@@ -1,21 +1,41 @@
 import React, { useState } from 'react';
-import { X, FileText, Table, Download, Image, Layers, Check } from 'lucide-react';
+import { X, FileText, Table, Download, Image, Layers, Check, Sparkles } from 'lucide-react';
+import { downloadKpiDocxInBrowser } from '../../utils/generateDocx';
 
 interface ExportModalProps {
   isOpen: boolean;
   onClose: () => void;
   lastUpdated: string;
+  activeUnitId?: string;
 }
 
-export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, lastUpdated }) => {
-  const [selectedFormat, setSelectedFormat] = useState<'pdf' | 'excel' | 'csv' | 'image' | 'twbx'>('pdf');
+export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, lastUpdated, activeUnitId = 'biro-keuangan' }) => {
+  const [selectedFormat, setSelectedFormat] = useState<'docx' | 'pdf' | 'excel' | 'csv' | 'image' | 'twbx'>('docx');
   const [isExporting, setIsExporting] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleExport = () => {
+  const handleExport = async () => {
     setIsExporting(true);
+
+    if (selectedFormat === 'docx') {
+      try {
+        const unitKey = activeUnitId === 'pdsi' ? 'pdsi' : 'keuangan';
+        await downloadKpiDocxInBrowser(unitKey);
+        setDownloadSuccess(true);
+        setTimeout(() => {
+          setIsExporting(false);
+          setDownloadSuccess(false);
+          onClose();
+        }, 1200);
+      } catch (err) {
+        console.error('Failed to export docx:', err);
+        setIsExporting(false);
+      }
+      return;
+    }
+
     setTimeout(() => {
       setIsExporting(false);
       setDownloadSuccess(true);
@@ -60,10 +80,20 @@ Data terverifikasi SIMKEU BP Batam.`;
     }, 750);
   };
 
+  const isPdsi = activeUnitId === 'pdsi';
   const options = [
     {
+      id: 'docx' as const,
+      label: isPdsi ? 'Kamus KPI & Formula PDSI (Word .docx)' : 'Kamus KPI & Formula Biro Keuangan (Word .docx)',
+      desc: isPdsi
+        ? 'Dokumen Word tabel acuan KPI Pusat Data dan Sistem Informasi (PDSI) BP Batam'
+        : 'Dokumen Word tabel acuan KPI resmi Biro Keuangan BP Batam (Revenue, Spending, Financial Linkage)',
+      icon: FileText,
+      isRecommended: true,
+    },
+    {
       id: 'pdf' as const,
-      label: 'PDF',
+      label: 'PDF Laporan Eksekutif',
       desc: 'Laporan visual resolusi tinggi format cetak PDF lanskap',
       icon: FileText,
     },

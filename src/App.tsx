@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Header } from './components/Header';
-import { Sidebar, SidebarTab } from './components/Sidebar';
+import { NavigationRail } from './components/NavigationRail';
+import { UnitsDrawer } from './components/UnitsDrawer';
 import { ExecutiveFilters } from './components/ExecutiveFilters';
 import { KpiMetricsRow } from './components/KpiMetricsRow';
 import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
@@ -8,15 +9,21 @@ import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
 import { AssetAndReportsRow } from './components/AssetAndReportsRow';
 import { FiscalInsightsRow } from './components/FiscalInsightsRow';
+import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
+import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
+import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
+import { KpiWordDocumentView } from './components/KpiWordDocumentView';
 import { DetailModal, ModalType } from './components/Modals/DetailModal';
 import { ExportModal } from './components/Modals/ExportModal';
 import { TableauGuideModal } from './components/Modals/TableauGuideModal';
 import { KPI_METRICS_DATA, REVENUE_DATA, EXPENSE_DATA } from './data/mockData';
-import { CheckCircle2, FileCode2, Database } from 'lucide-react';
+import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
+import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<SidebarTab>('dashboard');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // Navigation & Multi-Unit State
+  const [activeUnitId, setActiveUnitId] = useState<string>('biro-keuangan');
+  const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('overview');
 
   // Filters State - Complete Tableau Context Dimensions
@@ -36,6 +43,27 @@ export default function App() {
   const [detailModalType, setDetailModalType] = useState<ModalType>(null);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isTableauGuideOpen, setIsTableauGuideOpen] = useState(false);
+
+  // Active Unit Object
+  const currentUnit = useMemo(() => {
+    return BP_BATAM_24_UNITS.find((u) => u.id === activeUnitId) || BP_BATAM_24_UNITS[0];
+  }, [activeUnitId]);
+
+  // Unit Change Handler
+  const handleSelectUnit = (unitId: string) => {
+    setActiveUnitId(unitId);
+    if (unitId === 'biro-keuangan') {
+      setActiveSheet('overview');
+    } else if (unitId === 'pdsi') {
+      setActiveSheet('ikhtisar');
+    } else {
+      setActiveSheet('ikhtisar');
+    }
+    const unitObj = BP_BATAM_24_UNITS.find((u) => u.id === unitId);
+    setToastMessage(`Berpindah ke dashboard: ${unitObj?.name || unitId}`);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2500);
+  };
 
   // Filter Handlers with Feedback Toast
   const handleYearChange = (year: string) => {
@@ -92,7 +120,7 @@ export default function App() {
     setSelectedFunding('ALL');
     setBasis('ytd');
     setSelectedPeriod('April 2026');
-    setToastMessage('Semua filter berhasil direset ke pengaturan default (TA 2026 • April Q2 • Konsolidasi).');
+    setToastMessage('Semua filter berhasil direset ke default (TA 2026 • April Q2 • Konsolidasi).');
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
@@ -135,37 +163,10 @@ export default function App() {
     setIsRefreshing(true);
     setTimeout(() => {
       setIsRefreshing(false);
-      setToastMessage('Data extract Tableau berhasil diperbarui dari SIMKEU.');
+      setToastMessage('Data extract berhasil diperbarui.');
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     }, 600);
-  };
-
-  const handleSelectTab = (tab: SidebarTab) => {
-    setActiveTab(tab);
-    if (tab === 'dashboard') {
-      setActiveSheet('overview');
-      document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'pendapatan') {
-      setActiveSheet('pendapatan');
-      document.getElementById('pendapatan-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'belanja') {
-      setActiveSheet('belanja');
-      document.getElementById('belanja-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'piutang') {
-      setActiveSheet('piutang');
-      document.getElementById('piutang-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'kas_bank') {
-      setActiveSheet('kas_bank');
-      document.getElementById('kas-bank-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'aset') {
-      setActiveSheet('aset');
-      document.getElementById('aset-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (tab === 'laporan') {
-      setIsExportModalOpen(true);
-    } else if (tab === 'tableau_guide') {
-      setIsTableauGuideOpen(true);
-    }
   };
 
   const handleSelectSheet = (sheetId: string) => {
@@ -180,6 +181,8 @@ export default function App() {
       document.getElementById('piutang-section')?.scrollIntoView({ behavior: 'smooth' });
     } else if (sheetId === 'kas_bank') {
       document.getElementById('kas-bank-section')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (sheetId === 'aset') {
+      document.getElementById('aset-section')?.scrollIntoView({ behavior: 'smooth' });
     } else if (sheetId === 'fiskal') {
       document.getElementById('fiskal-section')?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -201,127 +204,169 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full bg-[#F4F6F8] text-slate-800 font-sans overflow-hidden antialiased selection:bg-[#002B49] selection:text-white">
-      {/* Left Tableau Navigation Pane */}
-      <Sidebar
-        activeTab={activeTab}
-        onSelectTab={handleSelectTab}
-        collapsed={sidebarCollapsed}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      {/* 1. Left Navigation Rail (Multi-Unit 24 Units Architecture) */}
+      <NavigationRail
+        activeUnitId={activeUnitId}
+        onSelectUnit={handleSelectUnit}
+        onOpenUnitsDrawer={() => setIsUnitsDrawerOpen(true)}
         onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
+        onOpenExportModal={() => setIsExportModalOpen(true)}
       />
 
-      {/* Main Workspace Area with Header, Dashboard Canvas and Status Bar */}
+      {/* 2. Main Workspace Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Header with Unit switcher and Sub-menus */}
         <Header
           onOpenExportModal={() => setIsExportModalOpen(true)}
           onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
+          onOpenUnitsDrawer={() => setIsUnitsDrawerOpen(true)}
           onRefresh={handleRefresh}
           isRefreshing={isRefreshing}
           activeSheet={activeSheet}
           onSelectSheet={handleSelectSheet}
+          activeUnitId={activeUnitId}
+          onSelectUnit={handleSelectUnit}
         />
 
-        {/* Tableau Dashboard Canvas (Tiled Layout Container) */}
+        {/* Scrollable Main Dashboard Canvas */}
         <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-5 space-y-4 scroll-smooth">
           <div className="max-w-[1920px] mx-auto space-y-4">
-            {/* Top Hero Banner & Parameter Bar - Styled to Match Reference Image */}
-            <ExecutiveFilters
-              selectedYear={selectedYear}
-              onChangeYear={handleYearChange}
-              selectedMonth={selectedMonth}
-              onChangeMonth={handleMonthChange}
-              selectedQuarter={selectedQuarter}
-              onChangeQuarter={handleQuarterChange}
-              selectedUnit={selectedUnit}
-              onChangeUnit={handleUnitChange}
-              selectedFunding={selectedFunding}
-              onChangeFunding={handleFundingChange}
-              basis={basis}
-              onChangeBasis={handleBasisChange}
-              onResetFilters={handleResetFilters}
-              onRefresh={handleRefresh}
-              isRefreshing={isRefreshing}
-              onOpenExportModal={() => setIsExportModalOpen(true)}
-              onOpenDataExploration={() => setIsTableauGuideOpen(true)}
-              selectedPeriod={selectedPeriod}
-              onChangePeriod={setSelectedPeriod}
-            />
 
-            {/* UNIFIED DASHBOARD WORKSHEETS */}
-            <div className="space-y-4">
-              {/* 1. Top 6 KPI Metric Cards (BANs) */}
-              <section id="overview" aria-label="KPI Ringkasan Eksekutif">
-                <KpiMetricsRow
-                  metrics={KPI_METRICS_DATA}
-                  onSelectMetric={handleSelectMetric}
-                />
-              </section>
+            {/* VIEW ROUTING ACCORDING TO ACTIVE UNIT */}
+            {activeSheet === 'kpi_word_doc' ? (
+              <KpiWordDocumentView
+                activeUnitId={activeUnitId}
+                onBackToDashboard={() => setActiveSheet(activeUnitId === 'biro-keuangan' ? 'overview' : 'ikhtisar')}
+              />
+            ) : activeUnitId === 'biro-keuangan' ? (
+              /* --- BIRO KEUANGAN DASHBOARD & KAMUS RUMUS --- */
+              activeSheet === 'kamus_rumus' ? (
+                <BiroKeuanganKamusRumusView />
+              ) : (
+                <>
+                  {/* Top Parameter & Filter Bar */}
+                  <ExecutiveFilters
+                    selectedYear={selectedYear}
+                    onChangeYear={handleYearChange}
+                    selectedMonth={selectedMonth}
+                    onChangeMonth={handleMonthChange}
+                    selectedQuarter={selectedQuarter}
+                    onChangeQuarter={handleQuarterChange}
+                    selectedUnit={selectedUnit}
+                    onChangeUnit={handleUnitChange}
+                    selectedFunding={selectedFunding}
+                    onChangeFunding={handleFundingChange}
+                    basis={basis}
+                    onChangeBasis={handleBasisChange}
+                    onResetFilters={handleResetFilters}
+                    onRefresh={handleRefresh}
+                    isRefreshing={isRefreshing}
+                    onOpenExportModal={() => setIsExportModalOpen(true)}
+                    onOpenDataExploration={() => setIsTableauGuideOpen(true)}
+                    selectedPeriod={selectedPeriod}
+                    onChangePeriod={setSelectedPeriod}
+                  />
 
-              {/* 2. Detail Performa Pendapatan & Detail Serapan Belanja (Side-by-Side Tiled Worksheets) */}
-              <section
-                id="pendapatan-belanja"
-                aria-label="Performa Pendapatan dan Belanja"
-                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-              >
-                <RevenuePerformanceCard
-                  items={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
-                  onViewDetail={() => setDetailModalType('pendapatan')}
-                  selectedYear={selectedYear}
-                  selectedUnit={selectedUnit}
-                  selectedMonth={selectedMonth}
-                />
+                  {/* Biro Keuangan Worksheets */}
+                  <div className="space-y-4">
+                    {/* 1. Top 6 KPI Metric Cards (BANs) */}
+                    <section id="overview" aria-label="KPI Ringkasan Eksekutif">
+                      <KpiMetricsRow
+                        metrics={KPI_METRICS_DATA}
+                        onSelectMetric={handleSelectMetric}
+                      />
+                    </section>
 
-                <BudgetAbsorptionCard
-                  items={filteredExpense.length > 0 ? filteredExpense : EXPENSE_DATA}
-                  onViewDetail={() => setDetailModalType('belanja')}
-                  selectedYear={selectedYear}
-                  selectedUnit={selectedUnit}
-                  selectedMonth={selectedMonth}
-                />
-              </section>
+                    {/* 2. Detail Performa Pendapatan & Detail Serapan Belanja */}
+                    <section
+                      id="pendapatan-belanja"
+                      aria-label="Performa Pendapatan dan Belanja"
+                      className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                    >
+                      <div id="pendapatan-section">
+                        <RevenuePerformanceCard
+                          items={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
+                          onViewDetail={() => setDetailModalType('pendapatan')}
+                          selectedYear={selectedYear}
+                          selectedUnit={selectedUnit}
+                          selectedMonth={selectedMonth}
+                        />
+                      </div>
 
-              {/* 3. Piutang & Arus Kas Section (Tiled Worksheets) */}
-              <section aria-label="Piutang dan Arus Kas">
-                <ReceivablesSection
-                  onViewPiutangDetail={() => setDetailModalType('piutang')}
-                  onViewKasBankDetail={() => setDetailModalType('kas_bank')}
-                />
-              </section>
+                      <div id="belanja-section">
+                        <BudgetAbsorptionCard
+                          items={filteredExpense.length > 0 ? filteredExpense : EXPENSE_DATA}
+                          onViewDetail={() => setDetailModalType('belanja')}
+                          selectedYear={selectedYear}
+                          selectedUnit={selectedUnit}
+                          selectedMonth={selectedMonth}
+                        />
+                      </div>
+                    </section>
 
-              {/* 4. Asset Utilization (Tiled Worksheet) */}
-              <section aria-label="Pemanfaatan Aset dan Konsesi">
-                <AssetAndReportsRow onOpenExportModal={() => setIsExportModalOpen(true)} />
-              </section>
+                    {/* 3. Piutang & Arus Kas Section */}
+                    <section aria-label="Piutang dan Arus Kas">
+                      <ReceivablesSection
+                        onViewPiutangDetail={() => setDetailModalType('piutang')}
+                        onViewKasBankDetail={() => setDetailModalType('kas_bank')}
+                      />
+                    </section>
 
-              {/* 5. Fiscal Insights, Diverging Bar Chart Surplus/Deficit */}
-              <section aria-label="Kemandirian Fiskal dan Rekomendasi">
-                <FiscalInsightsRow
-                  onOpenExportModal={() => setIsExportModalOpen(true)}
-                  onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
-                  lastUpdated="24 Apr 2026 10:24 WIB"
-                />
-              </section>
-            </div>
+                    {/* 4. Asset Utilization */}
+                    <section id="aset-section" aria-label="Pemanfaatan Aset dan Konsesi">
+                      <AssetAndReportsRow onOpenExportModal={() => setIsExportModalOpen(true)} />
+                    </section>
+
+                    {/* 5. Fiscal Insights, Surplus/Deficit */}
+                    <section id="fiskal-section" aria-label="Kemandirian Fiskal dan Rekomendasi">
+                      <FiscalInsightsRow
+                        onOpenExportModal={() => setIsExportModalOpen(true)}
+                        onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
+                        lastUpdated="24 Apr 2026 10:24 WIB"
+                      />
+                    </section>
+                  </div>
+                </>
+              )
+            ) : activeUnitId === 'pdsi' ? (
+              /* --- PUSAT DATA DAN SISTEM INFORMASI (PDSI) DASHBOARD --- */
+              <PdsiDashboard
+                activeSubMenu={activeSheet}
+                onSelectSubMenu={handleSelectSheet}
+              />
+            ) : (
+              /* --- OTHER 22 UNITS DASHBOARD & DESIGNER --- */
+              <OtherUnitPlaceholder
+                unit={currentUnit}
+                onOpen24UnitsDrawer={() => setIsUnitsDrawerOpen(true)}
+                onSwitchToKeuangan={() => handleSelectUnit('biro-keuangan')}
+                onSwitchToPdsi={() => handleSelectUnit('pdsi')}
+              />
+            )}
           </div>
         </main>
 
-        {/* Authentic Tableau Status Bar */}
+        {/* Status Bar */}
         <footer className="h-7 bg-[#F2F4F7] border-t border-slate-300 px-4 flex items-center justify-between text-[11px] text-slate-600 font-sans select-none shrink-0">
           <div className="flex items-center gap-3 truncate">
             <button
-              onClick={() => setDetailModalType('data_catalog')}
+              onClick={() => setIsUnitsDrawerOpen(true)}
               className="flex items-center gap-1 text-[#1F3864] hover:text-blue-700 font-bold hover:underline cursor-pointer"
-              title="Klik untuk membuka Katalog 28 Tabel & Atribut Database Resmi Biro Keuangan"
+              title="Buka Direktori 24 Unit Kerja BP Batam"
             >
-              <Database className="w-3 h-3 text-[#4E79A7]" />
-              <span>Katalog Data: 28 Tabel SIMKEU BP Batam</span>
+              <Layers className="w-3 h-3 text-[#4E79A7]" />
+              <span>Unit Aktif: {currentUnit.name} ({currentUnit.code})</span>
             </button>
             <span className="text-slate-300">|</span>
-            <span className="hidden sm:inline">6 Worksheets</span>
+            <span className="hidden sm:inline font-mono">24 Unit Tersedia</span>
             <span className="text-slate-300 hidden sm:inline">|</span>
-            <span className="hidden md:inline font-mono">Realisasi: Rp 981,2 M</span>
-            <span className="text-slate-300 hidden md:inline">|</span>
-            <span className="hidden lg:inline font-mono">Belanja: Rp 945,0 M</span>
+            <span className="hidden md:inline font-mono">
+              {activeUnitId === 'biro-keuangan'
+                ? '28 Item Katalog PDF'
+                : activeUnitId === 'pdsi'
+                ? '21 Item Katalog PDF'
+                : `${currentUnit.itemCount} Item Katalog PDF`}
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -330,15 +375,23 @@ export default function App() {
               className="text-[#4E79A7] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
             >
               <FileCode2 className="w-3 h-3 text-[#E15759]" />
-              <span>Tableau Calculated Fields</span>
+              <span>Tableau Calculated Fields &amp; Guide</span>
             </button>
             <span className="text-slate-300">|</span>
             <span className="font-mono text-slate-500 font-medium">
-              Tableau Server v2024.1
+              Command Center v2026.4
             </span>
           </div>
         </footer>
       </div>
+
+      {/* 24 Units Sliding Drawer */}
+      <UnitsDrawer
+        isOpen={isUnitsDrawerOpen}
+        onClose={() => setIsUnitsDrawerOpen(false)}
+        activeUnitId={activeUnitId}
+        onSelectUnit={handleSelectUnit}
+      />
 
       {/* Drill-down Detail Modal */}
       <DetailModal
@@ -352,6 +405,7 @@ export default function App() {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         lastUpdated="24 Apr 2026 10:24 WIB"
+        activeUnitId={activeUnitId}
       />
 
       {/* Tableau Guide Modal */}
@@ -362,7 +416,7 @@ export default function App() {
 
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-10 right-6 z-50 bg-slate-900 text-white px-4 py-2 shadow-lg border border-slate-700 flex items-center gap-2">
+        <div className="fixed bottom-10 right-6 z-50 bg-slate-900 text-white px-4 py-2 shadow-lg border border-slate-700 flex items-center gap-2 rounded-lg">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span className="text-xs font-mono">{toastMessage}</span>
         </div>

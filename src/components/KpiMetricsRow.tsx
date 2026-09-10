@@ -151,8 +151,7 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
             <div
               key={metric.id}
               id={`kpi-ban-${metric.id}`}
-              onClick={() => onSelectMetric?.(metric.id)}
-              className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between cursor-pointer p-5 relative group"
+              className="bg-white rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between p-5 relative"
             >
               <div>
                 {/* Header inside Box: Icon, Category Tag & Badge */}
@@ -198,8 +197,16 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
                   {theme.subLabel}
                 </div>
 
-                {/* Tableau Bullet Progress Bar */}
+                {/* Tableau Bullet Progress Bar with Percentage Label */}
                 <div className="space-y-1">
+                  <div className="flex items-center justify-between text-[10.5px] font-mono">
+                    <span className="font-bold text-slate-800">
+                      {theme.pctNum.toFixed(1)}%
+                    </span>
+                    <span className="text-slate-500 font-medium">
+                      Target {theme.benchMark.toFixed(0)}%
+                    </span>
+                  </div>
                   <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden">
                     {/* Actual Progress Bar */}
                     <div
@@ -209,17 +216,12 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
                         backgroundColor: theme.tableauColor,
                       }}
                     />
-                    {/* Reference Line Tick */}
+                    {/* Target Reference Line Tick */}
                     <div
                       className="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10"
                       style={{ left: `${theme.benchMark}%` }}
-                      title={`Target Reference: ${theme.benchMark}%`}
+                      title={`Target: ${theme.benchMark}%`}
                     />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                    <span>0%</span>
-                    <span className="text-slate-600 font-semibold">Ref: {theme.benchMark}%</span>
-                    <span>100%</span>
                   </div>
                 </div>
               </div>
@@ -230,11 +232,16 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
                   <div className="w-20">
                     <TableauSparkline data={metric.sparkline} color={theme.tableauColor} />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 text-right font-medium">
-                    {metric.trend?.value ? `${metric.trend.direction === 'up' ? '▲' : '▼'} ${metric.trend.value} ${metric.trend.period}` : 'Tren Q1–Q2'}
-                  </span>
+                  <div className="text-right">
+                    <span className="text-[10px] font-mono font-bold block" style={{ color: theme.tableauColor }}>
+                      {theme.pctNum.toFixed(1)}%
+                    </span>
+                    <span className="text-[9.5px] font-mono text-slate-500 font-medium block">
+                      {metric.trend?.value ? `${metric.trend.direction === 'up' ? '▲' : '▼'} ${metric.trend.value} ${metric.trend.period}` : 'Tren Q1–Q2'}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-[9.5px] font-mono text-slate-400 truncate group-hover:text-blue-700 transition-colors" title={theme.measureName}>
+                <div className="text-[9.5px] font-mono text-slate-400 truncate" title={theme.measureName}>
                   {theme.measureName}
                 </div>
               </div>

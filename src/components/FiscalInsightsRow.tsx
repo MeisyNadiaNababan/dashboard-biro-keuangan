@@ -529,24 +529,20 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
               {/* Legend & Breakdown Table */}
               <div className="border border-slate-200/80 rounded-xl overflow-hidden divide-y divide-slate-100 text-xs">
                 <div className="bg-slate-50/80 px-3 py-2 font-semibold text-slate-700 grid grid-cols-12">
-                  <div className="col-span-5">Sumber Dana</div>
+                  <div className="col-span-6">Sumber Dana</div>
                   <div className="col-span-3 text-right">Realisasi (Rp M)</div>
-                  <div className="col-span-2 text-right">Proporsi</div>
-                  <div className="col-span-2 text-center">Status</div>
+                  <div className="col-span-3 text-center">Status</div>
                 </div>
 
                 <div className="px-3 py-2.5 grid grid-cols-12 items-center hover:bg-slate-50/70">
-                  <div className="col-span-5 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2">
                     <span className="w-2.5 h-2.5 bg-[#4E79A7] inline-block rounded-full" />
                     <span className="font-semibold text-slate-900">PNBP Layanan BLU</span>
                   </div>
                   <div className="col-span-3 text-right font-mono font-bold text-slate-900">
                     Rp 681,0 M
                   </div>
-                  <div className="col-span-2 text-right font-mono text-slate-600">
-                    64,1%
-                  </div>
-                  <div className="col-span-2 text-center">
+                  <div className="col-span-3 text-center">
                     <span className="px-2 py-0.5 bg-blue-50 text-blue-800 text-[10px] font-bold rounded-full">
                       Utama
                     </span>
@@ -554,17 +550,14 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                 </div>
 
                 <div className="px-3 py-2.5 grid grid-cols-12 items-center hover:bg-slate-50/70">
-                  <div className="col-span-5 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2">
                     <span className="w-2.5 h-2.5 bg-[#F28E2B] inline-block rounded-full" />
                     <span className="font-semibold text-slate-900">APBN (Rupiah Murni)</span>
                   </div>
                   <div className="col-span-3 text-right font-mono font-bold text-slate-900">
                     Rp 224,0 M
                   </div>
-                  <div className="col-span-2 text-right font-mono text-slate-600">
-                    21,1%
-                  </div>
-                  <div className="col-span-2 text-center">
+                  <div className="col-span-3 text-center">
                     <span className="px-2 py-0.5 bg-amber-50 text-amber-800 text-[10px] font-bold rounded-full">
                       Proyek
                     </span>
@@ -572,17 +565,14 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                 </div>
 
                 <div className="px-3 py-2.5 grid grid-cols-12 items-center hover:bg-slate-50/70">
-                  <div className="col-span-5 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2">
                     <span className="w-2.5 h-2.5 bg-[#59A14F] inline-block rounded-full" />
                     <span className="font-semibold text-slate-900">Hibah, BLU Lain &amp; Bunga</span>
                   </div>
                   <div className="col-span-3 text-right font-mono font-bold text-slate-900">
                     Rp 157,2 M
                   </div>
-                  <div className="col-span-2 text-right font-mono text-slate-600">
-                    14,8%
-                  </div>
-                  <div className="col-span-2 text-center">
+                  <div className="col-span-3 text-center">
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-bold rounded-full">
                       Optimal
                     </span>

@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import {
   ArrowRight,
-  TrendingUp,
   Receipt,
   Building2,
   BarChart3,
-  Calendar
+  Layers,
+  FileText
 } from 'lucide-react';
 import {
   RECEIVABLES_DATA,
   RECEIVABLES_TOTAL,
   AGING_BUCKETS,
-  RECEIVABLE_STATUSES,
   CASH_FLOW_DATA,
-  SALDO_BANK_REAL_TIME_DATA
+  SALDO_BANK_REAL_TIME_DATA,
+  REKAPITULASI_UMUR_PIUTANG_DATA,
+  REKAPITULASI_MUTASI_PIUTANG_DATA
 } from '../data/mockData';
 import { TableauShelvesBadge } from './TableauShelvesBadge';
 
 interface ReceivablesSectionProps {
-  onViewPiutangDetail: () => void;
+  onViewPiutangDetail?: () => void;
   onViewKasBankDetail?: () => void;
 }
 
@@ -44,32 +45,35 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
   const maxBalance = saldoList.length > 0 ? Math.max(...saldoList) : 100;
   const balanceRange = maxBalance - minBalance || 1;
 
-  // Compact chart dimensions to save vertical space
-  const chartHeight = 115;
-  const paddingBottom = 18;
-  const paddingTop = 8;
+  // Extended chart dimensions for full-width layout
+  const chartHeight = 125;
+  const paddingBottom = 22;
+  const paddingTop = 12;
   const usableHeight = chartHeight - paddingBottom - paddingTop;
 
   // Points for line mark (Saldo Kas)
   const linePoints = data.map((d, idx) => {
-    const x = 50 + idx * 76;
-    const y = paddingTop + usableHeight - ((d.saldo - minBalance) / balanceRange) * (usableHeight * 0.72);
+    const x = 60 + idx * 115;
+    const y = paddingTop + usableHeight - ((d.saldo - minBalance) / balanceRange) * (usableHeight * 0.75);
     return `${x},${y}`;
   });
 
   return (
     <div className="w-full space-y-2">
-      {/* Dual Axis Chart Canvas - Compact */}
-      <div className="relative border border-slate-200/80 bg-slate-50/50 rounded-xl p-2.5">
-        <svg viewBox="0 0 460 115" className="w-full h-28 sm:h-32 overflow-visible">
+      {/* Dual Axis Chart Canvas - Full Width */}
+      <div className="relative border border-slate-200/80 bg-slate-50/50 rounded-xl p-3">
+        <svg viewBox="0 0 720 125" className="w-full h-36 sm:h-40 overflow-visible">
           {/* Horizontal Gridlines */}
           {[0, 0.5, 1].map((pct, i) => {
             const y = paddingTop + usableHeight * (1 - pct);
             return (
               <g key={i}>
-                <line x1="35" y1={y} x2="435" y2={y} stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3,3" />
-                <text x="30" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94A3B8" fontFamily="monospace">
+                <line x1="45" y1={y} x2="685" y2={y} stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3,3" />
+                <text x="40" y={y + 3} textAnchor="end" fontSize="9" fill="#94A3B8" fontFamily="monospace">
                   {(maxBar * pct).toFixed(0)}M
+                </text>
+                <text x="690" y={y + 3} textAnchor="start" fontSize="9" fill="#4E79A7" fontFamily="monospace" fontWeight="600">
+                  {((minBalance + balanceRange * pct * 0.75) / 1000).toFixed(2)}T
                 </text>
               </g>
             );
@@ -77,8 +81,8 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
 
           {/* Bars for Cash In & Cash Out */}
           {data.map((d, idx) => {
-            const groupX = 42 + idx * 76;
-            const barW = 15;
+            const groupX = 48 + idx * 115;
+            const barW = 20;
             const inH = (d.masuk / maxBar) * usableHeight;
             const outH = (d.keluar / maxBar) * usableHeight;
 
@@ -91,7 +95,7 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
                   width={barW}
                   height={inH}
                   fill="#59A14F"
-                  rx="2.5"
+                  rx="3"
                   className="hover:opacity-85 transition-all"
                 >
                   <title>{`${d.month} - Masuk: Rp ${d.masuk} M`}</title>
@@ -99,12 +103,12 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
 
                 {/* Bar Arus Keluar */}
                 <rect
-                  x={groupX + barW + 2}
+                  x={groupX + barW + 3}
                   y={paddingTop + usableHeight - outH}
                   width={barW}
                   height={outH}
                   fill="#E15759"
-                  rx="2.5"
+                  rx="3"
                   className="hover:opacity-85 transition-all"
                 >
                   <title>{`${d.month} - Keluar: Rp ${d.keluar} M`}</title>
@@ -113,10 +117,10 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
                 {/* X Axis Month Label */}
                 <text
                   x={groupX + barW + 1}
-                  y={chartHeight - 3}
+                  y={chartHeight - 4}
                   textAnchor="middle"
-                  fontSize="9.5"
-                  fill="#475569"
+                  fontSize="10"
+                  fill="#334155"
                   fontWeight="600"
                   fontFamily="sans-serif"
                 >
@@ -131,7 +135,7 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
             d={`M ${linePoints.join(' L ')}`}
             fill="none"
             stroke="#4E79A7"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeLinecap="round"
           />
 
@@ -139,12 +143,12 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
             const [cx, cy] = pt.split(',');
             return (
               <g key={idx}>
-                <circle cx={cx} cy={cy} r="3" fill="#4E79A7" stroke="#FFFFFF" strokeWidth="1.5" />
+                <circle cx={cx} cy={cy} r="3.5" fill="#4E79A7" stroke="#FFFFFF" strokeWidth="2" />
                 <text
                   x={cx}
-                  y={Number(cy) - 5}
+                  y={Number(cy) - 6}
                   textAnchor="middle"
-                  fontSize="8.5"
+                  fontSize="9.5"
                   fill="#002B49"
                   fontWeight="bold"
                   fontFamily="monospace"
@@ -156,23 +160,23 @@ const TableauCashFlowChart: React.FC<{ data?: typeof CASH_FLOW_DATA }> = ({ data
           })}
         </svg>
 
-        {/* Dual Axis Legends - Compact Single Row */}
+        {/* Dual Axis Legends */}
         <div className="flex flex-wrap items-center justify-between border-t border-slate-200/80 pt-2 px-1 text-[11px] text-slate-600 gap-1.5">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-[#59A14F] inline-block rounded-full" />
-              <span>Arus Masuk</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 bg-[#59A14F] inline-block rounded" />
+              <span>Arus Masuk (Penerimaan)</span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-[#E15759] inline-block rounded-full" />
-              <span>Arus Keluar</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 bg-[#E15759] inline-block rounded" />
+              <span>Arus Keluar (Pengeluaran)</span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-0.5 bg-[#4E79A7] inline-block rounded-full" />
-              <span className="font-semibold text-[#002B49]">Line: Saldo Kumulatif (T)</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-0.5 bg-[#4E79A7] inline-block rounded-full" />
+              <span className="font-semibold text-[#002B49]">Line: Saldo Kumulatif Akhir Bulan (T)</span>
             </div>
           </div>
-          <span className="font-mono text-slate-400 text-[10px]">Dual-Axis</span>
+          <span className="font-mono text-slate-400 text-[10px]">Dual-Axis Synchronized</span>
         </div>
       </div>
     </div>
@@ -184,43 +188,75 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
   onViewKasBankDetail,
 }) => {
   const [bankViewMode, setBankViewMode] = useState<'bar' | 'table' | 'treemap'>('bar');
+  const [piutangTab, setPiutangTab] = useState<'aging' | 'rekap' | 'mutasi'>('aging');
 
   return (
     <div className="space-y-5 font-sans select-none">
-      {/* 1. SEKSI PIUTANG: AGING BUCKET + DAFTAR DEBITUR */}
+      {/* 1. SEKSI PIUTANG: SWAP TABEL DATA (MODE SWAP TANPA BUTTON DETAIL) */}
       <div id="piutang-section" className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
         {/* Modern Executive Card Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
               <span className="w-2 h-2 rounded-full bg-[#E15759]" />
-              <span>MANAJEMEN PIUTANG &amp; KOLEKTIBILITAS</span>
+              <span>MANAJEMEN PIUTANG &amp; AGING</span>
             </div>
             <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
-              Monitoring Kolektibilitas &amp; Aging Piutang BLU
+              Monitoring Rekapitulasi Umur Piutang &amp; Mutasi Faktur
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              Standar PMK Kemenkeu • 305 Debitur Aktif di Seluruh Wilayah Kerja BP Batam
+              305 Debitur Aktif di Seluruh Wilayah Kerja BP Batam (Item 17 &amp; 18 Katalog Data)
             </p>
           </div>
 
-          <button
-            onClick={onViewPiutangDetail}
-            id="btn-detail-piutang-aging"
-            className="text-xs font-bold text-[#002B49] hover:text-[#001D3D] bg-white hover:bg-slate-50 px-3.5 py-2 border border-slate-200 rounded-xl flex items-center gap-2 cursor-pointer shadow-2xs transition-all shrink-0"
-          >
-            <Receipt className="w-3.5 h-3.5 text-slate-500" />
-            <span>Buka Matriks Aging Piutang</span>
-            <ArrowRight className="w-3 h-3 text-slate-400" />
-          </button>
+          {/* Table Switcher Tabs */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs font-semibold">
+            <button
+              onClick={() => setPiutangTab('aging')}
+              className={`px-3 py-1.5 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                piutangTab === 'aging'
+                  ? 'bg-[#002B49] text-white shadow-2xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Distribusi Aging</span>
+            </button>
+            <button
+              onClick={() => setPiutangTab('rekap')}
+              className={`px-3 py-1.5 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                piutangTab === 'rekap'
+                  ? 'bg-[#002B49] text-white shadow-2xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Receipt className="w-3.5 h-3.5" />
+              <span>Tabel Umur Piutang (Item 17)</span>
+            </button>
+            <button
+              onClick={() => setPiutangTab('mutasi')}
+              className={`px-3 py-1.5 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                piutangTab === 'mutasi'
+                  ? 'bg-[#002B49] text-white shadow-2xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Mutasi Faktur (Item 18)</span>
+            </button>
+          </div>
         </div>
 
-        {/* Content: 2-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Kolom Kiri: Aging Stacked Histogram (7 cols) */}
-          <div className="lg:col-span-7 space-y-3">
-            <div className="text-xs font-bold text-slate-700 uppercase tracking-wide">
-              Distribusi Umur Piutang (Aging Buckets)
+        {/* Content: Selected Piutang View */}
+        {piutangTab === 'aging' && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+                Distribusi Umur Piutang (Aging Buckets)
+              </div>
+              <span className="text-xs font-mono text-slate-500">
+                Total 4 Kategori Umur Piutang
+              </span>
             </div>
 
             {/* Tableau Shelves Mapping Badge */}
@@ -238,25 +274,25 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
                 const pct = (bucket.amount / RECEIVABLES_TOTAL.nilaiPiutang) * 100;
 
                 return (
-                  <div key={bucket.range} className="p-3 hover:bg-slate-50/70 transition-colors">
+                  <div key={bucket.range} className="p-3.5 hover:bg-slate-50/70 transition-colors">
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">{bucket.range}</span>
-                        <span className="text-[11px] text-slate-500 font-sans">
+                        <span className="font-bold text-slate-900 text-sm">{bucket.range}</span>
+                        <span className="text-xs text-slate-500 font-sans">
                           ({bucket.label})
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 font-mono text-xs">
-                        <span className="font-bold text-slate-900">
+                      <div className="flex items-center gap-3 font-mono text-xs">
+                        <span className="font-bold text-slate-900 text-sm">
                           Rp {bucket.amount.toFixed(1)} M
                         </span>
-                        <span className="text-slate-500">({pct.toFixed(1)}%)</span>
+                        <span className="text-slate-500 font-semibold">({pct.toFixed(1)}%)</span>
                       </div>
                     </div>
 
-                    <div className="relative h-3 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="relative h-3.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full"
+                        className="h-full rounded-full transition-all duration-500"
                         style={{
                           width: `${pct}%`,
                           backgroundColor: bucket.color,
@@ -269,12 +305,12 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
             </div>
 
             {/* Total Footer Banner */}
-            <div className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/80 flex items-center justify-between text-xs font-mono">
+            <div className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono gap-2">
               <span className="font-sans font-bold text-slate-800">
                 TOTAL OUTSTANDING PIUTANG:
               </span>
               <div className="flex items-center gap-3">
-                <span className="font-bold text-[#E15759] text-base">
+                <span className="font-bold text-[#E15759] text-base sm:text-lg">
                   Rp {RECEIVABLES_TOTAL.nilaiPiutang.toFixed(1)} M
                 </span>
                 <span className="text-slate-500 font-sans text-xs">
@@ -283,56 +319,139 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
               </div>
             </div>
           </div>
+        )}
 
-          {/* Kolom Kanan: Status Kolektibilitas & Ketentuan PUPN (5 cols) */}
-          <div className="lg:col-span-5 space-y-3">
-            <div className="text-xs font-bold text-slate-700 uppercase tracking-wide">
-              Kolektibilitas Berdasarkan Standar PMK/Kemenkeu
-            </div>
-
-            {/* Tableau Shelves Mapping Badge */}
+        {/* View 2: Tabel Rekapitulasi Umur Piutang (Item 17) - Tanpa kolom Ketentuan PUPN/Kemenkeu */}
+        {piutangTab === 'rekap' && (
+          <div className="space-y-3">
             <TableauShelvesBadge
-              showMe="Show Me #1 (Crosstab) / #6 (Bar)"
-              rows="[status] (Kolektibilitas)"
-              columns="SUM([amount]), % of Total"
-              color="[color] (Lancar/KL/Diragukan/Macet)"
-              detail="[percentage]"
+              showMe="Show Me #1 (Text Table / Crosstab)"
+              rows="[namaPelanggan]"
+              columns="SUM([jumlahPiutangTertagih]), [umurPiutang]"
+              color="[umurPiutang]"
+              detail="Tabel Item 17 SIMKEU BP Batam"
             />
+            <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+              <table className="w-full text-left text-xs border-collapse min-w-[560px]">
+                <thead className="bg-[#0B2545] text-white font-bold text-[11px]">
+                  <tr>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-center w-[8%]">
+                      No
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 w-[48%]">
+                      Nama Pelanggan (Debitur)
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[24%]">
+                      Jumlah Piutang Tertagih (Rp M)
+                    </th>
+                    <th className="py-2.5 px-3 text-center w-[20%]">
+                      Umur Piutang (Hari)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E2E8F0] text-[11px]">
+                  {REKAPITULASI_UMUR_PIUTANG_DATA.map((row, idx) => {
+                    const isEven = idx % 2 === 0;
 
-            <div className="rounded-xl border border-slate-200/80 divide-y divide-slate-100 text-xs overflow-hidden">
-              {RECEIVABLE_STATUSES.map((status) => (
-                <div key={status.status} className="p-3 flex items-center justify-between hover:bg-slate-50/70">
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className="w-3 h-3 rounded-full shrink-0"
-                      style={{ backgroundColor: status.color }}
-                    />
-                    <div>
-                      <span className="font-bold text-slate-800 block">{status.status}</span>
-                      <span className="text-[11px] text-slate-500">Kolektibilitas {status.status}</span>
-                    </div>
-                  </div>
-                  <div className="text-right font-mono">
-                    <span className="font-bold text-slate-900 block">
-                      Rp {status.amount.toFixed(1)} M
-                    </span>
-                    <span className="text-xs text-slate-500">{status.percentage}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Notice PUPN / Penagihan */}
-            <div className="p-3.5 bg-[#FEF9E7] rounded-xl border border-[#F28E2B]/40 text-xs text-[#7D6608] space-y-1">
-              <span className="font-bold block uppercase text-[10px] tracking-wider">
-                Ketentuan Penyerahan PUPN / DJKN:
-              </span>
-              <p className="text-[11px] leading-relaxed">
-                Piutang Macet (&gt;2 tahun) sebesar <strong>Rp 26,4 M (8,5%)</strong> telah diserahkan surat penagihan ketat dan terancam pembekuan izin alokasi lahan serta pencegahan operasional logistik pelabuhan.
-              </p>
+                    return (
+                      <tr
+                        key={idx}
+                        className={`hover:bg-blue-50/60 transition-colors ${
+                          isEven ? 'bg-[#F8FAFC]' : 'bg-white'
+                        }`}
+                      >
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-center font-mono text-slate-600 align-middle">
+                          {idx + 1}
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] font-semibold text-slate-900 align-middle">
+                          {row.namaPelanggan}
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-right font-mono font-bold text-[#E15759] align-middle">
+                          Rp {row.jumlahPiutangTertagih.toFixed(2)} M
+                        </td>
+                        <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-800 align-middle">
+                          {row.umurPiutang} Hari
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* View 3: Mutasi Piutang per Faktur (Item 18) */}
+        {piutangTab === 'mutasi' && (
+          <div className="space-y-3">
+            <TableauShelvesBadge
+              showMe="Show Me #1 (Text Table / Crosstab)"
+              rows="[nomorFaktur], [namaPelanggan]"
+              columns="SUM([saldoAwal]), SUM([bayarFaktur]), SUM([saldoAkhir])"
+              color="[saldoAkhir]"
+              detail="Tabel Item 18 SIMKEU BP Batam"
+            />
+            <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+              <table className="w-full text-left text-xs border-collapse min-w-[680px]">
+                <thead className="bg-[#0B2545] text-white font-bold text-[11px]">
+                  <tr>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-center w-[16%]">
+                      No Faktur
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 w-[30%]">
+                      Nama Pelanggan
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[14%]">
+                      Saldo Awal (Rp M)
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[14%]">
+                      Bayar Faktur (Rp M)
+                    </th>
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[14%]">
+                      Saldo Akhir (Rp M)
+                    </th>
+                    <th className="py-2.5 px-3 text-center w-[12%]">
+                      Umur
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E2E8F0] text-[11px]">
+                  {REKAPITULASI_MUTASI_PIUTANG_DATA.map((mutasi, idx) => {
+                    const isEven = idx % 2 === 0;
+
+                    return (
+                      <tr
+                        key={mutasi.id}
+                        className={`hover:bg-blue-50/60 transition-colors ${
+                          isEven ? 'bg-[#F8FAFC]' : 'bg-white'
+                        }`}
+                      >
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-center font-mono font-bold text-[#1F4E79] align-middle">
+                          {mutasi.fakturTerbit}
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] font-semibold text-slate-900 align-middle">
+                          {mutasi.namaPelanggan}
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-right font-mono text-slate-700 align-middle">
+                          Rp {mutasi.saldoAwal.toFixed(1)} M
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-right font-mono text-[#59A14F] font-bold align-middle">
+                          Rp {mutasi.bayarFaktur.toFixed(1)} M
+                        </td>
+                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-right font-mono text-[#E15759] font-bold align-middle">
+                          Rp {mutasi.saldoAkhir.toFixed(1)} M
+                        </td>
+                        <td className="py-2.5 px-3 text-center font-mono text-slate-700 align-middle">
+                          {mutasi.umurPiutang} Hari
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
           <span>Tableau Server BI • Filter Debitur: Seluruh Wilayah Kerja BP Batam</span>
@@ -340,9 +459,9 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
         </div>
       </div>
 
-      {/* 2. SEKSI ARUS KAS & POSISI LIKUIDITAS BANK MITRA */}
-      <div id="kas-bank-section" className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-        {/* Kolom Kiri: Arus Kas 6 Bulan */}
+      {/* 2. SEKSI ARUS KAS & SALDO BANK (DIPISAHKAN SECARA VERTIKAL, TIDAK BERSEJALAN) */}
+      <div id="kas-bank-section" className="space-y-6">
+        {/* Atas: Arus Kas & Likuiditas (Full Width) */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
             <div>
@@ -350,14 +469,14 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
                 <span className="w-2 h-2 rounded-full bg-[#76B7B2]" />
                 <span>LIKUIDITAS &amp; ARUS KAS</span>
               </div>
-              <h3 className="text-lg font-bold text-[#002B49] tracking-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-[#002B49] tracking-tight">
                 Tren Arus Kas &amp; Likuiditas (6 Bulan Terakhir)
               </h3>
               <p className="text-xs text-slate-500">
-                Dual Axis: Arus Kas Masuk, Keluar vs Saldo Kas Akhir
+                Dual Axis Tableau: Arus Kas Masuk (Item 14), Keluar (Item 27) vs Saldo Kas Akhir
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-slate-600 bg-slate-50 border border-slate-200 px-3 py-1 rounded-xl shadow-2xs self-start sm:self-auto whitespace-nowrap">
+            <span className="text-xs font-mono font-bold text-slate-600 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-2xs self-start sm:self-auto whitespace-nowrap">
               Nov 2025 – Apr 2026
             </span>
           </div>
@@ -376,28 +495,39 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
           </div>
 
           {/* 3-Column Summary Badges */}
-          <div className="grid grid-cols-3 gap-2.5 pt-1">
-            <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200/60 flex flex-col">
-              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Total Kas Masuk</span>
-              <span className="text-xs sm:text-sm font-bold font-mono text-emerald-900 mt-0.5 whitespace-nowrap">Rp 5.280,6 M</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/60 flex flex-col">
+              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Total Kas Masuk (Item 14)</span>
+              <span className="text-sm sm:text-base font-bold font-mono text-emerald-900 mt-0.5 whitespace-nowrap">Rp 5.280,6 M</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-rose-50/70 border border-rose-200/60 flex flex-col">
-              <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider">Total Kas Keluar</span>
-              <span className="text-xs sm:text-sm font-bold font-mono text-rose-900 mt-0.5 whitespace-nowrap">Rp 4.220,1 M</span>
+            <div className="p-3 rounded-xl bg-rose-50/70 border border-rose-200/60 flex flex-col">
+              <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider">Total Kas Keluar (Item 27)</span>
+              <span className="text-sm sm:text-base font-bold font-mono text-rose-900 mt-0.5 whitespace-nowrap">Rp 4.220,1 M</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/60 flex flex-col">
+            <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/60 flex flex-col">
               <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Net Surplus Kas</span>
-              <span className="text-xs sm:text-sm font-bold font-mono text-blue-900 mt-0.5 whitespace-nowrap">+Rp 1.060,5 M</span>
+              <span className="text-sm sm:text-base font-bold font-mono text-blue-900 mt-0.5 whitespace-nowrap">+Rp 1.060,5 M</span>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-            <span>Rata-rata Penerimaan Kas Bulanan:</span>
-            <span className="font-bold text-[#2B542C] font-mono text-sm whitespace-nowrap">Rp 880,1 M / bulan</span>
+          {/* Banner Calculated Field Rata-rata Penerimaan Kas Bulanan */}
+          <div className="p-3.5 bg-slate-50/90 rounded-xl border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-2.5 text-xs text-slate-700">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2 font-medium">
+                <span className="font-bold text-slate-800">Rata-rata Penerimaan Kas Bulanan:</span>
+                <span className="font-bold text-[#2B542C] font-mono text-sm">Rp 880,1 M / bulan</span>
+              </div>
+              <p className="text-[11px] text-slate-500 font-sans">
+                Formula Tableau: <code className="bg-white px-1 py-0.5 rounded border border-slate-200 text-slate-700 font-mono text-[10.5px]">SUM([keu_penerimaan_sumber_dana].[nilai]) / COUNTD([tanggal_rekap])</code>
+              </p>
+            </div>
+            <div className="text-[11px] font-mono text-slate-500 bg-white px-2.5 py-1 rounded border border-slate-200 shrink-0 self-start md:self-auto">
+              Tabel Sumber: keu_penerimaan_sumber_dana (Item 14)
+            </div>
           </div>
         </div>
 
-        {/* Kolom Kanan: Saldo Kas & Rekening Bank Operasional (Item 13) - Spacious Layout */}
+        {/* Bawah: Saldo Kas & Rekening Bank Operasional (Item 13) - Full Width Below Arus Kas */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
             <div>
@@ -405,15 +535,15 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
                 <span className="w-2 h-2 rounded-full bg-[#4E79A7]" />
                 <span>REKENING OPERASIONAL BANK</span>
               </div>
-              <h3 className="text-lg font-bold text-[#002B49] tracking-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-[#002B49] tracking-tight">
                 Saldo Bank Real Time (Item 13)
               </h3>
               <p className="text-xs text-slate-500">
-                Data Konsolidasi Rekening Bank Mitra BLU BP Batam
+                Data Konsolidasi Rekening Bank Mitra BLU BP Batam • Tabel: <code>keu_saldo_bank_realtime</code>
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="px-2.5 py-1 bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40 text-[10.5px] font-bold uppercase font-mono rounded-full whitespace-nowrap">
+              <span className="px-3 py-1 bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40 text-xs font-bold uppercase font-mono rounded-full whitespace-nowrap">
                 Likuiditas Prima
               </span>
               {onViewKasBankDetail && (

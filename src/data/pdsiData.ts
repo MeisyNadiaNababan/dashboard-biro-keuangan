@@ -21,48 +21,48 @@ export interface PdsiKpiMetric {
 
 export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
   {
-    id: 'uptime_dc',
-    title: 'Uptime & Ketersediaan Data Center',
-    value: '99,94%',
-    target: 'SLA: 99,90% (Tier 3 Standard)',
-    percentage: 'High Availability',
+    id: 'total_rak',
+    title: 'Total Rak Data Center',
+    value: '42 Unit Rak',
+    target: 'Standar Rak 42U Server',
+    percentage: 'Fasilitas DC BIDA & DRC Sekupang',
     trend: {
       direction: 'up',
-      value: '+0,04%',
-      period: '(MoM)',
+      value: '+0 Unit',
+      period: '(Kapasitas Tetap)',
       isPositive: true,
     },
-    sparkline: [99.85, 99.88, 99.91, 99.92, 99.90, 99.93, 99.94],
+    sparkline: [42, 42, 42, 42, 42, 42, 42],
     badge: {
       text: 'Tier III Ready',
       variant: 'success',
     },
-    colorTheme: 'emerald',
-    formulaRef: 'Item #10: SLA Uptime = ((Total Menit - Menit Downtime) / Total Menit) * 100',
+    colorTheme: 'blue',
+    formulaRef: 'Item #8: Total Rak = SUM([TOTAL RAK]) di Seluruh Fasilitas DC Tier III',
   },
   {
-    id: 'sla_helpdesk',
-    title: 'SLA Penyelesaian Layanan TI (Helpdesk)',
-    value: '94,2%',
-    target: 'Target Norma: ≥ 90,0%',
-    percentage: '418 dari 444 Tiket Selesai Tepat Waktu',
+    id: 'rak_terisi',
+    title: 'Jumlah Rak Data Terisi',
+    value: '33 Rak',
+    target: 'Tingkat Okupansi: 78,6%',
+    percentage: '33 Terisi • 9 Rak Kosong',
     trend: {
       direction: 'up',
-      value: '+2,8%',
-      period: '(MoM)',
+      value: '+2 Rak',
+      period: '(QoQ)',
       isPositive: true,
     },
-    sparkline: [88.5, 89.2, 91.0, 91.8, 92.5, 93.4, 94.2],
+    sparkline: [28, 29, 30, 31, 32, 32, 33],
     badge: {
-      text: 'Prima',
+      text: '78,6% Okupansi',
       variant: 'success',
     },
-    colorTheme: 'blue',
-    formulaRef: 'Item #21: SLA Tepat Waktu = (Tiket Selesai ≤ Norma / Total Tiket) * 100',
+    colorTheme: 'emerald',
+    formulaRef: 'Item #8: Rak Data Terisi = SUM([RAK TERISI]) • Slot Kosong = Total Rak - Rak Terisi',
   },
   {
     id: 'indeks_spbe',
-    title: 'Indeks SPBE BP Batam (Evaluasi KemenPAN-RB)',
+    title: 'Indeks SPBE BP Batam',
     value: '3,68',
     target: 'Skala 1 - 5 (Target: 3,50)',
     percentage: 'Predikat "Sangat Baik"',
@@ -78,47 +78,51 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
       variant: 'success',
     },
     colorTheme: 'purple',
-    formulaRef: 'Item #18: Indeks SPBE = Evaluasi 47 Indikator SPBE Terbobot',
+    formulaRef: 'Item #18: Indeks SPBE = Evaluasi 47 Indikator SPBE Terbobot (KemenPAN-RB)',
   },
   {
-    id: 'cyber_mitigation',
-    title: 'Tingkat Mitigasi Ancaman Siber (SOC)',
-    value: '98,7%',
-    target: '14.820 Serangan Terdeteksi',
-    percentage: '14.627 Serangan Berhasil Dinetralkan',
+    id: 'total_serangan',
+    title: 'Total Serangan Keamanan IT',
+    value: '14.820',
+    target: '14.627 Termitigasi (98,7%)',
+    percentage: 'Threat Activity Terdeteksi YTD',
     trend: {
       direction: 'up',
-      value: '+1,2%',
+      value: '+1.420',
       period: '(MoM)',
-      isPositive: true,
+      isPositive: false,
     },
-    sparkline: [96.2, 96.8, 97.4, 97.9, 98.1, 98.5, 98.7],
+    sparkline: [11200, 11800, 12400, 13100, 13750, 14200, 14820],
     badge: {
       text: 'SOC Protected',
       variant: 'info',
     },
     colorTheme: 'teal',
-    formulaRef: 'Item #12: Threat Mitigation Rate = (Serangan Termitigasi / Total Serangan) * 100',
+    formulaRef: 'Item #12: Total Serangan IT = SUM([JML SERANGAN]) • Mitigasi = SUM([TERMITIGASI])',
   },
   {
-    id: 'rack_occupancy',
-    title: 'Okupansi Rak Server Data Center',
-    value: '78,6%',
-    target: 'Kapasitas 42 Rak (DC + DRC)',
-    percentage: '33 Rak Terisi • 9 Rak Tersedia',
+    id: 'kepuasan_dc',
+    title: 'Tingkat Kepuasan Pelanggan Data Center',
+    value: '94,2%',
+    target: 'Target Kepuasan: ≥ 90,0%',
+    percentage: 'Kategori "Sangat Puas" (Indeks 4,71/5)',
     trend: {
       direction: 'up',
-      value: '+4,8%',
-      period: '(QoQ)',
+      value: '+1,8%',
+      period: '(YoY)',
       isPositive: true,
     },
-    sparkline: [68, 70, 72, 74, 75, 76, 78.6],
+    sparkline: [88.5, 89.2, 90.4, 91.8, 92.6, 93.5, 94.2],
+    badge: {
+      text: 'Sangat Puas',
+      variant: 'success',
+    },
     colorTheme: 'amber',
-    formulaRef: 'Item #8: Rack Occupancy Rate = (Rak Terisi / Total Rak) * 100',
+    formulaRef: 'Item #11: CSAT Data Center = (Total Skor Responden / Skor Maksimal) * 100%',
   },
   {
-    id: 'fiber_backbone',
-    title: 'Jaringan Fiber Optik (FO) Aktif',
+    id: 'jaringan_fiber',
+    title: 'Jaringan Fiber Optik (FO)',
     value: '284,5 KM',
     target: 'Cakupan: 8 Wilayah BP Batam',
     percentage: '81,4% Rata-rata Utilitas Core',
@@ -129,8 +133,52 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
       isPositive: true,
     },
     sparkline: [240, 252, 265, 270, 275, 280, 284.5],
+    badge: {
+      text: 'Backbone Aktif',
+      variant: 'info',
+    },
     colorTheme: 'blue',
     formulaRef: 'Item #2 & #5: Total Panjang FO = SUM([PANJANG]) km',
+  },
+  {
+    id: 'jumlah_server',
+    title: 'Jumlah Server',
+    value: '58 Server',
+    target: 'Fisik, Blade & Node HCI',
+    percentage: '48 Server Aktif • 10 Node Standby',
+    trend: {
+      direction: 'up',
+      value: '+4 Unit',
+      period: '(TA 2026)',
+      isPositive: true,
+    },
+    sparkline: [46, 48, 50, 52, 54, 56, 58],
+    badge: {
+      text: '58 Unit',
+      variant: 'info',
+    },
+    colorTheme: 'emerald',
+    formulaRef: 'Item #13: Total Server = SUM([JUMLAH]) Unit Server dan Node Storage',
+  },
+  {
+    id: 'jumlah_aplikasi',
+    title: 'Jumlah Aplikasi',
+    value: '46 Aplikasi',
+    target: 'Sistem Informasi Resmi BP Batam',
+    percentage: '38 Web Portal • 8 Mobile/Hybrid',
+    trend: {
+      direction: 'up',
+      value: '+3 Aplikasi',
+      period: '(YTD 2026)',
+      isPositive: true,
+    },
+    sparkline: [38, 40, 41, 43, 44, 45, 46],
+    badge: {
+      text: 'Terdaftar SPBE',
+      variant: 'success',
+    },
+    colorTheme: 'purple',
+    formulaRef: 'Item #14: Total Aplikasi = COUNT([NAMA APLIKASI]) di Direktori SPBE BP Batam',
   },
 ];
 
@@ -183,13 +231,15 @@ export const DC_RACKS_DATA: DcRackItem[] = [
   },
 ];
 
-// Infrastruktur Server & Storage (Item #13 di PDF)
+// Infrastruktur Server & Storage (Item #13 di PDF: REKAP INFRASTRUKTUR SERVER DAN STORAGE)
 export interface ServerStorageItem {
   id: string;
+  tanggalRekap: string;
   namaServer: string;
   brand: string;
   tipe: 'Hyperconverged HCI' | 'Storage SAN/NAS' | 'Database Appliance' | 'Blade Compute';
   jumlahUnit: number;
+  tanggalGaransi: string;
   statusGaransi: 'Aktif' | 'Masa Perpanjangan' | 'Habis Garansi';
   eosStatus: 'Aman (Supported)' | 'Mendekati EOS (<6 Bln)' | 'EOS (End of Support)';
   penggunaan: string;
@@ -198,270 +248,265 @@ export interface ServerStorageItem {
 export const SERVER_STORAGE_DATA: ServerStorageItem[] = [
   {
     id: 'srv-01',
+    tanggalRekap: '01/04/2026',
     namaServer: 'Cluster Nutanix Enterprise Cloud',
     brand: 'Nutanix / Supermicro',
     tipe: 'Hyperconverged HCI',
     jumlahUnit: 8,
+    tanggalGaransi: '31/12/2027',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
     penggunaan: 'Virtualisasi Utama Aplikasi SIMKEU & Portal BP Batam',
   },
   {
     id: 'srv-02',
+    tanggalRekap: '01/04/2026',
     namaServer: 'SAN Storage All-Flash OceanStor',
     brand: 'Huawei OceanStor',
     tipe: 'Storage SAN/NAS',
     jumlahUnit: 2,
+    tanggalGaransi: '15/09/2028',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
     penggunaan: 'High IOPS Database Oracle SIMKEU & PostgreSQL GIS',
   },
   {
     id: 'srv-03',
+    tanggalRekap: '01/04/2026',
     namaServer: 'Database Server Cluster (Exadata X8M)',
     brand: 'Oracle',
     tipe: 'Database Appliance',
     jumlahUnit: 2,
+    tanggalGaransi: '30/06/2027',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
     penggunaan: 'Core SIMKEU, PNBP, Billing Kas & Bank',
   },
   {
     id: 'srv-04',
+    tanggalRekap: '01/04/2026',
     namaServer: 'HPE ProLiant DL380 Gen9 (Legacy Node)',
     brand: 'HPE',
     tipe: 'Blade Compute',
     jumlahUnit: 4,
+    tanggalGaransi: '31/03/2024',
     statusGaransi: 'Habis Garansi',
     eosStatus: 'Mendekati EOS (<6 Bln)',
     penggunaan: 'Archive File Server & Dev Environment (Rencana Migrasi TA 2026)',
   },
 ];
 
-// Data Serangan Keamanan IT (Item #12 di PDF)
+// Data Serangan Keamanan IT (Item #12 di PDF: DATA SERANGAN KEAMANAN IT)
 export interface CyberThreatItem {
   id: string;
+  periode: string;
   threatActivity: string;
-  kategori: 'Volumetric Attack' | 'Application Layer' | 'Credential Abuse' | 'Social Engineering';
+  statusKeamanan: string;
   jmlSerangan: number;
-  statusKeamanan: 'Termitigasi (Blocked)' | 'Investigasi / Deep Inspection';
-  mitigasiPersen: number;
-  vektorUtama: string;
 }
 
 export const CYBER_THREATS_DATA: CyberThreatItem[] = [
   {
     id: 'th-01',
-    threatActivity: 'DDoS & SYN Flood ke Portal Publik',
-    kategori: 'Volumetric Attack',
+    periode: 'April 2026',
+    threatActivity: 'DDoS Volumetric & HTTP Flood ke Portal BP Batam',
+    statusKeamanan: 'Termitigasi (Blocked by WAF)',
     jmlSerangan: 6420,
-    statusKeamanan: 'Termitigasi (Blocked)',
-    mitigasiPersen: 99.8,
-    vektorUtama: 'Cloudflare WAF & Edge Anti-DDoS Scrubbing',
   },
   {
     id: 'th-02',
-    threatActivity: 'Brute Force Attack ke VPN & SSH Gateway',
-    kategori: 'Credential Abuse',
+    periode: 'April 2026',
+    threatActivity: 'Brute Force Authentication ke VPN & SSH Gateway',
+    statusKeamanan: 'Termitigasi (Blocked by IPS)',
     jmlSerangan: 4210,
-    statusKeamanan: 'Termitigasi (Blocked)',
-    mitigasiPersen: 99.1,
-    vektorUtama: 'Fail2ban, GeoIP Blocking & FortiGate IPS Rule',
   },
   {
     id: 'th-03',
-    threatActivity: 'SQL Injection & XSS pada Web Form',
-    kategori: 'Application Layer',
+    periode: 'April 2026',
+    threatActivity: 'SQL Injection (SQLi) & XSS pada Web Form Perizinan',
+    statusKeamanan: 'Termitigasi (Blocked by OWASP Rule)',
     jmlSerangan: 2380,
-    statusKeamanan: 'Termitigasi (Blocked)',
-    mitigasiPersen: 98.4,
-    vektorUtama: 'ModSecurity WAF & OWASP Top 10 Rule Set',
   },
   {
     id: 'th-04',
-    threatActivity: 'Malware & Ransomware Attachment (Email Gate)',
-    kategori: 'Social Engineering',
+    periode: 'Maret 2026',
+    threatActivity: 'Malware & Phishing Attachment di Mail Gateway',
+    statusKeamanan: 'Termitigasi (Quarantined)',
     jmlSerangan: 1250,
-    statusKeamanan: 'Termitigasi (Blocked)',
-    mitigasiPersen: 97.2,
-    vektorUtama: 'Email Sandboxing & Antivirus Gateway',
   },
   {
     id: 'th-05',
-    threatActivity: 'Suspicious Lateral Movement / Port Scanning',
-    kategori: 'Credential Abuse',
+    periode: 'Maret 2026',
+    threatActivity: 'Port Scanning & Reconnaissance Network Perimeter',
+    statusKeamanan: 'Termitigasi (Filtered)',
     jmlSerangan: 560,
-    statusKeamanan: 'Investigasi / Deep Inspection',
-    mitigasiPersen: 94.6,
-    vektorUtama: 'EDR Wazuh & BSSN CSIRT Threat Intelligence',
   },
 ];
 
-// Data Permintaan Layanan IT / Helpdesk (Item #21 & #17 di PDF)
+// Data Permintaan Layanan IT / Helpdesk (Item #17 & #21 di PDF: DAFTAR LAYANAN TI)
 export interface HelpdeskTicketItem {
   id: string;
+  kode: string;
   namaLayanan: string;
-  kategori: 'Infrastruktur Jaringan' | 'Aplikasi Bisnis' | 'Perangkat Keras' | 'Akses & Akun' | 'Keamanan';
-  jumlahTiket: number;
-  selesaiTepatWaktu: number;
+  namaSubLayanan: string;
+  kategoriPrioritas: 'Kritis (P1)' | 'Tinggi (P2)' | 'Sedang (P3)' | 'Rendah (P4)';
   normaWaktuRespon: string;
   normaWaktuSelesai: string;
-  realisasiAvgJam: number;
-  slaPercent: number;
+  pengelolaLayanan: string;
 }
 
 export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
   {
     id: 'hd-01',
-    namaLayanan: 'Gangguan Akses Jaringan LAN & WiFi Kantor',
-    kategori: 'Infrastruktur Jaringan',
-    jumlahTiket: 124,
-    selesaiTepatWaktu: 119,
+    kode: 'LYN-TI-01',
+    namaLayanan: 'Layanan Infrastruktur & Konektivitas',
+    namaSubLayanan: 'Penanganan Gangguan Jaringan LAN, WiFi & FO Kantor',
+    kategoriPrioritas: 'Tinggi (P2)',
     normaWaktuRespon: '15 Menit',
     normaWaktuSelesai: '2 Jam',
-    realisasiAvgJam: 1.2,
-    slaPercent: 96.0,
+    pengelolaLayanan: 'Subdit Infrastruktur TI',
   },
   {
     id: 'hd-02',
-    namaLayanan: 'Troubleshooting Aplikasi SIMKEU & PNBP',
-    kategori: 'Aplikasi Bisnis',
-    jumlahTiket: 98,
-    selesaiTepatWaktu: 92,
+    kode: 'LYN-TI-02',
+    namaLayanan: 'Layanan Sistem Informasi & Aplikasi',
+    namaSubLayanan: 'Troubleshooting Modul Transaksi SIMKEU, PNBP & Billing',
+    kategoriPrioritas: 'Kritis (P1)',
     normaWaktuRespon: '10 Menit',
     normaWaktuSelesai: '4 Jam',
-    realisasiAvgJam: 2.8,
-    slaPercent: 93.9,
+    pengelolaLayanan: 'Subdit Aplikasi & SI',
   },
   {
     id: 'hd-03',
-    namaLayanan: 'Reset Akun, Email Dinas & Hak Akses SPBE',
-    kategori: 'Akses & Akun',
-    jumlahTiket: 86,
-    selesaiTepatWaktu: 84,
+    kode: 'LYN-TI-03',
+    namaLayanan: 'Layanan Identitas & Hak Akses',
+    namaSubLayanan: 'Reset Akun Single Sign-On (SSO), Email Dinas & Hak Akses SPBE',
+    kategoriPrioritas: 'Sedang (P3)',
     normaWaktuRespon: '5 Menit',
     normaWaktuSelesai: '1 Jam',
-    realisasiAvgJam: 0.4,
-    slaPercent: 97.7,
+    pengelolaLayanan: 'Subdit Tata Kelola TI',
   },
   {
     id: 'hd-04',
-    namaLayanan: 'Perbaikan PC/Laptop, Printer & Perangkat Kerja',
-    kategori: 'Perangkat Keras',
-    jumlahTiket: 74,
-    selesaiTepatWaktu: 67,
+    kode: 'LYN-TI-04',
+    namaLayanan: 'Layanan Perangkat Keras Pengguna',
+    namaSubLayanan: 'Perbaikan PC/Laptop, Printer Dinas & Perangkat End-Point',
+    kategoriPrioritas: 'Rendah (P4)',
     normaWaktuRespon: '30 Menit',
     normaWaktuSelesai: '8 Jam',
-    realisasiAvgJam: 5.6,
-    slaPercent: 90.5,
+    pengelolaLayanan: 'Subdit Infrastruktur TI',
   },
   {
     id: 'hd-05',
-    namaLayanan: 'Permintaan Penerbitan Sertifikat TTE BSrE',
-    kategori: 'Keamanan',
-    jumlahTiket: 62,
-    selesaiTepatWaktu: 56,
+    kode: 'LYN-TI-05',
+    namaLayanan: 'Layanan Keamanan Informasi & TTE',
+    namaSubLayanan: 'Penerbitan & Konfigurasi Sertifikat Digital TTE BSrE',
+    kategoriPrioritas: 'Sedang (P3)',
     normaWaktuRespon: '20 Menit',
     normaWaktuSelesai: '24 Jam',
-    realisasiAvgJam: 14.2,
-    slaPercent: 90.3,
+    pengelolaLayanan: 'Subdit Keamanan TI & CSIRT',
   },
 ];
 
-// Jaringan Fiber Optik BP Batam (Item #2 & #5 di PDF)
+// Jaringan Fiber Optik BP Batam (Item #2 di PDF: JARINGAN FIBER OPTIK)
 export interface FiberOpticRoute {
   id: string;
+  ruas: string;
   jalur: string;
-  ruasJalan: string;
-  panjangKm: number;
-  jmlCore: number;
-  coreAktif: number;
-  utilitasPersen: number;
-  brandFo: string;
-  startPoint: string;
-  endPoint: string;
-  statusKabel: 'Normal Operasional' | 'Pemeliharaan Rutin';
+  jln: string;
+  namobj: string;
+  jmlhcore: number;
+  panjang: number; // KM
+  brandfo: string;
+  startpoint: string;
+  endpoint: string;
+  klasifikasi: string;
+  remark: string;
 }
 
 export const FIBER_OPTIC_ROUTES: FiberOpticRoute[] = [
   {
     id: 'fo-01',
-    jalur: 'Ring Backbone Batam Centre - Sei Panas - Nagoya',
-    ruasJalan: 'Jl. Engku Putri - Jl. Sudirman - Jl. Imam Bonjol',
-    panjangKm: 34.2,
-    jmlCore: 96,
-    coreAktif: 82,
-    utilitasPersen: 85.4,
-    brandFo: 'Corning SM 96C G.652D',
-    startPoint: 'Gedung BIDA Batam Centre',
-    endPoint: 'Kantor Perwakilan Nagoya',
-    statusKabel: 'Normal Operasional',
+    ruas: 'RUAS-BC-NGY-01',
+    jalur: 'Ring 1 Utama Batam Centre - Nagoya',
+    jln: 'Jl. Engku Putri - Jl. Sudirman - Jl. Imam Bonjol',
+    namobj: 'Koridor Pusat Pemerintahan & Bisnis Utama',
+    jmlhcore: 96,
+    panjang: 34.2,
+    brandfo: 'Corning Single Mode 96C G.652D',
+    startpoint: 'Data Center BIDA Batam Centre',
+    endpoint: 'Kantor Perwakilan Nagoya',
+    klasifikasi: 'Backbone Utama',
+    remark: 'Normal Operasional (Redundan 2 Arah)',
   },
   {
     id: 'fo-02',
-    jalur: 'Interkoneksi Batam Centre - Pelabuhan Batu Ampar',
-    ruasJalan: 'Jl. Ahmad Yani - Jl. Yos Sudarso - Dermaga Batu Ampar',
-    panjangKm: 28.6,
-    jmlCore: 72,
-    coreAktif: 64,
-    utilitasPersen: 88.9,
-    brandFo: 'Prysmian SM 72C Armored',
-    startPoint: 'Gedung BIDA Batam Centre',
-    endPoint: 'Dermaga Kontainer Batu Ampar',
-    statusKabel: 'Normal Operasional',
+    ruas: 'RUAS-BC-BTA-02',
+    jalur: 'Interkoneksi Pelabuhan Batu Ampar',
+    jln: 'Jl. Ahmad Yani - Jl. Yos Sudarso - Dermaga Batu Ampar',
+    namobj: 'Jalur Logistik & Gateway Maritim',
+    jmlhcore: 72,
+    panjang: 28.6,
+    brandfo: 'Prysmian Armored SM 72C',
+    startpoint: 'Data Center BIDA Batam Centre',
+    endpoint: 'Dermaga Peti Kemas Batu Ampar',
+    klasifikasi: 'Interkoneksi Kawasan',
+    remark: 'Normal Operasional (Koneksi TOS)',
   },
   {
     id: 'fo-03',
-    jalur: 'Backbone Batam Centre - DRC Sekupang & RSBP',
-    ruasJalan: 'Jl. Gajah Mada - Jl. Dr. Cipto Mangunkusumo',
-    panjangKm: 42.8,
-    jmlCore: 96,
-    coreAktif: 78,
-    utilitasPersen: 81.3,
-    brandFo: 'Furukawa SM 96C Aerial/Duct',
-    startPoint: 'Data Center BIDA',
-    endPoint: 'DRC Sekupang & RSBP Batam',
-    statusKabel: 'Normal Operasional',
+    ruas: 'RUAS-BC-SKP-03',
+    jalur: 'Backbone Batam Centre - Sekupang (DRC & RSBP)',
+    jln: 'Jl. Gajah Mada - Jl. Dr. Cipto Mangunkusumo',
+    namobj: 'Jalur Replikasi Disaster Recovery Center',
+    jmlhcore: 96,
+    panjang: 42.8,
+    brandfo: 'Furukawa SM 96C Aerial & Duct',
+    startpoint: 'Data Center BIDA Batam Centre',
+    endpoint: 'DRC Sekupang & RSBP Batam',
+    klasifikasi: 'Backbone Utama',
+    remark: 'Normal Operasional (Replikasi Data 10 Gbps)',
   },
   {
     id: 'fo-04',
+    ruas: 'RUAS-BC-BND-04',
     jalur: 'Spur Link Bandara Hang Nadim & KEK BAT',
-    ruasJalan: 'Jl. Hang Tuah - Bandara Internasional Hang Nadim',
-    panjangKm: 31.5,
-    jmlCore: 48,
-    coreAktif: 36,
-    utilitasPersen: 75.0,
-    brandFo: 'Corning SM 48C Armored',
-    startPoint: 'Batam Centre Node',
-    endPoint: 'Terminal Bandara Hang Nadim',
-    statusKabel: 'Normal Operasional',
+    jln: 'Jl. Hang Tuah - Bandara Internasional Hang Nadim',
+    namobj: 'Jalur Konektivitas Bandara & KEK Kedirgantaraan',
+    jmlhcore: 48,
+    panjang: 31.5,
+    brandfo: 'Corning Armored SM 48C',
+    startpoint: 'Batam Centre Sub-Node',
+    endpoint: 'Terminal Bandara Hang Nadim',
+    klasifikasi: 'Spur Link Distribusi',
+    remark: 'Normal Operasional',
   },
   {
     id: 'fo-05',
-    jalur: 'Link Kawasan Industri Kabil & KPLI B3',
-    ruasJalan: 'Jl. Hang Kesturi Kabil',
-    panjangKm: 24.1,
-    jmlCore: 48,
-    coreAktif: 34,
-    utilitasPersen: 70.8,
-    brandFo: 'Prysmian SM 48C Duct',
-    startPoint: 'Simpang Kabil Sub-node',
-    endPoint: 'KPLI B3 Kabil',
-    statusKabel: 'Normal Operasional',
+    ruas: 'RUAS-BC-KBL-05',
+    jalur: 'Kawasan Industri Kabil & Pelabuhan CPO',
+    jln: 'Jl. Hang Kesturi Kabil',
+    namobj: 'Jalur Pelayanan Industri Berat Kabil',
+    jmlhcore: 48,
+    panjang: 24.1,
+    brandfo: 'Prysmian Duct SM 48C',
+    startpoint: 'Simpang Kabil Sub-Node',
+    endpoint: 'KPLI B3 & Dermaga CPO Kabil',
+    klasifikasi: 'Spur Link Distribusi',
+    remark: 'Normal Operasional',
   },
 ];
 
-// Data Aplikasi BP Batam (Item #14 di PDF)
+// Data Aplikasi BP Batam (Item #14 di PDF: DAFTAR APLIKASI)
 export interface BpBatamAppItem {
   id: string;
   namaAplikasi: string;
   uraianAplikasi: string;
+  unitOperasional: string;
+  unitPengembang: string;
   basisAplikasi: 'Web' | 'Mobile' | 'Hybrid';
-  tandaTanganElektronik: 'Sudah TTE (BSrE)' | 'Dalam Proses' | 'Belum';
   kategoriAplikasi: 'Pelayanan Publik' | 'Administrasi Pemerintahan' | 'Keuangan & Aset' | 'Spasial GIS';
   status: 'Aktif Operasional' | 'Pemeliharaan' | 'Pengembangan';
-  unitOperasional: string;
-  bahasaPemrograman: string;
   devYear: number;
 }
 
@@ -470,72 +515,66 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     id: 'app-01',
     namaAplikasi: 'SIMKEU BP Batam (Sistem Informasi Manajemen Keuangan)',
     uraianAplikasi: 'Pengelolaan anggaran DIPA, realisasi belanja, penerimaan kas, billing kasir dan laporan keuangan BLU',
+    unitOperasional: 'Biro Keuangan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Keuangan & Aset',
     status: 'Aktif Operasional',
-    unitOperasional: 'Biro Keuangan',
-    bahasaPemrograman: 'TypeScript / Node / Java Oracle',
     devYear: 2021,
   },
   {
     id: 'app-02',
     namaAplikasi: 'Sistem Informasi Pengelolaan Lahan (LandMS / SIPRAJA)',
     uraianAplikasi: 'Penerbitan SKPT, alokasi lahan, revisi PL, faktur perubahan peruntukan, dan integrasi peta spasial',
+    unitOperasional: 'Direktorat Pengelolaan Lahan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Spasial GIS',
     status: 'Aktif Operasional',
-    unitOperasional: 'Direktorat Pengelolaan Lahan',
-    bahasaPemrograman: 'Python Django / PostGIS',
     devYear: 2020,
   },
   {
     id: 'app-03',
     namaAplikasi: 'E-Office & Tata Naskah Dinas Elektronik (TNDE)',
     uraianAplikasi: 'Distribusi surat masuk/keluar, disposisi pimpinan, nota dinas, dan pengarsipan digital',
+    unitOperasional: 'Biro Umum',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Hybrid',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Administrasi Pemerintahan',
     status: 'Aktif Operasional',
-    unitOperasional: 'Biro Umum',
-    bahasaPemrograman: 'React Native / PHP Laravel',
     devYear: 2022,
   },
   {
     id: 'app-04',
     namaAplikasi: 'Batam Online Single Submission (IBOSS / MPP Digital)',
     uraianAplikasi: 'Portal layanan perizinan terpadu investasi, izin usaha kawasan, lalu lintas barang, dan perizinan non-OSS',
+    unitOperasional: 'PTSP BP Batam',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Pelayanan Publik',
     status: 'Aktif Operasional',
-    unitOperasional: 'PTSP BP Batam',
-    bahasaPemrograman: 'Vue.js / Go microservices',
     devYear: 2023,
   },
   {
     id: 'app-05',
     namaAplikasi: 'Sistem Informasi Manajemen Pelabuhan (SIM-Pelabuhan)',
     uraianAplikasi: 'Manajemen pergerakan kapal (BMS), bongkar muat kargo peti kemas Batu Ampar, dan billing pass penumpang',
+    unitOperasional: 'Direktorat Pengelolaan Kepelabuhanan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Pelayanan Publik',
     status: 'Aktif Operasional',
-    unitOperasional: 'Direktorat Pengelolaan Kepelabuhanan',
-    bahasaPemrograman: 'Java Spring Boot / PostgreSQL',
     devYear: 2021,
   },
   {
     id: 'app-06',
     namaAplikasi: 'SIMRS Gos v2 (Sistem Informasi Rumah Sakit BP Batam)',
     uraianAplikasi: 'Rekam medis elektronik (RME), registrasi rawat inap/jalan IGD, resep obat farmasi, dan billing klaim BPJS',
+    unitOperasional: 'Badan Usaha Rumah Sakit (RSBP)',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
-    tandaTanganElektronik: 'Sudah TTE (BSrE)',
     kategoriAplikasi: 'Pelayanan Publik',
     status: 'Aktif Operasional',
-    unitOperasional: 'Badan Usaha Rumah Sakit (RSBP)',
-    bahasaPemrograman: 'Node.js / React / MySQL',
     devYear: 2023,
   },
 ];

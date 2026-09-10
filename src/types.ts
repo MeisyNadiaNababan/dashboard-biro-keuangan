@@ -157,6 +157,7 @@ export interface RincianTargetPnbp {
 
 // Item 8: Rekapitulasi Target Penerimaan Negara Bukan Pajak (PNBP)
 export interface RekapitulasiTargetPnbp {
+  tahun?: number;
   kodeKegiatan: string;
   namaUnit: string;
   namaLayanan: string;
@@ -189,6 +190,21 @@ export interface RekapitulasiPaguAnggaran {
   sumberDanaPhln: number; // in Miliar
   sumberDanaPdln: number; // in Miliar
   jumlah: number; // in Miliar
+}
+
+// Item 21: Rekapitulasi Daftar Piutang
+export interface RekapitulasiDaftarPiutang {
+  unitUsaha: string;
+  namaPelanggan: string;
+  jumlahPiutang: number; // in Miliar
+}
+
+// Item 17: Rekapitulasi Umur Piutang
+export interface RekapitulasiUmurPiutang {
+  namaPelanggan: string;
+  jumlahPiutangTertagih: number; // in Miliar
+  umurPiutang: number; // in Hari
+  kategoriCalculated?: string;
 }
 
 // Item 18: Rekapitulasi Mutasi Piutang Per Faktur

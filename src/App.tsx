@@ -6,8 +6,8 @@ import { ExecutiveFilters } from './components/ExecutiveFilters';
 import { KpiMetricsRow } from './components/KpiMetricsRow';
 import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
 import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
+import { BiroKeuanganFinancialCard } from './components/BiroKeuanganFinancialCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
-import { AssetAndReportsRow } from './components/AssetAndReportsRow';
 import { FiscalInsightsRow } from './components/FiscalInsightsRow';
 import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
@@ -204,13 +204,11 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full bg-[#F4F6F8] text-slate-800 font-sans overflow-hidden antialiased selection:bg-[#002B49] selection:text-white">
-      {/* 1. Left Navigation Rail (Multi-Unit 24 Units Architecture) */}
+      {/* 1. Left Navigation Rail (Direktori 24 Unit Kerja BP Batam) */}
       <NavigationRail
         activeUnitId={activeUnitId}
         onSelectUnit={handleSelectUnit}
         onOpenUnitsDrawer={() => setIsUnitsDrawerOpen(true)}
-        onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
-        onOpenExportModal={() => setIsExportModalOpen(true)}
       />
 
       {/* 2. Main Workspace Area */}
@@ -277,31 +275,18 @@ export default function App() {
                       />
                     </section>
 
-                    {/* 2. Detail Performa Pendapatan & Detail Serapan Belanja */}
+                    {/* 2. Detail Performa Keuangan BLU: Swap Tabel Data (Tanpa Button Lihat Detail) */}
                     <section
                       id="pendapatan-belanja"
                       aria-label="Performa Pendapatan dan Belanja"
-                      className="grid grid-cols-1 lg:grid-cols-2 gap-4"
                     >
-                      <div id="pendapatan-section">
-                        <RevenuePerformanceCard
-                          items={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
-                          onViewDetail={() => setDetailModalType('pendapatan')}
-                          selectedYear={selectedYear}
-                          selectedUnit={selectedUnit}
-                          selectedMonth={selectedMonth}
-                        />
-                      </div>
-
-                      <div id="belanja-section">
-                        <BudgetAbsorptionCard
-                          items={filteredExpense.length > 0 ? filteredExpense : EXPENSE_DATA}
-                          onViewDetail={() => setDetailModalType('belanja')}
-                          selectedYear={selectedYear}
-                          selectedUnit={selectedUnit}
-                          selectedMonth={selectedMonth}
-                        />
-                      </div>
+                      <BiroKeuanganFinancialCard
+                        revenueItems={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
+                        expenseItems={filteredExpense.length > 0 ? filteredExpense : EXPENSE_DATA}
+                        selectedYear={selectedYear}
+                        selectedUnit={selectedUnit}
+                        selectedMonth={selectedMonth}
+                      />
                     </section>
 
                     {/* 3. Piutang & Arus Kas Section */}
@@ -312,12 +297,7 @@ export default function App() {
                       />
                     </section>
 
-                    {/* 4. Asset Utilization */}
-                    <section id="aset-section" aria-label="Pemanfaatan Aset dan Konsesi">
-                      <AssetAndReportsRow onOpenExportModal={() => setIsExportModalOpen(true)} />
-                    </section>
-
-                    {/* 5. Fiscal Insights, Surplus/Deficit */}
+                    {/* 4. Fiscal Insights, Surplus/Deficit */}
                     <section id="fiskal-section" aria-label="Kemandirian Fiskal dan Rekomendasi">
                       <FiscalInsightsRow
                         onOpenExportModal={() => setIsExportModalOpen(true)}
@@ -333,6 +313,7 @@ export default function App() {
               <PdsiDashboard
                 activeSubMenu={activeSheet}
                 onSelectSubMenu={handleSelectSheet}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
               />
             ) : (
               /* --- OTHER 22 UNITS DASHBOARD & DESIGNER --- */

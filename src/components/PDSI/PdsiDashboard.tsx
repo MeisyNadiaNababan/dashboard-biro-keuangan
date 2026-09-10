@@ -6,101 +6,90 @@ import { PdsiHelpdeskSection } from './PdsiHelpdeskSection';
 import { PdsiFiberOpticAndApps } from './PdsiFiberOpticAndApps';
 import { PdsiKamusRumusView } from './PdsiKamusRumusView';
 import { KpiWordDocumentView } from '../KpiWordDocumentView';
-import { Server, ShieldCheck, Headphones, Network, FileCode2, Layers, Download, RefreshCw, Calendar, CheckCircle2, Shield, FileText } from 'lucide-react';
+import { PdsiFilters } from './PdsiFilters';
 
 interface PdsiDashboardProps {
   activeSubMenu: string;
   onSelectSubMenu: (menu: string) => void;
+  onOpenExportModal?: () => void;
 }
 
 export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
   activeSubMenu,
   onSelectSubMenu,
+  onOpenExportModal,
 }) => {
   const [selectedYear, setSelectedYear] = useState('2026');
   const [selectedMonth, setSelectedMonth] = useState('April');
+  const [selectedCycle, setSelectedCycle] = useState('ALL');
+  const [selectedDomain, setSelectedDomain] = useState('ALL');
+  const [selectedStatus, setSelectedStatus] = useState('ALL');
+  const [basis, setBasis] = useState<'ytd' | 'monthly'>('ytd');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleResetFilters = () => {
+    setSelectedYear('2026');
+    setSelectedMonth('April');
+    setSelectedCycle('ALL');
+    setSelectedDomain('ALL');
+    setSelectedStatus('ALL');
+    setBasis('ytd');
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 600);
+  };
 
   return (
     <div className="space-y-4 font-sans select-none pb-8">
-      {/* PDSI Executive Sub-Menu Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs flex flex-wrap items-center justify-between gap-3">
-        {/* Left: Unit Identity */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#0B2545] border border-blue-800 flex items-center justify-center text-sky-300 shadow-xs">
-            <Server className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-extrabold text-slate-900 tracking-tight">
-                Pusat Data dan Sistem Informasi (PDSI) BP Batam
-              </h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live Feed
-              </span>
-            </div>
-            <p className="text-xs text-slate-500">
-              Tata Kelola SPBE, Infrastruktur Data Center Tier III, Jaringan Fiber Optik &amp; CSIRT Keamanan Siber
-            </p>
-          </div>
-        </div>
+      {/* 1. Tableau Parameters & Filters Shelf (Matching Biro Keuangan style, tailored for PDSI) */}
+      <PdsiFilters
+        selectedYear={selectedYear}
+        onChangeYear={setSelectedYear}
+        selectedMonth={selectedMonth}
+        onChangeMonth={setSelectedMonth}
+        selectedCycle={selectedCycle}
+        onChangeCycle={setSelectedCycle}
+        selectedDomain={selectedDomain}
+        onChangeDomain={setSelectedDomain}
+        selectedStatus={selectedStatus}
+        onChangeStatus={setSelectedStatus}
+        basis={basis}
+        onChangeBasis={setBasis}
+        onResetFilters={handleResetFilters}
+        onRefresh={handleRefresh}
+        isRefreshing={isRefreshing}
+        onOpenExportModal={onOpenExportModal}
+      />
 
-        {/* Filters */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg text-xs">
-            <Calendar className="w-3.5 h-3.5 text-slate-500" />
-            <span className="font-semibold text-slate-700">Tahun:</span>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer"
-            >
-              <option value="2026">2026</option>
-              <option value="2025">2025</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg text-xs">
-            <span className="font-semibold text-slate-700">Bulan:</span>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer"
-            >
-              <option value="April">April (YTD)</option>
-              <option value="Maret">Maret</option>
-              <option value="Februari">Februari</option>
-              <option value="Januari">Januari</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Area based on activeSubMenu */}
+      {/* 2. Main Content Area based on activeSubMenu and selectedDomain */}
       {activeSubMenu === 'kpi_word_doc' ? (
         <KpiWordDocumentView activeUnitId="pdsi" onBackToDashboard={() => onSelectSubMenu('ikhtisar')} />
       ) : activeSubMenu === 'kamus_rumus' ? (
         <PdsiKamusRumusView />
-      ) : activeSubMenu === 'helpdesk' ? (
+      ) : activeSubMenu === 'helpdesk' || selectedDomain === 'helpdesk' ? (
         <div className="space-y-4">
           <PdsiHelpdeskSection />
         </div>
-      ) : activeSubMenu === 'datacenter' ? (
+      ) : activeSubMenu === 'datacenter' || selectedDomain === 'datacenter' ? (
         <div className="space-y-4">
           <PdsiDataCenterCard />
         </div>
-      ) : activeSubMenu === 'cyber' ? (
+      ) : activeSubMenu === 'cyber' || selectedDomain === 'cyber' ? (
         <div className="space-y-4">
           <PdsiCyberSecurityCard />
         </div>
-      ) : activeSubMenu === 'fiber' ? (
+      ) : activeSubMenu === 'fiber' || selectedDomain === 'fiber' ? (
         <div className="space-y-4">
           <PdsiFiberOpticAndApps />
         </div>
       ) : (
         /* Default: Ikhtisar PDSI Overview */
         <div className="space-y-4">
-          {/* KPI Metrics Row */}
+          {/* Key Performance Indicators BAN Row */}
           <PdsiKpiRow
             onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
             onSelectMetric={(id) => {
@@ -117,7 +106,7 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
             <PdsiCyberSecurityCard />
           </div>
 
-          {/* Row 2: Helpdesk & Jaringan/Aplikasi */}
+          {/* Row 2: IT Helpdesk & Fiber Optic / SPBE */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <PdsiHelpdeskSection />
             <PdsiFiberOpticAndApps />

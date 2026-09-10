@@ -12,6 +12,8 @@ import {
   REKAPITULASI_PAGU_ANGGARAN_DATA,
   REKAPITULASI_MUTASI_PIUTANG_DATA,
   REKAPITULASI_PIUTANG_TAK_TERTAGIH_DATA,
+  REKAPITULASI_DAFTAR_PIUTANG_DATA,
+  REKAPITULASI_UMUR_PIUTANG_DATA,
   LAPORAN_PENERIMAAN_SUMBER_DANA_DATA,
   BIRO_KEUANGAN_DATA_CATALOG
 } from '../../data/mockData';
@@ -176,7 +178,17 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                     : 'border-transparent text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Item 17 &amp; 19: Kategori &amp; Aging Schedule
+                Item 17: Rekapitulasi Umur Piutang (Aging)
+              </button>
+              <button
+                onClick={() => setSubTab('daftar_piutang')}
+                className={`px-3 py-1 font-semibold border-b-2 cursor-pointer transition-colors ${
+                  subTab === 'daftar_piutang'
+                    ? 'border-[#1F3864] text-[#1F3864] bg-white font-bold'
+                    : 'border-transparent text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Item 21: Rekapitulasi Daftar Piutang
               </button>
             </>
           )}
@@ -295,6 +307,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                   <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
                     <thead className="bg-[#F2F4F7] font-bold text-slate-700 border-b border-slate-300">
                       <tr>
+                        <th className="py-2 px-3 border-r border-slate-300 font-mono text-center">TAHUN</th>
                         <th className="py-2 px-3 border-r border-slate-300 font-mono">KODE KEGIATAN</th>
                         <th className="py-2 px-3 border-r border-slate-300">NAMA UNIT</th>
                         <th className="py-2 px-3 border-r border-slate-300">NAMA LAYANAN</th>
@@ -311,6 +324,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                         i.kodeKegiatan.toLowerCase().includes(searchTerm.toLowerCase())
                       ).map((item) => (
                         <tr key={item.kodeKegiatan} className="hover:bg-slate-50">
+                          <td className="py-2 px-3 text-center font-mono text-slate-700 border-r border-slate-200">
+                            {item.tahun || 2026}
+                          </td>
                           <td className="py-2 px-3 font-bold text-[#1F3864] border-r border-slate-200">
                             {item.kodeKegiatan}
                           </td>
@@ -469,8 +485,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                         <th className="py-2 px-3 text-center border-r border-slate-300 font-mono">TAHUN</th>
                         <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">ANGGARAN (RP M)</th>
                         <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">REALISASI (RP M)</th>
-                        <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">PERSENTASE</th>
-                        <th className="py-2 px-3">PERIODE REKAP</th>
+                        <th className="py-2 px-3 text-right font-mono">PERSENTASE</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200 font-mono text-xs">
@@ -500,11 +515,8 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                           <td className="py-2 px-3 text-right text-[#1F3864] border-r border-slate-200 font-bold">
                             Rp {item.realisasi.toFixed(1)} M
                           </td>
-                          <td className="py-2 px-3 text-right font-bold text-slate-900 border-r border-slate-200">
+                          <td className="py-2 px-3 text-right font-bold text-slate-900">
                             {item.persentase.toFixed(1)}%
-                          </td>
-                          <td className="py-2 px-3 font-sans text-slate-600 text-[11px]">
-                            {item.periodeRekap}
                           </td>
                         </tr>
                       ))}
@@ -609,11 +621,13 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                   <p className="text-sm font-black text-slate-900 mt-0.5">
                     {subTab === 'tak_tertagih'
                       ? 'keu_piutang_tak_tertagih'
+                      : subTab === 'daftar_piutang'
+                      ? 'keu_rekap_daftar_piutang'
                       : subTab === 'kategori'
                       ? 'keu_rekap_umur_piutang'
                       : 'keu_mutasi_piutang_faktur'}
                   </p>
-                  <span className="text-[11px] text-slate-500">Item 17, 18 &amp; 20 Katalog</span>
+                  <span className="text-[11px] text-slate-500">Item 17, 18, 20 &amp; 21 Katalog</span>
                 </div>
               </div>
 
@@ -747,59 +761,124 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
               )}
 
               {subTab === 'kategori' && (
-                /* Item 17 & 19: Kategori Piutang & Aging */
+                /* Item 17: Rekapitulasi Umur Piutang (Atribut Resmi + Calculated Field) */
                 <>
+                  <div className="mb-3 p-3 bg-blue-50/70 border border-blue-200 rounded-lg text-xs text-blue-950 leading-relaxed font-sans">
+                    <strong className="text-blue-900 block font-bold">ℹ️ Penjelasan Sumber Atribut Data &amp; Calculated Field:</strong>
+                    <p className="mt-1 text-slate-700">
+                      Berdasarkan dokumen resmi <em>Atribut Daftar Data Satu Data BP Batam</em>, tabel <code>keu_rekap_umur_piutang</code> (Item 17) menyimpan 3 atribut fisik di database: <strong>NAMA PELANGGAN</strong>, <strong>JUMLAH PIUTANG TERTAGIH (RP M)</strong>, dan <strong>UMUR PIUTANG (HARI)</strong>.
+                    </p>
+                    <p className="mt-1 text-slate-700">
+                      Kolom <strong>Kategori Aging Schedule</strong> dikelompokkan melalui <em>Calculated Field Tableau</em>: <br />
+                      <code className="bg-white/80 px-1 py-0.5 rounded border border-blue-200 text-blue-800 font-mono text-[11px]">
+                        IF [umur_piutang] &gt; 90 THEN '&gt; 90 Hari' ELSEIF [umur_piutang] &gt; 60 THEN '61-90 Hari' ELSEIF [umur_piutang] &gt; 30 THEN '31-60 Hari' ELSE '0-30 Hari' END
+                      </code>
+                    </p>
+                  </div>
+
                   <TableauShelvesBadge
                     className="mb-2.5"
                     showMe="Show Me #1 (Crosstab / Text Table)"
-                    rows="[kategori]"
-                    columns="COUNT([jumlahDebitur]), SUM([nilaiPiutang]), % of Total, AVG([agingTrend])"
-                    color="[kategori]"
-                    detail="Item 17 & 19 Katalog Data (keu_rekap_umur_piutang)"
+                    rows="[namaPelanggan], [kategoriCalculated]"
+                    columns="SUM([jumlahPiutangTertagih]), AVG([umurPiutang])"
+                    color="[kategoriCalculated]"
+                    detail="Item 17 Katalog Data (keu_rekap_umur_piutang)"
                   />
                   <div className="overflow-x-auto border border-slate-300">
-                  <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
-                    <thead className="bg-[#F2F4F7] font-bold text-slate-700 border-b border-slate-300">
-                      <tr>
-                        <th className="py-2 px-3 border-r border-slate-300">Kategori Piutang</th>
-                        <th className="py-2 px-3 text-right border-r border-slate-300">Jumlah Debitur</th>
-                        <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">Nilai Piutang (Rp M)</th>
-                        <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">Porsi (%)</th>
-                        <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">Aging Trend</th>
-                        <th className="py-2 px-3 text-center">Ketentuan PUPN / Kemenkeu</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200 font-mono text-xs">
-                      {RECEIVABLES_DATA.filter((i) =>
-                        i.kategori.toLowerCase().includes(searchTerm.toLowerCase())
-                      ).map((item) => (
-                        <tr key={item.id} className="hover:bg-slate-50">
-                          <td className="py-2 px-3 font-sans font-semibold text-slate-900 border-r border-slate-200">
-                            {item.kategori}
-                          </td>
-                          <td className="py-2 px-3 text-right text-slate-700 border-r border-slate-200">
-                            {item.jumlahDebitur} Mitra
-                          </td>
-                          <td className="py-2 px-3 text-right font-bold text-[#E15759] border-r border-slate-200">
-                            Rp {item.nilaiPiutang.toFixed(1)} M
-                          </td>
-                          <td className="py-2 px-3 text-right text-slate-800 border-r border-slate-200">
-                            {item.persentase.toFixed(1)}%
-                          </td>
-                          <td className="py-2 px-3 text-right font-bold text-slate-700 border-r border-slate-200">
-                            {item.agingTrend.toFixed(1)}%
-                          </td>
-                          <td className="py-2 px-3 text-center font-sans">
-                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-[#FEF9E7] text-[#7D6608] border border-[#F28E2B]/40">
-                              Penagihan Rutin / Verifikasi
-                            </span>
-                          </td>
+                    <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
+                      <thead className="bg-[#F2F4F7] font-bold text-slate-700 border-b border-slate-300">
+                        <tr>
+                          <th className="py-2 px-3 border-r border-slate-300">NAMA PELANGGAN (DB)</th>
+                          <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">JUMLAH PIUTANG (RP M)</th>
+                          <th className="py-2 px-3 text-right border-r border-slate-300 font-mono">UMUR PIUTANG (HARI)</th>
+                          <th className="py-2 px-3">KATEGORI AGING (CALCULATED)</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 font-mono text-xs">
+                        {REKAPITULASI_UMUR_PIUTANG_DATA.filter((i) =>
+                          i.namaPelanggan.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          i.kategoriCalculated.toLowerCase().includes(searchTerm.toLowerCase())
+                        ).map((item, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50">
+                            <td className="py-2 px-3 font-sans font-bold text-slate-900 border-r border-slate-200">
+                              {item.namaPelanggan}
+                            </td>
+                            <td className="py-2 px-3 text-right font-bold text-[#E15759] border-r border-slate-200">
+                              Rp {item.jumlahPiutangTertagih.toFixed(2)} M
+                            </td>
+                            <td className="py-2 px-3 text-right font-bold text-slate-800 border-r border-slate-200">
+                              {item.umurPiutang} Hari
+                            </td>
+                            <td className="py-2 px-3 font-sans">
+                              <span
+                                className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded ${
+                                  item.umurPiutang > 90
+                                    ? 'bg-[#FDEDEC] text-[#922B21] border border-[#E15759]/40'
+                                    : item.umurPiutang > 60
+                                    ? 'bg-[#FEF9E7] text-[#7D6608] border border-[#F28E2B]/40'
+                                    : item.umurPiutang > 30
+                                    ? 'bg-[#EBF3FB] text-[#1F3864] border border-[#4E79A7]/40'
+                                    : 'bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40'
+                                }`}
+                              >
+                                {item.kategoriCalculated}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+
+              {subTab === 'daftar_piutang' && (
+                /* Item 21: Rekapitulasi Daftar Piutang (Atribut Asli Dokumen Satu Data) */
+                <>
+                  <div className="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 leading-relaxed font-sans">
+                    <strong className="text-slate-900 block font-bold">ℹ️ Atribut Resmi Satu Data (Item 21 - keu_rekap_daftar_piutang):</strong>
+                    <p className="mt-1 text-slate-600">
+                      Tabel master ini memuat ringkasan piutang per unit kerja pengampu sesuai dokumen Atribut Daftar Data Satu Data BP Batam dengan 3 atribut resmi: <strong>UNIT USAHA</strong>, <strong>NAMA PELANGGAN</strong>, dan <strong>JUMLAH PIUTANG (RP M)</strong>.
+                    </p>
+                  </div>
+
+                  <TableauShelvesBadge
+                    className="mb-2.5"
+                    showMe="Show Me #1 (Crosstab / Text Table)"
+                    rows="[unitUsaha], [namaPelanggan]"
+                    columns="SUM([jumlahPiutang])"
+                    detail="Item 21 Katalog Data (keu_rekap_daftar_piutang)"
+                  />
+                  <div className="overflow-x-auto border border-slate-300">
+                    <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
+                      <thead className="bg-[#F2F4F7] font-bold text-slate-700 border-b border-slate-300">
+                        <tr>
+                          <th className="py-2 px-3 border-r border-slate-300">UNIT USAHA (DB)</th>
+                          <th className="py-2 px-3 border-r border-slate-300">NAMA PELANGGAN (DB)</th>
+                          <th className="py-2 px-3 text-right font-mono">JUMLAH PIUTANG (RP M) (DB)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 font-mono text-xs">
+                        {REKAPITULASI_DAFTAR_PIUTANG_DATA.filter((i) =>
+                          i.unitUsaha.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          i.namaPelanggan.toLowerCase().includes(searchTerm.toLowerCase())
+                        ).map((item, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50">
+                            <td className="py-2 px-3 font-sans font-semibold text-[#1F3864] border-r border-slate-200">
+                              {item.unitUsaha}
+                            </td>
+                            <td className="py-2 px-3 font-sans font-bold text-slate-900 border-r border-slate-200">
+                              {item.namaPelanggan}
+                            </td>
+                            <td className="py-2 px-3 text-right font-bold text-[#E15759]">
+                              Rp {item.jumlahPiutang.toFixed(2)} M
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -915,7 +994,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                     className="mb-2.5"
                     showMe="Show Me #1 (Crosstab / Text Table)"
                     rows="[sumberDana], [unitKerja]"
-                    columns="SUM([nilai]), % of Total"
+                    columns="SUM([nilai])"
                     filters="[tanggalRekapAwal] - [tanggalRekapAkhir]"
                     detail="Item 14 Katalog Data (keu_penerimaan_sumber_dana)"
                   />
@@ -927,8 +1006,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                           <th className="py-2 px-3 border-r border-slate-300">UNIT KERJA</th>
                           <th className="py-2 px-3 text-center border-r border-slate-300 font-mono">TANGGAL REKAP AWAL</th>
                           <th className="py-2 px-3 text-center border-r border-slate-300 font-mono">TANGGAL REKAP AKHIR</th>
-                          <th className="py-2 px-3 text-right font-mono border-r border-slate-300">NILAI (RP M)</th>
-                          <th className="py-2 px-3 text-right font-mono">PORSI (%)</th>
+                          <th className="py-2 px-3 text-right font-mono">NILAI (RP M)</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-200 font-mono text-xs">
@@ -949,11 +1027,8 @@ export const DetailModal: React.FC<DetailModalProps> = ({ type, isOpen, onClose 
                             <td className="py-2 px-3 text-center text-slate-600 border-r border-slate-200">
                               {item.tanggalRekapAkhir}
                             </td>
-                            <td className="py-2 px-3 text-right font-bold text-[#2B542C] border-r border-slate-200">
+                            <td className="py-2 px-3 text-right font-bold text-[#2B542C]">
                               Rp {item.nilai.toFixed(1)} M
-                            </td>
-                            <td className="py-2 px-3 text-right text-slate-700 font-bold">
-                              {item.porsi.toFixed(1)}%
                             </td>
                           </tr>
                         ))}

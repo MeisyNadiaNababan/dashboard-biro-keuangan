@@ -37,9 +37,19 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                 </span>
               )}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Pagu DIPA {selectedYear}: Rp 3.324,5 M • Cut-off: {selectedMonth} • Benchmark Target Q2: 35,0%
-            </p>
+            <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-slate-600">
+              <span className="px-2.5 py-0.5 bg-slate-100 rounded text-slate-700 font-medium">
+                Pagu DIPA {selectedYear}: <strong className="font-bold text-slate-900">Rp 3.324,5 M</strong>
+              </span>
+              <span className="text-slate-300">•</span>
+              <span className="px-2.5 py-0.5 bg-slate-100 rounded text-slate-700 font-medium">
+                Cut-off: <strong className="font-bold text-slate-900">{selectedMonth} {selectedYear}</strong>
+              </span>
+              <span className="text-slate-300">•</span>
+              <span className="px-2.5 py-0.5 bg-slate-100 rounded text-slate-700 font-medium">
+                Benchmark Q2: <strong className="font-bold text-slate-900">35,0%</strong>
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -75,9 +85,9 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
         {/* Tableau Shelves Mapping Badge */}
         <TableauShelvesBadge
           showMe="Show Me #6 / #23"
-          rows="[program] / [unit_kerja]"
+          rows="[jenis_anggaran] / [satker]"
           columns="SUM([realisasi]), SUM([pagu])"
-          color="[Status Serapan]"
+          color="[Realisasi Belanja]"
           referenceLine="SUM([pagu]) & Benchmark Q2 (35%)"
           detail="[jenis_belanja], [persentase_serapan]"
           filters={`[tahun]='${selectedYear}', [bulan]='${selectedMonth}'`}
@@ -88,12 +98,11 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
           <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
             <thead className="bg-slate-50/80 text-slate-700 font-bold border-b border-slate-200">
               <tr>
-                <th className="py-3 px-3.5">Program / Komponen Belanja</th>
+                <th className="py-3 px-3.5">Jenis Anggaran</th>
                 <th className="py-3 px-3.5 text-right">Pagu DIPA (Rp M)</th>
                 <th className="py-3 px-3.5 text-right">Realisasi YTD (Rp M)</th>
-                <th className="py-3 px-3.5 min-w-[170px]">Visual Bar (% Pagu)</th>
-                <th className="py-3 px-3.5 text-right">Sisa Pagu</th>
-                <th className="py-3 px-3.5 text-center">Status Serapan</th>
+                <th className="py-3 px-3.5 min-w-[200px]">Visual Bar (% Pagu DIPA)</th>
+                <th className="py-3 px-3.5 text-right">Sisa Pagu (Rp M)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-mono text-xs">
@@ -114,8 +123,8 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                       Rp {(item.realisasi ?? 0).toFixed(1)} M
                     </td>
                     <td className="py-2.5 px-3.5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-full bg-slate-100 h-2.5 relative rounded-full overflow-hidden">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-slate-100 h-2.5 relative rounded-full overflow-hidden">
                           {/* Progress Bar */}
                           <div
                             className="h-full bg-[#4E79A7] rounded-full transition-all duration-300"
@@ -128,26 +137,13 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                             title="Reference Line: 35% Q2"
                           />
                         </div>
-                        <span className="w-12 text-right text-xs font-bold text-slate-800">
+                        <span className="w-14 text-right text-xs font-bold text-slate-800">
                           {serapanPct.toFixed(1)}%
                         </span>
                       </div>
                     </td>
                     <td className="py-2.5 px-3.5 text-right text-slate-600">
                       Rp {sisaPagu.toFixed(1)} M
-                    </td>
-                    <td className="py-2.5 px-3.5 text-center font-sans">
-                      <span
-                        className={`px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full ${
-                          serapanPct >= 35
-                            ? 'bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40'
-                            : serapanPct >= 20
-                            ? 'bg-[#FEF9E7] text-[#7D6608] border border-[#F28E2B]/40'
-                            : 'bg-[#FDEDEC] text-[#922B21] border border-[#E15759]/40'
-                        }`}
-                      >
-                        {serapanPct >= 35 ? 'Baik (≥35%)' : serapanPct >= 20 ? 'Cukup' : 'Lambat (<20%)'}
-                      </span>
                     </td>
                   </tr>
                 );
@@ -166,8 +162,8 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                   Rp {(EXPENSE_TOTAL.realisasi ?? 0).toFixed(1)} M
                 </td>
                 <td className="py-3 px-3.5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-slate-200 h-2.5 relative rounded-full overflow-hidden">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 bg-slate-200 h-2.5 relative rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#4E79A7] rounded-full"
                         style={{ width: `${Math.min(EXPENSE_TOTAL.serapan ?? 0, 100)}%` }}
@@ -175,20 +171,16 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                       <div
                         className="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10"
                         style={{ left: '35%' }}
+                        title="Reference Line: 35% Q2"
                       />
                     </div>
-                    <span className="w-12 text-right text-xs font-bold text-slate-900">
+                    <span className="w-14 text-right text-xs font-bold text-slate-900">
                       {(EXPENSE_TOTAL.serapan ?? 0).toFixed(1)}%
                     </span>
                   </div>
                 </td>
                 <td className="py-3 px-3.5 text-right text-slate-900">
                   Rp {(EXPENSE_TOTAL.sisaAnggaran ?? 0).toFixed(1)} M
-                </td>
-                <td className="py-3 px-3.5 text-center font-sans">
-                  <span className="bg-[#FEF9E7] text-[#7D6608] px-2.5 py-0.5 text-[10px] uppercase font-bold border border-[#F28E2B]/40 rounded-full">
-                    Perlu Akselerasi Modal
-                  </span>
                 </td>
               </tr>
             </tfoot>

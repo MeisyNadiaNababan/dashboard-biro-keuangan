@@ -10,7 +10,6 @@ import {
   FileSpreadsheet,
   CheckCircle2,
   ChevronDown,
-  FileCode2,
   LayoutDashboard,
   TrendingUp,
   CreditCard,
@@ -23,12 +22,11 @@ import {
   Network,
   Package,
   Layers,
-  BookOpen,
   Sparkles,
   FileText,
+  FileCode2,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
-import { downloadKpiDocxInBrowser } from '../utils/generateDocx';
 
 interface HeaderProps {
   onOpenExportModal?: () => void;
@@ -54,7 +52,6 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectUnit,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isDownloadingWord, setIsDownloadingWord] = useState(false);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -63,18 +60,6 @@ export const Header: React.FC<HeaderProps> = ({
       if (document.exitFullscreen) {
         document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {});
       }
-    }
-  };
-
-  const handleDownloadWordDocx = async () => {
-    try {
-      setIsDownloadingWord(true);
-      const unitKey = activeUnitId === 'pdsi' ? 'pdsi' : 'keuangan';
-      await downloadKpiDocxInBrowser(unitKey);
-    } catch (err) {
-      console.error('Error downloading docx:', err);
-    } finally {
-      setIsDownloadingWord(false);
     }
   };
 
@@ -90,7 +75,6 @@ export const Header: React.FC<HeaderProps> = ({
         { id: 'piutang', label: 'Aging & Piutang', icon: Receipt },
         { id: 'kas_bank', label: 'Arus Kas & Bank', icon: Building2 },
         { id: 'fiskal', label: 'Surplus/Defisit & Fiskal', icon: Scale },
-        { id: 'aset', label: 'Pemanfaatan Aset', icon: Package },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus (PDF)', icon: FileCode2 },
       ];
@@ -108,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
       return [
         { id: 'ikhtisar', label: 'Ikhtisar Unit', icon: Layers },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
-        { id: 'katalog', label: 'Kamus Rumus & Katalog PDF', icon: BookOpen },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & Katalog PDF', icon: FileCode2 },
         { id: 'designer', label: '+ Rancang Dashboard Unit Ini', icon: Sparkles, isSpecial: true },
       ];
     }
@@ -162,21 +146,11 @@ export const Header: React.FC<HeaderProps> = ({
           {/* 24 Units Directory Button */}
           <button
             onClick={onOpenUnitsDrawer}
-            className="hidden md:flex items-center gap-1.5 text-xs bg-[#162D4D] hover:bg-[#203D68] text-sky-200 px-3 py-1.5 rounded-lg border border-sky-500/30 font-semibold cursor-pointer transition-all"
+            className="flex items-center gap-1.5 text-xs bg-[#162D4D] hover:bg-[#203D68] text-sky-200 px-3 py-1.5 rounded-lg border border-sky-500/30 font-semibold cursor-pointer transition-all"
             title="Buka Direktori 24 Unit Kerja BP Batam"
           >
             <Layers className="w-3.5 h-3.5 text-sky-400" />
             <span>24 Unit Kerja</span>
-          </button>
-
-          {/* Panduan Rumus / Calculated Fields Modal */}
-          <button
-            onClick={onOpenTableauGuide}
-            className="flex items-center gap-1.5 text-xs bg-[#1F3864] hover:bg-[#2B4C85] text-white px-3 py-1.5 rounded-lg border border-sky-400/30 font-semibold cursor-pointer transition-all shadow-2xs"
-            title="Kamus Rumus & Calculated Fields"
-          >
-            <FileCode2 className="w-3.5 h-3.5 text-sky-300" />
-            <span className="hidden sm:inline">Panduan Rumus (PDF)</span>
           </button>
 
           {/* Fullscreen */}
@@ -215,26 +189,10 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <div className="h-4 w-px bg-slate-300 mx-1 hidden sm:block" />
-
-          {/* Status Live */}
-          <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-600 font-mono px-2 py-0.5 rounded bg-slate-200/70">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Database: PostgreSQL Live Extract</span>
-          </div>
         </div>
 
         {/* Right Action: Export / Download */}
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={handleDownloadWordDocx}
-            disabled={isDownloadingWord}
-            className="flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 text-white px-2.5 py-1 font-bold text-xs rounded-md shadow-2xs cursor-pointer border border-emerald-800 transition-all disabled:opacity-75"
-            title="Download Kamus KPI & Formula (Word .docx)"
-          >
-            <FileText className="w-3.5 h-3.5 text-emerald-200" />
-            <span className="hidden sm:inline">{isDownloadingWord ? 'Mengunduh...' : 'File Word (.docx)'}</span>
-          </button>
-
           <button
             onClick={onOpenExportModal}
             className="flex items-center gap-1.5 bg-[#002B49] hover:bg-[#003d66] text-white px-3 py-1 font-bold text-xs rounded-md shadow-2xs cursor-pointer border border-[#001D3D] transition-all"

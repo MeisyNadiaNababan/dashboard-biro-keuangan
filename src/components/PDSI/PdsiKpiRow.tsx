@@ -1,94 +1,181 @@
-import React, { useState } from 'react';
-import { PDSI_KPI_METRICS, PdsiKpiMetric } from '../../data/pdsiData';
-import { ArrowUpRight, ArrowDownRight, Server, ShieldCheck, CheckCircle2, Clock, Network, Cpu, Info, Calculator, FileCode2 } from 'lucide-react';
+import React from 'react';
+import { PDSI_KPI_METRICS } from '../../data/pdsiData';
+import {
+  ArrowUpRight,
+  ArrowDownRight,
+  Server,
+  ShieldAlert,
+  Clock,
+  Network,
+  Cpu,
+  Calculator,
+  Layers,
+  HeartHandshake,
+  HardDrive,
+  AppWindow,
+} from 'lucide-react';
 
 interface PdsiKpiRowProps {
   onSelectMetric?: (metricId: string) => void;
   onOpenKamusRumus?: (metricTag?: string) => void;
 }
 
-export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKamusRumus }) => {
-  const [activeInfoId, setActiveInfoId] = useState<string | null>(null);
+// Crisp Tableau-Style Sparkline
+const TableauSparkline: React.FC<{ data?: number[]; color: string; height?: number }> = ({
+  data = [],
+  color,
+  height = 24,
+}) => {
+  if (!Array.isArray(data) || data.length === 0) return null;
 
+  const width = 110;
+  const padding = 2;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+
+  const points = data.map((val, idx) => {
+    const x = padding + (idx / Math.max(data.length - 1, 1)) * (width - padding * 2);
+    const y = height - padding - ((val - min) / range) * (height - padding * 2);
+    return `${x},${y}`;
+  });
+
+  const pathD = `M ${points.join(' L ')}`;
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-5 overflow-visible">
+      <path
+        d={pathD}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.75"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+      {points.length > 0 && (
+        <circle
+          cx={points[points.length - 1].split(',')[0]}
+          cy={points[points.length - 1].split(',')[1]}
+          r="2.5"
+          fill={color}
+        />
+      )}
+    </svg>
+  );
+};
+
+export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKamusRumus }) => {
   const getMetricIcon = (id: string) => {
     switch (id) {
-      case 'uptime_dc':
+      case 'total_rak':
         return Server;
-      case 'sla_helpdesk':
-        return Clock;
+      case 'rak_terisi':
+        return Layers;
       case 'indeks_spbe':
         return Cpu;
-      case 'cyber_mitigation':
-        return ShieldCheck;
-      case 'rack_occupancy':
-        return Server;
-      case 'fiber_backbone':
+      case 'total_serangan':
+        return ShieldAlert;
+      case 'kepuasan_dc':
+        return HeartHandshake;
+      case 'jaringan_fiber':
         return Network;
+      case 'jumlah_server':
+        return HardDrive;
+      case 'jumlah_aplikasi':
+        return AppWindow;
       default:
         return Server;
     }
   };
 
+  const getTableauColor = (id: string) => {
+    switch (id) {
+      case 'total_rak':
+        return '#1F4E79'; // Tableau Navy
+      case 'rak_terisi':
+        return '#59A14F'; // Tableau Green
+      case 'indeks_spbe':
+        return '#B07AA1'; // Tableau Purple
+      case 'total_serangan':
+        return '#E15759'; // Tableau Red
+      case 'kepuasan_dc':
+        return '#F28E2B'; // Tableau Amber
+      case 'jaringan_fiber':
+        return '#4E79A7'; // Tableau Steel
+      case 'jumlah_server':
+        return '#76B7B2'; // Tableau Teal
+      case 'jumlah_aplikasi':
+        return '#59A14F'; // Tableau Green
+      default:
+        return '#1F4E79';
+    }
+  };
+
   return (
     <div className="space-y-2 font-sans select-none">
+      {/* Tableau Row Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-4 bg-blue-600 rounded-xs" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            KEY PERFORMANCE INDICATORS (KPI UTAMA PDSI BP BATAM)
+          <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
+            Key Performance Indicators — PDSI BP Batam
           </h3>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-            Sumber: PDF Hal 40-43
+          <span className="text-[10px] text-slate-500 font-mono">
+            8 Indikator Kinerja Utama &amp; Operasional
           </span>
         </div>
-        <button
-          onClick={() => onOpenKamusRumus && onOpenKamusRumus()}
-          className="text-xs font-semibold text-blue-700 hover:text-blue-900 flex items-center gap-1 cursor-pointer transition-colors"
-        >
-          <FileCode2 className="w-3.5 h-3.5" />
-          <span>Lihat Kamus Rumus Calculated Fields</span>
-        </button>
+        {onOpenKamusRumus && (
+          <button
+            onClick={() => onOpenKamusRumus()}
+            className="text-xs font-semibold text-[#1F4E79] hover:text-[#0B2545] flex items-center gap-1 cursor-pointer transition-colors"
+          >
+            <Calculator className="w-3.5 h-3.5" />
+            <span>Kamus Rumus PDSI</span>
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+      {/* Grid of 8 Tableau BAN Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-2.5">
         {PDSI_KPI_METRICS.map((kpi) => {
           const Icon = getMetricIcon(kpi.id);
+          const color = getTableauColor(kpi.id);
           const isPositive = kpi.trend.isPositive;
 
           return (
             <div
               key={kpi.id}
               onClick={() => onSelectMetric && onSelectMetric(kpi.id)}
-              className="bg-white border border-slate-200 hover:border-blue-400 p-3.5 rounded-xl shadow-2xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between relative"
+              className="bg-white border border-[#CBD5E1] hover:border-[#1F4E79] p-3 rounded-lg shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between group"
             >
               {/* Header */}
               <div>
-                <div className="flex items-start justify-between gap-1 mb-1.5">
-                  <span className="text-[11px] font-bold text-slate-600 line-clamp-2 leading-tight group-hover:text-blue-700 transition-colors">
+                <div className="flex items-start justify-between gap-1 mb-1">
+                  <span className="text-[11px] font-bold text-slate-700 leading-tight group-hover:text-[#1F4E79] transition-colors line-clamp-2 min-h-[28px]">
                     {kpi.title}
                   </span>
-                  <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
-                    <Icon className="w-3.5 h-3.5 text-slate-700 group-hover:text-blue-600" />
+                  <div className="w-6 h-6 rounded bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center shrink-0">
+                    <Icon className="w-3 h-3 text-slate-600" />
                   </div>
                 </div>
 
                 {/* Big Number Value */}
                 <div className="my-1">
-                  <div className="text-xl font-extrabold tracking-tight text-slate-900 font-mono">
+                  <div className="text-lg sm:text-xl font-black tracking-tight text-slate-900 font-mono">
                     {kpi.value}
                   </div>
-                  <div className="text-[10px] font-medium text-slate-500 truncate">
+                  <div className="text-[10px] text-slate-500 truncate">
                     {kpi.target}
                   </div>
                 </div>
               </div>
 
               {/* Sparkline & Trend Footer */}
-              <div className="pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between mb-1.5">
+              <div className="pt-2 border-t border-[#E2E8F0] space-y-1.5">
+                <div className="flex items-center justify-between text-[10px]">
                   <div
-                    className={`flex items-center gap-0.5 text-[10px] font-bold font-mono ${
-                      isPositive ? 'text-emerald-600' : 'text-rose-600'
+                    className={`flex items-center gap-0.5 font-bold font-mono ${
+                      isPositive ? 'text-emerald-700' : 'text-slate-600'
                     }`}
                   >
                     {isPositive ? (
@@ -103,42 +190,15 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
                   </div>
 
                   {kpi.badge && (
-                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
                       {kpi.badge.text}
                     </span>
                   )}
                 </div>
 
-                {/* Sparkline Visual SVG */}
-                <div className="h-6 w-full flex items-end gap-1">
-                  {kpi.sparkline.map((val, idx) => {
-                    const min = Math.min(...kpi.sparkline);
-                    const max = Math.max(...kpi.sparkline);
-                    const heightPercent = max === min ? 50 : Math.max(15, Math.round(((val - min) / (max - min)) * 100));
-                    const isLast = idx === kpi.sparkline.length - 1;
-
-                    return (
-                      <div
-                        key={idx}
-                        className="flex-1 rounded-t-xs transition-all duration-300 group-hover:opacity-100"
-                        style={{
-                          height: `${heightPercent}%`,
-                          backgroundColor: isLast ? '#2563EB' : '#94A3B8',
-                          opacity: isLast ? 1 : 0.6,
-                        }}
-                        title={`Periode ${idx + 1}: ${val}`}
-                      />
-                    );
-                  })}
-                </div>
-
-                {/* Formula Footnote */}
-                <div
-                  className="mt-1.5 text-[9px] text-slate-400 truncate hover:text-slate-700 flex items-center gap-1"
-                  title={kpi.formulaRef}
-                >
-                  <Calculator className="w-2.5 h-2.5 shrink-0 text-slate-400" />
-                  <span className="truncate">{kpi.formulaRef}</span>
+                {/* Tableau Sparkline */}
+                <div className="w-full">
+                  <TableauSparkline data={kpi.sparkline} color={color} />
                 </div>
               </div>
             </div>

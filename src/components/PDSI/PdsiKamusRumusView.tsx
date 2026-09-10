@@ -61,7 +61,7 @@ export const PdsiKamusRumusView: React.FC = () => {
                 Kamus Rumus &amp; Data Catalog PDSI BP Batam
               </h3>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-900/80 border border-blue-400 text-blue-200">
-                PDF Halaman 40 - 43
+                Tableau Data Dictionary
               </span>
             </div>
             <p className="text-xs text-slate-300 mt-0.5">

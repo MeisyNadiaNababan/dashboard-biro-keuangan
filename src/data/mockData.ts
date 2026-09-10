@@ -16,6 +16,8 @@ import {
   RekapitulasiTargetPnbp,
   LaporanRealisasiAnggaranBlu,
   RekapitulasiPaguAnggaran,
+  RekapitulasiDaftarPiutang,
+  RekapitulasiUmurPiutang,
   RekapitulasiMutasiPiutang,
   RekapitulasiPiutangTakTertagih,
   LaporanPenerimaanSumberDana,
@@ -86,21 +88,21 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
   },
   {
     id: 'coverage_ratio',
-    title: 'Rasio PNBP Badan Usaha',
-    value: '0,67',
-    targetOrPagu: 'Target Perkin: 0,68',
-    percentage: 'Target Deputi PU (0,68)',
+    title: 'Coverage Ratio (FIN_COVER)',
+    value: '1,04x',
+    targetOrPagu: 'Benchmark: ≥ 1,00x',
+    percentage: 'Surplus Fiskal (+4%)',
     trend: {
       direction: 'up',
-      value: '0,03',
+      value: '0,05x',
       period: '(MoM)',
       isPositive: true,
     },
     badge: {
-      text: 'On Track',
+      text: 'Surplus',
       variant: 'success',
     },
-    sparkline: [0.58, 0.60, 0.62, 0.63, 0.65, 0.66, 0.67],
+    sparkline: [0.94, 0.96, 0.98, 1.01, 1.02, 1.03, 1.04],
     colorTheme: 'purple',
   },
   {
@@ -834,6 +836,7 @@ export const RINCIAN_TARGET_PNBP_DATA: RincianTargetPnbp[] = [
 // Atribut: KODE KEGIATAN, NAMA UNIT, NAMA LAYANAN, JUMLAH
 export const REKAPITULASI_TARGET_PNBP_DATA: RekapitulasiTargetPnbp[] = [
   {
+    tahun: 2026,
     kodeKegiatan: 'KEG-01-TANAH',
     namaUnit: 'Dit. Pengelolaan Pertanahan',
     namaLayanan: 'Alokasi Lahan & Perpanjangan Uang Wajib Tahunan (UWT)',
@@ -843,6 +846,7 @@ export const REKAPITULASI_TARGET_PNBP_DATA: RekapitulasiTargetPnbp[] = [
     capaian: 42.7,
   },
   {
+    tahun: 2026,
     kodeKegiatan: 'KEG-02-AIR-FASLING',
     namaUnit: 'BU SPAM, Fasilitas dan Lingkungan',
     namaLayanan: 'Distribusi Air Bersih Curah, Pengelolaan Limbah KPLI & Aset Komersial',
@@ -852,6 +856,7 @@ export const REKAPITULASI_TARGET_PNBP_DATA: RekapitulasiTargetPnbp[] = [
     capaian: 35.3,
   },
   {
+    tahun: 2026,
     kodeKegiatan: 'KEG-03-PELABUHAN',
     namaUnit: 'Dit. Pengelolaan Kepelabuhanan',
     namaLayanan: 'Jasa Labuh, Tambat, Dermaga, Bongkar Muat & Terminal Penumpang',
@@ -861,6 +866,7 @@ export const REKAPITULASI_TARGET_PNBP_DATA: RekapitulasiTargetPnbp[] = [
     capaian: 37.7,
   },
   {
+    tahun: 2026,
     kodeKegiatan: 'KEG-04-BANDARA',
     namaUnit: 'Dit. Pengelolaan Kawasan Bandara',
     namaLayanan: 'Konsesi Hang Nadim, PJP2U (Pelayanan Jasa Penumpang Pesawat Udara)',
@@ -870,6 +876,7 @@ export const REKAPITULASI_TARGET_PNBP_DATA: RekapitulasiTargetPnbp[] = [
     capaian: 54.4,
   },
   {
+    tahun: 2026,
     kodeKegiatan: 'KEG-05-TREASURY',
     namaUnit: 'Biro Keuangan',
     namaLayanan: 'Jasa Giro Rekening Penampungan Kas BLU & Bunga Deposito Penempatan',
@@ -974,6 +981,29 @@ export const REKAPITULASI_PAGU_ANGGARAN_DATA: RekapitulasiPaguAnggaran[] = [
   },
 ];
 
+// Item 21: REKAPITULASI DAFTAR PIUTANG (Data Statistik, Pertahun, Tertutup)
+// Atribut Database: UNIT USAHA, NAMA PELANGGAN, JUMLAH PIUTANG
+export const REKAPITULASI_DAFTAR_PIUTANG_DATA: RekapitulasiDaftarPiutang[] = [
+  { unitUsaha: 'Dit. Pengelolaan Kepelabuhanan', namaPelanggan: 'PT Batam Maritime Shipyard', jumlahPiutang: 24.3 },
+  { unitUsaha: 'Dit. Pengelolaan Pertanahan', namaPelanggan: 'PT Kabil Citra Nusantara', jumlahPiutang: 13.0 },
+  { unitUsaha: 'BU SPAM, Fasilitas & Lingkungan', namaPelanggan: 'PT Panbil Mega Industrial', jumlahPiutang: 25.4 },
+  { unitUsaha: 'Dit. Pengelolaan Bandara', namaPelanggan: 'PT Mega Terminal Kargo', jumlahPiutang: 26.4 },
+  { unitUsaha: 'Dit. Pengelolaan Kepelabuhanan', namaPelanggan: 'PT Citra Bahari Shipindo', jumlahPiutang: 16.28 },
+  { unitUsaha: 'Dit. Pengelolaan Pertanahan', namaPelanggan: 'PT Batam Logistik Nusantara', jumlahPiutang: 10.25 },
+];
+
+// Item 17: REKAPITULASI UMUR PIUTANG (Data Statistik, Pertahun, Tertutup)
+// Atribut Database: NAMA PELANGGAN, JUMLAH PIUTANG TERTAGIH, UMUR PIUTANG
+// (Kategori Umur adalah Calculated Field Kemenkeu berdasarkan [umurPiutang])
+export const REKAPITULASI_UMUR_PIUTANG_DATA: RekapitulasiUmurPiutang[] = [
+  { namaPelanggan: 'PT Panbil Mega Industrial', jumlahPiutangTertagih: 25.4, umurPiutang: 25, kategoriCalculated: '0 - 30 Hari (Lancar)' },
+  { namaPelanggan: 'PT Batam Maritime Shipyard', jumlahPiutangTertagih: 24.3, umurPiutang: 45, kategoriCalculated: '31 - 60 Hari (Kurang Lancar)' },
+  { namaPelanggan: 'PT Kabil Citra Nusantara', jumlahPiutangTertagih: 13.0, umurPiutang: 72, kategoriCalculated: '61 - 90 Hari (Diragukan)' },
+  { namaPelanggan: 'PT Mega Terminal Kargo', jumlahPiutangTertagih: 26.4, umurPiutang: 145, kategoriCalculated: '> 90 Hari (Macet / PUPN)' },
+  { namaPelanggan: 'PT Citra Bahari Shipindo', jumlahPiutangTertagih: 16.28, umurPiutang: 180, kategoriCalculated: '> 90 Hari (Macet / PUPN)' },
+  { namaPelanggan: 'PT Batam Logistik Nusantara', jumlahPiutangTertagih: 10.25, umurPiutang: 165, kategoriCalculated: '> 90 Hari (Macet / PUPN)' },
+];
+
 // 6. Item 18: REKAPITULASI MUTASI PIUTANG PER FAKTUR (Data Statistik, Pertahun, Tertutup)
 // Atribut: NAMA PELANGGAN, FAKTUR TERBIT, SALDO AWAL, BAYAR FAKTUR, SALDO AKHIR
 export const REKAPITULASI_MUTASI_PIUTANG_DATA: RekapitulasiMutasiPiutang[] = [
@@ -1069,9 +1099,9 @@ export const LAPORAN_PENERIMAAN_SUMBER_DANA_DATA: LaporanPenerimaanSumberDana[] 
   },
 ];
 
-// 9. DAFTAR 28 TABEL DATA KATALOG RESMI BIRO KEUANGAN BP BATAM
+// 9. DAFTAR MASTER TABEL DATA RESMI BIRO KEUANGAN BP BATAM
 // (Disinkronkan langsung dari Dokumen Master Katalog Data BP Batam, Halaman 2 s.d 6)
-export const BIRO_KEUANGAN_DATA_CATALOG: BiroKeuanganDataCatalogItem[] = [
+const ALL_BIRO_KEUANGAN_CATALOG_RAW: BiroKeuanganDataCatalogItem[] = [
   {
     no: 1,
     namaData: 'Persentase Realisasi Belanja dan Penerimaan BP Batam',
@@ -1348,11 +1378,16 @@ export const BIRO_KEUANGAN_DATA_CATALOG: BiroKeuanganDataCatalogItem[] = [
     jenisData: 'DATA STATISTIK',
     periodeData: 'PERBULAN',
     sifatData: 'TERTUTUP',
-    atributData: ['DOKUMEN DIGITAL'],
+    atributData: ['PERIODE', 'NOMOR SP3B', 'NILAI PENDAPATAN', 'NILAI BELANJA'],
     tabelDatabase: 'keu_pengesahan_pendapatan_belanja',
     keterangan: 'Surat Perintah Pengesahan Pendapatan dan Belanja BLU ke KPPN.',
   },
 ];
+
+// Tabel Data Katalog Terstruktur (Menyaring dokumen digital naratif yang tidak dapat diolah tabel/chart)
+export const BIRO_KEUANGAN_DATA_CATALOG: BiroKeuanganDataCatalogItem[] = ALL_BIRO_KEUANGAN_CATALOG_RAW.filter(
+  (item) => item.jenisData !== 'DOKUMEN DIGITAL' && !item.atributData.includes('DOKUMEN DIGITAL') && !item.atributData.includes('DOKUMEN NARASI DIGITAL')
+);
 
 export const SIMKEU_DATA_DICTIONARY: DataDictionaryField[] = [
   // 1. keu_target_pnbp_rekap (Item 8)

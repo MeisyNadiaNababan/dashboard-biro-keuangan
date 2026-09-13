@@ -8,6 +8,7 @@ import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
 import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
 import { BiroKeuanganFinancialCard } from './components/BiroKeuanganFinancialCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
+import { FiscalIndependenceDonutCards } from './components/FiscalIndependenceDonutCards';
 import { FiscalInsightsRow } from './components/FiscalInsightsRow';
 import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
@@ -16,6 +17,7 @@ import { KpiWordDocumentView } from './components/KpiWordDocumentView';
 import { DetailModal, ModalType } from './components/Modals/DetailModal';
 import { ExportModal } from './components/Modals/ExportModal';
 import { TableauGuideModal } from './components/Modals/TableauGuideModal';
+import { KpiFormulaExplanationModal } from './components/Modals/KpiFormulaExplanationModal';
 import { KPI_METRICS_DATA, REVENUE_DATA, EXPENSE_DATA } from './data/mockData';
 import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
@@ -43,6 +45,8 @@ export default function App() {
   const [detailModalType, setDetailModalType] = useState<ModalType>(null);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isTableauGuideOpen, setIsTableauGuideOpen] = useState(false);
+  const [selectedKpiFormulaId, setSelectedKpiFormulaId] = useState<string | null>(null);
+  const [isKpiFormulaModalOpen, setIsKpiFormulaModalOpen] = useState(false);
 
   // Active Unit Object
   const currentUnit = useMemo(() => {
@@ -184,22 +188,13 @@ export default function App() {
     } else if (sheetId === 'aset') {
       document.getElementById('aset-section')?.scrollIntoView({ behavior: 'smooth' });
     } else if (sheetId === 'fiskal') {
-      document.getElementById('fiskal-section')?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('kemandirian-fiskal')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   const handleSelectMetric = (metricId: string) => {
-    if (metricId === 'pendapatan') {
-      setDetailModalType('pendapatan');
-    } else if (metricId === 'belanja') {
-      setDetailModalType('belanja');
-    } else if (metricId === 'piutang') {
-      setDetailModalType('piutang');
-    } else if (metricId === 'kas_bank') {
-      setDetailModalType('kas_bank');
-    } else if (metricId === 'coverage_ratio') {
-      setDetailModalType('kas_bank');
-    }
+    setSelectedKpiFormulaId(metricId);
+    setIsKpiFormulaModalOpen(true);
   };
 
   return (
@@ -275,7 +270,12 @@ export default function App() {
                       />
                     </section>
 
-                    {/* 2. Detail Performa Keuangan BLU: Swap Tabel Data (Tanpa Button Lihat Detail) */}
+                    {/* 2. Rasio Kemandirian Fiskal & Struktur Sumber Pendanaan (Barisan Atas) */}
+                    <section id="kemandirian-fiskal" aria-label="Kemandirian Fiskal dan Sumber Pendanaan">
+                      <FiscalIndependenceDonutCards onExplainKpi={handleSelectMetric} />
+                    </section>
+
+                    {/* 3. Detail Performa Keuangan BLU: Swap Tabel Data (Tanpa Button Lihat Detail) */}
                     <section
                       id="pendapatan-belanja"
                       aria-label="Performa Pendapatan dan Belanja"
@@ -286,6 +286,7 @@ export default function App() {
                         selectedYear={selectedYear}
                         selectedUnit={selectedUnit}
                         selectedMonth={selectedMonth}
+                        onExplainKpi={handleSelectMetric}
                       />
                     </section>
 
@@ -294,6 +295,7 @@ export default function App() {
                       <ReceivablesSection
                         onViewPiutangDetail={() => setDetailModalType('piutang')}
                         onViewKasBankDetail={() => setDetailModalType('kas_bank')}
+                        onExplainKpi={handleSelectMetric}
                       />
                     </section>
 
@@ -302,6 +304,7 @@ export default function App() {
                       <FiscalInsightsRow
                         onOpenExportModal={() => setIsExportModalOpen(true)}
                         onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
+                        onExplainKpi={handleSelectMetric}
                         lastUpdated="24 Apr 2026 10:24 WIB"
                       />
                     </section>
@@ -314,6 +317,10 @@ export default function App() {
                 activeSubMenu={activeSheet}
                 onSelectSubMenu={handleSelectSheet}
                 onOpenExportModal={() => setIsExportModalOpen(true)}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
               />
             ) : (
               /* --- OTHER 22 UNITS DASHBOARD & DESIGNER --- */
@@ -393,6 +400,17 @@ export default function App() {
       <TableauGuideModal
         isOpen={isTableauGuideOpen}
         onClose={() => setIsTableauGuideOpen(false)}
+      />
+
+      {/* KPI Formula & Calculation Logic Pop-up Modal (Biro Keuangan & PDSI) */}
+      <KpiFormulaExplanationModal
+        kpiId={selectedKpiFormulaId}
+        isOpen={isKpiFormulaModalOpen}
+        onClose={() => {
+          setIsKpiFormulaModalOpen(false);
+          setSelectedKpiFormulaId(null);
+        }}
+        onSelectAnotherKpi={(id) => setSelectedKpiFormulaId(id)}
       />
 
       {/* Toast Notification */}

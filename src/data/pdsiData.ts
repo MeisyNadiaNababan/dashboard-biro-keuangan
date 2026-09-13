@@ -61,26 +61,6 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     formulaRef: 'Item #8: Rak Data Terisi = SUM([RAK TERISI]) • Slot Kosong = Total Rak - Rak Terisi',
   },
   {
-    id: 'indeks_spbe',
-    title: 'Indeks SPBE BP Batam',
-    value: '3,68',
-    target: 'Skala 1 - 5 (Target: 3,50)',
-    percentage: 'Predikat "Sangat Baik"',
-    trend: {
-      direction: 'up',
-      value: '+0,24',
-      period: '(YoY)',
-      isPositive: true,
-    },
-    sparkline: [3.12, 3.25, 3.38, 3.44, 3.52, 3.60, 3.68],
-    badge: {
-      text: 'Sangat Baik',
-      variant: 'success',
-    },
-    colorTheme: 'purple',
-    formulaRef: 'Item #18: Indeks SPBE = Evaluasi 47 Indikator SPBE Terbobot (KemenPAN-RB)',
-  },
-  {
     id: 'total_serangan',
     title: 'Total Serangan Keamanan IT',
     value: '14.820',
@@ -121,28 +101,28 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     formulaRef: 'Item #11: CSAT Data Center = (Total Skor Responden / Skor Maksimal) * 100%',
   },
   {
-    id: 'jaringan_fiber',
-    title: 'Jaringan Fiber Optik (FO)',
-    value: '284,5 KM',
-    target: 'Cakupan: 8 Wilayah BP Batam',
-    percentage: '81,4% Rata-rata Utilitas Core',
+    id: 'kapasitas_core_fo',
+    title: 'Kapasitas Core FO',
+    value: '1.152 Core',
+    target: 'Utilisasi: 81,4% (938 Core Aktif)',
+    percentage: 'Cakupan Koridor Backbone Pulau Batam',
     trend: {
       direction: 'up',
-      value: '+12,5 km',
+      value: '+48 Core',
       period: '(YTD 2026)',
       isPositive: true,
     },
-    sparkline: [240, 252, 265, 270, 275, 280, 284.5],
+    sparkline: [1000, 1024, 1056, 1080, 1104, 1128, 1152],
     badge: {
-      text: 'Backbone Aktif',
+      text: 'Core Backbone',
       variant: 'info',
     },
     colorTheme: 'blue',
-    formulaRef: 'Item #2 & #5: Total Panjang FO = SUM([PANJANG]) km',
+    formulaRef: 'Item #5: Total Kapasitas Core FO = SUM([JMLHCORE]) Core',
   },
   {
     id: 'jumlah_server',
-    title: 'Jumlah Server',
+    title: 'Jumlah Server & Storage',
     value: '58 Server',
     target: 'Fisik, Blade & Node HCI',
     percentage: '48 Server Aktif • 10 Node Standby',
@@ -159,26 +139,6 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     },
     colorTheme: 'emerald',
     formulaRef: 'Item #13: Total Server = SUM([JUMLAH]) Unit Server dan Node Storage',
-  },
-  {
-    id: 'jumlah_aplikasi',
-    title: 'Jumlah Aplikasi',
-    value: '46 Aplikasi',
-    target: 'Sistem Informasi Resmi BP Batam',
-    percentage: '38 Web Portal • 8 Mobile/Hybrid',
-    trend: {
-      direction: 'up',
-      value: '+3 Aplikasi',
-      period: '(YTD 2026)',
-      isPositive: true,
-    },
-    sparkline: [38, 40, 41, 43, 44, 45, 46],
-    badge: {
-      text: 'Terdaftar SPBE',
-      variant: 'success',
-    },
-    colorTheme: 'purple',
-    formulaRef: 'Item #14: Total Aplikasi = COUNT([NAMA APLIKASI]) di Direktori SPBE BP Batam',
   },
 ];
 
@@ -353,6 +313,9 @@ export interface HelpdeskTicketItem {
   normaWaktuRespon: string;
   normaWaktuSelesai: string;
   pengelolaLayanan: string;
+  tiketMasuk: number;
+  tiketTepatWaktu: number;
+  capaianSla: number;
 }
 
 export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
@@ -365,6 +328,9 @@ export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
     normaWaktuRespon: '15 Menit',
     normaWaktuSelesai: '2 Jam',
     pengelolaLayanan: 'Subdit Infrastruktur TI',
+    tiketMasuk: 120,
+    tiketTepatWaktu: 118,
+    capaianSla: 98.3,
   },
   {
     id: 'hd-02',
@@ -375,6 +341,9 @@ export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
     normaWaktuRespon: '10 Menit',
     normaWaktuSelesai: '4 Jam',
     pengelolaLayanan: 'Subdit Aplikasi & SI',
+    tiketMasuk: 145,
+    tiketTepatWaktu: 142,
+    capaianSla: 97.9,
   },
   {
     id: 'hd-03',
@@ -385,6 +354,9 @@ export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
     normaWaktuRespon: '5 Menit',
     normaWaktuSelesai: '1 Jam',
     pengelolaLayanan: 'Subdit Tata Kelola TI',
+    tiketMasuk: 85,
+    tiketTepatWaktu: 85,
+    capaianSla: 100.0,
   },
   {
     id: 'hd-04',
@@ -395,6 +367,9 @@ export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
     normaWaktuRespon: '30 Menit',
     normaWaktuSelesai: '8 Jam',
     pengelolaLayanan: 'Subdit Infrastruktur TI',
+    tiketMasuk: 54,
+    tiketTepatWaktu: 53,
+    capaianSla: 98.1,
   },
   {
     id: 'hd-05',
@@ -405,6 +380,9 @@ export const HELPDESK_TICKETS_DATA: HelpdeskTicketItem[] = [
     normaWaktuRespon: '20 Menit',
     normaWaktuSelesai: '24 Jam',
     pengelolaLayanan: 'Subdit Keamanan TI & CSIRT',
+    tiketMasuk: 35,
+    tiketTepatWaktu: 34,
+    capaianSla: 97.1,
   },
 ];
 
@@ -853,11 +831,11 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
   },
   {
     no: 2,
-    namaData: 'Jaringan Fiber Optic (FO)',
+    namaData: 'Jaringan Fiber Optik',
     jenisData: 'DATA SPASIAL / TEKNIS',
     periodeData: 'PERSEMESTER',
     sifatData: 'TERBATAS',
-    atributData: ['JALUR', 'RUAS JALAN', 'PANJANG KM', 'JUMLAH CORE', 'CORE AKTIF', 'BRAND FO', 'START POINT', 'END POINT', 'STATUS'],
+    atributData: ['METADATA', 'REMARK', 'SHAPE_Leng', 'NAMOBJ', 'SRS_ID', 'FCODE', 'OBJECTID', 'JALUR', 'JLN', 'JMLHCORE', 'PANJANG', 'BRANDFO', 'STARTPOINT', 'ENDPOINT', 'RUAS', 'KLASIFIKASI'],
     tabelDatabase: 'pdsi_jaringan_fiber_optik',
     keterangan: 'Inventarisasi bentang kabel serat optik bawah tanah dan tiang udara 284,5 KM interkoneksi gedung BP Batam.',
   },
@@ -943,13 +921,13 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
   },
   {
     no: 11,
-    namaData: 'Log Traffic Akses Data Center & Firewall',
-    jenisData: 'DATA KEAMANAN',
-    periodeData: 'REAL-TIME',
-    sifatData: 'TERTUTUP',
-    atributData: ['TIMESTAMP', 'SRC IP', 'DEST IP', 'PORT', 'ACTION', 'PROTOCOL', 'POLICY RULE'],
-    tabelDatabase: 'pdsi_log_traffic_firewall',
-    keterangan: 'Aliran lalu lintas data masuk dan keluar perimeter keamanan Next-Generation Firewall BP Batam.',
+    namaData: 'Data Kepuasan Pelanggan Data Centre',
+    jenisData: 'DATA EVALUASI',
+    periodeData: 'PERTAHUN',
+    sifatData: 'TERBUKA',
+    atributData: ['TAHUN', 'KATEGORI', 'TINGKAT KEPUASAN', 'PERSENTASE'],
+    tabelDatabase: 'pdsi_kepuasan_pelanggan_dc',
+    keterangan: 'Survei indeks kepuasan pengguna layanan fasilitas Colocation dan Data Center Tier III BP Batam.',
   },
   {
     no: 12,
@@ -957,8 +935,8 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
     jenisData: 'DATA KEAMANAN',
     periodeData: 'PERBULAN',
     sifatData: 'TERTUTUP',
-    atributData: ['PERIODE', 'THREAT ACTIVITY', 'STATUS KEAMANAN', 'JML SERANGAN', 'TANGGAL REKAP'],
-    tabelDatabase: 'pdsi_data_serangan_keamanan_it',
+    atributData: ['PERIODE', 'THREAT ACTIVITY', 'STATUS KEAMANAN', 'JML SERANGAN'],
+    tabelDatabase: 'pdsi_serangan_keamanan_it',
     keterangan: 'Rekapitulasi serangan siber (DDoS, Ransomware, Web Defacement, Phishing) yang ditindaklanjuti SOC.',
   },
   {
@@ -967,7 +945,7 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
     jenisData: 'DATA ASET TI',
     periodeData: 'PERSEMESTER',
     sifatData: 'TERTUTUP',
-    atributData: ['NAMA SERVER', 'JUMLAH', 'TIPE', 'BRAND', 'TGL GARANSI', 'STATUS GARANSI', 'EOS'],
+    atributData: ['TANGGAL REKAP', 'NAMA SERVER', 'JUMLAH', 'TIPE', 'BRAND', 'TGL GARANSI', 'STATUS GARANSI', 'EOS'],
     tabelDatabase: 'pdsi_infrastruktur_server_storage',
     keterangan: 'Daftar server rackmount, blade chassis, dan storage area network (SAN) beserta status siklus hidupnya.',
   },
@@ -977,8 +955,8 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
     jenisData: 'DATA SISTEM',
     periodeData: 'PERSEMESTER',
     sifatData: 'TERTUTUP',
-    atributData: ['NAMA APLIKASI', 'URAIAN APLIKASI', 'BASIS APLIKASI', 'TIPE LISENSI', 'BAHASA PEMOGRAMAN', 'TANDA TANGAN ELEKTRONIK', 'STATUS'],
-    tabelDatabase: 'pdsi_data_aplikasi_bp_batam',
+    atributData: ['NAMA APLIKASI', 'URAIAN APLIKASI', 'BASIS APLIKASI', 'TIPE LISENSI APLIKASI', 'BAHASA PEMOGRAMAN', 'KERANGKA PENGEMBANG', 'UNIT PENGEMBANG', 'UNIT OPERASIONAL', 'INSTANSI', 'KATEGORI APLIKASI', 'TANDA TANGAN ELEKTRONIK', 'KLASIFIKASI APLIKASI', 'DOMAIN', 'STATUS', 'DEV YEAR'],
+    tabelDatabase: 'pdsi_data_aplikasi',
     keterangan: 'Inventarisasi seluruh aplikasi operasional pelayanan publik dan administrasi internal BP Batam.',
   },
   {
@@ -1003,23 +981,23 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
   },
   {
     no: 17,
-    namaData: 'Data Utilisasi Core Switch dan Router Jaringan',
-    jenisData: 'DATA TEKNIS',
-    periodeData: 'PERBULAN',
-    sifatData: 'TERTUTUP',
-    atributData: ['NAMA PERANGKAT', 'LOKASI DISTRIBUSI', 'JUMLAH PORT', 'PORT AKTIF', 'LOAD CPU %', 'MEMORY %'],
-    tabelDatabase: 'pdsi_core_network_devices',
-    keterangan: 'Performa perangkat switch distribusi dan router agregasi backbone LAN BP Batam.',
+    namaData: 'Daftar Layanan TI',
+    jenisData: 'DATA LAYANAN',
+    periodeData: 'PERTAHUN',
+    sifatData: 'TERBUKA',
+    atributData: ['KODE', 'NAMA LAYANAN', 'NAMA SUB LAYANAN', 'KATEGORI PRIORITAS PENANGANAN LAYANAN', 'NORMA WAKTU RESPON', 'NORMA WAKTU PENYELESAIAN PENANGANAN', 'PENGELOLA LAYANAN'],
+    tabelDatabase: 'pdsi_daftar_layanan_ti',
+    keterangan: 'Katalog SLA standar norma waktu respon dan penyelesaian layanan Helpdesk TI BP Batam.',
   },
   {
     no: 18,
-    namaData: 'Laporan Pemantauan dan Evaluasi SPBE',
+    namaData: 'Laporan Pemantauan dan Evaluasi EPSS',
     jenisData: 'DATA EVALUASI',
     periodeData: 'PERTAHUN',
     sifatData: 'TERTUTUP',
     atributData: ['TAHUN', 'DOMAIN', 'ASPEK', 'INDIKATOR', 'BOBOT', 'NILAI'],
-    tabelDatabase: 'pdsi_evaluasi_spbe',
-    keterangan: 'Hasil audit dan penilaian mandiri indeks SPBE BP Batam berdasarkan instrumen KemenPAN-RB.',
+    tabelDatabase: 'pdsi_evaluasi_epss',
+    keterangan: 'Hasil audit dan penilaian mandiri indeks SPBE / EPSS BP Batam berdasarkan instrumen KemenPAN-RB.',
   },
   {
     no: 19,
@@ -1033,13 +1011,13 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
   },
   {
     no: 20,
-    namaData: 'Data Indeks KAMI (Keamanan Informasi BSSN)',
+    namaData: 'Laporan Pemantauan dan Evaluasi EPSS',
     jenisData: 'DATA EVALUASI',
     periodeData: 'PERTAHUN',
     sifatData: 'TERTUTUP',
-    atributData: ['AREA KEAMANAN', 'JUMLAH PERTANYAAN', 'SKOR CAPAIAN', 'TINGKAT KEMATANGAN', 'STATUS KELAYAKAN'],
-    tabelDatabase: 'pdsi_indeks_kami',
-    keterangan: 'Evaluasi tingkat kesiapan dan kepatuhan sistem keamanan siber BP Batam terhadap standar BSSN.',
+    atributData: ['TAHUN', 'DOMAIN', 'ASPEK', 'INDIKATOR', 'BOBOT', 'NILAI'],
+    tabelDatabase: 'pdsi_evaluasi_epss',
+    keterangan: 'Evaluasi Penyelenggaraan Statistik Sektoral dan Kematangan SPBE BP Batam.',
   },
   {
     no: 21,
@@ -1047,8 +1025,8 @@ export const PDSI_DATA_CATALOG: PdsiDataCatalogItem[] = [
     jenisData: 'DATA OPERASIONAL',
     periodeData: 'PERBULAN',
     sifatData: 'TERBUKA',
-    atributData: ['TAHUN', 'BULAN', 'NAMA LAYANAN', 'JUMLAH', 'NORMA WAKTU RESPON', 'NORMA WAKTU SELESAI'],
-    tabelDatabase: 'pdsi_permintaan_layanan_it',
+    atributData: ['TAHUN', 'BULAN', 'NAMA LAYANAN', 'JUMLAH'],
+    tabelDatabase: 'pdsi_permintaan_layanan_it_helpdesk',
     keterangan: 'Statistik tiket aduan dan permohonan layanan teknologi informasi yang masuk melalui portal Helpdesk.',
   },
 ];

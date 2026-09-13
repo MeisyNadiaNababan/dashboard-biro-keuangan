@@ -12,12 +12,14 @@ interface PdsiDashboardProps {
   activeSubMenu: string;
   onSelectSubMenu: (menu: string) => void;
   onOpenExportModal?: () => void;
+  onOpenFormulaModal?: (kpiId: string) => void;
 }
 
 export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
   activeSubMenu,
   onSelectSubMenu,
   onOpenExportModal,
+  onOpenFormulaModal,
 }) => {
   const [selectedYear, setSelectedYear] = useState('2026');
   const [selectedMonth, setSelectedMonth] = useState('April');
@@ -43,9 +45,15 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
     }, 600);
   };
 
+  const handleKpiCardClick = (kpiId: string) => {
+    if (onOpenFormulaModal) {
+      onOpenFormulaModal(kpiId);
+    }
+  };
+
   return (
     <div className="space-y-4 font-sans select-none pb-8">
-      {/* 1. Tableau Parameters & Filters Shelf (Matching Biro Keuangan style, tailored for PDSI) */}
+      {/* 1. Tableau Parameters & Filters Shelf */}
       <PdsiFilters
         selectedYear={selectedYear}
         onChangeYear={setSelectedYear}
@@ -72,44 +80,39 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
         <PdsiKamusRumusView />
       ) : activeSubMenu === 'helpdesk' || selectedDomain === 'helpdesk' ? (
         <div className="space-y-4">
-          <PdsiHelpdeskSection />
+          <PdsiHelpdeskSection onOpenFormulaModal={handleKpiCardClick} />
         </div>
       ) : activeSubMenu === 'datacenter' || selectedDomain === 'datacenter' ? (
         <div className="space-y-4">
-          <PdsiDataCenterCard />
+          <PdsiDataCenterCard onOpenFormulaModal={handleKpiCardClick} />
         </div>
       ) : activeSubMenu === 'cyber' || selectedDomain === 'cyber' ? (
         <div className="space-y-4">
-          <PdsiCyberSecurityCard />
+          <PdsiCyberSecurityCard onOpenFormulaModal={handleKpiCardClick} />
         </div>
       ) : activeSubMenu === 'fiber' || selectedDomain === 'fiber' ? (
         <div className="space-y-4">
-          <PdsiFiberOpticAndApps />
+          <PdsiFiberOpticAndApps onOpenFormulaModal={handleKpiCardClick} />
         </div>
       ) : (
         /* Default: Ikhtisar PDSI Overview */
         <div className="space-y-4">
-          {/* Key Performance Indicators BAN Row */}
+          {/* Key Performance Indicators BAN Row with formula pop-up trigger */}
           <PdsiKpiRow
             onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
-            onSelectMetric={(id) => {
-              if (id === 'uptime_dc' || id === 'rack_occupancy') onSelectSubMenu('datacenter');
-              else if (id === 'sla_helpdesk') onSelectSubMenu('helpdesk');
-              else if (id === 'cyber_mitigation') onSelectSubMenu('cyber');
-              else if (id === 'fiber_backbone') onSelectSubMenu('fiber');
-            }}
+            onSelectMetric={handleKpiCardClick}
           />
 
           {/* Row 1: Data Center & Keamanan Siber */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <PdsiDataCenterCard />
-            <PdsiCyberSecurityCard />
+            <PdsiDataCenterCard onOpenFormulaModal={handleKpiCardClick} />
+            <PdsiCyberSecurityCard onOpenFormulaModal={handleKpiCardClick} />
           </div>
 
           {/* Row 2: IT Helpdesk & Fiber Optic / SPBE */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <PdsiHelpdeskSection />
-            <PdsiFiberOpticAndApps />
+            <PdsiHelpdeskSection onOpenFormulaModal={handleKpiCardClick} />
+            <PdsiFiberOpticAndApps onOpenFormulaModal={handleKpiCardClick} />
           </div>
         </div>
       )}

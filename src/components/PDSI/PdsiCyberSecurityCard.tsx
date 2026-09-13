@@ -1,8 +1,12 @@
 import React from 'react';
 import { CYBER_THREATS_DATA } from '../../data/pdsiData';
-import { ShieldCheck, ShieldAlert, Activity, BarChart2 } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Activity, BarChart2, HelpCircle } from 'lucide-react';
 
-export const PdsiCyberSecurityCard: React.FC = () => {
+interface PdsiCyberSecurityCardProps {
+  onOpenFormulaModal?: (kpiId: string) => void;
+}
+
+export const PdsiCyberSecurityCard: React.FC<PdsiCyberSecurityCardProps> = ({ onOpenFormulaModal }) => {
   const totalSerangan = CYBER_THREATS_DATA.reduce((acc, t) => acc + t.jmlSerangan, 0);
 
   return (
@@ -12,9 +16,21 @@ export const PdsiCyberSecurityCard: React.FC = () => {
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
-              Data Serangan Keamanan TI &amp; Aktivitas CSIRT
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
+                Data Serangan Keamanan TI &amp; Aktivitas CSIRT
+              </h3>
+              {onOpenFormulaModal && (
+                <button
+                  onClick={() => onOpenFormulaModal('kpi_cyber_incident')}
+                  className="px-2 py-0.5 text-[10px] font-semibold text-[#1F4E79] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                  title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
+                >
+                  <HelpCircle className="w-3 h-3" />
+                  <span>Formula &amp; Insight</span>
+                </button>
+              )}
+            </div>
             <p className="text-[11px] text-slate-500 font-normal">
               Monitoring Aktivitas Threat dan Status Penanganan Insiden Keamanan TI (BSSN CSIRT)
             </p>
@@ -29,46 +45,33 @@ export const PdsiCyberSecurityCard: React.FC = () => {
         </div>
       </div>
 
-      {/* Tableau BAN (Big Numbers) Strip */}
-      <div className="p-4 border-b border-[#E2E8F0] bg-white grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Total Serangan
-          </span>
-          <div className="text-xl font-black text-[#E15759] font-mono mt-0.5">
-            {totalSerangan.toLocaleString('id-ID')}
+      {/* Tableau BAN (Big Numbers) Strip - Only Total Serangan */}
+      <div className="p-4 border-b border-[#E2E8F0] bg-white">
+        <div
+          onClick={() => onOpenFormulaModal && onOpenFormulaModal('total_serangan')}
+          className="p-3 bg-[#F8FAFC] hover:bg-rose-50/60 border border-[#E2E8F0] hover:border-rose-300 rounded cursor-pointer transition-all hover:shadow-2xs group flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left"
+          title="Klik untuk melihat Formula & Insight Total Serangan (SUM JML SERANGAN)"
+        >
+          <div>
+            <div className="flex items-center gap-2 justify-center sm:justify-start text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <span>Total Serangan</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800">
+                Formula: SUM(JML SERANGAN)
+              </span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#E15759] font-mono mt-0.5 group-hover:text-rose-900">
+              {totalSerangan.toLocaleString('id-ID')} Serangan
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Akumulasi anomali dan serangan siber terdeteksi pada gateway Next-Gen Firewall &amp; WAF
+            </p>
           </div>
-          <span className="text-[10px] text-slate-500">Akumulasi Percobaan Serangan</span>
-        </div>
 
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Status Keamanan
-          </span>
-          <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
-            100% Aman
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1.5 rounded border border-blue-200 group-hover:bg-blue-100">
+              Formula &gt;
+            </span>
           </div>
-          <span className="text-[10px] text-emerald-700 font-semibold">Semua Serangan Termitigasi</span>
-        </div>
-
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Vektor Terbesar
-          </span>
-          <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5">
-            6.420
-          </div>
-          <span className="text-[10px] text-slate-600 font-semibold">DDoS Volumetric &amp; Flood</span>
-        </div>
-
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            WAF / IPS Block Rate
-          </span>
-          <div className="text-xl font-black text-[#0066CC] font-mono mt-0.5">
-            99,8%
-          </div>
-          <span className="text-[10px] text-slate-500">Perimeter Gateway</span>
         </div>
       </div>
 

@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
 import { DC_RACKS_DATA, SERVER_STORAGE_DATA } from '../../data/pdsiData';
-import { Server, Database, HardDrive, Zap, Thermometer, CheckCircle2 } from 'lucide-react';
+import { Server, Database, HardDrive, Zap, Thermometer, CheckCircle2, HelpCircle } from 'lucide-react';
 
-export const PdsiDataCenterCard: React.FC = () => {
+interface PdsiDataCenterCardProps {
+  onOpenFormulaModal?: (kpiId: string) => void;
+}
+
+export const PdsiDataCenterCard: React.FC<PdsiDataCenterCardProps> = ({ onOpenFormulaModal }) => {
   const [activeTab, setActiveTab] = useState<'racks' | 'servers'>('racks');
 
   const totalRaks = DC_RACKS_DATA.reduce((acc, r) => acc + r.totalRak, 0);
   const totalTerisi = DC_RACKS_DATA.reduce((acc, r) => acc + r.rakTerisi, 0);
   const totalKosong = DC_RACKS_DATA.reduce((acc, r) => acc + r.rakKosong, 0);
   const overallOccupancy = Math.round((totalTerisi / totalRaks) * 1000) / 10;
+
+  const totalServerUnit = SERVER_STORAGE_DATA.reduce((acc, s) => acc + s.jumlahUnit, 0);
+  const serverGaransiAktif = SERVER_STORAGE_DATA.filter((s) => s.statusGaransi === 'Aktif').reduce(
+    (acc, s) => acc + s.jumlahUnit,
+    0
+  );
+  const pctGaransiAktif = Math.round((serverGaransiAktif / totalServerUnit) * 1000) / 10;
+
+  const serverAmanEos = SERVER_STORAGE_DATA.filter((s) => s.eosStatus === 'Aman (Supported)').reduce(
+    (acc, s) => acc + s.jumlahUnit,
+    0
+  );
+  const serverLegacyEos = totalServerUnit - serverAmanEos;
+  const pctAmanEos = Math.round((serverAmanEos / totalServerUnit) * 1000) / 10;
 
   return (
     <div className="bg-white border border-[#CBD5E1] rounded-lg shadow-2xs overflow-hidden flex flex-col font-sans select-none">
@@ -17,9 +35,21 @@ export const PdsiDataCenterCard: React.FC = () => {
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
-              Kapasitas &amp; Okupansi Data Center Tier III
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
+                Kapasitas &amp; Okupansi Data Center Tier III
+              </h3>
+              {onOpenFormulaModal && (
+                <button
+                  onClick={() => onOpenFormulaModal(activeTab === 'servers' ? 'jumlah_server' : 'kpi_dc_rack')}
+                  className="px-2 py-0.5 text-[10px] font-semibold text-[#1F4E79] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                  title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
+                >
+                  <HelpCircle className="w-3 h-3" />
+                  <span>Formula &amp; Insight</span>
+                </button>
+              )}
+            </div>
             <p className="text-[11px] text-slate-500 font-normal">
               Utilisasi Rak 42U, Efisiensi Daya Listrik (PUE) &amp; Storage SAN Terpusat
             </p>
@@ -53,35 +83,108 @@ export const PdsiDataCenterCard: React.FC = () => {
 
       {/* Tableau BAN (Big Numbers) Strip */}
       <div className="p-4 border-b border-[#E2E8F0] bg-white grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Total Rak
-          </span>
-          <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
-            {totalRaks} Unit Rak
-          </div>
-          <span className="text-[10px] text-slate-500">Standar 42U Server</span>
-        </div>
+        {activeTab === 'racks' ? (
+          <>
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('total_rak')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-blue-50/60 border border-[#E2E8F0] hover:border-blue-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title="Klik untuk melihat Formula & Insight Total Rak"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Total Rak</span>
+                <span className="text-[9px] font-normal text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Formula &gt;</span>
+              </div>
+              <div className="text-xl font-black text-slate-900 font-mono mt-0.5 group-hover:text-blue-900">
+                {totalRaks} Unit Rak
+              </div>
+              <span className="text-[10px] text-slate-500">Standar 42U Server</span>
+            </div>
 
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Rak Terisi
-          </span>
-          <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5">
-            {totalTerisi} Rak ({overallOccupancy}%)
-          </div>
-          <span className="text-[10px] text-blue-700 font-semibold">Terpasang Hardware Aktif</span>
-        </div>
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('rak_terisi')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-blue-50/60 border border-[#E2E8F0] hover:border-blue-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title="Klik untuk melihat Formula & Insight Okupansi Rak Terisi"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Rak Terisi</span>
+                <span className="text-[9px] font-normal text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Formula &gt;</span>
+              </div>
+              <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5 group-hover:text-blue-900">
+                {totalTerisi} Rak ({overallOccupancy}%)
+              </div>
+              <span className="text-[10px] text-blue-700 font-semibold">Terpasang Hardware Aktif</span>
+            </div>
 
-        <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-            Jumlah Rak Kosong
-          </span>
-          <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
-            {totalKosong} Rak ({Math.round((totalKosong / totalRaks) * 1000) / 10}%)
-          </div>
-          <span className="text-[10px] text-emerald-600 font-semibold">Slot Tersedia untuk Ekspansi</span>
-        </div>
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('rak_kosong')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-emerald-50/60 border border-[#E2E8F0] hover:border-emerald-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title="Klik untuk melihat Formula & Insight Kapasitas Rak Kosong (Total Rak - Rak Terisi)"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Jumlah Rak Kosong</span>
+                <span className="text-[9px] font-normal text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity">Formula &gt;</span>
+              </div>
+              <div className="text-xl font-black text-emerald-700 font-mono mt-0.5 group-hover:text-emerald-900">
+                {totalKosong} Rak ({Math.round((totalKosong / totalRaks) * 1000) / 10}%)
+              </div>
+              <span className="text-[10px] text-emerald-600 font-semibold">Total Rak - Rak Terisi</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('jumlah_server')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-blue-50/60 border border-[#E2E8F0] hover:border-blue-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title="Klik untuk melihat Formula & Insight Total Node Server & Storage"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Total Server &amp; Storage</span>
+                <span className="text-[9px] font-normal text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Formula &gt;</span>
+              </div>
+              <div className="text-xl font-black text-slate-900 font-mono mt-0.5 group-hover:text-blue-900">
+                {totalServerUnit} Unit Node
+              </div>
+              <span className="text-[10px] text-slate-500">HCI, Storage SAN &amp; Exadata</span>
+            </div>
+
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('jumlah_server')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-emerald-50/60 border border-[#E2E8F0] hover:border-emerald-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title="Klik untuk melihat Formula & Insight Garansi Aktif Perangkat Server"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Garansi Resmi Aktif</span>
+                <span className="text-[9px] font-normal text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity">Formula &gt;</span>
+              </div>
+              <div className="text-xl font-black text-emerald-700 font-mono mt-0.5 group-hover:text-emerald-900">
+                {serverGaransiAktif} Unit ({pctGaransiAktif}%)
+              </div>
+              <span className="text-[10px] text-emerald-600 font-semibold">SLA Support Vendor Aktif</span>
+            </div>
+
+            <div
+              onClick={() => onOpenFormulaModal && onOpenFormulaModal('kpi_lifecycle_eos')}
+              className="p-2.5 bg-[#F8FAFC] hover:bg-blue-50/60 border border-[#E2E8F0] hover:border-blue-300 rounded cursor-pointer transition-all hover:shadow-2xs group"
+              title={`Formula: (${serverAmanEos} Unit Aman ÷ ${totalServerUnit} Total Unit) × 100% = ${pctAmanEos.toFixed(1)}%`}
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Status Lifecycle / EOS</span>
+                <span className="text-[9px] font-mono text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                  {serverAmanEos}/{totalServerUnit} Unit
+                </span>
+              </div>
+              <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5 group-hover:text-blue-900">
+                {pctAmanEos.toFixed(1)}% Aman
+              </div>
+              <span className="text-[10px] text-blue-700 font-semibold block">
+                Formula: ({serverAmanEos} Aman ÷ {totalServerUnit} Total) × 100%
+              </span>
+              <span className="text-[9.5px] text-amber-700 font-medium block mt-0.5">
+                {serverLegacyEos} Unit Legacy Mendekati EOS
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Tableau Crosstab Table */}

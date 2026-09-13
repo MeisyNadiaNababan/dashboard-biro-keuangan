@@ -218,16 +218,18 @@ export interface RekapitulasiMutasiPiutang {
   umurPiutang: number; // in hari
 }
 
-// Item 20: Rekapitulasi Piutang Tak Tertagih
+// Item 20: Rekapitulasi Piutang Tak Tertagih (Katalog Data SIMKEU BP Batam)
 export interface RekapitulasiPiutangTakTertagih {
   nomorFaktur: string;
   tanggalTerbitFaktur: string;
   namaPelanggan: string;
   tanggalJatuhTempo: string;
-  jumlahPiutangKoreksiKpknl: number; // in Juta / Miliar
-  perhitunganDenda: number;
-  bayarFaktur: number;
-  saldoPiutangTakTertagih: number;
+  jumlahPiutang: number; // in Miliar
+  koreksiKpknl: number; // in Miliar
+  perhitunganDenda: number; // in Miliar
+  bayarFaktur: number; // in Miliar
+  saldoPiutangTakTertagih: number; // in Miliar
+  jumlahPiutangKoreksiKpknl?: number; // legacy alias
 }
 
 // Item 14: Laporan Penerimaan Sumber Dana

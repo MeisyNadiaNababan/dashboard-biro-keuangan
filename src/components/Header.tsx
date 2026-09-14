@@ -25,6 +25,11 @@ import {
   Sparkles,
   FileText,
   FileCode2,
+  Award,
+  FileCheck2,
+  Ship,
+  MessageSquare,
+  FolderKanban,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -87,6 +92,17 @@ export const Header: React.FC<HeaderProps> = ({
         { id: 'fiber', label: 'Jaringan FO & Apps', icon: Network },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus PDSI (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'ptsp') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar PTSP', icon: LayoutDashboard },
+        { id: 'ikm', label: 'Survei IKM PTSP (9 Unsur)', icon: Award, isSpecial: true },
+        { id: 'perizinan', label: 'Perizinan Berusaha (OSS)', icon: FileCheck2 },
+        { id: 'maritim', label: 'Maritim & Logistik', icon: Ship },
+        { id: 'pengaduan', label: 'Pengaduan & SP4N', icon: MessageSquare },
+        { id: 'katalog', label: '17 Item Data PDF', icon: FolderKanban },
+        { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus PTSP', icon: FileCode2 },
       ];
     } else {
       return [

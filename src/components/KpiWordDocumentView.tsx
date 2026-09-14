@@ -16,6 +16,7 @@ import {
 import {
   BIRO_KEUANGAN_KPI_DATA,
   PDSI_KPI_DATA,
+  PTSP_KPI_DATA,
   KPI_DICTIONARY_DATA,
   KpiTableItem,
   downloadKpiDocxInBrowser,
@@ -31,8 +32,8 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
   onBackToDashboard,
 }) => {
   // Unit tab: default to whichever unit the user came from
-  const initialUnit = activeUnitId === 'pdsi' ? 'PDSI' : 'KEUANGAN';
-  const [selectedUnit, setSelectedUnit] = useState<'KEUANGAN' | 'PDSI'>(initialUnit);
+  const initialUnit = activeUnitId === 'pdsi' ? 'PDSI' : activeUnitId === 'ptsp' ? 'PTSP' : 'KEUANGAN';
+  const [selectedUnit, setSelectedUnit] = useState<'KEUANGAN' | 'PDSI' | 'PTSP'>(initialUnit);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<'ALL' | 'Financial' | 'Executive' | 'Program Driver' | 'Operational Driver'>('ALL');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -43,6 +44,8 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
   useEffect(() => {
     if (activeUnitId === 'pdsi') {
       setSelectedUnit('PDSI');
+    } else if (activeUnitId === 'ptsp') {
+      setSelectedUnit('PTSP');
     } else if (activeUnitId === 'biro-keuangan') {
       setSelectedUnit('KEUANGAN');
     }
@@ -50,7 +53,9 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
 
   // Dataset strictly segregated by unit
   const activeDataset = useMemo(() => {
-    return selectedUnit === 'KEUANGAN' ? BIRO_KEUANGAN_KPI_DATA : PDSI_KPI_DATA;
+    if (selectedUnit === 'KEUANGAN') return BIRO_KEUANGAN_KPI_DATA;
+    if (selectedUnit === 'PDSI') return PDSI_KPI_DATA;
+    return PTSP_KPI_DATA;
   }, [selectedUnit]);
 
   // Filtered items
@@ -81,11 +86,13 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
   const handleDownloadDocx = async () => {
     try {
       setIsDownloading(true);
-      const unitKey = selectedUnit === 'KEUANGAN' ? 'keuangan' : 'pdsi';
+      const unitKey = selectedUnit === 'KEUANGAN' ? 'keuangan' : selectedUnit === 'PDSI' ? 'pdsi' : 'ptsp';
       await downloadKpiDocxInBrowser(unitKey);
       const filename = selectedUnit === 'KEUANGAN'
         ? 'Kamus_KPI_Dashboard_Biro_Keuangan_BP_Batam.docx'
-        : 'Kamus_KPI_Dashboard_PDSI_BP_Batam.docx';
+        : selectedUnit === 'PDSI'
+        ? 'Kamus_KPI_Dashboard_PDSI_BP_Batam.docx'
+        : 'Kamus_KPI_Dashboard_PTSP_BP_Batam.docx';
       setDownloadSuccess(filename);
       setTimeout(() => setDownloadSuccess(null), 4500);
     } catch (err) {
@@ -102,6 +109,8 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
   };
 
   const isKeu = selectedUnit === 'KEUANGAN';
+  const isPdsi = selectedUnit === 'PDSI';
+  const isPtsp = selectedUnit === 'PTSP';
 
   return (
     <div className="space-y-5 pb-12 animate-fadeIn font-sans">
@@ -119,7 +128,7 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
           )}
 
           {/* Unit Toggle Tabs */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
+          <div className="flex flex-wrap items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs gap-1">
             <button
               onClick={() => {
                 setSelectedUnit('KEUANGAN');
@@ -133,7 +142,7 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
               }`}
             >
               <Building2 className="w-4 h-4" />
-              <span>Biro Keuangan ({BIRO_KEUANGAN_KPI_DATA.length} KPI Sesuai PDF)</span>
+              <span>Biro Keuangan ({BIRO_KEUANGAN_KPI_DATA.length})</span>
             </button>
 
             <button
@@ -149,7 +158,23 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
               }`}
             >
               <Server className="w-4 h-4" />
-              <span>Pusat Data dan Sistem Informasi - PDSI ({PDSI_KPI_DATA.length} KPI)</span>
+              <span>PDSI ({PDSI_KPI_DATA.length})</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedUnit('PTSP');
+                setSearchTerm('');
+                setSelectedLevelFilter('ALL');
+              }}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md font-bold transition-all cursor-pointer ${
+                selectedUnit === 'PTSP'
+                  ? 'bg-blue-700 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>PTSP &amp; IKM Permenpan RB ({PTSP_KPI_DATA.length})</span>
             </button>
           </div>
         </div>
@@ -165,7 +190,9 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
         className={`rounded-xl p-6 text-white shadow-lg border relative overflow-hidden transition-all ${
           isKeu
             ? 'bg-gradient-to-r from-[#0B2545] via-[#123966] to-[#1F4E79] border-blue-900/40'
-            : 'bg-gradient-to-r from-[#0F1E36] via-[#193A6F] to-[#25529A] border-blue-900/40'
+            : isPdsi
+            ? 'bg-gradient-to-r from-[#0F1E36] via-[#193A6F] to-[#25529A] border-blue-900/40'
+            : 'bg-gradient-to-r from-[#0A2540] via-[#1A365D] to-[#2B6CB0] border-blue-900/40'
         }`}
       >
         <div className="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-8">
@@ -177,20 +204,22 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <span className="bg-blue-500/30 text-blue-200 text-xs px-2.5 py-0.5 rounded-full font-semibold border border-blue-400/30 flex items-center gap-1.5">
                 <TableIcon className="w-3.5 h-3.5" />
-                {isKeu ? 'Unit: Biro Keuangan BP Batam' : 'Unit: PDSI BP Batam'}
+                {isKeu ? 'Unit: Biro Keuangan BP Batam' : isPdsi ? 'Unit: PDSI BP Batam' : 'Unit: PTSP BP Batam'}
               </span>
               <span className="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-semibold border border-emerald-400/30">
                 Word (.docx) Ready
               </span>
               <span className="bg-white/10 text-slate-200 text-xs px-2.5 py-0.5 rounded-full font-mono">
-                BP_Batam_KPI_Dictionary_Updated.pdf
+                {isPtsp ? 'Permenpan RB No. 14/2017 & OSS RBA' : 'BP_Batam_KPI_Dictionary_Updated.pdf'}
               </span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
               {isKeu
                 ? 'Kamus Indikator Kinerja Utama (KPI) - Biro Keuangan'
-                : 'Kamus Indikator Kinerja Utama (KPI) - PDSI'}
+                : isPdsi
+                ? 'Kamus Indikator Kinerja Utama (KPI) - PDSI'
+                : 'Kamus Indikator Kinerja Utama (KPI) - PTSP'}
             </h1>
 
             <p className="text-blue-100 text-xs md:text-sm leading-relaxed">
@@ -202,13 +231,21 @@ export const KpiWordDocumentView: React.FC<KpiWordDocumentViewProps> = ({
                   <strong className="text-white">Budget / Spending Control</strong> (4 KPI), dan{' '}
                   <strong className="text-white">Financial Linkage</strong> (4 KPI). Seluruh indikator yang tidak ada di dashboard telah dieliminasi.
                 </>
-              ) : (
+              ) : isPdsi ? (
                 <>
                   Tabel kamus KPI resmi unit <strong className="text-white">Pusat Data dan Sistem Informasi (PDSI)</strong>.
                   Cakupan terbagi menjadi 4 domain operasional: <strong className="text-white">Data Center & Server Tier III</strong> (5 KPI),{' '}
                   <strong className="text-white">Layanan TI & Helpdesk</strong> (5 KPI),{' '}
                   <strong className="text-white">Keamanan Siber & SOC</strong> (4 KPI), dan{' '}
                   <strong className="text-white">Jaringan FO & Aplikasi SPBE</strong> (4 KPI).
+                </>
+              ) : (
+                <>
+                  Tabel kamus KPI resmi unit <strong className="text-white">Pusat Pelayanan Terpadu Satu Pintu (PTSP)</strong>.
+                  Cakupan mencakup <strong className="text-white">Indeks Kepuasan Masyarakat (IKM) 9 Unsur Permenpan RB No. 14 Tahun 2017</strong>,{' '}
+                  <strong className="text-white">SLA Kepatuhan Perizinan Berusaha OSS RBA</strong>,{' '}
+                  <strong className="text-white">Perizinan Maritim & Bongkar Muat (SKKBM/SPJK)</strong>, serta{' '}
+                  <strong className="text-white">Complaint Close Rate SP4N-LAPOR! & MPP</strong>.
                 </>
               )}
             </p>

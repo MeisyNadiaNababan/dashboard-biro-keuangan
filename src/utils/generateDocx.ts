@@ -297,10 +297,97 @@ export const PDSI_KPI_DATA: KpiTableItem[] = [
   },
 ];
 
+// =========================================================================
+// 3. PTSP KPI DICTIONARY (PELAYANAN TERPADU SATU PINTU & IKM PERMENPAN RB)
+// =========================================================================
+export const PTSP_KPI_DATA: KpiTableItem[] = [
+  {
+    domain: 'PTSP / Kepuasan Pemohon',
+    kpiCode: 'IKSS_IKM',
+    kpiName: 'Indeks Kepuasan Masyarakat (IKM) PTSP Permenpan RB',
+    strategicLevel: 'Executive',
+    definition: 'Pengukuran tingkat kepuasan penerima layanan perizinan terpadu dan Mal Pelayanan Publik (MPP) BP Batam berpedoman pada 9 unsur Permenpan RB No. 14 Tahun 2017.',
+    formula: 'SUM(Nilai Rata-Rata Unsur U1..U9 × 0,111) × 25 (Skala Konversi 0 - 100)',
+  },
+  {
+    domain: 'PTSP / Perizinan Berusaha',
+    kpiCode: 'LIC_SLA',
+    kpiName: 'SLA Perizinan Tepat Waktu (SLA Compliance)',
+    strategicLevel: 'Executive',
+    definition: 'Persentase permohonan perizinan berusaha OSS RBA dan non-perizinan yang diselesaikan tepat waktu sesuai standar pelayanan.',
+    formula: 'SUM(IIF([Durasi Hari] <= [Target SLA], 1, 0)) ÷ COUNT([Nomor Permohonan]) × 100%',
+  },
+  {
+    domain: 'PTSP / Perizinan Berusaha',
+    kpiCode: 'LIC_VOL',
+    kpiName: 'Volume Total Permohonan Izin Masuk',
+    strategicLevel: 'Program Driver',
+    definition: 'Akumulasi seluruh berkas permohonan izin berusaha, penanaman modal, pertanahan, dan maritim yang masuk ke PTSP BP Batam.',
+    formula: 'COUNT([Nomor Permohonan Masuk]) YTD TA Berjalan',
+  },
+  {
+    domain: 'PTSP / Perizinan Berusaha',
+    kpiCode: 'LIC_ISSUED',
+    kpiName: 'Rasio Efektivitas Penerbitan Izin (Issuance Ratio)',
+    strategicLevel: 'Financial',
+    definition: 'Rasio izin yang berhasil disetujui dan diterbitkan secara resmi terhadap total permohonan masuk.',
+    formula: 'Jumlah Izin Berhasil Terbit ÷ Total Permohonan Masuk × 100%',
+  },
+  {
+    domain: 'PTSP / Operasional Layanan',
+    kpiCode: 'LIC_BACKLOG',
+    kpiName: 'Backlog Permohonan / Pending Cases',
+    strategicLevel: 'Operational Driver',
+    definition: 'Jumlah berkas permohonan perizinan yang masih dalam status verifikasi aktif dan belum diterbitkan.',
+    formula: 'COUNT(IIF([Status] = "Dalam Proses", [Nomor Permohonan], NULL))',
+  },
+  {
+    domain: 'PTSP / Kecepatan Layanan',
+    kpiCode: 'LIC_MLT',
+    kpiName: 'Median Lead Time (MLT) Pemrosesan Izin',
+    strategicLevel: 'Operational Driver',
+    definition: 'Nilai tengah hari kerja yang dihabiskan sejak berkas diunggah hingga dokumen perizinan resmi diterbitkan.',
+    formula: 'MEDIAN(DATEDIFF("day", [Tgl Permohonan], [Tgl Terbit Izin]))',
+  },
+  {
+    domain: 'PTSP / Manajemen Risiko',
+    kpiCode: 'LIC_BOTTLENECK',
+    kpiName: 'Tingkat Keterlambatan Layanan (Bottleneck Rate)',
+    strategicLevel: 'Operational Driver',
+    definition: 'Persentase permohonan yang mengalami keterlambatan melebihi batas waktu SLA yang memerlukan eskalasi.',
+    formula: 'SUM(IIF([Durasi Hari] > [Target SLA], 1, 0)) ÷ Total Permohonan × 100%',
+  },
+  {
+    domain: 'PTSP / Penanganan Pengaduan',
+    kpiCode: 'SAT_CCR',
+    kpiName: 'Complaint Close Rate (CCR) SP4N-LAPOR! & MPP',
+    strategicLevel: 'Executive',
+    definition: 'Rasio penyelesaian pengaduan masyarakat yang berhasil diselesaikan solusinya terhadap seluruh keluhan yang masuk.',
+    formula: 'Jumlah Pengaduan Selesai ÷ Total Pengaduan Masuk × 100%',
+  },
+  {
+    domain: 'PTSP / Maritim & Logistik',
+    kpiCode: 'MAR_SKKBM',
+    kpiName: 'Volume Izin Bongkar Muat (SKKBM)',
+    strategicLevel: 'Program Driver',
+    definition: 'Jumlah surat keterangan kerja bongkar muat barang yang diterbitkan untuk aktivitas pelabuhan di Batam.',
+    formula: 'COUNT([Nomor SKKBM Terbit]) per Periode',
+  },
+  {
+    domain: 'PTSP / Maritim & Logistik',
+    kpiCode: 'MAR_SPJK',
+    kpiName: 'Persetujuan Jadwal Kedatangan Kapal (SPJK)',
+    strategicLevel: 'Operational Driver',
+    definition: 'Jumlah verifikasi dan persetujuan jadwal operasional kapal kargo dan penumpang di pelabuhan BP Batam.',
+    formula: 'COUNT([Nomor SPJK Terbit]) per Periode',
+  },
+];
+
 // Kombinasi seluruh KPI jika diperlukan
 export const KPI_DICTIONARY_DATA: KpiTableItem[] = [
   ...BIRO_KEUANGAN_KPI_DATA,
   ...PDSI_KPI_DATA,
+  ...PTSP_KPI_DATA,
 ];
 
 // Helper to build docx Table from dataset
@@ -536,14 +623,17 @@ function buildKpiDocxTable(items: KpiTableItem[]): Table {
   });
 }
 
-export function createDocxDocumentInstance(unit: 'keuangan' | 'pdsi' | 'all' = 'all'): Document {
+export function createDocxDocumentInstance(unit: 'keuangan' | 'pdsi' | 'ptsp' | 'all' = 'all'): Document {
   const isKeu = unit === 'keuangan';
   const isPdsi = unit === 'pdsi';
+  const isPtsp = unit === 'ptsp';
 
   const items = isKeu
     ? BIRO_KEUANGAN_KPI_DATA
     : isPdsi
     ? PDSI_KPI_DATA
+    : isPtsp
+    ? PTSP_KPI_DATA
     : KPI_DICTIONARY_DATA;
 
   const table = buildKpiDocxTable(items);
@@ -552,13 +642,17 @@ export function createDocxDocumentInstance(unit: 'keuangan' | 'pdsi' | 'all' = '
     ? 'Unit Kerja: Biro Keuangan BP Batam | Standar: BP_Batam_KPI_Dictionary_Updated.pdf | Cut-Off: April 2026'
     : isPdsi
     ? 'Unit Kerja: Pusat Data dan Sistem Informasi (PDSI) BP Batam | Cut-Off: April 2026'
-    : 'Unit Kerja: Biro Keuangan & Pusat Data dan Sistem Informasi (PDSI) BP Batam | Cut-Off: April 2026';
+    : isPtsp
+    ? 'Unit Kerja: Pusat Pelayanan Terpadu Satu Pintu (PTSP) BP Batam | Standar: Permenpan RB No. 14/2017 | Cut-Off: April 2026'
+    : 'Unit Kerja: Konsolidasi Multi-Unit BP Batam | Cut-Off: April 2026';
 
   const narrative = isKeu
     ? 'Dokumen ini menyajikan definisi operasional, strategic level, dan formula kalkulasi resmi untuk indikator kinerja Biro Keuangan BP Batam yang ditampilkan pada Dashboard Eksekutif. Mencakup domain Revenue / PNBP, Budget / Spending Control, serta Financial Linkage yang telah diselaraskan dengan dokumen resmi BP_Batam_KPI_Dictionary_Updated.pdf.'
     : isPdsi
     ? 'Dokumen ini menyajikan definisi operasional, strategic level, dan formula kalkulasi resmi untuk indikator kinerja Pusat Data dan Sistem Informasi (PDSI) BP Batam. Mencakup domain Data Center Tier III, Layanan Helpdesk TI, Keamanan Siber SOC/CSIRT, Jaringan Backbone Fiber Optic, dan Kesiapan Aplikasi SPBE.'
-    : 'Dokumen ini menyajikan kamus indikator kinerja dan formula kalkulasi resmi untuk unit Biro Keuangan dan Pusat Data dan Sistem Informasi (PDSI) BP Batam yang selaras dengan dokumen BP_Batam_KPI_Dictionary_Updated.pdf.';
+    : isPtsp
+    ? 'Dokumen ini menyajikan kamus indikator kinerja utama dan formula resmi Pusat Pelayanan Terpadu Satu Pintu (PTSP) BP Batam. Mencakup Indeks Kepuasan Masyarakat (IKM) 9 Unsur Permenpan RB No. 14/2017, SLA Perizinan Berusaha OSS RBA, Perizinan Maritim & Bongkar Muat (SKKBM), serta Pengelolaan Aspirasi & Pengaduan SP4N-LAPOR!.'
+    : 'Dokumen ini menyajikan kamus indikator kinerja dan formula kalkulasi resmi untuk unit kerja BP Batam yang selaras dengan dokumen resmi BP Batam.';
 
   return new Document({
     sections: [
@@ -598,6 +692,8 @@ export function createDocxDocumentInstance(unit: 'keuangan' | 'pdsi' | 'all' = '
                   ? 'KAMUS INDIKATOR KINERJA UTAMA (KPI DICTIONARY) - BIRO KEUANGAN'
                   : isPdsi
                   ? 'KAMUS INDIKATOR KINERJA UTAMA (KPI DICTIONARY) - PDSI'
+                  : isPtsp
+                  ? 'KAMUS INDIKATOR KINERJA UTAMA (KPI DICTIONARY) - UNIT PTSP'
                   : 'KAMUS INDIKATOR KINERJA UTAMA (KPI DICTIONARY) & FORMULA DASHBOARD EKSEKUTIF',
                 bold: true,
                 size: 22,
@@ -693,19 +789,22 @@ export function createDocxDocumentInstance(unit: 'keuangan' | 'pdsi' | 'all' = '
   });
 }
 
-export async function buildDocxDocument(unit: 'keuangan' | 'pdsi' | 'all' = 'all'): Promise<Buffer> {
+export async function buildDocxDocument(unit: 'keuangan' | 'pdsi' | 'ptsp' | 'all' = 'all'): Promise<Buffer> {
   const doc = createDocxDocumentInstance(unit);
   return await Packer.toBuffer(doc);
 }
 
-export async function downloadKpiDocxInBrowser(unit: 'keuangan' | 'pdsi' | 'all' = 'all'): Promise<void> {
+export async function downloadKpiDocxInBrowser(unit: 'keuangan' | 'pdsi' | 'ptsp' | 'all' = 'all'): Promise<void> {
   const isKeu = unit === 'keuangan';
   const isPdsi = unit === 'pdsi';
+  const isPtsp = unit === 'ptsp';
 
   const filename = isKeu
     ? 'Kamus_KPI_Dashboard_Biro_Keuangan_BP_Batam.docx'
     : isPdsi
     ? 'Kamus_KPI_Dashboard_PDSI_BP_Batam.docx'
+    : isPtsp
+    ? 'Kamus_KPI_Dashboard_PTSP_BP_Batam.docx'
     : 'Kamus_KPI_Dashboard_Biro_Keuangan_dan_PDSI_BP_Batam.docx';
 
   try {

@@ -20,7 +20,7 @@ import {
 
 export interface KpiFormulaDetail {
   id: string;
-  unit: 'biro-keuangan' | 'pdsi';
+  unit: 'biro-keuangan' | 'pdsi' | 'ptsp';
   title: string;
   codeTag: string;
   category: string;
@@ -2036,6 +2036,473 @@ SUM([keu_saldo_bank_realtime].[saldo_akhir]) / (SUM([keu_arus_kas].[arus_kas_kel
     },
     executiveAction: 'Pertahankan cadangan likuiditas 5,2 bulan ini dan alokasikan kelebihan kas di atas batas 3 bulan ke instrumen deposito bergulir (on-call) untuk meningkatkan yield PNBP jasa giro secara legal dan aman.',
   },
+
+  // ==========================================
+  // PUSAT PELAYANAN TERPADU SATU PINTU (PTSP)
+  // Berdasarkan Buku Katalog Data Atribut Hal 21-28 (17 Item)
+  // ==========================================
+  ikss_ikm: {
+    id: 'ikss_ikm',
+    unit: 'ptsp',
+    title: 'Indeks Kepuasan Masyarakat (IKM) PTSP & MPP BP Batam',
+    codeTag: 'IKSS_IKM',
+    category: 'Kualitas Pelayanan Publik (Permenpan RB 14/2017)',
+    currentValue: '89,24 (Mutu A • Sangat Baik)',
+    targetValue: 'Target Renstra: ≥ 88,00',
+    statusText: 'Melampaui Target (Capaian 101,4%)',
+    statusVariant: 'success',
+    summary: 'Pengukuran tingkat kepuasan penerima layanan atas 9 unsur standar pelayanan perizinan berusaha dan tatap muka MPP di lingkungan PTSP BP Batam.',
+    presentationPitch: 'Bapak/Ibu Pimpinan, Indeks Kepuasan Masyarakat (IKM) PTSP BP Batam pada TA 2026 membukukan skor 89,24 (Mutu A: Sangat Baik). Nilai 89,24 ini dihasilkan dari pengisian kuesioner elektronik mandiri oleh 1.480 responden di Mal Pelayanan Publik (MPP). Setiap unsur (U1 s.d U9) dinilai rata-rata 3,57 (skala 4), dikalikan bobot tertimbang 0,111, lalu dikali faktor konversi 25 menghasilkan skor 89,24.',
+    formulaConceptual: '∑ [Nilai Rata-rata per Unsur (U1 s.d U9) × 0,111] × 25',
+    numerator: {
+      label: 'Nilai Rata-rata Tertimbang (NRR Tertimbang 9 Unsur)',
+      realValue: '3,5696 (Skala 1 - 4)',
+      source: 'Dataset Item #5 [DATA IMPLEMENTASI TRANSFORMASI DIGITAL MPP]: SUM([NILAI PER UNSUR] * 0,111)',
+    },
+    denominator: {
+      label: 'Faktor Pengali Konversi Standar Permenpan RB',
+      realValue: 'Konversi Skala 100 (Nilai Pengali 25)',
+      source: 'Permenpan RB No. 14 Tahun 2017',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: 3,5696 × 25 = 89,24 (Kategori Mutu A: Sangat Baik)',
+    tableauCalculatedField: `// Calculated Field: [IKM PTSP Skala 100]
+// Sumber: Permenpan RB 14/2017 & Dataset Item #5 MPP
+SUM([Nilai Rata-rata per Unsur] * 0.1111) * 25.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 (Crosstab) & #6 (Horizontal Bar per Unsur)',
+      rows: '[UNSUR PELAYANAN U1-U9]',
+      columns: '[NILAI PER UNSUR], [NILAI TERTIMBANG]',
+      marks: 'Color: Kategori Mutu (Hijau untuk A, Biru untuk B)',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #5: DATA IMPLEMENTASI KEBIJAKAN TRANSFORMASI DIGITAL MAL PELAYANAN PUBLIK (MPP) (Hal 24)',
+      tableName: 'ptsp_ikm_mpp_survei',
+      attributes: ['SEMESTER', 'TAHUN', '9 UNSUR PELAYANAN', 'JUMLAH RESPONDEN', 'NILAI PER UNSUR', 'NILAI IKM TOTAL', 'KATEGORI MUTU'],
+      updateFrequency: 'Semesteran / Triwulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 88,00 (Kategori A - Sangat Baik)',
+      warning: '76,61 - 88,00 (Kategori B - Baik)',
+      critical: '< 76,61 (Kategori C/D - Kurang/Tidak Baik)',
+      standardOrigin: 'Permenpan RB No. 14 Tahun 2017 & Indikator Sasaran Strategis BP Batam',
+    },
+    executiveAction: 'Pertahankan mutu A dengan memperluas fitur self-service tracking izin via WhatsApp Bot dan optimalisasi anjungan antrean mandiri di lobi MPP.',
+  },
+
+  lic_sla: {
+    id: 'lic_sla',
+    unit: 'ptsp',
+    title: 'Kepatuhan SLA Perizinan Tepat Waktu',
+    codeTag: 'LIC_SLA',
+    category: 'Kecepatan & Kepatuhan Layanan',
+    currentValue: '94,6% (12.480 Berkas On-Time)',
+    targetValue: 'Target Kepatuhan SLA: ≥ 90,0%',
+    statusText: 'Kepatuhan Sangat Tinggi (+4,6% di Atas Target)',
+    statusVariant: 'success',
+    summary: 'Persentase permohonan perizinan berusaha dan operasional yang diselesaikan tepat waktu sesuai standar Service Level Agreement (SLA).',
+    presentationPitch: 'Bapak/Ibu Pimpinan, kepatuhan SLA perizinan PTSP BP Batam mencatatkan 94,6% dengan 12.480 berkas tuntas tepat waktu dari total 13.192 izin berstatus selesai. Angka 94,6% ini dihasilkan dari Dataset Item #17 [DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU] dengan memfilter berkas terbit yang durasi harinya ([TANGGAL REKAP AKHIR] - [TANGGAL REKAP AWAL]) <= target SLA dibagi total berkas selesai.',
+    formulaConceptual: '( ∑ [PERMOHONAN STATUS SELESAI (Durasi ≤ SLA)] ÷ ∑ [PERMOHONAN STATUS SELESAI] ) × 100%',
+    numerator: {
+      label: 'Berkas Selesai Tepat Waktu (Durasi ≤ SLA)',
+      realValue: '12.480 Berkas',
+      source: 'Dataset Item #17: SUM(IF DATEDIFF("day", [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]) <= [SLA] THEN [PERMOHONAN STATUS SELESAI] END)',
+    },
+    denominator: {
+      label: 'Total Berkas Berstatus Selesai',
+      realValue: '13.192 Berkas',
+      source: 'Dataset Item #17: SUM([PERMOHONAN STATUS SELESAI])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (12.480 ÷ 13.192) × 100% = 94,603% ≈ 94,6%',
+    tableauCalculatedField: `// Calculated Field: [Kepatuhan SLA Perizinan %]
+// Sumber: Dataset Item #17 DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU
+(SUM(IF DATEDIFF('day', [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]) <= [SERVICE LEVEL AGREEMENT (SLA)] 
+ THEN [PERMOHONAN STATUS SELESAI] ELSE 0 END) 
+ / SUM([PERMOHONAN STATUS SELESAI])) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #7 (Bullet Graph with 90% Reference Line)',
+      rows: '[JENIS PERIZINAN]',
+      columns: '[Kepatuhan SLA Perizinan %]',
+      marks: 'Color: Status SLA (Hijau >= 90%, Oranye < 90%)',
+      filters: "[BULAN] = 'April', [TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #17: DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU (Hal 28)',
+      tableName: 'ptsp_penyelesaian_izin_tepat_waktu',
+      attributes: ['BULAN', 'TANGGAL IZIN', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'JENIS PERIZINAN', 'NAMA PERIZINAN BERUSAHA', 'PERMOHONAN STATUS SELESAI', 'SERVICE LEVEL AGREEMENT (SLA)'],
+      updateFrequency: 'Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0% SLA Compliance',
+      warning: '80,0% - 89,9% SLA Compliance',
+      critical: '< 80,0% (Eskalasi ke Direktur PTSP)',
+      standardOrigin: 'Standar Pelayanan Minimum (SPM) BP Batam & PP No. 5/2021',
+    },
+    executiveAction: 'Lanjutkan penguatan notifikasi peringatan dini (early warning alert) H-1 sebelum batas waktu SLA terlampaui kepada verifikator teknis.',
+  },
+
+  lic_vol: {
+    id: 'lic_vol',
+    unit: 'ptsp',
+    title: 'Total Volume Permohonan Izin Masuk',
+    codeTag: 'LIC_VOL',
+    category: 'Volume & Beban Kerja',
+    currentValue: '13.820 Permohonan',
+    targetValue: 'Ekspektasi Demand: ~13.000 Berkas YTD',
+    statusText: 'Permintaan Tinggi (+9,0% YoY)',
+    statusVariant: 'info',
+    summary: 'Jumlah seluruh berkas perizinan berusaha OSS RBA, perizinan maritim kepelabuhanan (SKKBM/Jadwal Kapal), dan rekomendasi teknis non-perizinan yang masuk ke sistem PTSP BP Batam.',
+    presentationPitch: 'Bapak/Ibu Pimpinan, total permohonan masuk yang tercatat di dashboard berjumlah 13.820 berkas. Angka ini secara presisi dihasilkan dari Dataset Item #14 [JENIS LAYANAN BP BATAM] pada kolom [JUMLAH LAYANAN MASUK] periode Jan-Apr 2026 (Jan: 3.320 + Feb: 3.250 + Mar: 3.610 + Apr: 3.640 = 13.820). Rinciannya terdiri dari Perizinan Berusaha OSS [Item #9]: 8.568 berkas, Maritim [Item #1-#4, #10-#12]: 3.480 berkas, dan Non-Perizinan [Item #16]: 1.772 berkas.',
+    formulaConceptual: 'SUM([JUMLAH LAYANAN MASUK])  atau  COUNTD([NOMOR PERMOHONAN])',
+    numerator: {
+      label: 'Total Permohonan Masuk Seluruh Layanan',
+      realValue: '13.820 Berkas (Jan: 3.320, Feb: 3.250, Mar: 3.610, Apr: 3.640)',
+      source: 'Dataset Item #14 [JENIS LAYANAN BP BATAM]: SUM([JUMLAH LAYANAN MASUK]) & Item #9: COUNTD([NOMOR PERMOHONAN])',
+    },
+    denominator: {
+      label: 'Periode Waktu Rekapitulasi',
+      realValue: 'Januari - April 2026 (YTD Caturwulan I)',
+      source: 'Dataset Item #14 Kolom [BULAN] & [TAHUN]',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: 3.320 + 3.250 + 3.610 + 3.640 = 13.820 Berkas Masuk (Klaster: OSS 8.568 + Maritim 3.480 + Non-Izin 1.772)',
+    tableauCalculatedField: `// Calculated Field: [Total Permohonan Masuk]
+// Sumber: Dataset Item #14 JENIS LAYANAN BP BATAM & Dataset Item #9
+SUM([JUMLAH LAYANAN MASUK])
+
+// Alternatif pada tabel detail permohonan OSS:
+COUNTD([NOMOR PERMOHONAN])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #14 (Area / Line Chart Trend)',
+      rows: 'SUM([JUMLAH LAYANAN MASUK])',
+      columns: '[BULAN]',
+      marks: 'Line with Data Points, Color: Deep Blue',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #14: JENIS LAYANAN BP BATAM (Hal 27) & Item #9: DATA PERMOHONAN PERIZINAN BERUSAHA (Hal 25)',
+      tableName: 'ptsp_jenis_layanan_master & ptsp_permohonan_oss',
+      attributes: ['BULAN', 'TAHUN', 'JENIS LAYANAN', 'JUMLAH LAYANAN MASUK', 'NOMOR PERMOHONAN', 'TANGGAL PERMOHONAN', 'SEKTOR'],
+      updateFrequency: 'Jika Ada Update / Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: 'Kapasitas Pelayanan 50.000 Dok/Tahun',
+      warning: 'Lonjakan > 15.000 Dok/Caturwulan',
+      critical: 'Beban Antrean Melampaui Kapasitas',
+      standardOrigin: 'Desain Arsitektur Layanan PTSP BP Batam',
+    },
+    executiveAction: 'Alokasikan beban verifikator secara proporsional sesuai klaster sektor usaha dengan beban permohonan tertinggi.',
+  },
+
+  lic_issued: {
+    id: 'lic_issued',
+    unit: 'ptsp',
+    title: 'Izin Berhasil Terbit & Disahkan',
+    codeTag: 'LIC_ISSUED',
+    category: 'Output & Produktivitas Layanan',
+    currentValue: '13.192 Izin Terbit (95,4%)',
+    targetValue: 'Target Rasio Terbit: ≥ 95,0%',
+    statusText: 'Produktivitas Optimal (Melampaui Target)',
+    statusVariant: 'success',
+    summary: 'Jumlah berkas izin yang telah tervalidasi lengkap, disetujui, dan diterbitkan dengan Tanda Tangan Elektronik (TTE) tersertifikasi BSrE.',
+    presentationPitch: 'Sebanyak 13.192 berkas perizinan berhasil disahkan dan diterbitkan, mencerminkan rasio efektivitas penyelesaian 95,4% dari total permohonan masuk. Angka 13.192 ini dihasilkan dari Dataset Item #14 [JENIS LAYANAN BP BATAM] kolom [JUMLAH LAYANAN TERSELESAIKAN] dan dikonfirmasi pada Dataset Item #17 kolom [PERMOHONAN STATUS SELESAI].',
+    formulaConceptual: '( ∑ [JUMLAH LAYANAN TERSELESAIKAN] ÷ ∑ [JUMLAH LAYANAN MASUK] ) × 100%',
+    numerator: {
+      label: 'Izin Berhasil Terbit (Status Selesai)',
+      realValue: '13.192 Berkas (Jan: 3.150, Feb: 3.090, Mar: 3.460, Apr: 3.492)',
+      source: 'Dataset Item #14: SUM([JUMLAH LAYANAN TERSELESAIKAN]) & Item #17: SUM([PERMOHONAN STATUS SELESAI])',
+    },
+    denominator: {
+      label: 'Total Permohonan Masuk',
+      realValue: '13.820 Berkas',
+      source: 'Dataset Item #14: SUM([JUMLAH LAYANAN MASUK])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (13.192 ÷ 13.820) × 100% = 95,456% ≈ 95,4%',
+    tableauCalculatedField: `// Calculated Field: [Total Izin Terbit]
+SUM([JUMLAH LAYANAN TERSELESAIKAN])
+
+// Calculated Field: [Rasio Izin Terbit %]
+SUM([JUMLAH LAYANAN TERSELESAIKAN]) / SUM([JUMLAH LAYANAN MASUK]) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #6 (Horizontal Bar)',
+      rows: '[JENIS LAYANAN]',
+      columns: '[Rasio Izin Terbit %]',
+      marks: 'Color: Emerald Gradient',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #14: JENIS LAYANAN BP BATAM (Hal 27) & Item #17: DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU (Hal 28)',
+      tableName: 'ptsp_layanan_selesai_rekap',
+      attributes: ['BULAN', 'TAHUN', 'JUMLAH LAYANAN TERSELESAIKAN', 'PERMOHONAN STATUS SELESAI', 'TANGGAL IZIN', 'NO IZIN'],
+      updateFrequency: 'Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 95,0% Terbit',
+      warning: '90,0% - 94,9%',
+      critical: '< 90,0% (Timbunan Berkas Tertunda)',
+      standardOrigin: 'Target Perkin Direktur PTSP BP Batam',
+    },
+    executiveAction: 'Terus pertahankan otomasi TTE BSrE agar pemohon dapat mencetak dokumen secara mandiri tanpa harus datang fisik ke MPP.',
+  },
+
+  lic_backlog: {
+    id: 'lic_backlog',
+    unit: 'ptsp',
+    title: 'Backlog / Open Pending Cases (Berkas dalam Proses)',
+    codeTag: 'LIC_BACKLOG',
+    category: 'Beban Proses & Antrean',
+    currentValue: '628 Berkas (4,5%)',
+    targetValue: 'Batas Toleransi: ≤ 750 Berkas',
+    statusText: 'Antrean Terkendali & Sehat',
+    statusVariant: 'success',
+    summary: 'Jumlah berkas permohonan yang sedang berjalan pada tahapan verifikasi berkas, validasi teknis antar unit, atau perbaikan kelengkapan oleh pemohon.',
+    presentationPitch: 'Jumlah berkas dalam proses aktif saat ini adalah 628 berkas (4,5% dari total permohonan masuk). Angka ini dihasilkan dari Dataset Item #16 [JUMLAH NON PERIZINAN] kolom [JUMLAH STATUS PROSES] (92 berkas) ditambah Dataset Item #17 [DATA PENYELESAIAN PERIZINAN] kolom [PERMOHONAN STATUS PROSES] (536 berkas) = 628 berkas, yang juga identik dengan Total Masuk (13.820) dikurangi Izin Terbit (13.192).',
+    formulaConceptual: '∑ [PERMOHONAN STATUS PROSES] + ∑ [JUMLAH STATUS PROSES] = Total Masuk - Total Terbit',
+    numerator: {
+      label: 'Berkas Aktif dalam Antrean Proses',
+      realValue: '628 Berkas (536 Perizinan Berusaha + 92 Non-Perizinan)',
+      source: 'Dataset Item #17: SUM([PERMOHONAN STATUS PROSES]) & Item #16: SUM([JUMLAH STATUS PROSES])',
+    },
+    denominator: {
+      label: 'Ambang Batas Toleransi Beban Kerja',
+      realValue: 'Maksimal 750 Berkas (Target Toleransi)',
+      source: 'Kapasitas Operasional Verifikator SOP PTSP',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: 13.820 (Masuk) - 13.192 (Terbit) = 628 Berkas Open (Rasio: 4,54% dari Total Permohonan)',
+    tableauCalculatedField: `// Calculated Field: [Backlog Berkas Aktif]
+// Sumber: Dataset Item #16 & Item #17
+SUM([PERMOHONAN STATUS PROSES])
+
+// Calculated Field: [Backlog Ratio %]
+SUM([PERMOHONAN STATUS PROSES]) / SUM([PERMOHONAN STATUS MASUK]) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 (Stacked Bar)',
+      rows: '[JENIS PERIZINAN]',
+      columns: '[Backlog Berkas Aktif]',
+      marks: 'Color: Amber / Orange',
+      filters: "[PERMOHONAN STATUS PROSES] > 0",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #16: JUMLAH NON PERIZINAN (Hal 27-28) & Item #17: DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU (Hal 28)',
+      tableName: 'ptsp_backlog_tracking',
+      attributes: ['BULAN', 'TAHUN', 'PERMOHONAN STATUS PROSES', 'JUMLAH STATUS PROSES', 'STATUS PERMOHONAN', 'TANGGAL REKAP AWAL'],
+      updateFrequency: 'Harian / Bulanan',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≤ 750 Berkas Terbuka',
+      warning: '751 - 1.000 Berkas (Waspada Antrean)',
+      critical: '> 1.000 Berkas (Eskalasi Taskforce)',
+      standardOrigin: 'SOP Manajemen Beban Antrean PTSP BP Batam',
+    },
+    executiveAction: 'Prioritaskan penyelesaian berkas yang mendekati masa SLA batas waktu dengan fitur dispatch otomatis ke verifikator cadangan.',
+  },
+
+  lic_mlt: {
+    id: 'lic_mlt',
+    unit: 'ptsp',
+    title: 'Median Lead Time (Kecepatan Waktu Layanan)',
+    codeTag: 'LIC_MLT',
+    category: 'Kecepatan & Efisiensi Waktu',
+    currentValue: '1,8 Hari Kerja',
+    targetValue: 'Standar Maksimal SLA: ≤ 3,0 Hari Kerja',
+    statusText: '40% Lebih Cepat dari Standar Maksimal',
+    statusVariant: 'success',
+    summary: 'Nilai median hari kerja yang dibutuhkan sejak berkas permohonan disubmit oleh pemohon hingga diterbitkannya izin resmi.',
+    presentationPitch: 'Median waktu layanan (lead time) perizinan di BP Batam mencapai 1,8 hari kerja, 40% lebih cepat dibanding standar SLA regulasi (3,0 hari kerja). Angka ini dihasilkan dari Dataset Item #17 [DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU] dengan menghitung nilai tengah (median) dari selisih hari kerja antara [TANGGAL REKAP AKHIR] dan [TANGGAL REKAP AWAL] untuk seluruh 13.192 berkas selesai.',
+    formulaConceptual: 'MEDIAN ( [TANGGAL REKAP AKHIR] - [TANGGAL REKAP AWAL] ) dalam Hari Kerja',
+    numerator: {
+      label: 'Median Durasi Siklus Layanan Terbit',
+      realValue: '1,8 Hari Kerja (Nilai Tengah Persentil 50)',
+      source: 'Dataset Item #17: MEDIAN(DATEDIFF("day", [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]))',
+    },
+    denominator: {
+      label: 'Standar Regulasi Maksimal',
+      realValue: '3,0 Hari Kerja (Standar SLA)',
+      source: 'Dataset Item #17 Kolom [SERVICE LEVEL AGREEMENT (SLA)] & PP 5/2021',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: Median dari 13.192 data selisih tanggal rekap = 1,8 Hari Kerja (Lebih cepat 1,2 hari dari SLA 3 hari)',
+    tableauCalculatedField: `// Calculated Field: [Median Lead Time Hari]
+// Sumber: Dataset Item #17 DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU
+MEDIAN(DATEDIFF('day', [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]))`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #7 (Bullet Graph with 3.0 Days Reference Line)',
+      rows: '[JENIS PERIZINAN]',
+      columns: '[Median Lead Time Hari]',
+      marks: 'Bullet with Reference Line at 3.0 Days',
+      filters: "[PERMOHONAN STATUS SELESAI] > 0",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #17: DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU (Hal 28) & Item #9 (Hal 25)',
+      tableName: 'ptsp_leadtime_audit_trail',
+      attributes: ['TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'TANGGAL IZIN', 'SERVICE LEVEL AGREEMENT (SLA)', 'JENIS PERIZINAN'],
+      updateFrequency: 'Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≤ 3,0 Hari Kerja',
+      warning: '3,1 - 4,5 Hari Kerja',
+      critical: '> 4,5 Hari Kerja (Keterlambatan Sistemik)',
+      standardOrigin: 'Standar Waktu Layanan PTSP BP Batam',
+    },
+    executiveAction: 'Lakukan debottlenecking pada tahap evaluasi teknis sektor konstruksi/lingkungan agar lead time dapat ditekan mendekati 1,5 hari kerja.',
+  },
+
+  lic_bottleneck: {
+    id: 'lic_bottleneck',
+    unit: 'ptsp',
+    title: 'Bottleneck Rate (Kasus Keterlambatan / Overdue)',
+    codeTag: 'LIC_BOTTLENECK',
+    category: 'Pengendalian Risiko Operasional',
+    currentValue: '3,2% (20 Kasus dari 628 Open)',
+    targetValue: 'Batas Toleransi Maksimal: ≤ 5,0%',
+    statusText: 'Sangat Terkendali di Bawah Ambang Kritis',
+    statusVariant: 'success',
+    summary: 'Persentase berkas perizinan aktif yang masa pemrosesannya telah melampaui batas hari kerja SOP yang ditentukan.',
+    presentationPitch: 'Tingkat keterlambatan berkas tercatat sangat rendah yaitu 3,2% (hanya 20 kasus dari 628 berkas aktif). Angka ini dihasilkan dari Dataset Item #17 [DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU] dengan mengidentifikasi berkas dalam kolom [PERMOHONAN STATUS PROSES] yang selisih hari pengerjaannya melebihi kolom [SERVICE LEVEL AGREEMENT (SLA)] dibagi total 628 berkas dalam proses.',
+    formulaConceptual: '( ∑ [PERMOHONAN STATUS PROSES (Durasi > SLA)] ÷ ∑ [PERMOHONAN STATUS PROSES] ) × 100%',
+    numerator: {
+      label: 'Berkas Status Proses Melewati Batas SLA',
+      realValue: '20 Berkas (Overdue SLA)',
+      source: 'Dataset Item #17: SUM(IF [DURASI BERJALAN] > [SLA] THEN [PERMOHONAN STATUS PROSES] END)',
+    },
+    denominator: {
+      label: 'Total Berkas Berstatus Dalam Proses',
+      realValue: '628 Berkas',
+      source: 'Dataset Item #17: SUM([PERMOHONAN STATUS PROSES])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (20 berkas overdue ÷ 628 berkas proses) × 100% = 3,184% ≈ 3,2%',
+    tableauCalculatedField: `// Calculated Field: [Bottleneck Rate %]
+// Sumber: Dataset Item #17 DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU
+(SUM(IF DATEDIFF('day', [TANGGAL REKAP AWAL], TODAY()) > [SERVICE LEVEL AGREEMENT (SLA)] 
+ THEN [PERMOHONAN STATUS PROSES] ELSE 0 END) 
+ / SUM([PERMOHONAN STATUS PROSES])) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 (Crosstab Detail Overdue)',
+      rows: '[NAMA PERIZINAN BERUSAHA]',
+      columns: '[Bottleneck Rate %]',
+      marks: 'Color: Merah jika > 5%',
+      filters: "[PERMOHONAN STATUS PROSES] > 0",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #17: DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU (Hal 28)',
+      tableName: 'ptsp_bottleneck_tracking',
+      attributes: ['PERMOHONAN STATUS PROSES', 'TANGGAL REKAP AWAL', 'SERVICE LEVEL AGREEMENT (SLA)', 'NAMA PERIZINAN BERUSAHA'],
+      updateFrequency: 'Harian / Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≤ 5,0% Overdue Rate',
+      warning: '5,1% - 8,0%',
+      critical: '> 8,0% (Perlu Audit Layanan Khusus)',
+      standardOrigin: 'Indikator Pengendalian Internal BP Batam',
+    },
+    executiveAction: 'Terbitkan surat pemberitahuan otomatis kepada pemohon via SMS/Email untuk segera melengkapi perbaikan berkas dalam 3 hari kalender.',
+  },
+
+  sat_ccr: {
+    id: 'sat_ccr',
+    unit: 'ptsp',
+    title: 'Tingkat Penyelesaian Aduan SP4N-LAPOR! & MPP (CCR)',
+    codeTag: 'SAT_CCR',
+    category: 'Aspirasi & Penanganan Pengaduan',
+    currentValue: '98,4% (185 dari 188 Aduan Selesai)',
+    targetValue: 'Target Penyelesaian Aduan: ≥ 90,0%',
+    statusText: 'Respon Cepat & Tuntas (Kepatuhan Sangat Baik)',
+    statusVariant: 'success',
+    summary: 'Rasio penyelesaian aduan, saran, dan aspirasi masyarakat yang masuk melalui kanal SP4N-LAPOR!, email, telepon, dan meja tatap muka MPP.',
+    presentationPitch: 'Dari 188 tiket aduan yang masuk di PTSP sepanjang 2026, sebanyak 185 tiket (98,4%) berhasil diselesaikan tuntas. Angka ini dihasilkan dari Dataset Item #6 [DATA MONITORING DAN EVALUASI PENGELOLAAN PENGADUAN MASYARAKAT] dengan membagi kolom [PENYELESAIAN PENGADUAN] (185 aduan berstatus selesai) dengan kolom [JUMLAH PENGADUAN] (188 aduan masuk).',
+    formulaConceptual: '( ∑ [PENYELESAIAN PENGADUAN] ÷ ∑ [JUMLAH PENGADUAN] ) × 100%',
+    numerator: {
+      label: 'Tiket Aduan Tuntas Diselesaikan',
+      realValue: '185 Tiket Aduan',
+      source: 'Dataset Item #6: SUM([PENYELESAIAN PENGADUAN])',
+    },
+    denominator: {
+      label: 'Total Tiket Aduan Masuk',
+      realValue: '188 Tiket Aduan',
+      source: 'Dataset Item #6: SUM([JUMLAH PENGADUAN])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (185 ÷ 188) × 100% = 98,404% ≈ 98,4% (Sisa 3 tiket dalam investigasi)',
+    tableauCalculatedField: `// Calculated Field: [Complaint Close Rate %]
+// Sumber: Dataset Item #6 DATA PENGELOLAAN PENGADUAN MASYARAKAT
+(SUM([PENYELESAIAN PENGADUAN]) / SUM([JUMLAH PENGADUAN])) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 (Stacked Bar)',
+      rows: '[SALURAN PENGADUAN]',
+      columns: '[Complaint Close Rate %]',
+      marks: 'Color: Hijau untuk Selesai, Oranye untuk Proses',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #6: DATA MONITORING DAN EVALUASI PENGELOLAAN PENGADUAN MASYARAKAT (Hal 24) & Item #7 (Hal 24)',
+      tableName: 'ptsp_pengaduan_masyarakat_rekap',
+      attributes: ['BULAN', 'TAHUN', 'SALURAN PENGADUAN', 'JENIS PENGADUAN', 'JUMLAH PENGADUAN', 'PENYELESAIAN PENGADUAN', 'STATUS SELESAI'],
+      updateFrequency: 'Semesteran / Triwulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0% Resolution Rate',
+      warning: '80,0% - 89,9%',
+      critical: '< 80,0% (Tunggakan Respon Aduan)',
+      standardOrigin: 'Standar Nasional Pengelolaan SP4N-LAPOR! MenPAN-RB',
+    },
+    executiveAction: 'Terus pertahankan waktu respon tanggapan awal di bawah 24 jam untuk menjaga kepuasan publik dan reputasi tata kelola PTSP BP Batam.',
+  },
+
+  kpi_ptsp_maritim: {
+    id: 'kpi_ptsp_maritim',
+    unit: 'ptsp',
+    title: 'Kinerja Layanan Perizinan Maritim & Logistik Pelabuhan',
+    codeTag: 'PTSP_MARITIME',
+    category: 'Logistik & Layanan Kepelabuhanan',
+    currentValue: '3.480 Berkas (96,2% On-Time)',
+    targetValue: 'Target Kepatuhan SLA: ≥ 90,0%',
+    statusText: 'Layanan Lancar Tanpa Hambatan Operasional Pelabuhan',
+    statusVariant: 'success',
+    summary: 'Pengukuran kinerja penerbitan izin Surat Keterangan Kerja Bongkar Muat (SKKBM), Angkut Barang (SKKAB), Alat (SKKAA), jadwal kapal, dan persetujuan TUKS.',
+    presentationPitch: 'Layanan perizinan kepelabuhanan PTSP BP Batam telah melayani 3.480 dokumen dengan tingkat ketepatan waktu 96,2%. Angka ini dihasilkan dari konsolidasi Dataset Item #1 (SKKBM: 1.620 berkas), Item #2 (SKKAB: 980 berkas), Item #3 (SKKAA: 340 berkas), dan Item #12 (Jadwal Kapal: 540 berkas). Sebanyak 3.348 berkas terbit dengan lead time <= 1 hari kerja (3.348 ÷ 3.480 × 100% = 96,2%).',
+    formulaConceptual: '( COUNTD(IF [LEAD TIME] <= 1 THEN [NO IZIN] END) ÷ COUNTD([NO IZIN]) ) × 100%',
+    numerator: {
+      label: 'Izin Maritim Tepat Waktu (Lead Time ≤ 1 Hari)',
+      realValue: '3.348 Berkas',
+      source: 'Dataset Item #1, #2, #3, #12: COUNTD(IF [ESTIMATE LAMA HARI KERJA] <= 1 THEN [NO IZIN] END)',
+    },
+    denominator: {
+      label: 'Total Berkas Maritim Terbit',
+      realValue: '3.480 Berkas (SKKBM 1.620 + SKKAB 980 + SKKAA 340 + Jadwal Kapal 540)',
+      source: 'Dataset Item #1, #2, #3, #12: COUNTD([NO IZIN])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (3.348 tepat waktu ÷ 3.480 total maritim) × 100% = 96,20%',
+    tableauCalculatedField: `// Calculated Field: [Kepatuhan SLA Maritim %]
+// Sumber: Dataset Item #1, #2, #3, #12 Perizinan Maritim BP Batam
+(COUNTD(IF DATEDIFF('day', [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]) <= 1 THEN [NO IZIN] END) 
+ / COUNTD([NO IZIN])) * 100.0`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #6 (Horizontal Bar)',
+      rows: '[NAMA LAYANAN MARITIM]',
+      columns: '[Kepatuhan SLA Maritim %]',
+      marks: 'Color: Blue Palette',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #1, #2, #3, #4, #10, #11, #12: DATA PERIZINAN MARITIM BP BATAM (Hal 21-26)',
+      tableName: 'ptsp_maritim_izin_master',
+      attributes: ['NAMA LAYANAN', 'NO PENDAFTARAN', 'NO IZIN', 'TANGGAL IZIN', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'PELABUHAN BONGKAR MUAT', 'ESTIMATE LAMA HARI KERJA'],
+      updateFrequency: 'Bulanan / Harian',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0% SLA Maritim (≤ 1 Hari Kerja)',
+      warning: '80,0% - 89,9%',
+      critical: '< 80,0%',
+      standardOrigin: 'Standar Waktu Layanan Kepelabuhanan BP Batam',
+    },
+    executiveAction: 'Pertahankan sistem verifikasi online 24/7 untuk dokumen jadwal kapal demi kelancaran arus logistik ekspor-impor di Batam.',
+  },
 };
 
 /**
@@ -2143,6 +2610,44 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     kpi_csat_dc: 'kepuasan_dc',
     csat_dc: 'kepuasan_dc',
     server_drc: 'jumlah_server',
+
+    // PTSP Perizinan, IKM & Pengaduan
+    ikss_ikm: 'ikss_ikm',
+    kpi_ptsp_ikm: 'ikss_ikm',
+    ikm_ptsp: 'ikss_ikm',
+    ikm: 'ikss_ikm',
+    ikm_9unsur: 'ikss_ikm',
+    ptsp_ikm: 'ikss_ikm',
+    lic_sla: 'lic_sla',
+    kpi_ptsp_sla: 'lic_sla',
+    sla_ptsp: 'lic_sla',
+    lic_vol: 'lic_vol',
+    kpi_ptsp_vol: 'lic_vol',
+    volume_izin: 'lic_vol',
+    lic_issued: 'lic_issued',
+    kpi_ptsp_issued: 'lic_issued',
+    izin_terbit: 'lic_issued',
+    rasio_terbit: 'lic_issued',
+    lic_backlog: 'lic_backlog',
+    kpi_ptsp_backlog: 'lic_backlog',
+    backlog_izin: 'lic_backlog',
+    lic_mlt: 'lic_mlt',
+    kpi_ptsp_leadtime: 'lic_mlt',
+    lead_time: 'lic_mlt',
+    median_lead_time: 'lic_mlt',
+    lic_bottleneck: 'lic_bottleneck',
+    kpi_ptsp_bottleneck: 'lic_bottleneck',
+    bottleneck_rate: 'lic_bottleneck',
+    sat_ccr: 'sat_ccr',
+    kpi_ptsp_complaints: 'sat_ccr',
+    aduan_selesai: 'sat_ccr',
+    pengaduan_ptsp: 'sat_ccr',
+    sp4n_lapor: 'sat_ccr',
+    kpi_ptsp_maritim: 'kpi_ptsp_maritim',
+    ptsp_maritim: 'kpi_ptsp_maritim',
+    maritim: 'kpi_ptsp_maritim',
+    skkbm: 'kpi_ptsp_maritim',
+    pelabuhan_ptsp: 'kpi_ptsp_maritim',
   };
 
   const mappedKey = aliasMap[kpiId];
@@ -2150,7 +2655,7 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     return KPI_FORMULA_DETAILS[mappedKey];
   }
 
-  // 3. Prefix & Domain-based Fallback (Ensures PDSI never falls back to Keuangan PNBP)
+  // 3. Prefix & Domain-based Fallback
   const lowerId = kpiId.toLowerCase();
   if (
     lowerId.startsWith('kpi_dc') ||
@@ -2164,6 +2669,21 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     lowerId.includes('server')
   ) {
     return KPI_FORMULA_DETAILS.rak_terisi;
+  }
+
+  if (
+    lowerId.startsWith('ptsp') ||
+    lowerId.startsWith('lic_') ||
+    lowerId.startsWith('ikss_') ||
+    lowerId.startsWith('sat_') ||
+    lowerId.includes('ikm') ||
+    lowerId.includes('maritim') ||
+    lowerId.includes('izin') ||
+    lowerId.includes('aduan') ||
+    lowerId.includes('lapor') ||
+    lowerId.includes('oss')
+  ) {
+    return KPI_FORMULA_DETAILS.ikss_ikm;
   }
 
   return KPI_FORMULA_DETAILS.pendapatan;
@@ -2199,6 +2719,7 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
   const availableKpis = Object.values(KPI_FORMULA_DETAILS);
   const biroKeuanganKpis = availableKpis.filter((k) => k.unit === 'biro-keuangan');
   const pdsiKpis = availableKpis.filter((k) => k.unit === 'pdsi');
+  const ptspKpis = availableKpis.filter((k) => k.unit === 'ptsp');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto font-sans select-none animate-in fade-in duration-200">
@@ -2222,7 +2743,11 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
                   {detail.codeTag}
                 </span>
                 <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
-                  {detail.unit === 'biro-keuangan' ? 'Biro Keuangan' : 'Pusat Data & Sistem Informasi (PDSI)'}
+                  {detail.unit === 'biro-keuangan'
+                    ? 'Biro Keuangan'
+                    : detail.unit === 'pdsi'
+                    ? 'Pusat Data & Sistem Informasi (PDSI)'
+                    : 'Pusat Pelayanan Terpadu Satu Pintu (PTSP)'}
                 </span>
                 <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-medium">
                   {detail.statusText}
@@ -2250,7 +2775,12 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
               Ganti KPI:
             </span>
             <div className="flex items-center gap-1">
-              {(detail.unit === 'biro-keuangan' ? biroKeuanganKpis : pdsiKpis).map((item) => (
+              {(detail.unit === 'biro-keuangan'
+                ? biroKeuanganKpis
+                : detail.unit === 'pdsi'
+                ? pdsiKpis
+                : ptspKpis
+              ).map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onSelectAnotherKpi && onSelectAnotherKpi(item.id)}
@@ -2267,7 +2797,7 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
           </div>
 
           {/* Unit Toggle */}
-          <div className="flex items-center gap-1 text-[11px]">
+          <div className="flex items-center gap-1 text-[11px] shrink-0">
             <button
               onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('pendapatan')}
               className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
@@ -2284,6 +2814,15 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
               }`}
             >
               PDSI ({pdsiKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('ikss_ikm')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'ptsp' ? 'text-blue-700 font-bold bg-blue-50' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              PTSP ({ptspKpis.length})
             </button>
           </div>
         </div>

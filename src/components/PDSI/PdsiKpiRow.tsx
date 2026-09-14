@@ -1,8 +1,6 @@
 import React from 'react';
 import { PDSI_KPI_METRICS } from '../../data/pdsiData';
 import {
-  ArrowUpRight,
-  ArrowDownRight,
   Server,
   ShieldAlert,
   Cpu,
@@ -181,7 +179,6 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
         {PDSI_KPI_METRICS.map((kpi) => {
           const config = getPdsiConfig(kpi.id);
           const Icon = config.icon;
-          const isPositive = kpi.trend.isPositive;
 
           return (
             <div
@@ -228,21 +225,10 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
                 </div>
               </div>
 
-              {/* Bottom Row: Trend Pill & Micro Bar Sparkline */}
+              {/* Bottom Row: Target Metric & Micro Bar Sparkline */}
               <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 text-[10px] font-bold font-mono px-2 py-0.5 rounded-full ${
-                    isPositive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200/80'
-                  }`}
-                >
-                  {isPositive ? (
-                    <ArrowUpRight className="w-3 h-3" />
-                  ) : (
-                    <ArrowDownRight className="w-3 h-3" />
-                  )}
-                  <span>{kpi.trend.value}</span>
+                <span className="text-[10.5px] text-slate-500 font-medium truncate">
+                  {kpi.target}
                 </span>
 
                 <MicroBarSparkline

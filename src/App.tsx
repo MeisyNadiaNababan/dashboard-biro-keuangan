@@ -11,6 +11,7 @@ import { ReceivablesSection } from './components/ReceivablesSection';
 import { FiscalIndependenceDonutCards } from './components/FiscalIndependenceDonutCards';
 import { FiscalInsightsRow } from './components/FiscalInsightsRow';
 import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
+import { PtspDashboard } from './components/PTSP/PtspDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
 import { KpiWordDocumentView } from './components/KpiWordDocumentView';
@@ -322,8 +323,19 @@ export default function App() {
                   setIsKpiFormulaModalOpen(true);
                 }}
               />
+            ) : activeUnitId === 'ptsp' ? (
+              /* --- PUSAT PELAYANAN TERPADU SATU PINTU (PTSP) DASHBOARD --- */
+              <PtspDashboard
+                activeSubMenu={activeSheet}
+                onSelectSubMenu={handleSelectSheet}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
             ) : (
-              /* --- OTHER 22 UNITS DASHBOARD & DESIGNER --- */
+              /* --- OTHER 21 UNITS DASHBOARD & DESIGNER --- */
               <OtherUnitPlaceholder
                 unit={currentUnit}
                 onOpen24UnitsDrawer={() => setIsUnitsDrawerOpen(true)}

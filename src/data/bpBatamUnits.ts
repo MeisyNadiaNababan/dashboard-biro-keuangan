@@ -136,9 +136,9 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     pdfPages: 'Halaman 21 - 28',
     itemCount: 17,
     description: 'Layanan perizinan berusaha OSS & non-perizinan, SKKBM bongkar muat, jadwal kapal, Mal Pelayanan Publik (MPP), dan SLA penyelesaian perizinan.',
-    status: 'ready_to_build',
-    headOfUnit: 'Kepala PTSP',
-    keyKpis: ['SLA Penyelesaian Izin (Hari Kerja)', 'Tingkat Kepuasan Pemohon MPP', 'Volume Rekap Perizinan Berusaha'],
+    status: 'active',
+    headOfUnit: 'Kepala PTSP BP Batam',
+    keyKpis: ['Indeks Kepuasan Masyarakat (IKM) 9 Unsur', 'SLA Perizinan Tepat Waktu (≥90%)', 'Rasio Efektivitas Terbit Izin (95.4%)', 'Median Lead Time (1.8 Hari)', 'Complaint Close Rate SP4N (98.4%)'],
   },
   {
     id: 'pusat-perencanaan-program',

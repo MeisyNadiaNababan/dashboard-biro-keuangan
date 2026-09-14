@@ -55,7 +55,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#002B49]">
-                Performa Keuangan BLU BP Batam • TA {selectedYear}
+                Realisasi Pendapatan dan Belanja • TA {selectedYear}
               </h3>
               {selectedUnit !== 'ALL' && (
                 <span className="text-[10px] font-mono px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 rounded font-bold">
@@ -113,7 +113,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
                 Rp {totalRevTarget.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">10 Satker Penghasil</span>
             </div>
 
             <div
@@ -127,7 +126,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
                 Rp {totalRevReal.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-emerald-600 font-bold">{avgRevCapaian}% Capaian YTD</span>
             </div>
 
             <div
@@ -141,10 +139,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-rose-600 font-mono mt-0.5">
                 Rp {sisaRevTarget.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">Hingga Akhir TA {selectedYear}</span>
             </div>
 
-            {/* Point 6: Ganti Status Kinerja Q2 menjadi Persentase Realisasi PNBP */}
             <div
               onClick={() => onExplainKpi?.('rev_capaian')}
               className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-400 transition-colors"
@@ -156,9 +152,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-[#002B49] font-mono mt-0.5">
                 {avgRevCapaian.toFixed(1)}%
               </div>
-              <span className="text-[10px] text-blue-700 font-bold">
-                Target Perkin Rp {totalRevTarget.toFixed(1)} M
-              </span>
             </div>
           </>
         )}
@@ -176,7 +169,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
                 Rp {totalExpPagu.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">Alokasi Belanja Satker</span>
             </div>
 
             <div
@@ -190,7 +182,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-blue-700 font-mono mt-0.5">
                 Rp {totalExpReal.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-blue-600 font-bold">{avgExpSerapan}% Serapan Anggaran</span>
             </div>
 
             <div
@@ -204,10 +195,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-slate-800 font-mono mt-0.5">
                 Rp {sisaExpPagu.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">Alokasi Q3 &amp; Q4</span>
             </div>
 
-            {/* Point 8: Ganti Kontrol Efisiensi IKPA menjadi % Serapan dari Realisasi Belanja/Pagu */}
             <div
               onClick={() => onExplainKpi?.('exp_serapan')}
               className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-400 transition-colors"
@@ -219,9 +208,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <div className="text-xl font-black text-[#002B49] font-mono mt-0.5">
                 {avgExpSerapan.toFixed(1)}%
               </div>
-              <span className="text-[10px] text-blue-700 font-bold">
-                Realisasi Rp {totalExpReal.toFixed(1)} M / Pagu Rp {totalExpPagu.toFixed(1)} M
-              </span>
             </div>
           </>
         )}
@@ -283,7 +269,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               </div>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-1.5">
               {revenueItems.map((item, idx) => {
                 const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
                 const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
@@ -292,12 +278,12 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                   <div
                     key={item.id}
                     onClick={() => onExplainKpi?.('pendapatan')}
-                    className="p-3 bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all shadow-2xs space-y-2 cursor-pointer group"
+                    className="p-2 sm:p-2.5 bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all shadow-2xs space-y-1 cursor-pointer group"
                     title="Klik untuk membuka formula perhitungan capaian PNBP"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[10px]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[9px]">
                           {idx + 1}
                         </span>
                         <span className="font-bold text-slate-900 group-hover:text-blue-700 text-xs sm:text-[13px]">{item.sumber}</span>
@@ -311,8 +297,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                       </div>
                     </div>
 
-                    {/* Bar Track with % directly inside the bar */}
-                    <div className="relative w-full bg-slate-100 h-5 sm:h-6 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                    {/* Compact Bar Track */}
+                    <div className="relative w-full bg-slate-100 h-3.5 sm:h-4 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
                       {/* 50% Q2 Reference Line Marker */}
                       <div
                         className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
@@ -321,10 +307,10 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                       />
                       {/* Realisasi Bar Fill with % INSIDE */}
                       <div
-                        className="h-full rounded-md transition-all bg-[#002B49] flex items-center justify-end px-2"
+                        className="h-full rounded-md transition-all bg-[#002B49] flex items-center justify-end px-1.5"
                         style={{ width: `${Math.max(14, Math.min(100, capaianPct))}%` }}
                       >
-                        <span className="text-[10px] sm:text-[11px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                        <span className="text-[9px] sm:text-[10px] font-bold text-white font-mono whitespace-nowrap leading-none drop-shadow-2xs">
                           {capaianPct.toFixed(1)}%
                         </span>
                       </div>
@@ -347,7 +333,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
         {/* BELANJA TAB CONTENT (SIDE-BY-SIDE HORIZONTAL BAR ONLY) */}
         {/* ========================================================================= */}
         {activeTab === 'belanja' && (
-          <div className="space-y-3.5 py-1">
+          <div className="space-y-3 py-1">
             <TableauShelvesBadge
               showMe="Show Me #6 (Horizontal Bar)"
               rows="[komponen_belanja_operasional_dan_modal]"
@@ -373,7 +359,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               {expenseItems.map((item) => {
                 const programName = item.program || item.unitKerja || `Komponen Belanja ${item.id}`;
                 const serapanPct = item.serapan ?? item.persentase ?? (item.pagu ? (item.realisasi / item.pagu) * 100 : 0);
@@ -382,7 +368,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                   <div
                     key={item.id}
                     onClick={() => onExplainKpi?.('belanja')}
-                    className="space-y-1.5 p-2.5 rounded-xl hover:bg-blue-50/50 cursor-pointer group transition-colors border border-slate-100 hover:border-blue-200 bg-white shadow-2xs"
+                    className="space-y-1 p-2 sm:p-2.5 rounded-xl hover:bg-blue-50/50 cursor-pointer group transition-colors border border-slate-100 hover:border-blue-200 bg-white shadow-2xs"
                     title="Klik untuk melihat formula dan rincian komponen belanja"
                   >
                     <div className="flex items-center justify-between text-xs">
@@ -398,8 +384,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                       </div>
                     </div>
 
-                    {/* Point 9: Persentase taruh di dalam Bar saja */}
-                    <div className="relative w-full bg-slate-100 h-5 sm:h-6 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                    {/* Compact Bar Track */}
+                    <div className="relative w-full bg-slate-100 h-3.5 sm:h-4 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
                       {/* 35% Q2 Reference Line Marker */}
                       <div
                         className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
@@ -409,10 +395,10 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
                       {/* Realisasi Bar Fill with % INSIDE */}
                       <div
-                        className="h-full rounded-md transition-all bg-[#1F4E79] flex items-center justify-end px-2"
+                        className="h-full rounded-md transition-all bg-[#1F4E79] flex items-center justify-end px-1.5"
                         style={{ width: `${Math.max(14, Math.min(100, serapanPct))}%` }}
                       >
-                        <span className="text-[10px] sm:text-[11px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                        <span className="text-[9px] sm:text-[10px] font-bold text-white font-mono whitespace-nowrap leading-none drop-shadow-2xs">
                           {serapanPct.toFixed(1)}%
                         </span>
                       </div>

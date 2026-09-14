@@ -1,6 +1,6 @@
 {
   "name": "Dashboard Eksekutif Biro Keuangan BP Batam",
-  "description": "Dashboard Eksekutif Command Center 24 Unit Kerja BP Batam termasuk Biro Keuangan dan Pusat Data dan Sistem Informasi (PDSI) dilengkapi Kamus Rumus Calculated Fields KPI.",
+  "description": "Dashboard Eksekutif Command Center Unit Kerja BP Batam (Biro Keuangan, PDSI, dan PTSP) dengan dataset IKM Permenpan RB, perizinan maritim & berusaha, serta Kamus Rumus KPI.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -89,9 +89,9 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
   {
     id: 'coverage_ratio',
     title: 'Coverage Ratio (Kemandirian BLU)',
-    value: '0,86x',
+    value: '1,04x',
     targetOrPagu: 'Benchmark: ≥ 0,80x',
-    percentage: 'PNBP Rp 681,0 M / Belanja Rp 791,8 M',
+    percentage: 'PNBP Rp 981,2 M / Belanja Rp 945,0 M',
     trend: {
       direction: 'up',
       value: '+0,06x',
@@ -99,10 +99,10 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
       isPositive: true,
     },
     badge: {
-      text: 'Mandiri (0,86x)',
+      text: 'Mandiri (1,04x)',
       variant: 'success',
     },
-    sparkline: [0.72, 0.75, 0.78, 0.81, 0.83, 0.85, 0.86],
+    sparkline: [0.82, 0.88, 0.92, 0.96, 0.99, 1.02, 1.04],
     colorTheme: 'purple',
   },
   {
@@ -123,44 +123,6 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
     },
     sparkline: [88.2, 89.1, 90.0, 90.8, 91.5, 92.0, 92.4],
     colorTheme: 'teal',
-  },
-  {
-    id: 'panjang_fiber',
-    title: 'Panjang Jaringan FO',
-    value: '284,5 KM',
-    targetOrPagu: 'Target: 300 KM',
-    percentage: '81,4% Utilitas Core',
-    trend: {
-      direction: 'up',
-      value: '+12,5 km',
-      period: '(YTD)',
-      isPositive: true,
-    },
-    badge: {
-      text: 'Backbone Aktif',
-      variant: 'info',
-    },
-    sparkline: [240, 252, 265, 270, 275, 280, 284.5],
-    colorTheme: 'blue',
-  },
-  {
-    id: 'jumlah_aplikasi',
-    title: 'Jumlah Aplikasi SPBE',
-    value: '114 Aplikasi',
-    targetOrPagu: 'Mandat SPBE Nasional',
-    percentage: '84 Aktif • 30 Integrasi',
-    trend: {
-      direction: 'up',
-      value: '+3 App',
-      period: '(YTD)',
-      isPositive: true,
-    },
-    badge: {
-      text: '100% Terkatalog',
-      variant: 'success',
-    },
-    sparkline: [98, 102, 105, 108, 110, 112, 114],
-    colorTheme: 'purple',
   },
 ];
 
@@ -456,6 +418,8 @@ export const RECEIVABLES_TOTAL = {
   jumlahDebitur: 305,
   nilaiPiutang: 312.4,
   persentase: 100,
+  kategoriMacet: 17.6,
+  persenMacet: 9.3,
 };
 
 export const AGING_BUCKETS: AgingBucket[] = [

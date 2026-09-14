@@ -1,6 +1,10 @@
 import React from 'react';
 import { CYBER_THREATS_DATA } from '../../data/pdsiData';
-import { ShieldCheck, ShieldAlert, Activity, BarChart2, HelpCircle } from 'lucide-react';
+import {
+  ShieldCheck,
+  HelpCircle,
+} from 'lucide-react';
+import { TableauShelvesBadge } from '../TableauShelvesBadge';
 
 interface PdsiCyberSecurityCardProps {
   onOpenFormulaModal?: (kpiId: string) => void;
@@ -9,12 +13,29 @@ interface PdsiCyberSecurityCardProps {
 export const PdsiCyberSecurityCard: React.FC<PdsiCyberSecurityCardProps> = ({ onOpenFormulaModal }) => {
   const totalSerangan = CYBER_THREATS_DATA.reduce((acc, t) => acc + t.jmlSerangan, 0);
 
+  // Threat severity classifications based on threat data
+  const getThreatSeverity = (threatName: string) => {
+    if (threatName.includes('DDoS') || threatName.includes('Volumetric')) {
+      return { level: 'KRITIS', color: 'bg-rose-500', textColor: 'text-rose-700', bgSoft: 'bg-rose-50', border: 'border-rose-200' };
+    }
+    if (threatName.includes('SQL Injection') || threatName.includes('XSS')) {
+      return { level: 'TINGGI', color: 'bg-amber-500', textColor: 'text-amber-700', bgSoft: 'bg-amber-50', border: 'border-amber-200' };
+    }
+    if (threatName.includes('Brute Force') || threatName.includes('VPN')) {
+      return { level: 'TINGGI', color: 'bg-orange-500', textColor: 'text-orange-700', bgSoft: 'bg-orange-50', border: 'border-orange-200' };
+    }
+    if (threatName.includes('Malware') || threatName.includes('Phishing')) {
+      return { level: 'SEDANG', color: 'bg-purple-500', textColor: 'text-purple-700', bgSoft: 'bg-purple-50', border: 'border-purple-200' };
+    }
+    return { level: 'MONITOR', color: 'bg-blue-500', textColor: 'text-blue-700', bgSoft: 'bg-blue-50', border: 'border-blue-200' };
+  };
+
   return (
-    <div className="bg-white border border-[#CBD5E1] rounded-lg shadow-2xs overflow-hidden flex flex-col font-sans select-none">
+    <div className="bg-white border border-[#CBD5E1] rounded-xl shadow-xs overflow-hidden flex flex-col font-sans select-none transition-all">
       {/* Tableau Worksheet Title Bar */}
-      <div className="px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC] flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC] flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
+          <div className="w-1.5 h-4 bg-[#1F4E79] rounded-xs" />
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
@@ -37,104 +58,82 @@ export const PdsiCyberSecurityCard: React.FC<PdsiCyberSecurityCardProps> = ({ on
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono">
-          <span className="text-slate-500">Status CSIRT:</span>
-          <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-300">
-            Aktif 24/7
-          </span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-bold border border-emerald-300 text-xs font-mono">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>SOC CSIRT: Aktif 24/7</span>
         </div>
       </div>
 
-      {/* Tableau BAN (Big Numbers) Strip - Only Total Serangan */}
-      <div className="p-4 border-b border-[#E2E8F0] bg-white">
-        <div
-          onClick={() => onOpenFormulaModal && onOpenFormulaModal('total_serangan')}
-          className="p-3 bg-[#F8FAFC] hover:bg-rose-50/60 border border-[#E2E8F0] hover:border-rose-300 rounded cursor-pointer transition-all hover:shadow-2xs group flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left"
-          title="Klik untuk melihat Formula & Insight Total Serangan (SUM JML SERANGAN)"
-        >
-          <div>
-            <div className="flex items-center gap-2 justify-center sm:justify-start text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-              <span>Total Serangan</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800">
-                Formula: SUM(JML SERANGAN)
-              </span>
-            </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#E15759] font-mono mt-0.5 group-hover:text-rose-900">
-              {totalSerangan.toLocaleString('id-ID')} Serangan
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Akumulasi anomali dan serangan siber terdeteksi pada gateway Next-Gen Firewall &amp; WAF
-            </p>
-          </div>
+      {/* Tableau Shelves Specification Badge */}
+      <div className="px-4 pt-3">
+        <TableauShelvesBadge
+          showMe="Show Me #6 (Horizontal Diverging Bar) & #13 (Stacked Threat Volume)"
+          rows="[threat_activity], [periode]"
+          columns="SUM([jml_serangan]), [% Distribusi]"
+          color="[kategori_urgensi] (Merah = DDoS, Oranye = SQLi, Ungu = Phishing)"
+          filters="[tahun] = '2026', [status_keamanan] = 'Termitigasi'"
+        />
+      </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1.5 rounded border border-blue-200 group-hover:bg-blue-100">
-              Formula &gt;
+      {/* Main Content: Visual Model */}
+      <div className="p-4 flex-1">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-bold text-[#0B2545] uppercase tracking-wide">
+              Distribusi Volume &amp; Vektor Serangan Siber (Katalog Item #12)
+            </span>
+            <span className="text-[11px] font-mono text-slate-500">
+              Total: {totalSerangan.toLocaleString('id-ID')} Upaya Serangan
             </span>
           </div>
-        </div>
-      </div>
 
-      {/* Tableau-Style Crosstab Grid */}
-      <div className="p-4 flex-1 overflow-x-auto">
-        <table className="w-full text-left text-xs border-collapse min-w-[580px]">
-          {/* Tableau Header */}
-          <thead className="bg-[#0B2545] text-white font-bold text-[11px]">
-            <tr>
-              <th className="py-2 px-3 border-r border-blue-900/60 text-center w-[15%]">
-                Periode
-              </th>
-              <th className="py-2 px-3 border-r border-blue-900/60 w-[45%]">
-                Threat Activity
-              </th>
-              <th className="py-2 px-3 border-r border-blue-900/60 w-[24%]">
-                Status Keamanan
-              </th>
-              <th className="py-2 px-3 text-right w-[16%]">
-                Jml Serangan
-              </th>
-            </tr>
-          </thead>
-
-          {/* Tableau Data Rows with alternating background */}
-          <tbody className="divide-y divide-[#E2E8F0] text-[11px]">
-            {CYBER_THREATS_DATA.map((threat, idx) => {
-              const isEven = idx % 2 === 0;
+          <div className="space-y-2.5">
+            {CYBER_THREATS_DATA.map((threat) => {
+              const pct = Math.round((threat.jmlSerangan / totalSerangan) * 1000) / 10;
+              const severity = getThreatSeverity(threat.threatActivity);
 
               return (
-                <tr
+                <div
                   key={threat.id}
-                  className={`hover:bg-blue-50/60 transition-colors ${
-                    isEven ? 'bg-[#F8FAFC]' : 'bg-white'
-                  }`}
+                  className="p-3 rounded-xl border border-slate-200 bg-slate-50/40 hover:bg-blue-50/30 hover:border-blue-300 transition-all shadow-2xs"
                 >
-                  {/* Periode */}
-                  <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-center font-mono font-medium text-slate-600 align-middle">
-                    {threat.periode}
-                  </td>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[9.5px] font-bold uppercase tracking-wider font-mono ${severity.bgSoft} ${severity.textColor} border ${severity.border}`}>
+                        {severity.level}
+                      </span>
+                      <span className="text-xs font-bold text-slate-900">
+                        {threat.threatActivity}
+                      </span>
+                    </div>
 
-                  {/* Threat Activity */}
-                  <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-slate-800 font-semibold align-middle">
-                    {threat.threatActivity}
-                  </td>
+                    <div className="flex items-center gap-2 font-mono text-xs">
+                      <span className="font-bold text-slate-900">
+                        {threat.jmlSerangan.toLocaleString('id-ID')} Upaya
+                      </span>
+                    </div>
+                  </div>
 
-                  {/* Status Keamanan */}
-                  <td className="py-2.5 px-3 border-r border-[#E2E8F0] align-middle">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-                      <ShieldCheck className="w-3 h-3 text-emerald-700" />
-                      {threat.statusKeamanan}
-                    </span>
-                  </td>
+                  {/* Progress Bar with Embedded Percentage Value */}
+                  <div className="relative w-full bg-slate-100 h-5 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                    <div
+                      className={`h-full rounded-md transition-all flex items-center justify-end px-2.5 ${severity.color}`}
+                      style={{ width: `${Math.max(12, pct)}%` }}
+                    >
+                      <span className="text-[10px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                        {pct}%
+                      </span>
+                    </div>
+                  </div>
 
-                  {/* Jml Serangan */}
-                  <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-900 align-middle">
-                    {threat.jmlSerangan.toLocaleString('id-ID')}
-                  </td>
-                </tr>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 mt-1 font-mono">
+                    <span>Periode Deteksi: {threat.periode}</span>
+                  </div>
+                </div>
               );
             })}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
 
       {/* Tableau Caption Footer */}
@@ -143,7 +142,7 @@ export const PdsiCyberSecurityCard: React.FC<PdsiCyberSecurityCardProps> = ({ on
           <ShieldCheck className="w-3.5 h-3.5 text-[#1F4E79]" />
           <span>Sumber: Integrasi WAF Cloudflare, UTM Firewall Fortinet &amp; Gov-CSIRT BSSN</span>
         </div>
-        <span className="font-mono">Koneksi SOC: Live</span>
+        <span className="font-mono">Koneksi SOC: Live 24/7 Monitoring</span>
       </div>
     </div>
   );

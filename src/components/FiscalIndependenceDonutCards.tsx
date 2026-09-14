@@ -151,49 +151,14 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
             </div>
           </div>
 
-          {/* Top 3 Executive Metric Tiles (Matching Image 3 Top Tiles) */}
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
-                Realisasi PNBP
-              </span>
-              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
-                Rp {pnbpBerjalan.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
-              </div>
-              <span className="text-[9px] text-slate-400 font-medium block truncate">
-                Kas Masuk Jasa BLU
-              </span>
-            </div>
-
-            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
-                Belanja Operasional
-              </span>
-              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
-                Rp {belanjaOperasional.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
-              </div>
-              <span className="text-[9px] text-slate-400 font-medium block truncate">
-                Beban Rutin Satker
-              </span>
-            </div>
-
-            <div className="p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-emerald-800 uppercase tracking-wider block">
-                Coverage Ratio
-              </span>
-              <div className="text-sm sm:text-base font-black text-emerald-700 font-mono mt-0.5">
-                {rasioKemandirian.toFixed(2)}x
-              </div>
-              <span className="text-[9px] text-emerald-600 font-bold block truncate">
-                Ambang Batas &ge; 0,80x
-              </span>
-            </div>
-          </div>
-
           {/* VISUALISASI MODEL BARU: DONUT SCORE + RANKED PROGRESS BARS (MATCHING IMAGE 2 CARD 1) */}
           <div className="p-3 bg-slate-50/60 rounded-xl border border-slate-200/80 space-y-3">
-            {/* Top Score Banner: Donut + Predikat Header */}
-            <div className="flex items-center gap-3.5 pb-2.5 border-b border-slate-200/70">
+            {/* Top Score Banner: Donut + Predikat Header (Clickable for Coverage Formula) */}
+            <div
+              onClick={() => onExplainKpi?.('coverage_ratio')}
+              className="flex items-center gap-3.5 pb-2.5 border-b border-slate-200/70 cursor-pointer group hover:bg-white/70 p-1.5 rounded-lg transition-all"
+              title="Klik untuk rincian formula matematis Coverage Ratio"
+            >
               <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 110 110">
                   <circle
@@ -225,10 +190,16 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </div>
               </div>
 
-              <div className="min-w-0">
-                <div className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 mb-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>Predikat: Mandiri Fiskal Prima</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <div className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Predikat: Mandiri Fiskal Prima</span>
+                  </div>
+                  <span className="text-[9.5px] text-blue-600 font-mono flex items-center gap-0.5">
+                    <HelpCircle className="w-2.5 h-2.5" />
+                    <span>Formula</span>
+                  </span>
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
                   Realisasi kas masuk PNBP berjalan menutup <strong className="text-slate-900 font-mono">86,0%</strong> beban operasional rutin. Target Kemenkeu: <strong className="text-slate-900 font-mono">0,80x</strong>.
@@ -236,11 +207,18 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
               </div>
             </div>
 
-            {/* 4 Ranked Horizontal Progress Bars (Matching Image 2 Card 1) */}
+            {/* 4 Ranked Horizontal Progress Bars (Clickable to inspect each formula) */}
             <div className="space-y-2 text-xs">
-              <div>
+              <div
+                onClick={() => onExplainKpi?.('otonomi_fiskal')}
+                className="p-1.5 rounded-lg hover:bg-white transition-all cursor-pointer group"
+                title="Klik untuk melihat formula Daya Tutup Belanja Operasional"
+              >
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="font-semibold text-slate-800">1. Daya Tutup Belanja Operasional (PNBP / Belanja Rutin)</span>
+                  <span className="font-semibold text-slate-800 group-hover:text-blue-700 flex items-center gap-1">
+                    <span>1. Daya Tutup Belanja Operasional (PNBP / Belanja Rutin)</span>
+                    <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </span>
                   <span className="font-mono font-bold text-slate-900">0,86x <span className="text-slate-400 font-normal">/ 0,80x</span></span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -248,9 +226,16 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </div>
               </div>
 
-              <div>
+              <div
+                onClick={() => onExplainKpi?.('coverage_ratio')}
+                className="p-1.5 rounded-lg hover:bg-white transition-all cursor-pointer group"
+                title="Klik untuk melihat formula Kemandirian Total DIPA"
+              >
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="font-semibold text-slate-800">2. Kemandirian Total DIPA (PNBP / Pagu DIPA Total)</span>
+                  <span className="font-semibold text-slate-800 group-hover:text-blue-700 flex items-center gap-1">
+                    <span>2. Kemandirian Total DIPA (PNBP / Pagu DIPA Total)</span>
+                    <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </span>
                   <span className="font-mono font-bold text-slate-900">0,74x <span className="text-slate-400 font-normal">/ 0,70x</span></span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -258,9 +243,16 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </div>
               </div>
 
-              <div>
+              <div
+                onClick={() => onExplainKpi?.('liquidity_runway')}
+                className="p-1.5 rounded-lg hover:bg-white transition-all cursor-pointer group"
+                title="Klik untuk melihat formula Tingkat Likuiditas Kas Operasional (Cash Runway)"
+              >
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="font-semibold text-slate-800">3. Tingkat Likuiditas Kas Operasional</span>
+                  <span className="font-semibold text-slate-800 group-hover:text-blue-700 flex items-center gap-1">
+                    <span>3. Tingkat Likuiditas Kas Operasional (Runway)</span>
+                    <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </span>
                   <span className="font-mono font-bold text-slate-900">3,89 Bln <span className="text-slate-400 font-normal">/ 3,00 Bln</span></span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -268,9 +260,16 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </div>
               </div>
 
-              <div>
+              <div
+                onClick={() => onExplainKpi?.('ipa')}
+                className="p-1.5 rounded-lg hover:bg-white transition-all cursor-pointer group"
+                title="Klik untuk melihat formula Efisiensi Beban Pegawai"
+              >
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="font-semibold text-slate-800">4. Efisiensi Beban Pegawai terhadap PNBP</span>
+                  <span className="font-semibold text-slate-800 group-hover:text-blue-700 flex items-center gap-1">
+                    <span>4. Efisiensi Beban Pegawai terhadap PNBP</span>
+                    <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </span>
                   <span className="font-mono font-bold text-slate-900">42,3% <span className="text-slate-400 font-normal">/ Maks 50%</span></span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -354,41 +353,56 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
             </div>
           </div>
 
-          {/* Top 3 Executive Metric Tiles (Matching Image 3 Top Tiles) */}
+          {/* Top 3 Executive Metric Tiles (Clickable for Formula Explanation) */}
           <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
-                PNBP Layanan BLU
-              </span>
-              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+            <div
+              onClick={() => onExplainKpi?.('sumber_pendanaan')}
+              className="p-2.5 bg-slate-50/90 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
+              title="Klik untuk melihat formula Sumber Dana PNBP"
+            >
+              <div className="flex items-center justify-center gap-1 text-[9.5px] font-bold text-slate-500 group-hover:text-blue-700 uppercase tracking-wider">
+                <span>PNBP Layanan BLU</span>
+                <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="text-sm sm:text-base font-black text-slate-900 group-hover:text-blue-900 font-mono mt-0.5">
                 Rp 681,0 M
               </div>
               <span className="text-[9px] text-blue-700 font-bold block truncate">
-                64,1% Porsi Terbesar
+                64,1% Porsi Terbesar • Formula
               </span>
             </div>
 
-            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
-                Rupiah Murni (APBN)
-              </span>
-              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+            <div
+              onClick={() => onExplainKpi?.('sumber_pendanaan')}
+              className="p-2.5 bg-slate-50/90 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
+              title="Klik untuk melihat formula Sumber Dana Rupiah Murni APBN"
+            >
+              <div className="flex items-center justify-center gap-1 text-[9.5px] font-bold text-slate-500 group-hover:text-blue-700 uppercase tracking-wider">
+                <span>Rupiah Murni (APBN)</span>
+                <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="text-sm sm:text-base font-black text-slate-900 group-hover:text-blue-900 font-mono mt-0.5">
                 Rp 224,0 M
               </div>
               <span className="text-[9px] text-sky-600 font-bold block truncate">
-                21,1% Alokasi Proyek
+                21,1% Alokasi Proyek • Formula
               </span>
             </div>
 
-            <div className="p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl">
-              <span className="text-[9.5px] font-bold text-emerald-800 uppercase tracking-wider block">
-                Hibah &amp; Lainnya
-              </span>
+            <div
+              onClick={() => onExplainKpi?.('sumber_pendanaan')}
+              className="p-2.5 bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200/80 hover:border-emerald-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
+              title="Klik untuk melihat formula Sumber Dana Hibah & Lainnya"
+            >
+              <div className="flex items-center justify-center gap-1 text-[9.5px] font-bold text-emerald-800 uppercase tracking-wider">
+                <span>Hibah &amp; Lainnya</span>
+                <HelpCircle className="w-2.5 h-2.5 text-emerald-600" />
+              </div>
               <div className="text-sm sm:text-base font-black text-emerald-700 font-mono mt-0.5">
                 Rp 157,2 M
               </div>
               <span className="text-[9px] text-emerald-600 font-bold block truncate">
-                14,8% Kas Deposito
+                14,8% Kas Deposito • Formula
               </span>
             </div>
           </div>
@@ -399,12 +413,16 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
               {fundingSources.map((item, idx) => (
                 <div
                   key={item.id}
-                  onClick={() => setActiveSegment(item.id)}
-                  className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                  onClick={() => {
+                    setActiveSegment(item.id);
+                    onExplainKpi?.('sumber_pendanaan');
+                  }}
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer group ${
                     activeSegment === item.id
                       ? 'bg-white border-blue-400 shadow-2xs ring-1 ring-blue-300'
                       : 'bg-white/80 border-slate-200/80 hover:bg-white'
                   }`}
+                  title="Klik untuk melihat formula rincian sumber dana"
                 >
                   <div className="flex items-center justify-between text-xs mb-1">
                     <div className="flex items-center gap-1.5 min-w-0">
@@ -412,24 +430,28 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                         className="w-2.5 h-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="font-bold text-slate-800 text-[11px] truncate">
+                      <span className="font-bold text-slate-800 text-[11px] group-hover:text-blue-700 truncate">
                         {idx + 1}. {item.label}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 font-mono text-[11px] shrink-0">
+                    <div className="flex items-center gap-1.5 font-mono text-[11px] shrink-0">
                       <strong className="text-slate-900 font-black">Rp {item.nominal.toFixed(1)} M</strong>
-                      <span className="text-blue-700 font-bold text-[10.5px]">({item.percentage}%)</span>
+                      <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   </div>
 
-                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden my-1">
+                  <div className="relative h-5 w-full bg-slate-100 rounded-md overflow-hidden my-1.5 border border-slate-200/70 flex items-center">
                     <div
-                      className="h-full rounded-full transition-all duration-500"
+                      className="h-full rounded-md transition-all duration-500 flex items-center justify-end px-2"
                       style={{
-                        width: `${item.percentage}%`,
+                        width: `${Math.max(14, item.percentage)}%`,
                         backgroundColor: item.color,
                       }}
-                    />
+                    >
+                      <span className="text-[10px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                        {item.percentage}%
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between text-[10px] text-slate-500 font-normal">
@@ -440,12 +462,12 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
               ))}
             </div>
           ) : (
-            /* VIEW MODE 2: TABEL INFORMASI STRUKTUR SUMBER PENDANAAN */
+            /* VIEW MODE 2: TABEL INFORMASI STRUKTUR SUMBER PENDANAAN (Clickable Rows) */
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full text-left text-xs border-collapse min-w-[500px]">
                 <thead className="bg-[#0B2545] text-white font-bold text-[10.5px]">
                   <tr>
-                    <th className="py-2 px-2.5">SUMBER DANA</th>
+                    <th className="py-2 px-2.5">SUMBER DANA (KLIK RUMUS)</th>
                     <th className="py-2 px-2.5">UNIT KERJA</th>
                     <th className="py-2 px-2.5 text-right">PAGU</th>
                     <th className="py-2 px-2.5 text-right">REALISASI</th>
@@ -454,9 +476,15 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
                   {fundingSources.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="py-2 px-2.5 font-sans font-semibold text-slate-900">
-                        {item.label}
+                    <tr
+                      key={item.id}
+                      onClick={() => onExplainKpi?.('sumber_pendanaan')}
+                      className="hover:bg-blue-50/70 transition-colors cursor-pointer group"
+                      title="Klik untuk membuka formula perhitungan struktur pendanaan"
+                    >
+                      <td className="py-2 px-2.5 font-sans font-semibold text-slate-900 group-hover:text-blue-700 flex items-center justify-between gap-1">
+                        <span>{item.label}</span>
+                        <HelpCircle className="w-2.5 h-2.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                       </td>
                       <td className="py-2 px-2.5 font-sans text-slate-600 text-[10.5px]">
                         {item.unitKerja}
@@ -464,7 +492,7 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                       <td className="py-2 px-2.5 text-right text-slate-500">
                         Rp {item.pagu.toFixed(1)} M
                       </td>
-                      <td className="py-2 px-2.5 text-right font-bold text-slate-900">
+                      <td className="py-2 px-2.5 text-right font-bold text-slate-900 group-hover:text-blue-800">
                         Rp {item.nominal.toFixed(1)} M
                       </td>
                       <td className="py-2 px-2.5 text-center font-bold text-blue-700">

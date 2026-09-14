@@ -123,23 +123,22 @@ export const BudgetAbsorptionCard: React.FC<BudgetAbsorptionCardProps> = ({
                       Rp {(item.realisasi ?? 0).toFixed(1)} M
                     </td>
                     <td className="py-2.5 px-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 bg-slate-100 h-2.5 relative rounded-full overflow-hidden">
-                          {/* Progress Bar */}
-                          <div
-                            className="h-full bg-[#4E79A7] rounded-full transition-all duration-300"
-                            style={{ width: `${Math.min(serapanPct, 100)}%` }}
-                          />
-                          {/* Reference Line for 35% target */}
-                          <div
-                            className="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10"
-                            style={{ left: '35%' }}
-                            title="Reference Line: 35% Q2"
-                          />
+                      <div className="w-full bg-slate-100 h-5 relative rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                        {/* Reference Line for 35% target */}
+                        <div
+                          className="absolute top-0 bottom-0 w-0.5 bg-blue-600 z-10"
+                          style={{ left: '35%' }}
+                          title="Reference Line: 35% Q2"
+                        />
+                        {/* Progress Bar with % on Bar */}
+                        <div
+                          className="h-full bg-[#1F4E79] rounded-md transition-all duration-300 flex items-center justify-end px-2"
+                          style={{ width: `${Math.max(16, Math.min(serapanPct, 100))}%` }}
+                        >
+                          <span className="text-[10px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                            {serapanPct.toFixed(1)}%
+                          </span>
                         </div>
-                        <span className="w-14 text-right text-xs font-bold text-slate-800">
-                          {serapanPct.toFixed(1)}%
-                        </span>
                       </div>
                     </td>
                     <td className="py-2.5 px-3.5 text-right text-slate-600">

@@ -2,21 +2,14 @@ import React, { useState } from 'react';
 import {
   TrendingUp,
   Wallet,
-  Receipt,
-  Layers,
   BarChart3,
-  CheckCircle2,
-  Table as TableIcon,
   HelpCircle,
-  Sparkles,
-  ChevronDown,
-  ChevronUp,
+  Layers,
 } from 'lucide-react';
 import { RevenueItem, ExpenseItem } from '../types';
 import {
   REVENUE_TOTAL,
   EXPENSE_TOTAL,
-  RINCIAN_TARGET_PNBP_DATA,
 } from '../data/mockData';
 import { TableauShelvesBadge } from './TableauShelvesBadge';
 
@@ -30,7 +23,6 @@ interface BiroKeuanganFinancialCardProps {
 }
 
 type FinancialTabType = 'pendapatan' | 'belanja';
-type VisualModeType = 'horizontal_bar' | 'incell_bullet';
 
 export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps> = ({
   revenueItems,
@@ -41,8 +33,6 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
   onExplainKpi,
 }) => {
   const [activeTab, setActiveTab] = useState<FinancialTabType>('pendapatan');
-  const [visualMode, setVisualMode] = useState<VisualModeType>('horizontal_bar');
-  const [showTableauGuide, setShowTableauGuide] = useState(false);
 
   // Calculations for Revenue BANs
   const totalRevTarget = revenueItems.reduce((acc, r) => acc + (r.target || 0), 0) || REVENUE_TOTAL.target;
@@ -56,18 +46,9 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
   const avgExpSerapan = Math.round((totalExpReal / totalExpPagu) * 1000) / 10;
   const sisaExpPagu = Math.max(0, totalExpPagu - totalExpReal);
 
-  // Status helper for in-cell badges - Clean corporate styling (without distracting green/orange)
-  const getStatusBadge = (pct: number, _benchmark?: number) => {
-    return {
-      label: `${pct.toFixed(1)}%`,
-      bg: 'bg-slate-100 text-slate-700 border-slate-200',
-      barColor: 'bg-[#1F4E79]',
-    };
-  };
-
   return (
     <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden flex flex-col font-sans select-none">
-      {/* 1. Header with Data Tab Switcher & Creative Visual Mode Switcher matching Image 2 & 3 */}
+      {/* 1. Header with Data Tab Switcher */}
       <div className="px-4 py-3.5 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div className="w-1.5 h-4 bg-[#002B49] rounded-2xs" />
@@ -88,7 +69,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
           </div>
         </div>
 
-        {/* Sweet Swap Mode Switcher */}
+        {/* Tab Switcher */}
         <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold border border-slate-200/80">
           <button
             onClick={() => setActiveTab('pendapatan')}
@@ -117,13 +98,14 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
         </div>
       </div>
 
-      {/* 2. Executive 4-Tile BAN Strip (Matching Image 3 Top Metric Tiles) */}
+      {/* 2. Executive 4-Tile BAN Strip */}
       <div className="p-4 border-b border-slate-200 bg-slate-50/50 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
         {activeTab === 'pendapatan' && (
           <>
             <div
               onClick={() => onExplainKpi?.('rev_target')}
-              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-300 transition-colors"
+              title="Target Perjanjian Kinerja"
             >
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Target Perkin {selectedYear}
@@ -136,7 +118,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
             <div
               onClick={() => onExplainKpi?.('rev_real')}
-              className="p-3 bg-white border border-emerald-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-emerald-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-emerald-300 transition-colors"
+              title="Kas Masuk Riil"
             >
               <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">
                 Realisasi Kas Masuk
@@ -149,7 +132,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
             <div
               onClick={() => onExplainKpi?.('rev_sisa')}
-              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-rose-300 transition-colors"
+              title="Sisa Target yang Harus Dicapai"
             >
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Sisa Target Tahunan
@@ -160,17 +144,21 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <span className="text-[10px] text-slate-400 font-medium">Hingga Akhir TA {selectedYear}</span>
             </div>
 
+            {/* Point 6: Ganti Status Kinerja Q2 menjadi Persentase Realisasi PNBP */}
             <div
               onClick={() => onExplainKpi?.('rev_capaian')}
-              className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-400 transition-colors"
+              title="Persentase Capaian Realisasi PNBP terhadap Target Perkin"
             >
               <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
-                Status Kinerja Q2
+                Persentase Realisasi PNBP
               </span>
               <div className="text-xl font-black text-[#002B49] font-mono mt-0.5">
-                On-Track
+                {avgRevCapaian.toFixed(1)}%
               </div>
-              <span className="text-[10px] text-blue-700 font-bold">Benchmark Q2: 50,0%</span>
+              <span className="text-[10px] text-blue-700 font-bold">
+                Target Perkin Rp {totalRevTarget.toFixed(1)} M
+              </span>
             </div>
           </>
         )}
@@ -179,7 +167,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
           <>
             <div
               onClick={() => onExplainKpi?.('exp_pagu')}
-              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-300 transition-colors"
+              title="Total Pagu DIPA"
             >
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Total Pagu DIPA {selectedYear}
@@ -192,7 +181,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
             <div
               onClick={() => onExplainKpi?.('exp_real')}
-              className="p-3 bg-white border border-blue-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-blue-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-400 transition-colors"
+              title="Realisasi Pengeluaran Kas SP2D"
             >
               <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
                 Realisasi Belanja
@@ -205,7 +195,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
             <div
               onClick={() => onExplainKpi?.('exp_sisa')}
-              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-slate-300 transition-colors"
+              title="Sisa Pagu Anggaran"
             >
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Sisa Pagu Anggaran
@@ -216,525 +207,225 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               <span className="text-[10px] text-slate-400 font-medium">Alokasi Q3 &amp; Q4</span>
             </div>
 
+            {/* Point 8: Ganti Kontrol Efisiensi IKPA menjadi % Serapan dari Realisasi Belanja/Pagu */}
             <div
               onClick={() => onExplainKpi?.('exp_serapan')}
-              className="p-3 bg-emerald-50/70 border border-emerald-200/90 rounded-xl shadow-2xs"
+              className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs cursor-pointer hover:border-blue-400 transition-colors"
+              title="Persentase Serapan Belanja terhadap Pagu DIPA"
             >
-              <span className="text-[10px] font-bold text-emerald-900 uppercase tracking-wider block">
-                Kontrol Efisiensi IKPA
+              <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
+                % Serapan Anggaran
               </span>
-              <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
-                92,4 Poin
+              <div className="text-xl font-black text-[#002B49] font-mono mt-0.5">
+                {avgExpSerapan.toFixed(1)}%
               </div>
-              <span className="text-[10px] text-emerald-600 font-bold">Predikat Sangat Baik</span>
+              <span className="text-[10px] text-blue-700 font-bold">
+                Realisasi Rp {totalExpReal.toFixed(1)} M / Pagu Rp {totalExpPagu.toFixed(1)} M
+              </span>
             </div>
           </>
         )}
       </div>
 
-      {/* 3. Creative View Mode Switcher Toolbar */}
+      {/* 3. Subheader / Shelf Indicator */}
       <div className="px-4 py-2 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide mr-1 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Format Visualisasi Tableau:</span>
-            </span>
-
-            {/* View 1: In-Cell Bullet Table */}
-            <button
-              onClick={() => setVisualMode('incell_bullet')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1 ${
-                visualMode === 'incell_bullet'
-                  ? 'bg-white text-[#1F4E79] shadow-2xs border border-slate-300 font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3 h-3" />
-              <span>Tabel In-Cell Bullet (Tanpa Kolom Bar Terpisah)</span>
-            </button>
-
-            {/* View 2: Horizontal Bar Show Me #6 */}
-            <button
-              onClick={() => setVisualMode('horizontal_bar')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1 ${
-                visualMode === 'horizontal_bar'
-                  ? 'bg-white text-[#1F4E79] shadow-2xs border border-slate-300 font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <BarChart3 className="w-3 h-3" />
-              <span>Side-by-Side Horizontal Bar (Show Me #6)</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {onExplainKpi && (
-              <button
-                onClick={() => {
-                  if (activeTab === 'pendapatan') onExplainKpi('rev_capaian');
-                  else onExplainKpi('exp_serapan');
-                }}
-                className="text-[11px] font-semibold text-[#1F4E79] bg-white hover:bg-blue-50 border border-slate-300 px-2.5 py-1 rounded-md flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
-                title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
-              >
-                <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-                <span>Formula &amp; Insight</span>
-              </button>
-            )}
-
-            {/* Tableau Guide Toggle */}
-            <button
-              onClick={() => setShowTableauGuide(!showTableauGuide)}
-              className="text-[11px] font-medium text-blue-700 hover:text-blue-900 flex items-center gap-1 cursor-pointer"
-            >
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Cara Bikin di Tableau</span>
-              {showTableauGuide ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            </button>
-          </div>
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-3.5 h-3.5 text-[#1F4E79]" />
+          <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide">
+            Model Visualisasi: Side-by-Side Horizontal Bar (Tableau Show Me #6)
+          </span>
         </div>
 
-      {/* 4. Collapsible Tableau Implementation Guide Box */}
-      {showTableauGuide && (
-        <div className="p-3.5 bg-blue-50/70 border-b border-blue-200 text-xs text-slate-800 space-y-2 animate-in fade-in">
-          <div className="font-bold text-blue-900 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-blue-700" />
-            <span>Panduan Implementasi Kreatif di Tableau Desktop (Meniadakan Kolom Visual Bar Tradisional):</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
-            <div className="p-2.5 bg-white rounded-lg border border-blue-200">
-              <strong className="text-blue-900 block mb-1">1. Pola In-Cell Bullet (Dual-Axis):</strong>
-              <p className="text-slate-600">
-                Di Tableau Desktop, jangan buat kolom bar terpisah. Gunakan fitur <em>Dual-Axis</em> pada <code>Measure Values</code> di Columns shelf. Atur Mark 1 sebagai <strong>Bar</strong> (Realisasi) dan Mark 2 sebagai <strong>Text Label</strong> (Angka Rp M), lalu sinkronkan axis.
-              </p>
-            </div>
-            <div className="p-2.5 bg-white rounded-lg border border-blue-200">
-              <strong className="text-blue-900 block mb-1">2. Bullet Graph Standar (Show Me #23):</strong>
-              <p className="text-slate-600">
-                Pilih <code>Show Me &gt; Bullet Graph</code>. Masukkan <code>[Realisasi]</code> pada Columns, <code>[Target]</code> pada Detail, lalu klik kanan axis &gt; <em>Add Reference Line</em> pada 50% (Q2 Benchmark).
-              </p>
-            </div>
-            <div className="p-2.5 bg-white rounded-lg border border-blue-200">
-              <strong className="text-blue-900 block mb-1">3. Status Color Encoding:</strong>
-              <p className="text-slate-600">
-                Buat Calculated Field: <code>IF [Capaian %] &gt;= 50 THEN 'Hijau' ELSEIF [Capaian %] &gt;= 35 THEN 'Kuning' ELSE 'Merah' END</code> dan seret ke <strong>Color Card</strong>.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+        {onExplainKpi && (
+          <button
+            onClick={() => {
+              if (activeTab === 'pendapatan') onExplainKpi('rev_capaian');
+              else onExplainKpi('exp_serapan');
+            }}
+            className="text-[11px] font-semibold text-[#1F4E79] bg-white hover:bg-blue-50 border border-slate-300 px-2.5 py-1 rounded-md flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all"
+            title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+            <span>Formula &amp; Insight</span>
+          </button>
+        )}
+      </div>
 
-      {/* 5. Main Content Area according to selected visualMode */}
+      {/* 4. Main Content Area (Side by Side Horizontal Bar View Only) */}
       <div className="p-3 sm:p-4 flex-1 overflow-x-auto">
         {/* ========================================================================= */}
-        {/* PENDAPATAN TAB CONTENT */}
+        {/* PENDAPATAN TAB CONTENT (SIDE-BY-SIDE HORIZONTAL BAR ONLY) */}
         {/* ========================================================================= */}
         {activeTab === 'pendapatan' && (
-          <>
-            {/* Banner Deskripsi Tabel Pendapatan PNBP */}
-            <div className="mb-3 p-3 bg-blue-50/60 border border-blue-200/80 rounded-xl flex items-start gap-2.5 text-xs text-slate-700 shadow-2xs">
-              <TrendingUp className="w-4 h-4 text-[#1F4E79] shrink-0 mt-0.5" />
-              <div className="space-y-0.5">
-                <span className="font-bold text-[#002B49] block">
-                  Tabel Target &amp; Realisasi Pendapatan PNBP (Penerimaan Negara Bukan Pajak)
+          <div className="space-y-3 py-1">
+            <TableauShelvesBadge
+              showMe="Show Me #6 (Horizontal Bar)"
+              rows="[satker_penghasil_pnbp]"
+              columns="SUM([realisasi_kas_masuk]), SUM([target_perkin])"
+              color="[satker]"
+              referenceLine="Benchmark Q2: 50%"
+            />
+
+            <div className="flex items-center justify-between text-xs font-bold text-slate-500 pb-2 border-b border-slate-200">
+              <span className="uppercase tracking-wider text-[#002B49]">10 Satker Penghasil PNBP (Peringkat Kinerja)</span>
+              <div className="flex items-center gap-4 text-[11px] font-mono">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-xs bg-[#002B49]" />
+                  <span>Realisasi YTD</span>
                 </span>
-                <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                  Tabel ini menampilkan perbandingan target kinerja tahunan dengan penerimaan kas riil (kas masuk) yang dihasilkan dari berbagai unit usaha dan layanan operasional BP Batam (seperti Pelabuhan, Bandara Hang Nadim, RSBP, Pengelolaan Air Bersih, Pemanfaatan Tanah &amp; Bangunan) yang disetor ke kas BLU.
-                </p>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-xs bg-slate-200" />
+                  <span>Target Perkin</span>
+                </span>
+                <span className="text-blue-700 font-bold">
+                  Benchmark Q2: 50%
+                </span>
               </div>
             </div>
 
-            {/* VIEW MODE 1: IN-CELL BULLET TABLE (NO VISUAL BAR COLUMN!) - COMPACT SCROLL */}
-            {visualMode === 'incell_bullet' && (
-              <div className="border border-slate-200/90 rounded-xl overflow-x-auto max-h-[350px] overflow-y-auto shadow-2xs">
-                <table className="w-full text-left text-xs border-collapse min-w-[760px]">
-                  <thead className="sticky top-0 z-10 bg-[#0B2545] text-white font-bold text-[11px]">
-                    <tr>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 w-[34%]">
-                        Unit Kerja Penghasil / Badan Usaha
-                      </th>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 text-right w-[18%]">
-                        Target Perkin (Rp M)
-                      </th>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 text-left w-[26%]">
-                        Realisasi YTD &amp; In-Cell Bullet
-                      </th>
-                      <th className="py-2 px-2.5 text-right w-[22%]">
-                        Sisa Target (Rp M)
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 text-[11px]">
-                  {revenueItems.map((item, idx) => {
-                    const isEven = idx % 2 === 0;
-                    const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
-                    const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
-                    const status = getStatusBadge(capaianPct, 50);
+            <div className="space-y-2.5">
+              {revenueItems.map((item, idx) => {
+                const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
+                const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
 
-                    return (
-                      <tr
-                        key={item.id}
-                        className={`hover:bg-blue-50/50 transition-colors ${
-                          isEven ? 'bg-slate-50/50' : 'bg-white'
-                        }`}
-                      >
-                        {/* Satker Column */}
-                        <td className="py-3 px-3 border-r border-slate-200 font-semibold text-slate-900 align-middle">
-                          <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                            <span>{item.sumber}</span>
-                          </div>
-                        </td>
-
-                        {/* Target Column */}
-                        <td className="py-3 px-3 border-r border-slate-200 text-right font-mono text-slate-700 align-middle font-medium">
-                          Rp {item.target.toFixed(1)} M
-                        </td>
-
-                        {/* Realisasi YTD with In-Cell Bullet Progress Visual inside the cell! */}
-                        <td className="py-3 px-3 border-r border-slate-200 align-middle">
-                          <div className="space-y-1">
-                            {/* Figure and Status Badge */}
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="font-mono font-bold text-slate-900 text-xs">
-                                Rp {item.realisasi.toFixed(1)} M
-                              </span>
-                              <span
-                                className={`text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded border ${status.bg}`}
-                              >
-                                {status.label}
-                              </span>
-                            </div>
-
-                            {/* In-Cell Bullet Progress Bar with 50% Benchmark Marker */}
-                            <div className="relative w-full bg-slate-200/80 h-1.5 rounded-full overflow-hidden">
-                              {/* Actual Progress Fill */}
-                              <div
-                                className={`h-full rounded-full transition-all ${status.barColor}`}
-                                style={{ width: `${Math.min(100, capaianPct)}%` }}
-                              />
-                            </div>
-                            <div className="flex items-center justify-between text-[9px] text-slate-400 font-mono">
-                              <span>0%</span>
-                              <span className="text-blue-700 font-bold">| 50% Ref Q2</span>
-                              <span>100%</span>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Sisa Target Column */}
-                        <td className="py-3 px-3 text-right font-mono font-medium text-slate-600 align-middle">
-                          Rp {sisa.toFixed(1)} M
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-                {/* Total Row */}
-                <tfoot className="bg-slate-100 font-bold text-xs border-t-2 border-slate-300">
-                  <tr>
-                    <td className="py-3 px-3 border-r border-slate-300 text-slate-900 uppercase">
-                      TOTAL KONSOLIDASI PNBP
-                    </td>
-                    <td className="py-3 px-3 border-r border-slate-300 text-right font-mono text-slate-900">
-                      Rp {totalRevTarget.toFixed(1)} M
-                    </td>
-                    <td className="py-3 px-3 border-r border-slate-300">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-emerald-700 font-bold">
-                          Rp {totalRevReal.toFixed(1)} M
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => onExplainKpi?.('pendapatan')}
+                    className="p-3 bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all shadow-2xs space-y-2 cursor-pointer group"
+                    title="Klik untuk membuka formula perhitungan capaian PNBP"
+                  >
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-md bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[10px]">
+                          {idx + 1}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-blue-100 text-[#1F4E79] font-mono text-[10px] font-bold">
-                          {avgRevCapaian}% Konsolidasi
+                        <span className="font-bold text-slate-900 group-hover:text-blue-700 text-xs sm:text-[13px]">{item.sumber}</span>
+                        <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <div className="flex items-center gap-3 font-mono text-xs">
+                        <span className="text-slate-500 font-medium">
+                          <span className="font-black text-slate-900 group-hover:text-blue-800">Rp {item.realisasi.toFixed(1)} M</span>
+                          {' '}/ Rp {item.target.toFixed(1)} M
                         </span>
                       </div>
-                    </td>
-                    <td className="py-2.5 px-3 text-right font-mono text-slate-800">
-                      Rp {sisaRevTarget.toFixed(1)} M
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          )}
+                    </div>
 
-            {/* VIEW MODE 2: SIDE-BY-SIDE HORIZONTAL BAR (SHOW ME #6 TABLEAU) */}
-            {visualMode === 'horizontal_bar' && (
-              <div className="space-y-3 py-1">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-500 pb-2 border-b border-slate-200">
-                  <span className="uppercase tracking-wider text-[#002B49]">10 Satker Penghasil PNBP (Peringkat Kinerja)</span>
-                  <div className="flex items-center gap-4 text-[11px] font-mono">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-[#002B49]" />
-                      <span>Realisasi YTD</span>
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-slate-200" />
-                      <span>Target Perkin</span>
-                    </span>
-                    <span className="text-blue-700 font-bold">
-                      Benchmark Q2: 50%
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-2.5">
-                  {revenueItems.map((item, idx) => {
-                    const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
-                    const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
-
-                    return (
+                    {/* Bar Track with % directly inside the bar */}
+                    <div className="relative w-full bg-slate-100 h-5 sm:h-6 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                      {/* 50% Q2 Reference Line Marker */}
                       <div
-                        key={item.id}
-                        className="p-3 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl transition-all shadow-2xs space-y-2"
+                        className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
+                        style={{ left: '50%' }}
+                        title="Tableau Reference Line: Q2 Benchmark 50%"
+                      />
+                      {/* Realisasi Bar Fill with % INSIDE */}
+                      <div
+                        className="h-full rounded-md transition-all bg-[#002B49] flex items-center justify-end px-2"
+                        style={{ width: `${Math.max(14, Math.min(100, capaianPct))}%` }}
                       >
-                        <div className="flex items-center justify-between text-xs">
-                          <div className="flex items-center gap-2">
-                            <span className="w-5 h-5 rounded-md bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[10px]">
-                              {idx + 1}
-                            </span>
-                            <span className="font-bold text-slate-900 text-xs sm:text-[13px]">{item.sumber}</span>
-                          </div>
-                          <div className="flex items-center gap-3 font-mono text-xs">
-                            <span className="text-slate-500 font-medium">
-                              <span className="font-black text-slate-900">Rp {item.realisasi.toFixed(1)} M</span>
-                              {' '}/ Rp {item.target.toFixed(1)} M
-                            </span>
-                            <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-blue-50 text-blue-800 border border-blue-200">
-                              {capaianPct.toFixed(1)}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Dual Bar Track with 50% Reference Line */}
-                        <div className="relative w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/60">
-                          {/* 50% Q2 Reference Line Marker */}
-                          <div
-                            className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
-                            style={{ left: '50%' }}
-                            title="Tableau Reference Line: Q2 Benchmark 50%"
-                          />
-                          {/* Realisasi Bar Fill */}
-                          <div
-                            className="h-full rounded-full transition-all bg-[#002B49]"
-                            style={{ width: `${Math.min(100, capaianPct)}%` }}
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
-                          <span>Sisa Target: Rp {sisa.toFixed(1)} M</span>
-                          <span className={capaianPct >= 50 ? 'text-emerald-600 font-bold' : 'text-slate-500'}>
-                            {capaianPct >= 50 ? 'Melampaui Benchmark Q2' : 'Menuju Target Semester I'}
-                          </span>
-                        </div>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                          {capaianPct.toFixed(1)}%
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                      <span>Sisa Target: Rp {sisa.toFixed(1)} M</span>
+                      <span className={capaianPct >= 50 ? 'text-emerald-600 font-bold' : 'text-slate-500'}>
+                        {capaianPct >= 50 ? 'Melampaui Benchmark Q2 • Formula' : 'Menuju Target Semester I • Formula'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
 
         {/* ========================================================================= */}
-        {/* BELANJA TAB CONTENT */}
+        {/* BELANJA TAB CONTENT (SIDE-BY-SIDE HORIZONTAL BAR ONLY) */}
         {/* ========================================================================= */}
         {activeTab === 'belanja' && (
-          <>
-            {/* Banner Deskripsi Tabel Realisasi Belanja */}
-            <div className="mb-3 p-3 bg-blue-50/60 border border-blue-200/80 rounded-xl flex items-start gap-2.5 text-xs text-slate-700 shadow-2xs">
-              <Wallet className="w-4 h-4 text-[#1F4E79] shrink-0 mt-0.5" />
-              <div className="space-y-0.5">
-                <span className="font-bold text-[#002B49] block">
-                  Tabel Pagu &amp; Realisasi Belanja (Pengeluaran Kas SP2D)
+          <div className="space-y-3.5 py-1">
+            <TableauShelvesBadge
+              showMe="Show Me #6 (Horizontal Bar)"
+              rows="[komponen_belanja_operasional_dan_modal]"
+              columns="SUM([realisasi_sp2d]), SUM([pagu_dipa])"
+              color="[program_belanja]"
+              referenceLine="Ref Line Q2: 35%"
+            />
+
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1 border-b border-slate-200">
+              <span>Komponen Belanja (Rows)</span>
+              <div className="flex items-center gap-4 text-[11px] font-mono">
+                <span className="flex items-center gap-1">
+                  <span className="w-2.5 h-2.5 rounded-xs bg-[#1F4E79]" />
+                  <span>Realisasi SP2D (M)</span>
                 </span>
-                <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                  Tabel ini menampilkan rincian alokasi pagu DIPA dan pencairan anggaran belanja riil (SP2D) berdasarkan program kerja serta unit operasional BP Batam untuk mengontrol dan mengevaluasi daya serap anggaran belanja pegawai, barang, jasa, dan belanja modal.
-                </p>
+                <span className="flex items-center gap-1">
+                  <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
+                  <span>Pagu DIPA (M)</span>
+                </span>
+                <span className="text-blue-700 font-bold">
+                  Ref Line Q2: 35%
+                </span>
               </div>
             </div>
 
-            {/* VIEW MODE 1: IN-CELL BULLET TABLE (NO VISUAL BAR COLUMN!) - COMPACT SCROLL */}
-            {visualMode === 'incell_bullet' && (
-              <div className="border border-slate-200/90 rounded-xl overflow-x-auto max-h-[350px] overflow-y-auto shadow-2xs">
-                <table className="w-full text-left text-xs border-collapse min-w-[760px]">
-                  <thead className="sticky top-0 z-10 bg-[#0B2545] text-white font-bold text-[11px]">
-                    <tr>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 w-[34%]">
-                        Komponen Belanja / Satker
-                      </th>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 text-right w-[18%]">
-                        Pagu DIPA (Rp M)
-                      </th>
-                      <th className="py-2 px-2.5 border-r border-blue-900/60 text-left w-[26%]">
-                        Realisasi Belanja &amp; In-Cell Bullet
-                      </th>
-                      <th className="py-2 px-2.5 text-right w-[22%]">
-                        Sisa Pagu (Rp M)
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 text-[11px]">
-                  {expenseItems.map((item, idx) => {
-                    const isEven = idx % 2 === 0;
-                    const programName = item.program || item.unitKerja || `Komponen Belanja ${item.id}`;
-                    const serapanPct = item.serapan ?? item.persentase ?? (item.pagu ? (item.realisasi / item.pagu) * 100 : 0);
-                    const sisaPagu = item.sisaAnggaran ?? item.sisa ?? Math.max(0, item.pagu - item.realisasi);
-                    const status = getStatusBadge(serapanPct, 35); // Belanja Q2 benchmark is 35%
+            <div className="space-y-3">
+              {expenseItems.map((item) => {
+                const programName = item.program || item.unitKerja || `Komponen Belanja ${item.id}`;
+                const serapanPct = item.serapan ?? item.persentase ?? (item.pagu ? (item.realisasi / item.pagu) * 100 : 0);
 
-                    return (
-                      <tr
-                        key={item.id}
-                        className={`hover:bg-blue-50/50 transition-colors ${
-                          isEven ? 'bg-slate-50/50' : 'bg-white'
-                        }`}
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => onExplainKpi?.('belanja')}
+                    className="space-y-1.5 p-2.5 rounded-xl hover:bg-blue-50/50 cursor-pointer group transition-colors border border-slate-100 hover:border-blue-200 bg-white shadow-2xs"
+                    title="Klik untuk melihat formula dan rincian komponen belanja"
+                  >
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-slate-800 group-hover:text-blue-700">{programName}</span>
+                        <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <div className="flex items-center gap-3 font-mono text-[11px]">
+                        <span className="font-bold text-slate-900 group-hover:text-blue-800">
+                          Rp {item.realisasi.toFixed(1)} M{' '}
+                          <span className="text-slate-400 font-normal">/ Rp {item.pagu.toFixed(1)} M</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Point 9: Persentase taruh di dalam Bar saja */}
+                    <div className="relative w-full bg-slate-100 h-5 sm:h-6 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
+                      {/* 35% Q2 Reference Line Marker */}
+                      <div
+                        className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
+                        style={{ left: '35%' }}
+                        title="Tableau Reference Line: Q2 Benchmark 35%"
+                      />
+
+                      {/* Realisasi Bar Fill with % INSIDE */}
+                      <div
+                        className="h-full rounded-md transition-all bg-[#1F4E79] flex items-center justify-end px-2"
+                        style={{ width: `${Math.max(14, Math.min(100, serapanPct))}%` }}
                       >
-                        {/* Satker Column */}
-                        <td className="py-3 px-3 border-r border-slate-200 font-semibold text-slate-900 align-middle">
-                          <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1F4E79]" />
-                            <span>{programName}</span>
-                          </div>
-                        </td>
-
-                        {/* Pagu Column */}
-                        <td className="py-3 px-3 border-r border-slate-200 text-right font-mono text-slate-700 align-middle font-medium">
-                          Rp {item.pagu.toFixed(1)} M
-                        </td>
-
-                        {/* Realisasi Belanja with In-Cell Bullet Progress Visual inside the cell! */}
-                        <td className="py-3 px-3 border-r border-slate-200 align-middle">
-                          <div className="space-y-1">
-                            {/* Figure and Status Badge */}
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="font-mono font-bold text-slate-900 text-xs">
-                                Rp {item.realisasi.toFixed(1)} M
-                              </span>
-                              <span
-                                className={`text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded border ${status.bg}`}
-                              >
-                                {status.label}
-                              </span>
-                            </div>
-
-                            {/* In-Cell Bullet Progress Bar with 35% Benchmark Marker */}
-                            <div className="relative w-full bg-slate-200/80 h-1.5 rounded-full overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all ${status.barColor}`}
-                                style={{ width: `${Math.min(100, serapanPct)}%` }}
-                              />
-                            </div>
-                            <div className="flex items-center justify-between text-[9px] text-slate-400 font-mono">
-                              <span>0%</span>
-                              <span className="text-blue-700 font-bold">| 35% Ref Q2</span>
-                              <span>100%</span>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Sisa Pagu Column */}
-                        <td className="py-3 px-3 text-right font-mono font-medium text-slate-600 align-middle">
-                          Rp {sisaPagu.toFixed(1)} M
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-                {/* Total Row */}
-                <tfoot className="bg-slate-100 font-bold text-xs border-t-2 border-slate-300">
-                  <tr>
-                    <td className="py-3 px-3 border-r border-slate-300 text-slate-900 uppercase">
-                      TOTAL KONSOLIDASI BELANJA
-                    </td>
-                    <td className="py-3 px-3 border-r border-slate-300 text-right font-mono text-slate-900">
-                      Rp {totalExpPagu.toFixed(1)} M
-                    </td>
-                    <td className="py-3 px-3 border-r border-slate-300">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[#1F4E79] font-bold">
-                          Rp {totalExpReal.toFixed(1)} M
-                        </span>
-                        <span className="px-2 py-0.5 rounded bg-blue-100 text-[#1F4E79] font-mono text-[10px] font-bold">
-                          {avgExpSerapan}% Konsolidasi
+                        <span className="text-[10px] sm:text-[11px] font-bold text-white font-mono whitespace-nowrap drop-shadow-2xs">
+                          {serapanPct.toFixed(1)}%
                         </span>
                       </div>
-                    </td>
-                    <td className="py-2.5 px-3 text-right font-mono text-slate-800">
-                      Rp {sisaExpPagu.toFixed(1)} M
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          )}
-
-            {/* VIEW MODE 2: SIDE-BY-SIDE HORIZONTAL BAR (SHOW ME #6 TABLEAU) */}
-            {visualMode === 'horizontal_bar' && (
-              <div className="space-y-3.5 py-1">
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1 border-b border-slate-200">
-                  <span>Komponen Belanja (Rows)</span>
-                  <div className="flex items-center gap-4 text-[11px] font-mono">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-[#1F4E79]" />
-                      <span>Realisasi SP2D (M)</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
-                      <span>Pagu DIPA (M)</span>
-                    </span>
-                    <span className="text-blue-700 font-bold">
-                      Ref Line Q2: 35%
-                    </span>
+                    </div>
                   </div>
-                </div>
-
-                <div className="space-y-3">
-                  {expenseItems.map((item) => {
-                    const programName = item.program || item.unitKerja || `Komponen Belanja ${item.id}`;
-                    const serapanPct = item.serapan ?? item.persentase ?? (item.pagu ? (item.realisasi / item.pagu) * 100 : 0);
-                    const status = getStatusBadge(serapanPct, 35);
-
-                    return (
-                      <div key={item.id} className="space-y-1">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-slate-800">{programName}</span>
-                          <div className="flex items-center gap-3 font-mono text-[11px]">
-                            <span className="font-bold text-slate-900">
-                              Rp {item.realisasi.toFixed(1)} M{' '}
-                              <span className="text-slate-400 font-normal">/ Rp {item.pagu.toFixed(1)} M</span>
-                            </span>
-                            <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-bold border ${status.bg}`}>
-                              {serapanPct.toFixed(1)}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Dual Bar Track with 35% Reference Line */}
-                        <div className="relative w-full bg-slate-100 h-4 rounded-md overflow-hidden border border-slate-200/80">
-                          {/* 35% Q2 Reference Line Marker */}
-                          <div
-                            className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
-                            style={{ left: '35%' }}
-                            title="Tableau Reference Line: Q2 Benchmark 35%"
-                          />
-
-                          {/* Realisasi Bar Fill */}
-                          <div
-                            className={`h-full rounded-xs transition-all ${status.barColor}`}
-                            style={{ width: `${Math.min(100, serapanPct)}%` }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
 
-      {/* 6. Footer Caption with Tableau Info */}
+      {/* 5. Footer Caption */}
       <div className="px-4 py-2.5 bg-slate-50/80 border-t border-slate-200 flex flex-wrap items-center justify-between text-[11px] text-slate-500 gap-2">
         <div className="flex items-center gap-1.5">
           <Layers className="w-3.5 h-3.5 text-[#1F4E79]" />
@@ -743,8 +434,8 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
-            Tableau-Ready: Dual-Axis &amp; In-Cell Bullet
+          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold border border-blue-200">
+            Tableau-Ready: Side-by-Side Horizontal Bar
           </span>
           <span className="font-mono text-slate-400">Extract Live</span>
         </div>

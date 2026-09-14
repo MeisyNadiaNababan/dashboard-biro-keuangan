@@ -101,24 +101,24 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     formulaRef: 'Item #11: CSAT Data Center = (Total Skor Responden / Skor Maksimal) * 100%',
   },
   {
-    id: 'kapasitas_core_fo',
-    title: 'Kapasitas Core FO',
-    value: '1.152 Core',
-    target: 'Utilisasi: 81,4% (938 Core Aktif)',
-    percentage: 'Cakupan Koridor Backbone Pulau Batam',
+    id: 'indeks_spbe',
+    title: 'Indeks SPBE BP Batam',
+    value: '3,68',
+    target: 'Target Perkin: ≥ 3,50 (Terlampaui)',
+    percentage: 'Predikat "Sangat Baik" (Skala 0-5)',
     trend: {
       direction: 'up',
-      value: '+48 Core',
-      period: '(YTD 2026)',
+      value: '+0,24',
+      period: '(Evaluasi KemenPAN-RB)',
       isPositive: true,
     },
-    sparkline: [1000, 1024, 1056, 1080, 1104, 1128, 1152],
+    sparkline: [2.95, 3.12, 3.28, 3.42, 3.55, 3.62, 3.68],
     badge: {
-      text: 'Core Backbone',
-      variant: 'info',
+      text: 'Sangat Baik',
+      variant: 'success',
     },
-    colorTheme: 'blue',
-    formulaRef: 'Item #5: Total Kapasitas Core FO = SUM([JMLHCORE]) Core',
+    colorTheme: 'purple',
+    formulaRef: 'Formula Perkin: Indeks SPBE = Komposit 4 Domain (Kebijakan, Tata Kelola, Manajemen, Layanan)',
   },
   {
     id: 'jumlah_server',
@@ -655,6 +655,71 @@ export const SPBE_DOMAINS_DATA: SpbeDomainItem[] = [
     predikat: 'Baik',
     status: 'Perlu Optimalisasi',
     keterangan: 'Penerapan ISO 27001 dan penguatan SOC (Security Operations Center) bersama BSSN CSIRT',
+  },
+];
+
+// Tabel Informasi Indeks SPBE (Atribut: Level/Nilai per domain 0-5, Tahun, Evidence, Status Pemenuhan kriteria 1-5 sesuai formula Perkin)
+export interface SpbeIndexInfoItem {
+  id: string;
+  domain: string;
+  aspek: string;
+  levelNilai: number; // 0 - 5
+  bobot: string;
+  tahun: number;
+  evidence: string;
+  statusPemenuhan: string; // Kriteria 1-5
+  levelKriteria: number; // 1 - 5
+  predikat: string;
+}
+
+export const SPBE_INDEX_INFO_DATA: SpbeIndexInfoItem[] = [
+  {
+    id: 'spbe-dom-01',
+    domain: 'Domain 1: Kebijakan Internal SPBE',
+    aspek: 'Tata Kelola SPBE & Layanan Administrasi',
+    levelNilai: 3.85,
+    bobot: '13,0%',
+    tahun: 2026,
+    evidence: 'Perka BP Batam No. 12/2023 tentang Tata Kelola SPBE & Pedoman Arsitektur SPBE BP Batam',
+    statusPemenuhan: 'Level 4: Terpadu / Terintegrasi (Kriteria Perkin 4)',
+    levelKriteria: 4,
+    predikat: 'Sangat Baik',
+  },
+  {
+    id: 'spbe-dom-02',
+    domain: 'Domain 2: Tata Kelola SPBE',
+    aspek: 'Kelembagaan, Strategi & Perencanaan TIK',
+    levelNilai: 3.65,
+    bobot: '25,0%',
+    tahun: 2026,
+    evidence: 'Dokumen Arsitektur & Peta Rencana SPBE 2025-2029, SK Tim Koordinasi SPBE BP Batam',
+    statusPemenuhan: 'Level 4: Terpadu / Kolaboratif (Kriteria Perkin 4)',
+    levelKriteria: 4,
+    predikat: 'Sangat Baik',
+  },
+  {
+    id: 'spbe-dom-03',
+    domain: 'Domain 3: Manajemen SPBE',
+    aspek: 'Manajemen Risiko, Keamanan Info & Data',
+    levelNilai: 3.45,
+    bobot: '17,0%',
+    tahun: 2026,
+    evidence: 'Piagam Manajemen Risiko TIK, Sertifikasi ISO 27001 CSIRT, Audit Keamanan BSSN & SOP CSIRT',
+    statusPemenuhan: 'Level 3: Terstandarisasi / Diterapkan (Kriteria Perkin 3)',
+    levelKriteria: 3,
+    predikat: 'Baik',
+  },
+  {
+    id: 'spbe-dom-04',
+    domain: 'Domain 4: Layanan SPBE',
+    aspek: 'Layanan Administrasi & Layanan Publik Terpadu',
+    levelNilai: 3.78,
+    bobot: '45,0%',
+    tahun: 2026,
+    evidence: 'Portal IBOSS, SIMKEU Keuangan, Portal Satu Data Batam, Integrasi TTE BSrE, Helpdesk Mobile',
+    statusPemenuhan: 'Level 4: Terpadu Antar-Unit & Terhubung Pusat (Kriteria Perkin 4)',
+    levelKriteria: 4,
+    predikat: 'Sangat Baik',
   },
 ];
 

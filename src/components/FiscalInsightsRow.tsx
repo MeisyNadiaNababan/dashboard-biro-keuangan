@@ -4,10 +4,12 @@ import {
   BarChart3,
   Table as TableIcon,
   HelpCircle,
-  Maximize2,
-  Info
+  CheckCircle2,
+  TrendingUp,
+  TrendingDown,
+  Building2,
+  Layers
 } from 'lucide-react';
-import { FUNDING_SOURCES } from '../data/mockData';
 import { TableauShelvesBadge } from './TableauShelvesBadge';
 
 interface FiscalInsightsRowProps {
@@ -26,6 +28,7 @@ const SURPLUS_DEFISIT_DATA = [
     belanja: 61.0,
     net: 367.0, // Surplus (+367 M)
     keterangan: 'Sewa lahan industri Batam Center, Kabil & Batu Ampar',
+    kategori: 'Donor Terbesar',
   },
   {
     unit: 'Kantor Bandara Hang Nadim',
@@ -34,6 +37,7 @@ const SURPLUS_DEFISIT_DATA = [
     belanja: 142.0,
     net: 173.0, // Surplus (+173 M)
     keterangan: 'Penerimaan jasa kebandarudaraan & konsesi kargo',
+    kategori: 'Surplus Operasional',
   },
   {
     unit: 'Dit. Pelabuhan & Terminal',
@@ -42,6 +46,7 @@ const SURPLUS_DEFISIT_DATA = [
     belanja: 159.0,
     net: 67.2, // Surplus (+67.2 M)
     keterangan: 'Jasa labuh, tambat & terminal kargo curah/peti kemas',
+    kategori: 'Surplus Operasional',
   },
   {
     unit: 'Dit. Fasilitas Usaha & Promosi',
@@ -50,6 +55,7 @@ const SURPLUS_DEFISIT_DATA = [
     belanja: 68.0,
     net: -40.0, // Defisit (-40 M)
     keterangan: 'Subsidi promosi investasi asing & pemeliharaan aset umum',
+    kategori: 'Penerima Subsidi',
   },
   {
     unit: 'Dit. Pembangunan Infrastruktur',
@@ -58,6 +64,7 @@ const SURPLUS_DEFISIT_DATA = [
     belanja: 183.0,
     net: -171.0, // Defisit (-171 M)
     keterangan: 'Belanja modal jalan arteri, drainase & fasilitas umum',
+    kategori: 'Penerima Subsidi Terbesar',
   },
 ];
 
@@ -70,8 +77,7 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
   const [viewMode, setViewMode] = useState<'chart' | 'table'>('chart');
   const [hoveredUnit, setHoveredUnit] = useState<string | null>(null);
 
-  // Diverging Bar Calculations
-  // Range from -200 to +400 M
+  // Diverging Bar Calculations (-200 to +400 M)
   const minVal = -200;
   const maxVal = 400;
   const totalRange = maxVal - minVal; // 600
@@ -79,16 +85,19 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
 
   return (
     <div id="fiskal-section" className="space-y-4 font-sans select-none">
-      {/* 1. TOP ROW: KESEIMBANGAN SURPLUS & DEFISIT (TABLEAU DIVERGING BAR CHART) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
+      {/* KESEIMBANGAN SURPLUS & DEFISIT PER UNIT KERJA (STANDARISASI VISUAL MODEL SEPERTI LAINNYA) */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
         {/* Modern Executive Card Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#4E79A7]" />
-              <span>ANALISIS SURPLUS &amp; DEFISIT OPERASIONAL</span>
+              <span className="w-2 h-2 rounded-full bg-[#59A14F]" />
+              <span>ANALISIS FISKAL &amp; SUBSIDI SILANG BLU</span>
+              <span className="text-[10px] text-slate-400 font-mono bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">
+                Item #16
+              </span>
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
                 Keseimbangan Surplus &amp; Defisit per Unit Kerja
               </h3>
@@ -98,69 +107,112 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                   className="px-2.5 py-1 text-xs font-semibold text-[#1F4E79] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
                   title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
                 >
-                  <HelpCircle className="w-3.5 h-3.5" />
+                  <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
                   <span>Formula &amp; Insight</span>
                 </button>
               )}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Surplus sewa lahan &amp; kepelabuhanan mensubsidi silang belanja infrastruktur publik
+              Keseimbangan anggaran operasional: Surplus sewa lahan &amp; kepelabuhanan mensubsidi silang belanja infrastruktur umum
             </p>
           </div>
 
-          {/* Action Controls: Color Legend & View Mode Toggle */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Legend Shelf */}
-            <div className="hidden sm:flex items-center gap-3 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs text-slate-700 shadow-2xs">
-              <span className="font-bold text-slate-400 text-[10px] uppercase tracking-wider">Marks:</span>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 bg-[#59A14F] inline-block rounded-full" />
-                <span className="font-medium text-xs">Surplus (+Rp M)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 bg-[#E15759] inline-block rounded-full" />
-                <span className="font-medium text-xs">Defisit (-Rp M)</span>
-              </div>
-            </div>
-
-            {/* View Toggle */}
-            <div className="flex items-center border border-slate-200 bg-slate-100/80 p-1 rounded-xl shadow-2xs">
+          {/* Right Controls: View Mode Toggle */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* View Mode Switcher */}
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs font-medium border border-slate-200/80">
               <button
                 onClick={() => setViewMode('chart')}
-                className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1 ${
                   viewMode === 'chart'
-                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/80 font-bold'
+                    ? 'bg-white text-[#002B49] font-bold shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
-                title="Tampilkan Diagram Batang"
+                title="Format Tampilan: Tableau Diverging Bar Chart"
               >
-                <BarChart3 className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Visual Bar</span>
+                <BarChart3 className="w-3 h-3" />
+                <span>Visual Bar</span>
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1 ${
                   viewMode === 'table'
-                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/80 font-bold'
+                    ? 'bg-white text-[#002B49] font-bold shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
-                title="Tampilkan Tabel Crosstab"
+                title="Format Tampilan: Tabel In-Cell Crosstab"
               >
-                <TableIcon className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Crosstab</span>
+                <TableIcon className="w-3 h-3" />
+                <span>Tabel In-Cell</span>
               </button>
-            </div>
-
-            {/* Net Total KPI Badge */}
-            <div className="bg-[#EBF3E8] border border-[#59A14F]/40 px-3 py-1.5 rounded-xl text-xs font-mono text-[#2B542C] font-bold shadow-2xs">
-              Netto: +Rp 196,0 M
             </div>
           </div>
         </div>
 
+        {/* Executive BAN Strip (2 Tiles: Net Surplus & Keseluruhan Jumlah Defisit) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div
+            onClick={() => onExplainKpi?.('keseimbangan_surplus')}
+            className="p-3 bg-slate-50/90 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
+            title="Klik untuk membuka formula Surplus Konsolidasi"
+          >
+            <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+              <span>Net Surplus Konsolidasi</span>
+              <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="text-xl sm:text-2xl font-black text-[#002B49] font-mono leading-tight">
+              +Rp 196,2 M
+            </div>
+            <div className="text-[10px] text-emerald-700 font-bold mt-0.5 truncate">
+              Penerimaan Lebih Tinggi dari Belanja
+            </div>
+          </div>
+
+          <div
+            onClick={() => onExplainKpi?.('keseimbangan_surplus')}
+            className="p-3 bg-slate-50/90 hover:bg-rose-50/70 border border-slate-200/80 hover:border-rose-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
+            title="Klik untuk melihat rincian keseluruhan defisit unit kerja"
+          >
+            <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+              <span>Keseluruhan Jumlah Defisit</span>
+              <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="text-xl sm:text-2xl font-black text-[#E15759] font-mono leading-tight">
+              -Rp 211,0 M
+            </div>
+            <div className="text-[10px] text-rose-700 font-semibold mt-0.5 truncate">
+              Dit. Infrastruktur (-Rp 171,0 M) &amp; Fasilitas (-Rp 40,0 M)
+            </div>
+          </div>
+        </div>
+
+        {/* Marks & Legend Shelf Standardized */}
+        <div className="px-3.5 py-2 bg-slate-50/70 rounded-xl border border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-slate-800 text-[11px]">Marks &amp; Saldo Fiskal:</span>
+            <div className="flex items-center gap-3 text-[11px] flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#59A14F]" />
+                <span>Surplus Operasional (+Rp M)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#E15759]" />
+                <span>Defisit Operasional (-Rp M)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2.5 border-r-2 border-slate-700 inline-block" />
+                <span>Titik Nol Keseimbangan (Rp 0 M)</span>
+              </div>
+            </div>
+          </div>
+          <span className="text-[10.5px] font-mono text-slate-400">
+            Show Me #6 (Diverging Bar) &amp; #1 (Crosstab)
+          </span>
+        </div>
+
         {/* Tableau Shelves Mapping Badge */}
         <TableauShelvesBadge
-          showMe="Show Me #6 (Diverging Bar) / #1 (Crosstab)"
+          showMe="Show Me #6 (Diverging Bar) / #1 (Crosstab with In-Cell Bullet)"
           rows="[unit] (Unit Kerja Pengampu)"
           columns="[Net Variance] = SUM([pendapatan]) - SUM([belanja])"
           color="IF [Net Variance] >= 0 THEN 'Surplus' ELSE 'Defisit' END"
@@ -173,21 +225,23 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
           {viewMode === 'chart' ? (
             <div className="space-y-4">
               {/* Diverging Bar Chart Canvas */}
-              <div className="relative border border-slate-200/80 bg-slate-50/50 rounded-xl p-4">
-                {/* Axis Scale Top */}
-                <div className="relative h-6 border-b border-slate-300 mb-3 text-[10px] font-mono text-slate-500">
-                  <span className="absolute left-[33.33%] -translate-x-1/2 font-bold text-slate-700">Rp 0 M</span>
+              <div className="relative border border-slate-200/80 bg-white rounded-xl p-4 shadow-2xs space-y-3">
+                {/* Axis Scale Top with Zero Indicator */}
+                <div className="relative h-6 border-b border-slate-200 mb-2 text-[10px] font-mono text-slate-500">
                   <span className="absolute left-0 text-slate-400">-Rp 200 M</span>
                   <span className="absolute left-[16.66%] -translate-x-1/2 text-slate-400">-Rp 100 M</span>
+                  <span className="absolute left-[33.33%] -translate-x-1/2 font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300">
+                    Rp 0 M (Titik Impas)
+                  </span>
                   <span className="absolute left-[50%] -translate-x-1/2 text-slate-400">+Rp 100 M</span>
                   <span className="absolute left-[66.66%] -translate-x-1/2 text-slate-400">+Rp 200 M</span>
                   <span className="absolute left-[83.33%] -translate-x-1/2 text-slate-400">+Rp 300 M</span>
                   <span className="absolute right-0 text-slate-400">+Rp 400 M</span>
                 </div>
 
-                {/* Center Zero Gridline */}
+                {/* Center Zero Gridline across chart */}
                 <div
-                  className="absolute top-10 bottom-10 w-px bg-slate-400 z-10"
+                  className="absolute top-12 bottom-6 w-0.5 bg-slate-400/90 z-10 pointer-events-none"
                   style={{ left: `calc(${zeroPosPercent}% + 16px)` }}
                 />
 
@@ -201,34 +255,43 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                     return (
                       <div
                         key={item.unit}
+                        onClick={() => onExplainKpi?.('keseimbangan_surplus')}
                         onMouseEnter={() => setHoveredUnit(item.unit)}
                         onMouseLeave={() => setHoveredUnit(null)}
-                        className={`p-2 transition-colors border ${
-                          isHovered ? 'bg-slate-50 border-slate-300 shadow-2xs' : 'border-transparent'
+                        className={`p-2.5 rounded-xl transition-all cursor-pointer border ${
+                          isHovered
+                            ? 'bg-blue-50/60 border-blue-300 shadow-2xs ring-1 ring-blue-200'
+                            : 'bg-slate-50/60 border-slate-200/70 hover:bg-slate-50'
                         }`}
+                        title="Klik untuk membuka formula perhitungan Keseimbangan Fiskal"
                       >
                         {/* Unit Label and details */}
-                        <div className="flex items-center justify-between text-xs mb-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1 mb-1.5">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-800">{item.unit}</span>
-                            <span className="text-[11px] text-slate-400 font-normal">
+                            <span className="font-bold text-slate-900 group-hover:text-blue-700">
+                              {item.unit}
+                            </span>
+                            <span className="text-[10.5px] text-slate-500 font-sans hidden sm:inline">
                               ({item.keterangan})
                             </span>
+                            <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded font-mono border border-blue-200">
+                              Rumus
+                            </span>
                           </div>
-                          <div className="flex items-center gap-3 text-[11px] font-mono">
+                          <div className="flex items-center gap-2.5 text-[11px] font-mono shrink-0">
                             <span className="text-slate-500">
-                              Pendapatan: <strong className="text-slate-800">Rp {item.pendapatan.toFixed(1)} M</strong>
+                              P: <strong className="text-slate-800">Rp {item.pendapatan.toFixed(1)} M</strong>
                             </span>
                             <span className="text-slate-300">|</span>
                             <span className="text-slate-500">
-                              Belanja: <strong className="text-slate-800">Rp {item.belanja.toFixed(1)} M</strong>
+                              B: <strong className="text-slate-800">Rp {item.belanja.toFixed(1)} M</strong>
                             </span>
                             <span className="text-slate-300">|</span>
                             <span
-                              className={`font-bold px-1.5 py-0.5 ${
+                              className={`font-black px-2 py-0.5 rounded text-[10.5px] ${
                                 isPositive
-                                  ? 'bg-[#EBF3E8] text-[#2B542C]'
-                                  : 'bg-[#FDEDEC] text-[#922B21]'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  : 'bg-rose-100 text-rose-800 border border-rose-200'
                               }`}
                             >
                               {isPositive ? `+Rp ${item.net.toFixed(1)} M` : `-Rp ${Math.abs(item.net).toFixed(1)} M`}
@@ -237,17 +300,17 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                         </div>
 
                         {/* Bar Track */}
-                        <div className="relative h-6 bg-slate-100 border border-slate-200">
+                        <div className="relative h-6 bg-slate-200/80 rounded-md overflow-hidden">
                           {/* Zero Line Marker inside bar */}
                           <div
-                            className="absolute top-0 bottom-0 w-px bg-slate-400 z-10"
+                            className="absolute top-0 bottom-0 w-0.5 bg-slate-500 z-10"
                             style={{ left: `${zeroPosPercent}%` }}
                           />
 
                           {/* Colored Tableau Bar */}
                           {isPositive ? (
                             <div
-                              className="absolute top-0 bottom-0 bg-[#59A14F] hover:bg-[#4E8F45] transition-all flex items-center pl-2 text-[10px] font-mono font-bold text-white shadow-2xs"
+                              className="absolute top-0 bottom-0 bg-[#59A14F] hover:bg-[#4E8F45] rounded-r-md transition-all flex items-center pl-2.5 text-[10px] font-mono font-bold text-white shadow-2xs"
                               style={{
                                 left: `${zeroPosPercent}%`,
                                 width: `${barWidthPct}%`,
@@ -257,7 +320,7 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                             </div>
                           ) : (
                             <div
-                              className="absolute top-0 bottom-0 bg-[#E15759] hover:bg-[#C94749] transition-all flex items-center justify-end pr-2 text-[10px] font-mono font-bold text-white shadow-2xs"
+                              className="absolute top-0 bottom-0 bg-[#E15759] hover:bg-[#C94749] rounded-l-md transition-all flex items-center justify-end pr-2.5 text-[10px] font-mono font-bold text-white shadow-2xs"
                               style={{
                                 right: `${100 - zeroPosPercent}%`,
                                 width: `${barWidthPct}%`,
@@ -271,95 +334,107 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                     );
                   })}
                 </div>
-
-                {/* Bottom Reference Note */}
-                <div className="mt-4 pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between text-[11px] text-slate-500">
-                  <span>
-                    Tableau Calculation: <code>[Net Surplus / Defisit] = SUM([Realisasi Pendapatan]) - SUM([Realisasi Belanja])</code>
-                  </span>
-                  <span className="font-semibold text-slate-700">
-                    Kaidah Penganggaran BLU: Surplus sewa lahan & kepelabuhanan mensubsidi silang belanja infrastruktur publik.
-                  </span>
-                </div>
               </div>
             </div>
           ) : (
-            /* Crosstab View */
-            <div className="overflow-x-auto rounded-xl border border-slate-200/80">
-              <table className="w-full text-left text-xs whitespace-nowrap border-collapse">
-                <thead className="bg-slate-50/80 text-slate-700 font-bold border-b border-slate-200">
+            /* Crosstab View (Show Me #1 Matching BiroKeuanganFinancialCard) */
+            <div className="overflow-x-auto rounded-xl border border-slate-200/80 shadow-2xs">
+              <table className="w-full text-left text-xs border-collapse min-w-[720px]">
+                <thead className="bg-[#0B2545] text-white font-bold text-[10.5px]">
                   <tr>
-                    <th className="py-3 px-3.5">Unit Kerja Pengampu</th>
-                    <th className="py-3 px-3.5 text-right">Realisasi Pendapatan</th>
-                    <th className="py-3 px-3.5 text-right">Realisasi Belanja</th>
-                    <th className="py-3 px-3.5 text-right">Net Variance (Surplus/Defisit)</th>
-                    <th className="py-3 px-3.5 text-center">Klasifikasi Fiskal</th>
-                    <th className="py-3 px-3.5">Catatan Tata Kelola</th>
+                    <th className="py-2.5 px-3">UNIT KERJA PENGAMPU (KLIK RUMUS)</th>
+                    <th className="py-2.5 px-3 text-right">PENDAPATAN</th>
+                    <th className="py-2.5 px-3 text-right">BELANJA</th>
+                    <th className="py-2.5 px-3 text-right">NET (SURPLUS/DEFISIT)</th>
+                    <th className="py-2.5 px-3 text-center">KLASIFIKASI FISKAL</th>
+                    <th className="py-2.5 px-3">CATATAN TATA KELOLA ANGGARAN</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
-                  {SURPLUS_DEFISIT_DATA.map((item) => (
-                    <tr key={item.unit} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-2.5 px-3.5 font-sans font-semibold text-slate-900">
-                        {item.unit}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-right text-slate-700">
-                        Rp {item.pendapatan.toFixed(1)} M
-                      </td>
-                      <td className="py-2.5 px-3.5 text-right text-slate-700">
-                        Rp {item.belanja.toFixed(1)} M
-                      </td>
-                      <td
-                        className={`py-2.5 px-3.5 text-right font-bold ${
-                          item.net >= 0 ? 'text-[#2B542C]' : 'text-[#922B21]'
+                <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
+                  {SURPLUS_DEFISIT_DATA.map((item, idx) => {
+                    const isEven = idx % 2 === 0;
+
+                    return (
+                      <tr
+                        key={item.unit}
+                        onClick={() => onExplainKpi?.('keseimbangan_surplus')}
+                        className={`hover:bg-blue-50/70 transition-colors cursor-pointer group ${
+                          isEven ? 'bg-white' : 'bg-slate-50/50'
                         }`}
+                        title="Klik untuk melihat formula Keseimbangan Fiskal"
                       >
-                        {item.net >= 0 ? `+Rp ${item.net.toFixed(1)} M` : `-Rp ${Math.abs(item.net).toFixed(1)} M`}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-center font-sans">
-                        <span
-                          className={`px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full ${
-                            item.net >= 0
-                              ? 'bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40'
-                              : 'bg-[#FDEDEC] text-[#922B21] border border-[#E15759]/40'
+                        <td className="py-2.5 px-3 font-sans font-bold text-slate-900 group-hover:text-blue-700 flex items-center justify-between gap-1">
+                          <span>{item.unit}</span>
+                          <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                        </td>
+                        <td className="py-2.5 px-3 text-right text-slate-700">
+                          Rp {item.pendapatan.toFixed(1)} M
+                        </td>
+                        <td className="py-2.5 px-3 text-right text-slate-700">
+                          Rp {item.belanja.toFixed(1)} M
+                        </td>
+                        <td
+                          className={`py-2.5 px-3 text-right font-bold ${
+                            item.net >= 0 ? 'text-[#2B542C]' : 'text-[#922B21]'
                           }`}
                         >
-                          {item.net >= 0 ? 'Surplus (Donor)' : 'Defisit (Penerima Subsidi)'}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-3.5 font-sans text-slate-600 text-xs">
-                        {item.keterangan}
-                      </td>
-                    </tr>
-                  ))}
+                          {item.net >= 0 ? `+Rp ${item.net.toFixed(1)} M` : `-Rp ${Math.abs(item.net).toFixed(1)} M`}
+                        </td>
+                        <td className="py-2.5 px-3 text-center font-sans">
+                          <span
+                            className={`px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full ${
+                              item.net >= 0
+                                ? 'bg-[#EBF3E8] text-[#2B542C] border border-[#59A14F]/40'
+                                : 'bg-[#FDEDEC] text-[#922B21] border border-[#E15759]/40'
+                            }`}
+                          >
+                            {item.net >= 0 ? 'Surplus (Donor)' : 'Defisit (Penerima)'}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3 font-sans text-slate-600 text-xs">
+                          {item.keterangan}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
-                <tfoot className="bg-slate-50/90 font-bold border-t-2 border-slate-200 font-mono text-xs">
+                <tfoot className="bg-slate-100 font-bold border-t-2 border-slate-300 font-mono text-xs">
                   <tr>
-                    <td className="py-3 px-3.5 font-sans text-slate-900">
+                    <td className="py-3 px-3 font-sans text-slate-900 uppercase tracking-wider text-[10.5px]">
                       TOTAL KONSOLIDASI (NETTO)
                     </td>
-                    <td className="py-3 px-3.5 text-right text-slate-900">
+                    <td className="py-3 px-3 text-right text-slate-900">
                       Rp 999,2 M
                     </td>
-                    <td className="py-3 px-3.5 text-right text-slate-900">
+                    <td className="py-3 px-3 text-right text-slate-900">
                       Rp 803,0 M
                     </td>
-                    <td className="py-3 px-3.5 text-right text-[#2B542C]">
+                    <td className="py-3 px-3 text-right font-black text-[#2B542C] text-sm">
                       +Rp 196,2 M
                     </td>
-                    <td className="py-3 px-3.5 text-center font-sans">
-                      <span className="bg-[#EBF3E8] text-[#2B542C] px-2.5 py-0.5 text-[10px] uppercase font-bold rounded-full">
+                    <td className="py-3 px-3 text-center font-sans">
+                      <span className="bg-[#EBF3E8] text-[#2B542C] px-2.5 py-0.5 text-[10px] uppercase font-bold rounded-full border border-[#59A14F]/40">
                         Surplus Bersih
                       </span>
                     </td>
-                    <td className="py-3 px-3.5 font-sans text-slate-600 text-xs">
-                      Kondisi likuiditas anggaran BP Batam terkonsolidasi sehat
+                    <td className="py-3 px-3 font-sans text-slate-600 text-xs">
+                      Kondisi likuiditas fiskal BP Batam prima &amp; mandiri
                     </td>
                   </tr>
                 </tfoot>
               </table>
             </div>
           )}
+        </div>
+
+        {/* Interpretasi Tata Kelola Subsidi Silang */}
+        <div className="p-3 bg-slate-50 border border-slate-200/90 rounded-xl text-xs text-slate-700 leading-relaxed shadow-2xs">
+          <span className="font-bold text-[#002B49] block mb-1">
+            💡 Prinsip Tata Kelola Subsidi Silang Anggaran BLU BP Batam:
+          </span>
+          <p className="text-[11.5px] text-slate-600">
+            Defisit pada unit kerja pembangunan infrastruktur publik (Rp -171,0 M) dan promosi fasilitas usaha (Rp -40,0 M) <strong>bukan merupakan kerugian operasional</strong>, melainkan investasi penyediaan fasilitas publik yang sepenuhnya disubsidi silang secara tertutup oleh surplus dari unit pengelola lahan industri (Rp +367,0 M) serta konsesi kebandarudaraan &amp; pelabuhan (Rp +240,2 M). Hal ini mencerminkan kemandirian fiskal BLU BP Batam yang tidak bergantung pada transfer APBN.
+          </p>
         </div>
 
         {/* Worksheet Caption / Footnote */}

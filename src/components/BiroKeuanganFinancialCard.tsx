@@ -30,7 +30,7 @@ interface BiroKeuanganFinancialCardProps {
 }
 
 type FinancialTabType = 'pendapatan' | 'belanja';
-type VisualModeType = 'incell_bullet' | 'horizontal_bar';
+type VisualModeType = 'horizontal_bar' | 'incell_bullet';
 
 export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps> = ({
   revenueItems,
@@ -41,7 +41,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
   onExplainKpi,
 }) => {
   const [activeTab, setActiveTab] = useState<FinancialTabType>('pendapatan');
-  const [visualMode, setVisualMode] = useState<VisualModeType>('incell_bullet');
+  const [visualMode, setVisualMode] = useState<VisualModeType>('horizontal_bar');
   const [showTableauGuide, setShowTableauGuide] = useState(false);
 
   // Calculations for Revenue BANs
@@ -67,13 +67,13 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden flex flex-col font-sans select-none">
-      {/* 1. Header with Data Tab Switcher & Creative Visual Mode Switcher */}
-      <div className="px-4 py-3.5 border-b border-slate-200 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+      {/* 1. Header with Data Tab Switcher & Creative Visual Mode Switcher matching Image 2 & 3 */}
+      <div className="px-4 py-3.5 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
+          <div className="w-1.5 h-4 bg-[#002B49] rounded-2xs" />
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+              <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#002B49]">
                 Performa Keuangan BLU BP Batam • TA {selectedYear}
               </h3>
               {selectedUnit !== 'ALL' && (
@@ -83,105 +83,94 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               )}
             </div>
             <p className="text-[11px] text-slate-500 font-normal">
-              Visualisasi terintegrasi Tableau: In-Cell Bullet, Dual-Axis Bar, dan Heatmap matriks
+              Realisasi Kas Masuk PNBP &amp; Serapan Belanja Satker Terhadap Alokasi DIPA BLU
             </p>
           </div>
         </div>
 
-        {/* Data Tabs */}
-        <div className="flex items-center bg-slate-200/80 p-0.5 rounded-lg text-xs font-semibold flex-wrap">
+        {/* Sweet Swap Mode Switcher */}
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold border border-slate-200/80">
           <button
             onClick={() => setActiveTab('pendapatan')}
-            className={`px-3 py-1.5 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'pendapatan'
-                ? 'bg-[#1F4E79] text-white shadow-2xs font-bold'
+                ? 'bg-[#002B49] text-white shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
             <span>Pendapatan PNBP</span>
+            <span className="ml-1 text-[10px] opacity-80 font-mono hidden sm:inline">({avgRevCapaian}%)</span>
           </button>
           <button
             onClick={() => setActiveTab('belanja')}
-            className={`px-3 py-1.5 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'belanja'
-                ? 'bg-[#1F4E79] text-white shadow-2xs font-bold'
+                ? 'bg-[#002B49] text-white shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Wallet className="w-3.5 h-3.5" />
             <span>Realisasi Belanja</span>
+            <span className="ml-1 text-[10px] opacity-80 font-mono hidden sm:inline">({avgExpSerapan}%)</span>
           </button>
         </div>
       </div>
 
-      {/* 2. Tableau BAN Strip */}
-      <div className="p-4 border-b border-slate-200 bg-white grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+      {/* 2. Executive 4-Tile BAN Strip (Matching Image 3 Top Metric Tiles) */}
+      <div className="p-4 border-b border-slate-200 bg-slate-50/50 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
         {activeTab === 'pendapatan' && (
           <>
             <div
               onClick={() => onExplainKpi?.('rev_target')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Target Perkin {selectedYear}</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Target Perkin {selectedYear}
               </span>
               <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
                 Rp {totalRevTarget.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-500">10 Satker Penghasil</span>
+              <span className="text-[10px] text-slate-400 font-medium">10 Satker Penghasil</span>
             </div>
+
             <div
               onClick={() => onExplainKpi?.('rev_real')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-emerald-300 hover:bg-emerald-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-emerald-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-emerald-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Realisasi YTD ({selectedMonth})</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">
+                Realisasi Kas Masuk
               </span>
-              <div className="text-xl font-black text-emerald-600 font-mono mt-0.5">
+              <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
                 Rp {totalRevReal.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-emerald-700 font-semibold">Kas Masuk BLU</span>
+              <span className="text-[10px] text-emerald-600 font-bold">{avgRevCapaian}% Capaian YTD</span>
             </div>
-            <div
-              onClick={() => onExplainKpi?.('rev_capaian')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
-            >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>% Capaian Target</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
-              </span>
-              <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5">
-                {avgRevCapaian}%
-              </div>
-              <span className="text-[10px] text-emerald-600 font-semibold">Benchmark Q2: 50,0%</span>
-            </div>
+
             <div
               onClick={() => onExplainKpi?.('rev_sisa')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-rose-300 hover:bg-rose-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-rose-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Sisa Target Perkin</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Sisa Target Tahunan
               </span>
               <div className="text-xl font-black text-rose-600 font-mono mt-0.5">
                 Rp {sisaRevTarget.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-500">Hingga Akhir TA 2026</span>
+              <span className="text-[10px] text-slate-400 font-medium">Hingga Akhir TA {selectedYear}</span>
+            </div>
+
+            <div
+              onClick={() => onExplainKpi?.('rev_capaian')}
+              className="p-3 bg-blue-50/70 border border-blue-200/90 rounded-xl shadow-2xs"
+            >
+              <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
+                Status Kinerja Q2
+              </span>
+              <div className="text-xl font-black text-[#002B49] font-mono mt-0.5">
+                On-Track
+              </div>
+              <span className="text-[10px] text-blue-700 font-bold">Benchmark Q2: 50,0%</span>
             </div>
           </>
         )}
@@ -190,67 +179,54 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
           <>
             <div
               onClick={() => onExplainKpi?.('exp_pagu')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Total Pagu DIPA {selectedYear}</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Total Pagu DIPA {selectedYear}
               </span>
               <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
                 Rp {totalExpPagu.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-500">Alokasi DIPA BLU</span>
+              <span className="text-[10px] text-slate-400 font-medium">Alokasi Belanja Satker</span>
             </div>
+
             <div
               onClick={() => onExplainKpi?.('exp_real')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-blue-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Realisasi Belanja YTD</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-blue-900 uppercase tracking-wider block">
+                Realisasi Belanja
               </span>
-              <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5">
+              <div className="text-xl font-black text-blue-700 font-mono mt-0.5">
                 Rp {totalExpReal.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-blue-700 font-semibold">SP2D Cair</span>
+              <span className="text-[10px] text-blue-600 font-bold">{avgExpSerapan}% Serapan Anggaran</span>
             </div>
-            <div
-              onClick={() => onExplainKpi?.('exp_serapan')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
-            >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>% Serapan Pagu</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
-              </span>
-              <div className="text-xl font-black text-[#1F4E79] font-mono mt-0.5">
-                {avgExpSerapan}%
-              </div>
-              <span className="text-[10px] text-slate-500">Benchmark Q2: 35,0%</span>
-            </div>
+
             <div
               onClick={() => onExplainKpi?.('exp_sisa')}
-              className={`p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl transition-all ${
-                onExplainKpi ? 'cursor-pointer hover:border-slate-400 hover:bg-slate-100 hover:shadow-2xs group' : ''
-              }`}
-              title={onExplainKpi ? "Klik untuk melihat formula & penjelasan KPI lengkap" : undefined}
+              className="p-3 bg-white border border-slate-200/90 rounded-xl shadow-2xs"
             >
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-slate-700 uppercase tracking-wider flex items-center justify-center gap-1">
-                <span>Sisa Pagu Anggaran</span>
-                {onExplainKpi && <HelpCircle className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />}
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Sisa Pagu Anggaran
               </span>
               <div className="text-xl font-black text-slate-800 font-mono mt-0.5">
                 Rp {sisaExpPagu.toFixed(1)} M
               </div>
-              <span className="text-[10px] text-slate-500">Kebutuhan Q3 &amp; Q4</span>
+              <span className="text-[10px] text-slate-400 font-medium">Alokasi Q3 &amp; Q4</span>
+            </div>
+
+            <div
+              onClick={() => onExplainKpi?.('exp_serapan')}
+              className="p-3 bg-emerald-50/70 border border-emerald-200/90 rounded-xl shadow-2xs"
+            >
+              <span className="text-[10px] font-bold text-emerald-900 uppercase tracking-wider block">
+                Kontrol Efisiensi IKPA
+              </span>
+              <div className="text-xl font-black text-emerald-700 font-mono mt-0.5">
+                92,4 Poin
+              </div>
+              <span className="text-[10px] text-emerald-600 font-bold">Predikat Sangat Baik</span>
             </div>
           </>
         )}
@@ -484,58 +460,72 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
 
             {/* VIEW MODE 2: SIDE-BY-SIDE HORIZONTAL BAR (SHOW ME #6 TABLEAU) */}
             {visualMode === 'horizontal_bar' && (
-              <div className="space-y-3.5 py-1">
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1 border-b border-slate-200">
-                  <span>Unit Kerja Penghasil (Rows)</span>
+              <div className="space-y-3 py-1">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-500 pb-2 border-b border-slate-200">
+                  <span className="uppercase tracking-wider text-[#002B49]">10 Satker Penghasil PNBP (Peringkat Kinerja)</span>
                   <div className="flex items-center gap-4 text-[11px] font-mono">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-emerald-600" />
-                      <span>Realisasi YTD (M)</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-xs bg-[#002B49]" />
+                      <span>Realisasi YTD</span>
                     </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
-                      <span>Target Perkin (M)</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-xs bg-slate-200" />
+                      <span>Target Perkin</span>
                     </span>
                     <span className="text-blue-700 font-bold">
-                      Ref Line Q2: 50%
+                      Benchmark Q2: 50%
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  {revenueItems.map((item) => {
+                <div className="space-y-2.5">
+                  {revenueItems.map((item, idx) => {
                     const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
-                    const status = getStatusBadge(capaianPct, 50);
+                    const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
 
                     return (
-                      <div key={item.id} className="space-y-1">
+                      <div
+                        key={item.id}
+                        className="p-3 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl transition-all shadow-2xs space-y-2"
+                      >
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-slate-800">{item.sumber}</span>
-                          <div className="flex items-center gap-3 font-mono text-[11px]">
-                            <span className="font-bold text-slate-900">
-                              Rp {item.realisasi.toFixed(1)} M{' '}
-                              <span className="text-slate-400 font-normal">/ Rp {item.target.toFixed(1)} M</span>
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-md bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[10px]">
+                              {idx + 1}
                             </span>
-                            <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-bold border ${status.bg}`}>
+                            <span className="font-bold text-slate-900 text-xs sm:text-[13px]">{item.sumber}</span>
+                          </div>
+                          <div className="flex items-center gap-3 font-mono text-xs">
+                            <span className="text-slate-500 font-medium">
+                              <span className="font-black text-slate-900">Rp {item.realisasi.toFixed(1)} M</span>
+                              {' '}/ Rp {item.target.toFixed(1)} M
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-blue-50 text-blue-800 border border-blue-200">
                               {capaianPct.toFixed(1)}%
                             </span>
                           </div>
                         </div>
 
                         {/* Dual Bar Track with 50% Reference Line */}
-                        <div className="relative w-full bg-slate-100 h-4 rounded-md overflow-hidden border border-slate-200/80">
+                        <div className="relative w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/60">
                           {/* 50% Q2 Reference Line Marker */}
                           <div
                             className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
                             style={{ left: '50%' }}
                             title="Tableau Reference Line: Q2 Benchmark 50%"
                           />
-
                           {/* Realisasi Bar Fill */}
                           <div
-                            className={`h-full rounded-xs transition-all ${status.barColor}`}
+                            className="h-full rounded-full transition-all bg-[#002B49]"
                             style={{ width: `${Math.min(100, capaianPct)}%` }}
                           />
+                        </div>
+
+                        <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                          <span>Sisa Target: Rp {sisa.toFixed(1)} M</span>
+                          <span className={capaianPct >= 50 ? 'text-emerald-600 font-bold' : 'text-slate-500'}>
+                            {capaianPct >= 50 ? 'Melampaui Benchmark Q2' : 'Menuju Target Semester I'}
+                          </span>
                         </div>
                       </div>
                     );

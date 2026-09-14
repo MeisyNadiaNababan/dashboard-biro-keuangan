@@ -112,6 +112,15 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
           themeColor: '#0D9488',
           subLabel: '48 Aktif • 10 DRC Node',
         };
+      case 'panjang_fiber':
+        return {
+          acronym: 'FO-KM',
+          icon: Network,
+          badgeBg: 'bg-blue-600',
+          badgeText: 'text-white',
+          themeColor: '#2563EB',
+          subLabel: '8 Ruas Koridor Utama',
+        };
       case 'jumlah_aplikasi':
         return {
           acronym: 'APP',

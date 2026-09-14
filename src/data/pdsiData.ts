@@ -140,6 +140,46 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     colorTheme: 'emerald',
     formulaRef: 'Item #13: Total Server = SUM([JUMLAH]) Unit Server dan Node Storage',
   },
+  {
+    id: 'panjang_fiber',
+    title: 'Panjang Jaringan FO',
+    value: '284,5 KM',
+    target: 'Target: 300 KM',
+    percentage: '81,4% Utilitas Koridor',
+    trend: {
+      direction: 'up',
+      value: '+12,5 km',
+      period: '(YTD)',
+      isPositive: true,
+    },
+    sparkline: [240, 252, 265, 270, 275, 280, 284.5],
+    badge: {
+      text: 'Backbone Aktif',
+      variant: 'info',
+    },
+    colorTheme: 'blue',
+    formulaRef: 'Item #2: Panjang FO = SUM([PANJANG]) di 8 Ruas Jalan Utama Batam',
+  },
+  {
+    id: 'jumlah_aplikasi',
+    title: 'Jumlah Aplikasi SPBE',
+    value: '114 Aplikasi',
+    target: 'Mandat SPBE Nasional',
+    percentage: '84 Aktif • 30 Integrasi',
+    trend: {
+      direction: 'up',
+      value: '+3 App',
+      period: '(YTD)',
+      isPositive: true,
+    },
+    sparkline: [98, 102, 105, 108, 110, 112, 114],
+    badge: {
+      text: '100% Terkatalog',
+      variant: 'success',
+    },
+    colorTheme: 'purple',
+    formulaRef: 'Item #14: Total Aplikasi = COUNT([NAMA APLIKASI]) di Katalog Data SPBE',
+  },
 ];
 
 // Data Center Racks (Item #8 di PDF)

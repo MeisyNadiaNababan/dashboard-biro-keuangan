@@ -9,7 +9,9 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Calculator,
-  Sparkles
+  Sparkles,
+  Network,
+  AppWindow
 } from 'lucide-react';
 import { KpiMetric } from '../types';
 import { TableauShelvesBadge } from './TableauShelvesBadge';
@@ -19,14 +21,14 @@ interface KpiMetricsRowProps {
   onSelectMetric?: (metricId: string) => void;
 }
 
-// Micro vertical bar visual matching Image 2 (CRMS Total MTD Revenue card)
+// Micro vertical bar visual matching CRMS Total MTD Revenue card
 const MicroBarSparkline: React.FC<{
   data?: number[];
   color: string;
 }> = ({ data = [40, 55, 60, 75, 85, 95], color }) => {
   const max = Math.max(...data, 1);
   return (
-    <div className="flex items-end gap-1 h-6 w-14 shrink-0 justify-end">
+    <div className="flex items-end gap-0.5 h-5 sm:h-5.5 w-10 sm:w-12 shrink-0 justify-end">
       {data.slice(-5).map((val, i) => {
         const heightPct = Math.max(20, Math.round((val / max) * 100));
         const isLast = i === 4;
@@ -127,6 +129,33 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           trendPositive: true,
           benchmarkText: 'Target ≥ 90,0 Poin',
         };
+      case 'panjang_fiber':
+      case 'jaringan_fiber':
+        return {
+          acronym: 'FO',
+          icon: Network,
+          badgeBg: 'bg-blue-600',
+          badgeText: 'text-white',
+          themeColor: '#2563EB', // Blue
+          subLabel: '8 Wilayah Vital Batam',
+          pctLabel: '81,4% Utilitas',
+          trendVal: '+12,5 km',
+          trendPositive: true,
+          benchmarkText: 'Target: 300 KM',
+        };
+      case 'jumlah_aplikasi':
+        return {
+          acronym: 'APPS',
+          icon: AppWindow,
+          badgeBg: 'bg-indigo-600',
+          badgeText: 'text-white',
+          themeColor: '#4F46E5', // Indigo
+          subLabel: '84 Aktif • 30 Integrasi',
+          pctLabel: '100% SPBE',
+          trendVal: '+3 App',
+          trendPositive: true,
+          benchmarkText: 'Mandat SPBE',
+        };
       default:
         return {
           acronym: 'KPI',
@@ -134,8 +163,8 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeBg: 'bg-slate-700',
           badgeText: 'text-white',
           themeColor: '#1E293B',
-          subLabel: 'Kinerja Fiskal',
-          pctLabel: '50,0%',
+          subLabel: 'Kinerja Operasional',
+          pctLabel: '100%',
           trendVal: '+0,0%',
           trendPositive: true,
           benchmarkText: 'Target 100%',
@@ -154,87 +183,112 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
         detail="Klik kartu KPI untuk melihat pop-up rumus matematis & breakdown angka riil"
       />
 
-      {/* Grid of 6 Compact CRMS / E-Commerce Style KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+      {/* Header bar matching Image 1 */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-4 bg-[#002B49] rounded-2xs" />
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">
+            Metrik Utama Eksekutif — Biro Keuangan
+          </h3>
+          <span className="text-[10px] text-slate-500 font-mono hidden sm:inline">
+            (Klik kartu untuk melihat formula perhitungan matematis &amp; rincian katalog data)
+          </span>
+        </div>
+        <button
+          onClick={() => onSelectMetric && onSelectMetric('kamus_rumus')}
+          className="text-xs font-semibold text-[#1F4E79] hover:text-[#0B2545] flex items-center gap-1 cursor-pointer transition-colors bg-white px-2.5 py-1 rounded-md border border-slate-200 shadow-2xs hover:bg-slate-50"
+        >
+          <Calculator className="w-3.5 h-3.5" />
+          <span>Kamus Rumus &amp; Formula Keuangan</span>
+        </button>
+      </div>
+
+      {/* Grid of 8 KPI Cards Matching Image 1 Executive Design */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2.5">
         {metrics.map((metric) => {
           const config = getKpiConfig(metric.id);
           const Icon = config.icon;
+
+          // Color assignment for values matching Image 1
+          const getValueColor = (id: string) => {
+            switch (id) {
+              case 'pendapatan':
+                return 'text-slate-900';
+              case 'belanja':
+                return 'text-blue-600';
+              case 'kas_bank':
+                return 'text-slate-900';
+              case 'piutang':
+                return 'text-rose-600';
+              case 'coverage_ratio':
+                return 'text-purple-600';
+              case 'ipa':
+                return 'text-amber-600';
+              case 'panjang_fiber':
+              case 'jaringan_fiber':
+                return 'text-blue-600';
+              case 'jumlah_aplikasi':
+                return 'text-indigo-600';
+              default:
+                return 'text-slate-900';
+            }
+          };
+
+          // Subtitle text matching Image 1 format
+          const getSublabelCaps = (id: string) => {
+            switch (id) {
+              case 'pendapatan':
+                return '40,1% CAPAIAN PERKIN';
+              case 'belanja':
+                return '28,5% SERAPAN PAGU';
+              case 'kas_bank':
+                return 'CADANGAN 3,89 BULAN';
+              case 'piutang':
+                return '73,8% KOLEKTIBEL • 305 DEB';
+              case 'coverage_ratio':
+                return 'PNBP 681M / BELANJA 791M';
+              case 'ipa':
+                return 'STANDAR SAP & KEMENKEU';
+              case 'panjang_fiber':
+              case 'jaringan_fiber':
+                return '1.152 CORE • 81,4% UTIL';
+              case 'jumlah_aplikasi':
+                return '84 AKTIF • 30 INTEGRASI';
+              default:
+                return config.pctLabel.toUpperCase();
+            }
+          };
 
           return (
             <div
               key={metric.id}
               id={`kpi-card-${metric.id}`}
               onClick={() => onSelectMetric && onSelectMetric(metric.id)}
-              className="bg-white rounded-xl border border-slate-200/90 hover:border-blue-400 p-3.5 shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group hover:-translate-y-0.5 active:scale-[0.99] relative overflow-hidden"
-              title="Klik untuk membuka penjelasan lengkap formula & cara kerja KPI"
+              className="bg-white rounded-2xl border border-slate-200/90 hover:border-blue-400 p-3.5 shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group hover:-translate-y-0.5 active:scale-[0.99] relative"
+              title="Klik untuk membuka formula perhitungan & rincian katalog data"
             >
-              {/* Subtle top accent bar */}
-              <div
-                className="absolute top-0 left-0 right-0 h-1 transition-opacity opacity-70 group-hover:opacity-100"
-                style={{ backgroundColor: config.themeColor }}
-              />
+              {/* Card Top: Title on left, Subtle Icon on right */}
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider group-hover:text-blue-700 transition-colors truncate">
+                  {metric.title}
+                </span>
+                <Icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors shrink-0" />
+              </div>
 
-              <div>
-                {/* Header Row: Left Acronym Block (like CRMS MTD Revenue) + Title + Formula Tag */}
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    {/* CRMS-Style Left Colored Badge Block */}
-                    <div
-                      className={`${config.badgeBg} ${config.badgeText} text-[10px] font-black font-mono px-2 py-0.5 rounded-md shadow-2xs shrink-0 flex items-center gap-1`}
-                    >
-                      <Icon className="w-3 h-3" />
-                      <span>{config.acronym}</span>
-                    </div>
-
-                    {/* Full Visible Title without Truncation */}
-                    <h4 className="text-xs font-bold text-slate-800 leading-tight group-hover:text-blue-700 transition-colors">
-                      {metric.title}
-                    </h4>
-                  </div>
-
-                  {/* Micro "Rumus ↗" Pill Indicator */}
-                  <span className="text-[9.5px] font-mono font-semibold px-1.5 py-0.5 rounded bg-slate-100 group-hover:bg-blue-50 text-slate-500 group-hover:text-blue-700 border border-slate-200 group-hover:border-blue-200 transition-colors shrink-0 flex items-center gap-0.5">
-                    <Calculator className="w-2.5 h-2.5" />
-                    <span>Rumus</span>
-                  </span>
-                </div>
-
-                {/* Big Number Figure */}
-                <div className="my-1.5">
-                  <div className="text-xl sm:text-[22px] font-black text-slate-900 font-mono tracking-tight leading-none">
-                    {metric.value}
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium mt-1 leading-snug">
-                    {config.subLabel}
-                  </div>
+              {/* Card Center: Big Bold Colored Number */}
+              <div className="my-1">
+                <div
+                  className={`text-xl sm:text-[22px] font-black tracking-tight leading-tight truncate ${getValueColor(
+                    metric.id
+                  )}`}
+                >
+                  {metric.value}
                 </div>
               </div>
 
-              {/* Bottom Row: Trend Pill on Left, Micro-Bar Sparkline on Right (like CRMS card) */}
-              <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                {/* Left Pill */}
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`inline-flex items-center gap-0.5 text-[10px] font-bold font-mono px-2 py-0.5 rounded-full ${
-                      config.trendPositive
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200/80'
-                    }`}
-                  >
-                    {config.trendPositive ? (
-                      <ArrowUpRight className="w-3 h-3" />
-                    ) : (
-                      <ArrowDownRight className="w-3 h-3" />
-                    )}
-                    <span>{config.pctLabel}</span>
-                  </span>
-                </div>
-
-                {/* Right: Micro Bar Sparkline (Exact match to CRMS card visual) */}
-                <MicroBarSparkline
-                  data={metric.sparkline}
-                  color={config.themeColor}
-                />
+              {/* Card Bottom: Small Uppercase Subtitle / Benchmark */}
+              <div className="text-[9.5px] font-semibold text-slate-400 uppercase tracking-wider truncate">
+                {getSublabelCaps(metric.id)}
               </div>
             </div>
           );

@@ -117,20 +117,18 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
       {/* CARD 1: RASIO KEMANDIRIAN FISKAL BLU */}
       {/* ========================================================================= */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all p-4 sm:p-5 flex flex-col justify-between">
-        <div>
-          {/* Header Bar */}
+        <div className="space-y-3.5">
+          {/* Header Bar matching Image 2 style */}
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#002B49]/10 border border-[#002B49]/20 flex items-center justify-center text-[#002B49]">
-                <CreditCard className="w-4 h-4" />
-              </div>
+              <div className="w-1.5 h-4 bg-[#002B49] rounded-2xs" />
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-xs sm:text-sm font-black text-[#002B49] uppercase tracking-wider">
                     Rasio Kemandirian Fiskal BLU
                   </h3>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Mandiri (0,86)
+                    Mandiri (0,86x)
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 font-normal">
@@ -140,7 +138,6 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
             </div>
 
             <div className="flex items-center gap-1.5">
-              {/* Formula & Insight Button */}
               {onExplainKpi && (
                 <button
                   onClick={() => onExplainKpi('otonomi_fiskal')}
@@ -154,106 +151,140 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
             </div>
           </div>
 
-          {/* VISUALISASI DIAGRAM DONAT & DESKRIPSI LENGKAP */}
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 pt-3.5 items-center">
-              {/* Donut Visual Center */}
-              <div className="sm:col-span-5 flex flex-col items-center justify-center">
-                <div className="relative w-32 h-32 flex items-center justify-center">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 110 110">
-                    {/* Background Track */}
-                    <circle
-                      cx="55"
-                      cy="55"
-                      r={radius1}
-                      fill="transparent"
-                      stroke="#F1F5F9"
-                      strokeWidth={strokeWidth1}
-                    />
-                    {/* Progress Circle */}
-                    <circle
-                      cx="55"
-                      cy="55"
-                      r={radius1}
-                      fill="transparent"
-                      stroke="#002B49"
-                      strokeWidth={strokeWidth1}
-                      strokeDasharray={circumference1}
-                      strokeDashoffset={strokeDashoffset1}
-                      strokeLinecap="round"
-                      className="transition-all duration-700 ease-out"
-                    />
-                  </svg>
+          {/* Top 3 Executive Metric Tiles (Matching Image 3 Top Tiles) */}
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
+                Realisasi PNBP
+              </span>
+              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+                Rp {pnbpBerjalan.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
+              </div>
+              <span className="text-[9px] text-slate-400 font-medium block truncate">
+                Kas Masuk Jasa BLU
+              </span>
+            </div>
 
-                  {/* Center Text */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="text-2xl font-black text-[#002B49] font-mono tracking-tight leading-none">
-                      {rasioKemandirian.toFixed(2)}
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                      RATIO BLU
-                    </span>
-                  </div>
-                </div>
+            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
+                Belanja Operasional
+              </span>
+              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+                Rp {belanjaOperasional.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
+              </div>
+              <span className="text-[9px] text-slate-400 font-medium block truncate">
+                Beban Rutin Satker
+              </span>
+            </div>
 
-                <div className="mt-2 text-center">
-                  <div className="inline-flex items-center gap-1 text-[10.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Ambang Batas &ge; {targetThreshold.toFixed(2)} (Terpenuhi)</span>
-                  </div>
+            <div className="p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-emerald-800 uppercase tracking-wider block">
+                Coverage Ratio
+              </span>
+              <div className="text-sm sm:text-base font-black text-emerald-700 font-mono mt-0.5">
+                {rasioKemandirian.toFixed(2)}x
+              </div>
+              <span className="text-[9px] text-emerald-600 font-bold block truncate">
+                Ambang Batas &ge; 0,80x
+              </span>
+            </div>
+          </div>
+
+          {/* VISUALISASI MODEL BARU: DONUT SCORE + RANKED PROGRESS BARS (MATCHING IMAGE 2 CARD 1) */}
+          <div className="p-3 bg-slate-50/60 rounded-xl border border-slate-200/80 space-y-3">
+            {/* Top Score Banner: Donut + Predikat Header */}
+            <div className="flex items-center gap-3.5 pb-2.5 border-b border-slate-200/70">
+              <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 110 110">
+                  <circle
+                    cx="55"
+                    cy="55"
+                    r={radius1}
+                    fill="transparent"
+                    stroke="#E2E8F0"
+                    strokeWidth={strokeWidth1}
+                  />
+                  <circle
+                    cx="55"
+                    cy="55"
+                    r={radius1}
+                    fill="transparent"
+                    stroke="#002B49"
+                    strokeWidth={strokeWidth1}
+                    strokeDasharray={circumference1}
+                    strokeDashoffset={strokeDashoffset1}
+                    strokeLinecap="round"
+                    className="transition-all duration-700 ease-out"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span className="text-sm font-black text-[#002B49] font-mono leading-none">
+                    {rasioKemandirian.toFixed(2)}
+                  </span>
+                  <span className="text-[7.5px] font-bold text-slate-400 font-mono">/ 1.00</span>
                 </div>
               </div>
 
-              {/* Deskripsi & Rincian Parameter */}
-              <div className="sm:col-span-7 space-y-2 text-xs">
-                <div className="p-3 bg-slate-50/90 rounded-xl border border-slate-200/80 space-y-2">
-                  <div className="flex items-start justify-between gap-2 text-[11px]">
-                    <div>
-                      <span className="font-bold text-slate-800 block">Penerimaan PNBP Berjalan:</span>
-                      <span className="text-[10px] text-slate-500">
-                        Kas masuk riil jasa layanan BLU yang telah disetor
-                      </span>
-                    </div>
-                    <span className="font-mono font-bold text-[#002B49] text-sm shrink-0">
-                      Rp {pnbpBerjalan.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
-                    </span>
-                  </div>
-
-                  <div className="flex items-start justify-between gap-2 text-[11px] pt-1.5 border-t border-slate-200/60">
-                    <div>
-                      <span className="font-bold text-slate-800 block">Belanja Operasional Rutin:</span>
-                      <span className="text-[10px] text-slate-500">
-                        Beban belanja pegawai, barang &amp; pemeliharaan kantor
-                      </span>
-                    </div>
-                    <span className="font-mono font-bold text-slate-800 text-sm shrink-0">
-                      Rp {belanjaOperasional.toLocaleString('id-ID', { minimumFractionDigits: 1 })} M
-                    </span>
-                  </div>
-
-                  <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[11px]">
-                    <span className="text-slate-600 font-semibold">Daya Tutup Mandiri:</span>
-                    <span className="font-mono font-black text-emerald-700">
-                      {(rasioKemandirian * 100).toFixed(1)}% Operasional
-                    </span>
-                  </div>
+              <div className="min-w-0">
+                <div className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 mb-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Predikat: Mandiri Fiskal Prima</span>
                 </div>
+                <p className="text-[11px] text-slate-600 leading-snug">
+                  Realisasi kas masuk PNBP berjalan menutup <strong className="text-slate-900 font-mono">86,0%</strong> beban operasional rutin. Target Kemenkeu: <strong className="text-slate-900 font-mono">0,80x</strong>.
+                </p>
+              </div>
+            </div>
 
-                {/* Deskripsi Analisis Naratif */}
-                <div className="p-2.5 bg-blue-50/70 rounded-xl border border-blue-200/70 text-[11px] text-slate-700 leading-relaxed">
-                  <strong className="text-blue-900 font-bold block mb-0.5">
-                    Deskripsi &amp; Analisis Kemandirian:
-                  </strong>
-                  Realisasi kas masuk PNBP berjalan telah mampu menutup 86% beban operasional rutin BP Batam.
-                  Sisa 14% dialokasikan dari saldo kas BLU tanpa pinjaman luar, mencerminkan otonomi fiskal yang tangguh.
+            {/* 4 Ranked Horizontal Progress Bars (Matching Image 2 Card 1) */}
+            <div className="space-y-2 text-xs">
+              <div>
+                <div className="flex items-center justify-between text-[11px] mb-1">
+                  <span className="font-semibold text-slate-800">1. Daya Tutup Belanja Operasional (PNBP / Belanja Rutin)</span>
+                  <span className="font-mono font-bold text-slate-900">0,86x <span className="text-slate-400 font-normal">/ 0,80x</span></span>
+                </div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-emerald-600 rounded-full" style={{ width: '86%' }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between text-[11px] mb-1">
+                  <span className="font-semibold text-slate-800">2. Kemandirian Total DIPA (PNBP / Pagu DIPA Total)</span>
+                  <span className="font-mono font-bold text-slate-900">0,74x <span className="text-slate-400 font-normal">/ 0,70x</span></span>
+                </div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-[#1F4E79] rounded-full" style={{ width: '74%' }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between text-[11px] mb-1">
+                  <span className="font-semibold text-slate-800">3. Tingkat Likuiditas Kas Operasional</span>
+                  <span className="font-mono font-bold text-slate-900">3,89 Bln <span className="text-slate-400 font-normal">/ 3,00 Bln</span></span>
+                </div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-teal-600 rounded-full" style={{ width: '92%' }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between text-[11px] mb-1">
+                  <span className="font-semibold text-slate-800">4. Efisiensi Beban Pegawai terhadap PNBP</span>
+                  <span className="font-mono font-bold text-slate-900">42,3% <span className="text-slate-400 font-normal">/ Maks 50%</span></span>
+                </div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-600 rounded-full" style={{ width: '84.6%' }} />
                 </div>
               </div>
             </div>
+          </div>
         </div>
 
-        {/* Footer info tag */}
+        {/* Footer info tag matching Image 2 */}
         <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[10.5px] text-slate-400 font-mono">
-          <span>Katalog Item #8 &amp; Item #3 SIMKEU</span>
-          <span className="text-slate-600 font-medium">Standar Evaluasi Kemenkeu RI</span>
+          <span>Standar Indikator Kemandirian BLU Kemenkeu RI</span>
+          <span className="text-blue-700 font-medium">Katalog Item #8 &amp; Item #3</span>
         </div>
       </div>
 
@@ -261,13 +292,11 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
       {/* CARD 2: STRUKTUR KOMPOSISI SUMBER PENDANAAN */}
       {/* ========================================================================= */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all p-4 sm:p-5 flex flex-col justify-between">
-        <div>
+        <div className="space-y-3.5">
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#002B49]/10 border border-[#002B49]/20 flex items-center justify-center text-[#002B49]">
-                <Share2 className="w-4 h-4" />
-              </div>
+              <div className="w-1.5 h-4 bg-[#1F4E79] rounded-2xs" />
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-xs sm:text-sm font-black text-[#002B49] uppercase tracking-wider">
@@ -312,7 +341,6 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
                 </button>
               </div>
 
-              {/* Formula & Insight Button */}
               {onExplainKpi && (
                 <button
                   onClick={() => onExplainKpi('sumber_pendanaan')}
@@ -326,197 +354,134 @@ export const FiscalIndependenceDonutCards: React.FC<FiscalIndependenceDonutCards
             </div>
           </div>
 
-          {/* VIEW MODE 1: DIAGRAM DONAT & DESKRIPSI LENGKAP */}
-          {card2View === 'donut' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 pt-3.5 items-center">
-              {/* Multi-segment Donut Chart */}
-              <div className="sm:col-span-5 flex flex-col items-center justify-center">
-                <div className="relative w-32 h-32 flex items-center justify-center">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 110 110">
-                    {/* Background Track */}
-                    <circle
-                      cx="55"
-                      cy="55"
-                      r={radius2}
-                      fill="transparent"
-                      stroke="#F1F5F9"
-                      strokeWidth={strokeWidth2}
-                    />
-                    {/* Slices */}
-                    {segments.map((seg) => (
-                      <circle
-                        key={seg.id}
-                        cx="55"
-                        cy="55"
-                        r={radius2}
-                        fill="transparent"
-                        stroke={seg.color}
-                        strokeWidth={strokeWidth2}
-                        strokeDasharray={seg.strokeDasharray}
-                        strokeDashoffset={seg.strokeDashoffset}
-                        strokeLinecap="butt"
-                        className="cursor-pointer transition-all duration-300 hover:opacity-85"
-                        onClick={() => setActiveSegment(seg.id)}
-                      />
-                    ))}
-                  </svg>
+          {/* Top 3 Executive Metric Tiles (Matching Image 3 Top Tiles) */}
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
+                PNBP Layanan BLU
+              </span>
+              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+                Rp 681,0 M
+              </div>
+              <span className="text-[9px] text-blue-700 font-bold block truncate">
+                64,1% Porsi Terbesar
+              </span>
+            </div>
 
-                  {/* Center Tooltip Info */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-1 pointer-events-none">
-                    <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-tight">
-                      {selectedSource.id.toUpperCase()}
-                    </span>
-                    <span className="text-sm font-black text-slate-900 font-mono leading-tight">
-                      Rp {selectedSource.nominal.toLocaleString('id-ID', { minimumFractionDigits: 1 })}M
-                    </span>
-                    <span className="text-[10px] font-bold text-blue-700 font-mono">
-                      {selectedSource.percentage}%
-                    </span>
+            <div className="p-2.5 bg-slate-50/90 border border-slate-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block">
+                Rupiah Murni (APBN)
+              </span>
+              <div className="text-sm sm:text-base font-black text-slate-900 font-mono mt-0.5">
+                Rp 224,0 M
+              </div>
+              <span className="text-[9px] text-sky-600 font-bold block truncate">
+                21,1% Alokasi Proyek
+              </span>
+            </div>
+
+            <div className="p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl">
+              <span className="text-[9.5px] font-bold text-emerald-800 uppercase tracking-wider block">
+                Hibah &amp; Lainnya
+              </span>
+              <div className="text-sm sm:text-base font-black text-emerald-700 font-mono mt-0.5">
+                Rp 157,2 M
+              </div>
+              <span className="text-[9px] text-emerald-600 font-bold block truncate">
+                14,8% Kas Deposito
+              </span>
+            </div>
+          </div>
+
+          {/* VIEW MODE 1: VISUAL MODEL BARU (MATCHING IMAGE 2 & IMAGE 3) */}
+          {card2View === 'donut' ? (
+            <div className="p-3 bg-slate-50/60 rounded-xl border border-slate-200/80 space-y-2.5">
+              {fundingSources.map((item, idx) => (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveSegment(item.id)}
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                    activeSegment === item.id
+                      ? 'bg-white border-blue-400 shadow-2xs ring-1 ring-blue-300'
+                      : 'bg-white/80 border-slate-200/80 hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="font-bold text-slate-800 text-[11px] truncate">
+                        {idx + 1}. {item.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 font-mono text-[11px] shrink-0">
+                      <strong className="text-slate-900 font-black">Rp {item.nominal.toFixed(1)} M</strong>
+                      <span className="text-blue-700 font-bold text-[10.5px]">({item.percentage}%)</span>
+                    </div>
+                  </div>
+
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden my-1">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${item.percentage}%`,
+                        backgroundColor: item.color,
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 font-normal">
+                    <span className="truncate">{item.description}</span>
+                    <span className="font-mono text-slate-400 shrink-0 ml-1">Pagu: Rp {item.pagu.toFixed(1)} M</span>
                   </div>
                 </div>
-
-                {/* Selected Segment Tag matching user's requested style */}
-                <div className="mt-1 px-2.5 py-1 bg-white border border-slate-300 rounded shadow-xs text-center cursor-pointer">
-                  <span className="text-[11px] font-mono font-bold text-slate-800">
-                    {selectedSource.id.toUpperCase()} : Rp {selectedSource.nominal.toLocaleString('id-ID', { minimumFractionDigits: 1 })}M ({selectedSource.percentage}%)
-                  </span>
-                </div>
-              </div>
-
-              {/* Segments Cards with Descriptions */}
-              <div className="sm:col-span-7 space-y-2 text-xs">
-                <div className="space-y-1.5">
-                  {fundingSources.map((item) => {
-                    const isSelected = item.id === activeSegment;
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => setActiveSegment(item.id)}
-                        className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-                          isSelected
-                            ? 'bg-blue-50/70 border-blue-400 shadow-2xs ring-1 ring-blue-400/30'
-                            : 'bg-slate-50/70 border-slate-200/70 hover:bg-slate-100/60'
-                        }`}
-                      >
-                        <div className="flex items-start gap-2">
-                          <span
-                            className="w-2.5 h-2.5 rounded-full mt-1 shrink-0"
-                            style={{ backgroundColor: item.color }}
-                          />
-                          <div>
-                            <div className="font-bold text-slate-800 text-[11px] leading-tight">
-                              {item.label}
-                            </div>
-                            <div className="text-[10px] text-slate-500 font-normal leading-tight mt-0.5">
-                              {item.role}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-right shrink-0 pl-2">
-                          <div className="font-mono font-black text-slate-900 text-[11px]">
-                            Rp {item.nominal.toFixed(1)} M
-                          </div>
-                          <div className="text-[10px] font-mono font-bold text-blue-700">
-                            {item.percentage}%
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Deskripsi Analisis Naratif */}
-                <div className="p-2.5 bg-blue-50/70 rounded-xl border border-blue-200/70 text-[11px] text-slate-700 leading-relaxed">
-                  <strong className="text-blue-900 font-bold block mb-0.5">
-                    Deskripsi &amp; Analisis Struktur Pendanaan:
-                  </strong>
-                  Penerimaan kas masuk didominasi oleh PNBP Layanan BLU (64,1%) sebagai penopang utama kemandirian rutin,
-                  didukung alokasi belanja modal APBN (21,1%) untuk infrastruktur pulau Batam, serta 14,8% dari treasury &amp; hibah.
-                </div>
-              </div>
+              ))}
             </div>
           ) : (
             /* VIEW MODE 2: TABEL INFORMASI STRUKTUR SUMBER PENDANAAN */
-            <div className="pt-3 overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse min-w-[580px]">
-                <thead className="bg-[#0B2545] text-white font-bold text-[11px]">
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs border-collapse min-w-[500px]">
+                <thead className="bg-[#0B2545] text-white font-bold text-[10.5px]">
                   <tr>
-                    <th className="py-2 px-2.5 border-r border-blue-900/60 w-[30%]">
-                      SUMBER DANA
-                    </th>
-                    <th className="py-2 px-2.5 border-r border-blue-900/60 w-[26%]">
-                      UNIT KERJA
-                    </th>
-                    <th className="py-2 px-2.5 border-r border-blue-900/60 text-center w-[15%]">
-                      TANGGAL REKAP AWAL
-                    </th>
-                    <th className="py-2 px-2.5 border-r border-blue-900/60 text-center w-[15%]">
-                      TANGGAL REKAP AKHIR
-                    </th>
-                    <th className="py-2 px-2.5 text-right w-[14%]">
-                      NILAI
-                    </th>
+                    <th className="py-2 px-2.5">SUMBER DANA</th>
+                    <th className="py-2 px-2.5">UNIT KERJA</th>
+                    <th className="py-2 px-2.5 text-right">PAGU</th>
+                    <th className="py-2 px-2.5 text-right">REALISASI</th>
+                    <th className="py-2 px-2.5 text-center">PORSI</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-[11px]">
-                  {fundingSources.map((source, idx) => (
-                    <tr
-                      key={source.id}
-                      className={`hover:bg-blue-50/50 ${idx % 2 === 1 ? 'bg-slate-50/50' : ''}`}
-                    >
-                      <td className="py-2 px-2.5 border-r border-slate-200 font-semibold text-slate-900">
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            className="w-2 h-2 rounded-full shrink-0"
-                            style={{ backgroundColor: source.color }}
-                          />
-                          <span>{source.sumberDana}</span>
-                        </div>
+                <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
+                  {fundingSources.map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-2 px-2.5 font-sans font-semibold text-slate-900">
+                        {item.label}
                       </td>
-                      <td className="py-2 px-2.5 border-r border-slate-200 text-slate-700">
-                        {source.unitKerja}
+                      <td className="py-2 px-2.5 font-sans text-slate-600 text-[10.5px]">
+                        {item.unitKerja}
                       </td>
-                      <td className="py-2 px-2.5 border-r border-slate-200 text-center font-mono text-slate-600">
-                        {source.tglAwal}
+                      <td className="py-2 px-2.5 text-right text-slate-500">
+                        Rp {item.pagu.toFixed(1)} M
                       </td>
-                      <td className="py-2 px-2.5 border-r border-slate-200 text-center font-mono text-slate-600">
-                        {source.tglAkhir}
+                      <td className="py-2 px-2.5 text-right font-bold text-slate-900">
+                        Rp {item.nominal.toFixed(1)} M
                       </td>
-                      <td className="py-2 px-2.5 text-right font-mono font-bold text-[#002B49]">
-                        {source.nilaiFormatted}
+                      <td className="py-2 px-2.5 text-center font-bold text-blue-700">
+                        {item.percentage}%
                       </td>
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="bg-slate-100/90 font-bold border-t-2 border-slate-200 font-mono text-xs">
-                  <tr>
-                    <td className="py-2 px-2.5 font-sans text-slate-900">
-                      TOTAL PENERIMAAN KONSOLIDASI
-                    </td>
-                    <td className="py-2 px-2.5 font-sans text-slate-700 font-normal">
-                      Seluruh Satker BP Batam
-                    </td>
-                    <td className="py-2 px-2.5 text-center text-slate-600">
-                      01/01/2026
-                    </td>
-                    <td className="py-2 px-2.5 text-center text-slate-600">
-                      30/04/2026
-                    </td>
-                    <td className="py-2 px-2.5 text-right text-[#002B49] font-black">
-                      Rp 1.062.200.000.000
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           )}
         </div>
 
-        {/* Footer info tag */}
+        {/* Footer info tag matching Image 2 */}
         <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[10.5px] text-slate-400 font-mono">
-          <span>Katalog Item #14: Penerimaan Sumber Dana</span>
-          <span className="text-slate-600 font-medium">keu_penerimaan_sumber_dana</span>
+          <span>Rekapitulasi Penerimaan Kas Berdasarkan Sumber Dana</span>
+          <span className="text-blue-700 font-medium">Katalog Item #14</span>
         </div>
       </div>
     </div>

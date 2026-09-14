@@ -316,10 +316,10 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
               </div>
               <div className="text-right">
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Coverage Ratio
+                  Ketahanan Cadangan Kas
                 </span>
                 <p className="text-sm font-extrabold text-[#4E79A7] font-mono mt-0.5">
-                  1,4x <span className="text-xs font-normal text-slate-500">(Realisasi PNBP 981,2 / Belanja 945,0)</span>
+                  3,89 Bulan <span className="text-xs font-normal text-slate-500">(Threshold ≥ 3,0 Bln)</span>
                 </p>
               </div>
             </div>

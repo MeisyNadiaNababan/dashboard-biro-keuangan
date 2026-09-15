@@ -30,6 +30,9 @@ import {
   Ship,
   MessageSquare,
   FolderKanban,
+  ArrowRightLeft,
+  Briefcase,
+  MapPin,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -85,24 +88,29 @@ export const Header: React.FC<HeaderProps> = ({
       ];
     } else if (activeUnitId === 'pdsi') {
       return [
-        { id: 'ikhtisar', label: 'Ikhtisar PDSI', icon: LayoutDashboard },
-        { id: 'helpdesk', label: 'Layanan TI & Helpdesk', icon: Headphones },
-        { id: 'datacenter', label: 'Data Center & Server', icon: Server },
-        { id: 'cyber', label: 'Keamanan Siber & SOC', icon: ShieldCheck },
-        { id: 'fiber', label: 'Jaringan FO & Apps', icon: Network },
+        { id: 'ikhtisar', label: '10 Poin Eksekutif PDSI', icon: LayoutDashboard },
+        { id: 'datacenter', label: 'Poin 9: Rekap DC, Tenant & Server', icon: Server },
+        { id: 'layanan_ti', label: 'Poin 10: Layanan & Permintaan TI', icon: Headphones },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus PDSI (PDF)', icon: FileCode2 },
       ];
     } else if (activeUnitId === 'ptsp') {
       return [
-        { id: 'ikhtisar', label: 'Ikhtisar PTSP', icon: LayoutDashboard },
-        { id: 'ikm', label: 'Survei IKM PTSP (9 Unsur)', icon: Award, isSpecial: true },
-        { id: 'perizinan', label: 'Perizinan Berusaha (OSS)', icon: FileCheck2 },
-        { id: 'maritim', label: 'Maritim & Logistik', icon: Ship },
-        { id: 'pengaduan', label: 'Pengaduan & SP4N', icon: MessageSquare },
-        { id: 'katalog', label: '17 Item Data PDF', icon: FolderKanban },
-        { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'ikhtisar', label: '12 Poin Eksekutif PTSP', icon: LayoutDashboard },
+        { id: 'jenis_layanan', label: 'Jenis Layanan (Dataset 14)', icon: Layers },
+        { id: 'sheet_swap', label: 'Sheet Swap Perizinan & Non-Perizinan', icon: ArrowRightLeft },
+        { id: 'sektor', label: 'Sektor Berusaha (Dataset 9)', icon: Briefcase },
+        { id: 'pengaduan', label: 'Pengaduan (Dataset 6)', icon: MessageSquare },
         { id: 'kamus_rumus', label: 'Kamus Rumus PTSP', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-pengembangan-kek') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar Eksekutif KEK', icon: LayoutDashboard },
+        { id: 'investasi', label: 'Investasi PMA vs PMDN (Dataset 1)', icon: TrendingUp },
+        { id: 'sheet_swap', label: 'Sheet Swap Perizinan (DS 3, 4, 7)', icon: ArrowRightLeft },
+        { id: 'profil_kek', label: 'Profil 3 KEK (Dataset 2)', icon: MapPin },
+        { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & 12 Dataset (PDF)', icon: FileCode2 },
       ];
     } else {
       return [

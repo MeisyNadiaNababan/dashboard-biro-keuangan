@@ -252,75 +252,51 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               referenceLine="Benchmark Q2: 50%"
             />
 
-            <div className="flex items-center justify-between text-xs font-bold text-slate-500 pb-2 border-b border-slate-200">
-              <span className="uppercase tracking-wider text-[#002B49]">10 Satker Penghasil PNBP (Peringkat Kinerja)</span>
-              <div className="flex items-center gap-4 text-[11px] font-mono">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1.5 border-b border-slate-200">
+              <span className="text-[#002B49] font-bold">Peringkat Satker</span>
+              <div className="flex items-center gap-3 text-[11px] font-mono">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-[#002B49]" />
-                  <span>Realisasi YTD</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#002B49]" />
+                  <span>Realisasi</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-slate-200" />
-                  <span>Target Perkin</span>
-                </span>
-                <span className="text-blue-700 font-bold">
-                  Benchmark Q2: 50%
+                  <span className="w-2 h-2 rounded-xs bg-slate-200" />
+                  <span>Target</span>
                 </span>
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {revenueItems.map((item, idx) => {
                 const capaianPct = item.capaian ?? (item.target ? (item.realisasi / item.target) * 100 : 0);
-                const sisa = item.sisaTarget ?? Math.max(0, item.target - item.realisasi);
 
                 return (
                   <div
                     key={item.id}
                     onClick={() => onExplainKpi?.('pendapatan')}
-                    className="p-2 sm:p-2.5 bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all shadow-2xs space-y-1 cursor-pointer group"
+                    className="p-1.5 sm:p-2 bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 rounded-lg transition-all shadow-2xs space-y-0.5 cursor-pointer group"
                     title="Klik untuk membuka formula perhitungan capaian PNBP"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[9px]">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="w-3.5 h-3.5 rounded bg-[#002B49] text-white flex items-center justify-center font-mono font-bold text-[8.5px] shrink-0">
                           {idx + 1}
                         </span>
-                        <span className="font-bold text-slate-900 group-hover:text-blue-700 text-xs sm:text-[13px]">{item.sumber}</span>
-                        <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <span className="font-bold text-slate-900 group-hover:text-blue-700 text-xs truncate">{item.sumber}</span>
                       </div>
-                      <div className="flex items-center gap-3 font-mono text-xs">
-                        <span className="text-slate-500 font-medium">
-                          <span className="font-black text-slate-900 group-hover:text-blue-800">Rp {item.realisasi.toFixed(1)} M</span>
-                          {' '}/ Rp {item.target.toFixed(1)} M
-                        </span>
+                      <div className="flex items-center gap-2 font-mono text-[11px] shrink-0">
+                        <span className="font-bold text-slate-900 group-hover:text-blue-800">Rp {item.realisasi.toFixed(1)} M</span>
+                        <span className="text-slate-400 font-normal">/ {item.target.toFixed(1)} M</span>
+                        <span className="font-bold text-[#002B49] text-[10px] ml-1 bg-slate-100 px-1 rounded">{capaianPct.toFixed(1)}%</span>
                       </div>
                     </div>
 
-                    {/* Compact Bar Track */}
-                    <div className="relative w-full bg-slate-100 h-3.5 sm:h-4 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
-                      {/* 50% Q2 Reference Line Marker */}
+                    {/* Narrow Compact Bar Track */}
+                    <div className="relative w-full bg-slate-100 h-2 sm:h-2.5 rounded overflow-hidden border border-slate-200/70 flex items-center">
                       <div
-                        className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
-                        style={{ left: '50%' }}
-                        title="Tableau Reference Line: Q2 Benchmark 50%"
+                        className="h-full rounded transition-all bg-[#002B49]"
+                        style={{ width: `${Math.max(4, Math.min(100, capaianPct))}%` }}
                       />
-                      {/* Realisasi Bar Fill with % INSIDE */}
-                      <div
-                        className="h-full rounded-md transition-all bg-[#002B49] flex items-center justify-end px-1.5"
-                        style={{ width: `${Math.max(14, Math.min(100, capaianPct))}%` }}
-                      >
-                        <span className="text-[9px] sm:text-[10px] font-bold text-white font-mono whitespace-nowrap leading-none drop-shadow-2xs">
-                          {capaianPct.toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
-                      <span>Sisa Target: Rp {sisa.toFixed(1)} M</span>
-                      <span className={capaianPct >= 50 ? 'text-emerald-600 font-bold' : 'text-slate-500'}>
-                        {capaianPct >= 50 ? 'Melampaui Benchmark Q2 • Formula' : 'Menuju Target Semester I • Formula'}
-                      </span>
                     </div>
                   </div>
                 );
@@ -333,7 +309,7 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
         {/* BELANJA TAB CONTENT (SIDE-BY-SIDE HORIZONTAL BAR ONLY) */}
         {/* ========================================================================= */}
         {activeTab === 'belanja' && (
-          <div className="space-y-3 py-1">
+          <div className="space-y-2 py-1">
             <TableauShelvesBadge
               showMe="Show Me #6 (Horizontal Bar)"
               rows="[komponen_belanja_operasional_dan_modal]"
@@ -342,24 +318,21 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
               referenceLine="Ref Line Q2: 35%"
             />
 
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1 border-b border-slate-200">
-              <span>Komponen Belanja (Rows)</span>
-              <div className="flex items-center gap-4 text-[11px] font-mono">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-500 pb-1.5 border-b border-slate-200">
+              <span className="text-[#002B49] font-bold">Komponen Belanja</span>
+              <div className="flex items-center gap-3 text-[11px] font-mono">
                 <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-[#1F4E79]" />
-                  <span>Realisasi SP2D (M)</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#1F4E79]" />
+                  <span>Realisasi</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
-                  <span>Pagu DIPA (M)</span>
-                </span>
-                <span className="text-blue-700 font-bold">
-                  Ref Line Q2: 35%
+                  <span className="w-2 h-2 rounded-xs bg-slate-300" />
+                  <span>Pagu</span>
                 </span>
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {expenseItems.map((item) => {
                 const programName = item.program || item.unitKerja || `Komponen Belanja ${item.id}`;
                 const serapanPct = item.serapan ?? item.persentase ?? (item.pagu ? (item.realisasi / item.pagu) * 100 : 0);
@@ -368,40 +341,28 @@ export const BiroKeuanganFinancialCard: React.FC<BiroKeuanganFinancialCardProps>
                   <div
                     key={item.id}
                     onClick={() => onExplainKpi?.('belanja')}
-                    className="space-y-1 p-2 sm:p-2.5 rounded-xl hover:bg-blue-50/50 cursor-pointer group transition-colors border border-slate-100 hover:border-blue-200 bg-white shadow-2xs"
+                    className="p-1.5 sm:p-2 rounded-lg hover:bg-blue-50/50 cursor-pointer group transition-colors border border-slate-100 hover:border-blue-200 bg-white shadow-2xs space-y-0.5"
                     title="Klik untuk melihat formula dan rincian komponen belanja"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-slate-800 group-hover:text-blue-700">{programName}</span>
-                        <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="font-bold text-slate-800 group-hover:text-blue-700 text-xs truncate">{programName}</span>
                       </div>
-                      <div className="flex items-center gap-3 font-mono text-[11px]">
+                      <div className="flex items-center gap-2 font-mono text-[11px] shrink-0">
                         <span className="font-bold text-slate-900 group-hover:text-blue-800">
                           Rp {item.realisasi.toFixed(1)} M{' '}
-                          <span className="text-slate-400 font-normal">/ Rp {item.pagu.toFixed(1)} M</span>
+                          <span className="text-slate-400 font-normal">/ {item.pagu.toFixed(1)} M</span>
                         </span>
+                        <span className="font-bold text-[#1F4E79] text-[10px] ml-1 bg-slate-100 px-1 rounded">{serapanPct.toFixed(1)}%</span>
                       </div>
                     </div>
 
-                    {/* Compact Bar Track */}
-                    <div className="relative w-full bg-slate-100 h-3.5 sm:h-4 rounded-md overflow-hidden border border-slate-200/80 flex items-center">
-                      {/* 35% Q2 Reference Line Marker */}
+                    {/* Narrow Compact Bar Track */}
+                    <div className="relative w-full bg-slate-100 h-2 sm:h-2.5 rounded overflow-hidden border border-slate-200/70 flex items-center">
                       <div
-                        className="absolute top-0 bottom-0 w-[2px] bg-blue-600 z-10"
-                        style={{ left: '35%' }}
-                        title="Tableau Reference Line: Q2 Benchmark 35%"
+                        className="h-full rounded transition-all bg-[#1F4E79]"
+                        style={{ width: `${Math.max(4, Math.min(100, serapanPct))}%` }}
                       />
-
-                      {/* Realisasi Bar Fill with % INSIDE */}
-                      <div
-                        className="h-full rounded-md transition-all bg-[#1F4E79] flex items-center justify-end px-1.5"
-                        style={{ width: `${Math.max(14, Math.min(100, serapanPct))}%` }}
-                      >
-                        <span className="text-[9px] sm:text-[10px] font-bold text-white font-mono whitespace-nowrap leading-none drop-shadow-2xs">
-                          {serapanPct.toFixed(1)}%
-                        </span>
-                      </div>
                     </div>
                   </div>
                 );

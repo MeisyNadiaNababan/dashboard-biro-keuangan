@@ -30,8 +30,8 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
     id: 'pendapatan',
     title: 'Realisasi PNBP (IKS Perkin)',
     value: 'Rp 981,2 M',
-    targetOrPagu: 'Target: Rp 2,447 T',
-    percentage: '40,1% Capaian Perkin',
+    targetOrPagu: 'Target PNBP: Rp 2.447,5 M',
+    percentage: '40,1% Capaian (Realisasi/Target × 100%)',
     trend: {
       direction: 'up',
       value: '12,3%',
@@ -45,8 +45,8 @@ export const KPI_METRICS_DATA: KpiMetric[] = [
     id: 'belanja',
     title: 'Realisasi Belanja',
     value: 'Rp 945,0 M',
-    targetOrPagu: 'Pagu DIPA: Rp 3,32 T',
-    percentage: '28,5% Serapan Pagu',
+    targetOrPagu: 'Pagu DIPA: Rp 3.318,5 M',
+    percentage: '28,5% Serapan (Realisasi/Pagu × 100%)',
     trend: {
       direction: 'up',
       value: '8,1%',

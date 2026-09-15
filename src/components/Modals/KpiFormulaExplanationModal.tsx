@@ -20,7 +20,7 @@ import {
 
 export interface KpiFormulaDetail {
   id: string;
-  unit: 'biro-keuangan' | 'pdsi' | 'ptsp';
+  unit: 'biro-keuangan' | 'pdsi' | 'ptsp' | 'dit-pengembangan-kek';
   title: string;
   codeTag: string;
   category: string;
@@ -2503,6 +2503,252 @@ MEDIAN(DATEDIFF('day', [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]))`,
     },
     executiveAction: 'Pertahankan sistem verifikasi online 24/7 untuk dokumen jadwal kapal demi kelancaran arus logistik ekspor-impor di Batam.',
   },
+
+  // DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK
+  kpi_kek_investasi: {
+    id: 'kpi_kek_investasi',
+    unit: 'dit-pengembangan-kek',
+    title: 'Persentase Capaian Realisasi Investasi KEK (%)',
+    codeTag: 'KPI-KEK-01',
+    category: 'Investasi & Penanaman Modal',
+    currentValue: 'Rp 9.091,45 M (208,9%)',
+    targetValue: 'Target Investasi TA 2025: Rp 4.352,00 M',
+    statusText: 'Target Sangat Terlampaui (+108,9% di atas target)',
+    statusVariant: 'success',
+    summary: 'Rasio akumulasi realisasi penanaman modal investasi (PMA dan PMDN) di Kawasan Ekonomi Khusus (KEK Nongsa, Batam Teknik, dan Pariwisata & Kesehatan Internasional Batam) terhadap target investasi tahunan.',
+    presentationPitch: 'Bapak/Ibu Pimpinan, realisasi investasi di KEK KPBPBB Batam pada TA 2025 telah mencapai angka impresif Rp 9,09 Triliun atau 208,9% dari target Perkin Rp 4,35 Triliun. Kontributor terbesar didorong oleh penanaman modal asing (PMA) sebesar Rp 8,86 Triliun (97,4%) pada sektor Hyperscale Data Center di KEK Nongsa Digital Park.',
+    formulaConceptual: '(Total Realisasi Investasi PMA & PMDN ÷ Total Target Investasi KEK) × 100%',
+    numerator: {
+      label: 'Pembilang (Total Realisasi Investasi KEK)',
+      realValue: 'Rp 9.091.449.868.293 (Dataset No. 1: 16 Baris Data)',
+      source: 'SUM([nilairealisasiinvestasi-kek-dp].[REALISASI INVESTASI])',
+    },
+    denominator: {
+      label: 'Penyebut (Total Target Investasi KEK)',
+      realValue: 'Rp 4.352.000.000.000 (Target Tahunan 3 KEK)',
+      source: 'SUM([nilairealisasiinvestasi-kek-dp].[TARGET INVESTASI])',
+    },
+    calculationResult: '(9.091.449.868.293 ÷ 4.352.000.000.000) × 100% = 208,90% ≈ 208,9%',
+    tableauCalculatedField: `// Calculated Field: [% Capaian Investasi KEK]
+SUM([REALISASI INVESTASI]) / SUM([TARGET INVESTASI]) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'BAN Metric Tile & Stacked Bar PMA/PMDN',
+      rows: '[NAMA KAWASAN EKONOMI KHUSUS], [JENIS INVESTASI (PMA/PMDN)]',
+      columns: 'SUM([REALISASI INVESTASI]), [% Capaian Investasi KEK]',
+      marks: 'Color by [JENIS INVESTASI], Tooltip with [TRIWULAN]',
+      filters: '[TAHUN] = 2025, [TRIWULAN] = All',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 1: Nilai Realisasi Investasi KEK di KPBPBB Batam',
+      tableName: 'nilairealisasiinvestasi_kek_dp',
+      attributes: ['TAHUN', 'TRIWULAN', 'NAMA KAWASAN EKONOMI KHUSUS', 'JENIS INVESTASI', 'TARGET INVESTASI', 'REALISASI INVESTASI'],
+      updateFrequency: 'Pertriwulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 100,0%',
+      warning: '85,0% - 99,9%',
+      critical: '< 85,0%',
+      standardOrigin: 'Perjanjian Kinerja (Perkin) Direktorat Pengembangan KPBPBB dan KEK',
+    },
+    executiveAction: 'Akselerasi fasilitasi perizinan BUPP dan kepabeanan untuk menjamin penyelesaian konstruksi Data Center dan fasilitas MRO pesawat on-schedule.',
+  },
+
+  kpi_kek_izin_berusaha: {
+    id: 'kpi_kek_izin_berusaha',
+    unit: 'dit-pengembangan-kek',
+    title: 'Jumlah Daftar Perizinan Berusaha Administrator KEK',
+    codeTag: 'KPI-KEK-02',
+    category: 'Layanan Perizinan Berusaha',
+    currentValue: '22 Perizinan Berusaha',
+    targetValue: 'Target: 100% Pemohon Terlayani Sesuai NSPK',
+    statusText: 'Optimal (Semua Permohonan Berstatus Terbit)',
+    statusVariant: 'success',
+    summary: 'Total volume perizinan berusaha berbasis risiko (OSS RBA) dan izin komersial/operasional yang diproses dan diterbitkan oleh Administrator KEK di KPBPBB Batam.',
+    presentationPitch: 'Pelayanan Perizinan Berusaha Administrator KEK telah berhasil menerbitkan 22 izin berusaha bagi pelaku usaha di KEK Nongsa, Batam Teknik, dan KEK Pariwisata & Kesehatan Internasional tanpa adanya backlog permohonan.',
+    formulaConceptual: 'COUNT([NAMA PERIZINAN BERUSAHA]) dari Dataset Administrator KEK',
+    numerator: {
+      label: 'Volume Perizinan Berusaha Terbit',
+      realValue: '22 Dokumen Izin Usaha Terbit',
+      source: 'Dataset No. 3: COUNT([NAMA PERIZINAN BERUSAHA])',
+    },
+    denominator: {
+      label: 'Total Permohonan Masuk',
+      realValue: '22 Permohonan (Zero Backlog)',
+      source: 'Sistem Administrator KEK Online',
+    },
+    calculationResult: 'Total 22 Perizinan Berusaha Terbit (100% Tingkat Penyelesaian)',
+    tableauCalculatedField: `// Calculated Field: [Total Perizinan Berusaha]
+COUNT([NAMA PERIZINAN BERUSAHA])`,
+    tableauShelvesGuide: {
+      showMe: 'Tableau Sheet Swap Table (Worksheet 1)',
+      rows: '[NAMA PERIZINAN BERUSAHA], [TANGGAL PERIZINAN BERUSAHA]',
+      columns: 'Measure Names / Status',
+      marks: 'Text Marks',
+      filters: '[p_Sheet_Filter_Perizinan] = "Perizinan Berusaha"',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 3: Daftar Perizinan Berusaha Administrator KEK',
+      tableName: 'kek_perizinan_berusaha',
+      attributes: ['NAMA PERIZINAN BERUSAHA', 'TANGGAL PERIZINAN BERUSAHA'],
+      updateFrequency: 'Jika Update',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '100% SLA',
+      warning: '90% - 99%',
+      critical: '< 90%',
+      standardOrigin: 'NSPK Administrator Kawasan Ekonomi Khusus',
+    },
+    executiveAction: 'Terus integrasikan sistem perizinan administrator KEK dengan sistem SIAGA BP Batam dan OSS RBA Kementerian Investasi/BKPM.',
+  },
+
+  kpi_kek_non_perizinan: {
+    id: 'kpi_kek_non_perizinan',
+    unit: 'dit-pengembangan-kek',
+    title: 'Jumlah Daftar Non Perizinan Administrator KEK',
+    codeTag: 'KPI-KEK-03',
+    category: 'Fasilitas & Rekomendasi Non-Izin',
+    currentValue: '12 Layanan Non Perizinan',
+    targetValue: 'Target: Seluruh Fasilitas Fiskal Terfasilitasi',
+    statusText: 'Aktif & Terfasilitasi',
+    statusVariant: 'info',
+    summary: 'Total dokumen rekomendasi fiskal, pembebasan bea masuk, masterlist, dan fasilitas ketenagakerjaan yang diterbitkan oleh Administrator KEK.',
+    presentationPitch: 'Sebanyak 12 fasilitas dan layanan non-perizinan telah difasilitasi oleh Administrator KEK, mencakup rekomendasi Tax Holiday, pembebasan PPN/PPnBM, fasilitas masterlist peralatan modal, dan rekomendasi RPTKA tenaga ahli asing.',
+    formulaConceptual: 'COUNT([NAMA NON PERIZINAN]) dari Dataset Administrator KEK',
+    numerator: {
+      label: 'Volume Layanan Non Perizinan',
+      realValue: '12 Dokumen Rekomendasi/Fasilitas',
+      source: 'Dataset No. 4: COUNT([NAMA NON PERIZINAN])',
+    },
+    denominator: {
+      label: 'Kategori Fasilitas',
+      realValue: 'Fiskal, Kepabeanan & Ketenagakerjaan',
+      source: 'Buku Pedoman Fasilitas KEK',
+    },
+    calculationResult: 'Total 12 Layanan Non Perizinan Terbit',
+    tableauCalculatedField: `// Calculated Field: [Total Non Perizinan KEK]
+COUNT([NAMA NON PERIZINAN])`,
+    tableauShelvesGuide: {
+      showMe: 'Tableau Sheet Swap Table (Worksheet 2)',
+      rows: '[NAMA NON PERIZINAN], [TANGGAL], [KETERANGAN]',
+      columns: 'COUNT([NAMA NON PERIZINAN])',
+      marks: 'Text Marks',
+      filters: '[p_Sheet_Filter_Perizinan] = "Non Perizinan"',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 4: Daftar Non Perizinan Administrator KEK',
+      tableName: 'kek_non_perizinan',
+      attributes: ['NAMA NON PERIZINAN', 'TANGGAL', 'KETERANGAN'],
+      updateFrequency: 'Jika Update',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '100% Tuntas',
+      warning: '85% - 99%',
+      critical: '< 85%',
+      standardOrigin: 'Standar Pelayanan Non-Perizinan Administrator KEK',
+    },
+    executiveAction: 'Tingkatkan pendampingan teknis kepada pelaku usaha untuk pemanfaatan insentif super tax deduction dan fasilitas masterlist importasi.',
+  },
+
+  kpi_kek_perizinan_lainnya: {
+    id: 'kpi_kek_perizinan_lainnya',
+    unit: 'dit-pengembangan-kek',
+    title: 'Jumlah Daftar Perizinan Lainnya Administrator KEK',
+    codeTag: 'KPI-KEK-04',
+    category: 'Perizinan Khusus & Lingkungan',
+    currentValue: '10 Perizinan Lainnya',
+    targetValue: 'Target: Kepatuhan Operasional 100%',
+    statusText: 'Terbit & Memenuhi Syarat',
+    statusVariant: 'info',
+    summary: 'Jumlah perizinan khusus yang diterbitkan Administrator KEK meliputi izin pemanfaatan limbah B3, izin operasi pembangkit tenaga listrik, izin dispensasi jam kerja lembur, dan izin keselamatan teknis.',
+    presentationPitch: 'Administrator KEK telah menerbitkan 10 perizinan lainnya yang bersifat teknis operasional, memastikan kegiatan industri di KEK mematuhi standar keselamatan kerja dan ramah lingkungan.',
+    formulaConceptual: 'COUNT([NAMAPERIZINAN]) dari Dataset No. 7 Administrator KEK',
+    numerator: {
+      label: 'Volume Perizinan Lainnya Terbit',
+      realValue: '10 Dokumen Perizinan Khusus',
+      source: 'Dataset No. 7: COUNT([NAMAPERIZINAN])',
+    },
+    denominator: {
+      label: 'Sektor Khusus',
+      realValue: 'Lingkungan, Ketenagalistrikan & K3',
+      source: 'Regulasi Teknis KEK',
+    },
+    calculationResult: 'Total 10 Perizinan Khusus/Lainnya Terbit',
+    tableauCalculatedField: `// Calculated Field: [Total Perizinan Lainnya KEK]
+COUNT([NAMAPERIZINAN])`,
+    tableauShelvesGuide: {
+      showMe: 'Tableau Sheet Swap Table (Worksheet 3)',
+      rows: '[NAMAPERIZINAN], [TANGGALPERIZINAN]',
+      columns: 'COUNT([NAMAPERIZINAN])',
+      marks: 'Text Marks',
+      filters: '[p_Sheet_Filter_Perizinan] = "Perizinan Lainnya"',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 7: Daftar Perizinan Lainnya Administrator KEK',
+      tableName: 'kek_perizinan_lainnya',
+      attributes: ['NAMAPERIZINAN', 'TANGGALPERIZINAN'],
+      updateFrequency: 'Jika Update',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '100% Kepatuhan',
+      warning: '85% - 99%',
+      critical: '< 85%',
+      standardOrigin: 'Standar Teknis dan Lingkungan Kawasan Khusus',
+    },
+    executiveAction: 'Lakukan inspeksi periodik terhadap izin genset dan pengelolaan limbah untuk menjaga komitmen keberlanjutan (green KEK).',
+  },
+
+  kpi_kek_kajian_perkin: {
+    id: 'kpi_kek_kajian_perkin',
+    unit: 'dit-pengembangan-kek',
+    title: '% Kajian Pengembangan, Kerjasama, Daya Saing & KEK Berkelanjutan',
+    codeTag: 'KPI-KEK-05',
+    category: 'Perjanjian Kinerja (Perkin)',
+    currentValue: '91,7% Capaian Perkin',
+    targetValue: 'Target Perkin: ≥ 90,0%',
+    statusText: 'Target Perkin Tercapai (11 dari 12 Analisis Ditindaklanjuti)',
+    statusVariant: 'success',
+    summary: 'Formula Perkin: Capaian (%) = (Jumlah Analisis yang Ditindaklanjuti ÷ Jumlah Dokumen Analisis) × 100%. Mengukur persentase rekomendasi kebijakan dan telaahan analisis strategis yang diimplementasikan.',
+    presentationPitch: 'Berdasarkan formula Perjanjian Kinerja (Perkin), capaian indikator kajian pengembangan dan kerjasama strategis KEK mencapai 91,7%, melampaui target tahunan 90,0%. Dari 12 dokumen analisis yang diterbitkan, 11 telaahan telah berhasil ditindaklanjuti menjadi kebijakan operasional atau perjanjian kerja sama.',
+    formulaConceptual: '(Jumlah Analisis yang Ditindaklanjuti ÷ Jumlah Dokumen Analisis) × 100%',
+    numerator: {
+      label: 'Pembilang (Jumlah Analisis Ditindaklanjuti)',
+      realValue: '11 Dokumen Analisis Ditindaklanjuti',
+      source: 'Dataset No. 12: COUNT(IF [Status] = "Ditindaklanjuti")',
+    },
+    denominator: {
+      label: 'Penyebut (Jumlah Dokumen Analisis Diterbitkan)',
+      realValue: '12 Dokumen Analisis Diterbitkan',
+      source: 'Dataset No. 12: COUNT([LAPORAN KAJIAN])',
+    },
+    calculationResult: '(11 ÷ 12) × 100% = 91,67% ≈ 91,7% Capaian Perkin',
+    tableauCalculatedField: `// Calculated Field: [% Capaian Perkin Kajian KEK]
+(COUNT(IF [Status] = 'Ditindaklanjuti' THEN [ID] END) / COUNT([ID])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Gauge / Donut Chart & Detail List',
+      rows: '[Judul Analisis], [Status Tindak Lanjut]',
+      columns: '[% Capaian Perkin Kajian KEK]',
+      marks: 'Color by Status, Tooltip with Rekomendasi Kebijakan',
+      filters: '[Tahun] = 2025',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 12: Laporan Kajian Pengembangan, Kerja Sama di KPBPBB dan KEK',
+      tableName: 'kek_kajian_perkin',
+      attributes: ['LAPORAN KAJIAN', 'TAHUN', 'STATUS TINDAK LANJUT'],
+      updateFrequency: 'Pertahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0%',
+      warning: '80,0% - 89,9%',
+      critical: '< 80,0%',
+      standardOrigin: 'Perjanjian Kinerja (Perkin) Pejabat Pimpinan Tinggi Pratama BP Batam',
+    },
+    executiveAction: 'Dorong penyelesaian telaahan ke-12 terkait insentif green data center agar capaian mencapai 100% sempurna sebelum akhir tahun anggaran.',
+  },
 };
 
 /**
@@ -2684,6 +2930,15 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     lowerId.includes('oss')
   ) {
     return KPI_FORMULA_DETAILS.ikss_ikm;
+  }
+
+  if (lowerId.includes('kek') || lowerId.includes('investasi') || lowerId.includes('perkin')) {
+    if (lowerId.includes('investasi')) return KPI_FORMULA_DETAILS.kpi_kek_investasi;
+    if (lowerId.includes('berusaha') || lowerId.includes('izin')) return KPI_FORMULA_DETAILS.kpi_kek_izin_berusaha;
+    if (lowerId.includes('non')) return KPI_FORMULA_DETAILS.kpi_kek_non_perizinan;
+    if (lowerId.includes('lainnya')) return KPI_FORMULA_DETAILS.kpi_kek_perizinan_lainnya;
+    if (lowerId.includes('kajian') || lowerId.includes('perkin') || lowerId.includes('analisis')) return KPI_FORMULA_DETAILS.kpi_kek_kajian_perkin;
+    return KPI_FORMULA_DETAILS.kpi_kek_investasi;
   }
 
   return KPI_FORMULA_DETAILS.pendapatan;

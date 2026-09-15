@@ -12,6 +12,7 @@ import { FiscalIndependenceDonutCards } from './components/FiscalIndependenceDon
 import { FiscalInsightsRow } from './components/FiscalInsightsRow';
 import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
 import { PtspDashboard } from './components/PTSP/PtspDashboard';
+import { KekDashboard } from './components/KEK/KekDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
 import { KpiWordDocumentView } from './components/KpiWordDocumentView';
@@ -25,9 +26,9 @@ import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-reac
 
 export default function App() {
   // Navigation & Multi-Unit State
-  const [activeUnitId, setActiveUnitId] = useState<string>('biro-keuangan');
+  const [activeUnitId, setActiveUnitId] = useState<string>('dit-pengembangan-kek');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
-  const [activeSheet, setActiveSheet] = useState<string>('overview');
+  const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
   // Filters State - Complete Tableau Context Dimensions
   const [selectedYear, setSelectedYear] = useState('2026');
@@ -271,15 +272,10 @@ export default function App() {
                       />
                     </section>
 
-                    {/* 2. Rasio Kemandirian Fiskal & Struktur Sumber Pendanaan (Barisan Atas) */}
-                    <section id="kemandirian-fiskal" aria-label="Kemandirian Fiskal dan Sumber Pendanaan">
-                      <FiscalIndependenceDonutCards onExplainKpi={handleSelectMetric} />
-                    </section>
-
-                    {/* 3. Detail Performa Keuangan BLU: Swap Tabel Data (Tanpa Button Lihat Detail) */}
+                    {/* 2. Realisasi Pendapatan dan Belanja */}
                     <section
                       id="pendapatan-belanja"
-                      aria-label="Performa Pendapatan dan Belanja"
+                      aria-label="Realisasi Pendapatan dan Belanja"
                     >
                       <BiroKeuanganFinancialCard
                         revenueItems={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
@@ -289,6 +285,11 @@ export default function App() {
                         selectedMonth={selectedMonth}
                         onExplainKpi={handleSelectMetric}
                       />
+                    </section>
+
+                    {/* 3. Sumber Pendanaan (Treemap) */}
+                    <section id="sumber-pendanaan" aria-label="Sumber Pendanaan">
+                      <FiscalIndependenceDonutCards onExplainKpi={handleSelectMetric} />
                     </section>
 
                     {/* 3. Piutang & Arus Kas Section */}
@@ -326,6 +327,17 @@ export default function App() {
             ) : activeUnitId === 'ptsp' ? (
               /* --- PUSAT PELAYANAN TERPADU SATU PINTU (PTSP) DASHBOARD --- */
               <PtspDashboard
+                activeSubMenu={activeSheet}
+                onSelectSubMenu={handleSelectSheet}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'dit-pengembangan-kek' ? (
+              /* --- DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK DASHBOARD --- */
+              <KekDashboard
                 activeSubMenu={activeSheet}
                 onSelectSubMenu={handleSelectSheet}
                 onOpenExportModal={() => setIsExportModalOpen(true)}

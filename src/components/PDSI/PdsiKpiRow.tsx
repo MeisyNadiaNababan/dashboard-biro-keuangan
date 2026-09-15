@@ -93,6 +93,7 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
           themeColor: '#D97706',
           subLabel: 'Indeks 4,71 dari 5,00',
         };
+      case 'jumlah_core_fo':
       case 'kapasitas_core_fo':
         return {
           acronym: 'FO-CORE',
@@ -100,7 +101,7 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
           badgeBg: 'bg-sky-600',
           badgeText: 'text-white',
           themeColor: '#0284C7',
-          subLabel: 'Backbone Pulau Batam',
+          subLabel: '83,3% Utilisasi • 8 Koridor',
         };
       case 'jumlah_server':
         return {
@@ -176,7 +177,7 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
 
       {/* Grid of 8 Spacious CRMS Style Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4">
-        {PDSI_KPI_METRICS.map((kpi) => {
+        {PDSI_KPI_METRICS.map((kpi, idx) => {
           const config = getPdsiConfig(kpi.id);
           const Icon = config.icon;
 
@@ -194,9 +195,12 @@ export const PdsiKpiRow: React.FC<PdsiKpiRowProps> = ({ onSelectMetric, onOpenKa
               />
 
               <div>
-                {/* Header Row: Left Acronym Block + Title */}
+                {/* Header Row: Index Number + Acronym Block + Title */}
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                      #{idx + 1}
+                    </span>
                     <div
                       className={`${config.badgeBg} ${config.badgeText} text-[10px] font-black font-mono px-1.5 py-0.5 rounded shadow-2xs shrink-0 flex items-center gap-1`}
                     >

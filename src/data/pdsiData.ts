@@ -21,86 +21,6 @@ export interface PdsiKpiMetric {
 
 export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
   {
-    id: 'total_rak',
-    title: 'Total Rak Data Center',
-    value: '42 Unit Rak',
-    target: 'Standar Rak 42U Server',
-    percentage: 'Fasilitas DC BIDA & DRC Sekupang',
-    trend: {
-      direction: 'up',
-      value: '+0 Unit',
-      period: '(Kapasitas Tetap)',
-      isPositive: true,
-    },
-    sparkline: [42, 42, 42, 42, 42, 42, 42],
-    badge: {
-      text: 'Tier III Ready',
-      variant: 'success',
-    },
-    colorTheme: 'blue',
-    formulaRef: 'Item #8: Total Rak = SUM([TOTAL RAK]) di Seluruh Fasilitas DC Tier III',
-  },
-  {
-    id: 'rak_terisi',
-    title: 'Jumlah Rak Data Terisi',
-    value: '33 Rak',
-    target: 'Tingkat Okupansi: 78,6%',
-    percentage: '33 Terisi • 9 Rak Kosong',
-    trend: {
-      direction: 'up',
-      value: '+2 Rak',
-      period: '(QoQ)',
-      isPositive: true,
-    },
-    sparkline: [28, 29, 30, 31, 32, 32, 33],
-    badge: {
-      text: '78,6% Okupansi',
-      variant: 'success',
-    },
-    colorTheme: 'emerald',
-    formulaRef: 'Item #8: Rak Data Terisi = SUM([RAK TERISI]) • Slot Kosong = Total Rak - Rak Terisi',
-  },
-  {
-    id: 'total_serangan',
-    title: 'Total Serangan Keamanan IT',
-    value: '14.820',
-    target: '14.627 Termitigasi (98,7%)',
-    percentage: 'Threat Activity Terdeteksi YTD',
-    trend: {
-      direction: 'up',
-      value: '+1.420',
-      period: '(MoM)',
-      isPositive: false,
-    },
-    sparkline: [11200, 11800, 12400, 13100, 13750, 14200, 14820],
-    badge: {
-      text: 'SOC Protected',
-      variant: 'info',
-    },
-    colorTheme: 'teal',
-    formulaRef: 'Item #12: Total Serangan IT = SUM([JML SERANGAN]) • Mitigasi = SUM([TERMITIGASI])',
-  },
-  {
-    id: 'kepuasan_dc',
-    title: 'Tingkat Kepuasan Pelanggan Data Center',
-    value: '94,2%',
-    target: 'Target Kepuasan: ≥ 90,0%',
-    percentage: 'Kategori "Sangat Puas" (Indeks 4,71/5)',
-    trend: {
-      direction: 'up',
-      value: '+1,8%',
-      period: '(YoY)',
-      isPositive: true,
-    },
-    sparkline: [88.5, 89.2, 90.4, 91.8, 92.6, 93.5, 94.2],
-    badge: {
-      text: 'Sangat Puas',
-      variant: 'success',
-    },
-    colorTheme: 'amber',
-    formulaRef: 'Item #11: CSAT Data Center = (Total Skor Responden / Skor Maksimal) * 100%',
-  },
-  {
     id: 'indeks_spbe',
     title: 'Indeks SPBE BP Batam',
     value: '3,68',
@@ -118,14 +38,74 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
       variant: 'success',
     },
     colorTheme: 'purple',
-    formulaRef: 'Formula Perkin: Indeks SPBE = Komposit 4 Domain (Kebijakan, Tata Kelola, Manajemen, Layanan)',
+    formulaRef: 'Poin #1: Indeks SPBE = Komposit 4 Domain (Kebijakan, Tata Kelola, Manajemen, Layanan) Sesuai PermenPAN-RB No. 59/2020',
+  },
+  {
+    id: 'total_rak',
+    title: 'Total Rak Data DC',
+    value: '42 Unit Rak',
+    target: 'Standar Rak 42U Server Blade & Storage',
+    percentage: 'Main DC BIDA & DRC Sekupang',
+    trend: {
+      direction: 'up',
+      value: '+0 Unit',
+      period: '(Kapasitas Tetap)',
+      isPositive: true,
+    },
+    sparkline: [42, 42, 42, 42, 42, 42, 42],
+    badge: {
+      text: 'Tier III Ready',
+      variant: 'info',
+    },
+    colorTheme: 'blue',
+    formulaRef: 'Poin #2: Total Rak = SUM([TOTAL RAK]) di Fasilitas Main Data Center & DRC Sekupang',
+  },
+  {
+    id: 'rak_terisi',
+    title: 'Jumlah Rak Data yang Terisi',
+    value: '33 Rak',
+    target: 'Tingkat Okupansi: 78,6%',
+    percentage: '33 Terisi • 9 Slot Kosong',
+    trend: {
+      direction: 'up',
+      value: '+2 Rak',
+      period: '(QoQ)',
+      isPositive: true,
+    },
+    sparkline: [28, 29, 30, 31, 32, 32, 33],
+    badge: {
+      text: '78,6% Okupansi',
+      variant: 'success',
+    },
+    colorTheme: 'emerald',
+    formulaRef: 'Poin #3: Rak Data Terisi = SUM([JUMLAH RAK TERISI]) • Okupansi = (Terisi / Total) * 100%',
+  },
+  {
+    id: 'kepuasan_dc',
+    title: 'SLA Kepuasan Pelanggan Data Center',
+    value: '94,2%',
+    target: 'Target Kepuasan: ≥ 90,0%',
+    percentage: 'Kategori "Sangat Puas" (Indeks 4,71/5)',
+    trend: {
+      direction: 'up',
+      value: '+1,8%',
+      period: '(YoY)',
+      isPositive: true,
+    },
+    sparkline: [88.5, 89.2, 90.4, 91.8, 92.6, 93.5, 94.2],
+    badge: {
+      text: 'Sangat Puas',
+      variant: 'success',
+    },
+    colorTheme: 'amber',
+    formulaRef: 'Poin #4: CSAT Data Center = (Total Skor Responden / Skor Maksimal) * 100% (Standar SLA ISO 20000)',
   },
   {
     id: 'jumlah_server',
     title: 'Jumlah Server & Storage',
-    value: '58 Server',
-    target: 'Fisik, Blade & Node HCI',
-    percentage: '48 Server Aktif • 10 Node Standby',
+    value: '58 Unit',
+    target: 'HCI, SAN/NAS, Appliance & Blade',
+    percentage: '48 Server Aktif • 10 Node Standby/DRC',
     trend: {
       direction: 'up',
       value: '+4 Unit',
@@ -137,35 +117,55 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
       text: '58 Unit',
       variant: 'info',
     },
-    colorTheme: 'emerald',
-    formulaRef: 'Item #13: Total Server = SUM([JUMLAH]) Unit Server dan Node Storage',
+    colorTheme: 'teal',
+    formulaRef: 'Poin #5: Total Server & Storage = SUM([JUMLAH]) Unit Hardware di Ruang Server BIDA & DRC',
   },
   {
-    id: 'panjang_fiber',
-    title: 'Panjang Jaringan FO',
-    value: '284,5 KM',
-    target: 'Target: 300 KM',
-    percentage: '81,4% Utilitas Koridor',
+    id: 'jumlah_core_fo',
+    title: 'Jumlah Core FO',
+    value: '3.456 Core',
+    target: '2.880 Core Aktif (83,3% Utilisasi)',
+    percentage: 'Kapasitas Total 8 Koridor Backbone Batam',
     trend: {
       direction: 'up',
-      value: '+12,5 km',
-      period: '(YTD)',
+      value: '+288 Core',
+      period: '(Ekspansi Ruas)',
       isPositive: true,
     },
-    sparkline: [240, 252, 265, 270, 275, 280, 284.5],
+    sparkline: [2880, 2976, 3072, 3168, 3264, 3360, 3456],
     badge: {
-      text: 'Backbone Aktif',
+      text: '83,3% Utilisasi',
       variant: 'info',
     },
     colorTheme: 'blue',
-    formulaRef: 'Item #2: Panjang FO = SUM([PANJANG]) di 8 Ruas Jalan Utama Batam',
+    formulaRef: 'Poin #6: Jumlah Core FO = SUM([JMLHCORE]) di Seluruh Bentang Kabel Serat Optik BP Batam',
+  },
+  {
+    id: 'total_serangan',
+    title: 'Total Serangan',
+    value: '14.820',
+    target: '14.627 Termitigasi (98,7%)',
+    percentage: 'Threat Activity Terdeteksi CSIRT YTD',
+    trend: {
+      direction: 'up',
+      value: '+1.420',
+      period: '(MoM)',
+      isPositive: false,
+    },
+    sparkline: [11200, 11800, 12400, 13100, 13750, 14200, 14820],
+    badge: {
+      text: 'SOC Protected',
+      variant: 'info',
+    },
+    colorTheme: 'teal',
+    formulaRef: 'Poin #7: Total Serangan IT = SUM([JML SERANGAN]) • Mitigasi = SUM([TERMITIGASI])',
   },
   {
     id: 'jumlah_aplikasi',
-    title: 'Jumlah Aplikasi SPBE',
+    title: 'Jumlah Aplikasi',
     value: '114 Aplikasi',
-    target: 'Mandat SPBE Nasional',
-    percentage: '84 Aktif • 30 Integrasi',
+    target: 'Mandat Arsitektur SPBE Nasional',
+    percentage: '84 Publik & Internal Aktif • 30 Integrasi',
     trend: {
       direction: 'up',
       value: '+3 App',
@@ -178,7 +178,7 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
       variant: 'success',
     },
     colorTheme: 'purple',
-    formulaRef: 'Item #14: Total Aplikasi = COUNT([NAMA APLIKASI]) di Katalog Data SPBE',
+    formulaRef: 'Poin #8: Total Aplikasi = COUNT([NAMA APLIKASI]) di Katalog Data SPBE BP Batam',
   },
 ];
 
@@ -231,13 +231,72 @@ export const DC_RACKS_DATA: DcRackItem[] = [
   },
 ];
 
+// Data Tenant Data Center (Poin #9 Rekap Data Tenant)
+export interface DcTenantItem {
+  id: string;
+  kategori: string;
+  jumlah: number;
+  persentase: number;
+  contohTenant: string;
+  tipeLayanan: string;
+  kapasitasRak: string;
+}
+
+export const DC_TENANTS_DATA: DcTenantItem[] = [
+  {
+    id: 'tnt-01',
+    kategori: 'Instansi Pemerintah Pusat & K/L',
+    jumlah: 8,
+    persentase: 10.3,
+    contohTenant: 'Kemenkeu (DJP/BC Batam), BSSN CSIRT, BKPM RI, Kemenhub Hubla',
+    tipeLayanan: 'Colocation 42U Dedicated & Interkoneksi Fiber Optic',
+    kapasitasRak: '6 Rak Dedicated',
+  },
+  {
+    id: 'tnt-02',
+    kategori: 'Organisasi Perangkat Daerah (OPD) Pemko Batam',
+    jumlah: 12,
+    persentase: 15.4,
+    contohTenant: 'Diskominfo Kota Batam, Bapenda Kota Batam, PTSP Kota Batam, RSUD Embung Fatimah',
+    tipeLayanan: 'Virtual Data Center (VDC), Cloud Hosting & Replikasi DRC',
+    kapasitasRak: '5 Rak Bersama',
+  },
+  {
+    id: 'tnt-03',
+    kategori: 'BUMN, BUMD & Lembaga Keuangan / Bank Mitra',
+    jumlah: 15,
+    persentase: 19.2,
+    contohTenant: 'Bank Mandiri, BRI, BNI, Bank Riau Kepri Syariah, Telkom Indonesia, PLN Batam',
+    tipeLayanan: 'Secure Colocation Gateway Payment, Host-to-Host Host Billing',
+    kapasitasRak: '7 Rak Dedicated',
+  },
+  {
+    id: 'tnt-04',
+    kategori: 'Unit Usaha & Satker Internal BP Batam',
+    jumlah: 24,
+    persentase: 30.8,
+    contohTenant: 'Biro Keuangan (SIMKEU), PTSP BP Batam, BU Fasling, BU Pelabuhan, RSBP Batam, Bandara Hang Nadim',
+    tipeLayanan: 'Core Mission-Critical Datacenter Hosting, Database Cluster & Backup',
+    kapasitasRak: '11 Rak Primary',
+  },
+  {
+    id: 'tnt-05',
+    kategori: 'Perusahaan Swasta, Kawasan Industri & KEK',
+    jumlah: 19,
+    persentase: 24.3,
+    contohTenant: 'Pengelola KEK Batam Aero Technic, Nongsa Digital Park, Kawasan Industri Batamindo, Mitra Logistik',
+    tipeLayanan: 'Disaster Recovery As A Service (DRaaS) & Edge Meet-Me-Room',
+    kapasitasRak: '4 Rak Colocation',
+  },
+];
+
 // Infrastruktur Server & Storage (Item #13 di PDF: REKAP INFRASTRUKTUR SERVER DAN STORAGE)
 export interface ServerStorageItem {
   id: string;
   tanggalRekap: string;
   namaServer: string;
   brand: string;
-  tipe: 'Hyperconverged HCI' | 'Storage SAN/NAS' | 'Database Appliance' | 'Blade Compute';
+  tipe: 'Hyperconverged HCI' | 'Storage SAN/NAS' | 'Database Appliance' | 'Blade Compute' | 'Rackmount Server' | 'Storage Backup/NAS';
   jumlahUnit: number;
   tanggalGaransi: string;
   statusGaransi: 'Aktif' | 'Masa Perpanjangan' | 'Habis Garansi';
@@ -252,7 +311,7 @@ export const SERVER_STORAGE_DATA: ServerStorageItem[] = [
     namaServer: 'Cluster Nutanix Enterprise Cloud',
     brand: 'Nutanix / Supermicro',
     tipe: 'Hyperconverged HCI',
-    jumlahUnit: 8,
+    jumlahUnit: 16,
     tanggalGaransi: '31/12/2027',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
@@ -261,38 +320,324 @@ export const SERVER_STORAGE_DATA: ServerStorageItem[] = [
   {
     id: 'srv-02',
     tanggalRekap: '01/04/2026',
+    namaServer: 'Cisco UCS Blade B200 Compute Cluster',
+    brand: 'Cisco Systems',
+    tipe: 'Blade Compute',
+    jumlahUnit: 12,
+    tanggalGaransi: '30/11/2027',
+    statusGaransi: 'Aktif',
+    eosStatus: 'Aman (Supported)',
+    penggunaan: 'Node Pemrosesan Mikroservis & Kubernetes Container',
+  },
+  {
+    id: 'srv-03',
+    tanggalRekap: '01/04/2026',
+    namaServer: 'Dell PowerEdge R750 Enterprise Server',
+    brand: 'Dell Technologies',
+    tipe: 'Rackmount Server',
+    jumlahUnit: 10,
+    tanggalGaransi: '31/08/2028',
+    statusGaransi: 'Aktif',
+    eosStatus: 'Aman (Supported)',
+    penggunaan: 'Server Core Routing, AD, DNS & Security Monitoring',
+  },
+  {
+    id: 'srv-04',
+    tanggalRekap: '01/04/2026',
     namaServer: 'SAN Storage All-Flash OceanStor',
     brand: 'Huawei OceanStor',
     tipe: 'Storage SAN/NAS',
-    jumlahUnit: 2,
+    jumlahUnit: 6,
     tanggalGaransi: '15/09/2028',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
     penggunaan: 'High IOPS Database Oracle SIMKEU & PostgreSQL GIS',
   },
   {
-    id: 'srv-03',
+    id: 'srv-05',
     tanggalRekap: '01/04/2026',
     namaServer: 'Database Server Cluster (Exadata X8M)',
     brand: 'Oracle',
     tipe: 'Database Appliance',
-    jumlahUnit: 2,
+    jumlahUnit: 4,
     tanggalGaransi: '30/06/2027',
     statusGaransi: 'Aktif',
     eosStatus: 'Aman (Supported)',
     penggunaan: 'Core SIMKEU, PNBP, Billing Kas & Bank',
   },
   {
-    id: 'srv-04',
+    id: 'srv-06',
+    tanggalRekap: '01/04/2026',
+    namaServer: 'NetApp FAS8300 Enterprise Hybrid Storage',
+    brand: 'NetApp',
+    tipe: 'Storage SAN/NAS',
+    jumlahUnit: 4,
+    tanggalGaransi: '31/01/2025',
+    statusGaransi: 'Masa Perpanjangan',
+    eosStatus: 'Aman (Supported)',
+    penggunaan: 'Storage Repository Dokumen Digital & Arsip TIK',
+  },
+  {
+    id: 'srv-07',
     tanggalRekap: '01/04/2026',
     namaServer: 'HPE ProLiant DL380 Gen9 (Legacy Node)',
     brand: 'HPE',
-    tipe: 'Blade Compute',
+    tipe: 'Rackmount Server',
     jumlahUnit: 4,
     tanggalGaransi: '31/03/2024',
     statusGaransi: 'Habis Garansi',
-    eosStatus: 'Mendekati EOS (<6 Bln)',
-    penggunaan: 'Archive File Server & Dev Environment (Rencana Migrasi TA 2026)',
+    eosStatus: 'EOS (End of Support)',
+    penggunaan: 'Archive File Server & Dev Environment (Rencana Refresh TA 2026)',
+  },
+  {
+    id: 'srv-08',
+    tanggalRekap: '01/04/2026',
+    namaServer: 'Synology Enterprise Backup Appliance',
+    brand: 'Synology Inc',
+    tipe: 'Storage Backup/NAS',
+    jumlahUnit: 2,
+    tanggalGaransi: '15/10/2027',
+    statusGaransi: 'Aktif',
+    eosStatus: 'Aman (Supported)',
+    penggunaan: 'Off-site Replikasi Backup DRC Sekupang',
+  },
+];
+
+// Data Layanan TI & Permintaan Layanan TI pada Bcare (Poin #10 & Lampiran PDF Bcare)
+export interface PdsiDataLayananItem {
+  id: string;
+  kode: string;
+  namaLayanan: string;
+  jumlah: number;
+  kategori: string;
+  subLayananContoh: string;
+  subditPengelola: string;
+}
+
+export interface PdsiBcareSubLayananRecord {
+  id: number;
+  kode: string;
+  namaLayanan: string;
+  namaSubLayanan: string;
+  kategoriTingkat: 'Tinggi' | 'Menengah' | 'Rendah';
+}
+
+// 44 Entri Katalog Layanan Resmi pada Bcare (PDF: layanan — Data Layanan TI pada Bcare)
+export const BCARE_44_SUB_LAYANAN: PdsiBcareSubLayananRecord[] = [
+  { id: 1, kode: 'ITSM.3', namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam', namaSubLayanan: '3.6 Layanan Akses Aplikasi Sistem Informasi', kategoriTingkat: 'Tinggi' },
+  { id: 2, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.1 Layanan Penanganan Insiden Aplikasi Sistem Informasi TIK', kategoriTingkat: 'Menengah' },
+  { id: 3, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.3 Layanan Pengembangan Netware', kategoriTingkat: 'Menengah' },
+  { id: 4, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.5 Layanan Interkoneksi Jaringan', kategoriTingkat: 'Menengah' },
+  { id: 5, kode: 'ITSM.1', namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi', namaSubLayanan: '1.1 Pembangunan Aplikasi Baru', kategoriTingkat: 'Menengah' },
+  { id: 6, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.4 Layanan Performance Tuning Basis Data', kategoriTingkat: 'Tinggi' },
+  { id: 7, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.6 Layanan Penanganan Insiden Keamanan TIK', kategoriTingkat: 'Menengah' },
+  { id: 8, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.3 Layanan Permintaan Replikasi/Backup/Restore Basis Data', kategoriTingkat: 'Tinggi' },
+  { id: 9, kode: 'ITSM.5', namaLayanan: 'Layanan PDSI - Keamanan Siber', namaSubLayanan: '5.3 Layanan Penanganan Insiden Keamanan Siber (CSIRT)', kategoriTingkat: 'Tinggi' },
+  { id: 10, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.5 Layanan Permintaan Penyajian Informasi Dashboard', kategoriTingkat: 'Tinggi' },
+  { id: 11, kode: 'ITSM.9', namaLayanan: 'Layanan PDSI - Kebijakan Tata Kelola TI', namaSubLayanan: '9.1 Layanan PDSI - Layanan Penyusunan Kebijakan TI', kategoriTingkat: 'Tinggi' },
+  { id: 12, kode: 'ITSM.3', namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam', namaSubLayanan: '3.7 Layanan Akses Basis Data', kategoriTingkat: 'Tinggi' },
+  { id: 13, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.2 Layanan Penanganan Insiden Basis Data TIK', kategoriTingkat: 'Menengah' },
+  { id: 14, kode: 'ITSM.5', namaLayanan: 'Layanan PDSI - Keamanan Siber', namaSubLayanan: '5.2 Layanan Uji Kerentanan Sistem Informasi', kategoriTingkat: 'Tinggi' },
+  { id: 15, kode: 'ITSM.9', namaLayanan: 'Layanan PDSI - Kebijakan Tata Kelola TI', namaSubLayanan: '9.2 Layanan PDSI - Layanan Evaluasi Sistem dan Kebijakan TI', kategoriTingkat: 'Tinggi' },
+  { id: 16, kode: 'ITSM.10', namaLayanan: 'Layanan PDSI - Layanan Pengelolaan Data dan Tata Usaha TI', namaSubLayanan: '10.1 Layanan Pengelolaan Persuratan dan Keperluan sehari-hari', kategoriTingkat: 'Menengah' },
+  { id: 17, kode: 'ITSM.1', namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi', namaSubLayanan: '1.2 Pengembangan Modul Aplikasi', kategoriTingkat: 'Menengah' },
+  { id: 18, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.1 Layanan Penambahan Domain dan Subdomain', kategoriTingkat: 'Menengah' },
+  { id: 19, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.3 Layanan Penanganan Insiden Integrasi', kategoriTingkat: 'Menengah' },
+  { id: 20, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.1 Layanan Permintaan Data Kebutuhan Eksternal', kategoriTingkat: 'Menengah' },
+  { id: 21, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.4 Layanan Penanganan Insiden Koneksi Jaringan & Internet', kategoriTingkat: 'Menengah' },
+  { id: 22, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.5 Layanan Penanganan Insiden Perangkat Server & Storage', kategoriTingkat: 'Tinggi' },
+  { id: 23, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.7 Layanan Penanganan Insiden Akun Email & SSO Portal', kategoriTingkat: 'Menengah' },
+  { id: 24, kode: 'ITSM.4', namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam', namaSubLayanan: '4.8 Layanan Penanganan Insiden Sistem Monitoring Data Center', kategoriTingkat: 'Tinggi' },
+  { id: 25, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.2 Layanan Permintaan Integrasi Data Internal Antar Satker', kategoriTingkat: 'Tinggi' },
+  { id: 26, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.6 Layanan Ekstraksi & Migrasi Basis Data Sistem Lama', kategoriTingkat: 'Tinggi' },
+  { id: 27, kode: 'ITSM.8', namaLayanan: 'Layanan PDSI - Data dan Informasi', namaSubLayanan: '8.7 Layanan Verifikasi Kualitas & Validasi Data Transaksional', kategoriTingkat: 'Menengah' },
+  { id: 28, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.2 Layanan Alokasi IP Publik / Load Balance', kategoriTingkat: 'Menengah' },
+  { id: 29, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.4 Layanan Konfigurasi VPN & Akses Jarak Jauh', kategoriTingkat: 'Menengah' },
+  { id: 30, kode: 'ITSM.2', namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan', namaSubLayanan: '2.6 Layanan Penyambungan Core Fiber Optic Antar Gedung', kategoriTingkat: 'Tinggi' },
+  { id: 31, kode: 'ITSM.5', namaLayanan: 'Layanan PDSI - Keamanan Siber', namaSubLayanan: '5.1 Layanan Penerbitan & Asistensi Sertifikat Elektronik TTE BSrE', kategoriTingkat: 'Tinggi' },
+  { id: 32, kode: 'ITSM.5', namaLayanan: 'Layanan PDSI - Keamanan Siber', namaSubLayanan: '5.4 Layanan Audit Kepatuhan Keamanan Sistem Informasi (ISO 27001)', kategoriTingkat: 'Tinggi' },
+  { id: 33, kode: 'ITSM.5', namaLayanan: 'Layanan PDSI - Keamanan Siber', namaSubLayanan: '5.5 Layanan Monitoring SOC & Log Forensik Siber 24/7', kategoriTingkat: 'Tinggi' },
+  { id: 34, kode: 'ITSM.3', namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam', namaSubLayanan: '3.1 Layanan Pembuatan Akun SSO Pegawai Baru BP Batam', kategoriTingkat: 'Menengah' },
+  { id: 35, kode: 'ITSM.3', namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam', namaSubLayanan: '3.2 Layanan Hak Akses Server Virtual / VM Colocation DC', kategoriTingkat: 'Tinggi' },
+  { id: 36, kode: 'ITSM.3', namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam', namaSubLayanan: '3.3 Layanan Reset Kredensial & Autentikasi MFA Pengguna', kategoriTingkat: 'Menengah' },
+  { id: 37, kode: 'ITSM.1', namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi', namaSubLayanan: '1.3 Layanan Pengembangan Integrasi / Pertukaran Data (API Web Service)', kategoriTingkat: 'Menengah' },
+  { id: 38, kode: 'ITSM.1', namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi', namaSubLayanan: '1.4 Layanan Uji Coba (UAT) & Deployment Sistem ke Production', kategoriTingkat: 'Menengah' },
+  { id: 39, kode: 'ITSM.1', namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi', namaSubLayanan: '1.5 Layanan Pemeliharaan & Bug Fixing Aplikasi Berjalan', kategoriTingkat: 'Menengah' },
+  { id: 40, kode: 'ITSM.9', namaLayanan: 'Layanan PDSI - Kebijakan Tata Kelola TI', namaSubLayanan: '9.3 Layanan Pengukuran Indeks Kematangan SPBE BP Batam', kategoriTingkat: 'Tinggi' },
+  { id: 41, kode: 'ITSM.9', namaLayanan: 'Layanan PDSI - Kebijakan Tata Kelola TI', namaSubLayanan: '9.4 Layanan Standardisasi SOP & Arsitektur SPBE', kategoriTingkat: 'Tinggi' },
+  { id: 42, kode: 'ITSM.10', namaLayanan: 'Layanan PDSI - Layanan Pengelolaan Data dan Tata Usaha TI', namaSubLayanan: '10.2 Layanan Administrasi Perizinan TIK & Lisensi Software', kategoriTingkat: 'Menengah' },
+  { id: 43, kode: 'ITSM.10', namaLayanan: 'Layanan PDSI - Layanan Pengelolaan Data dan Tata Usaha TI', namaSubLayanan: '10.3 Layanan Pelaporan Monitoring Kinerja Bulanan PDSI', kategoriTingkat: 'Menengah' },
+  { id: 44, kode: 'ITSM.10', namaLayanan: 'Layanan PDSI - Layanan Pengelolaan Data dan Tata Usaha TI', namaSubLayanan: '10.4 Layanan Pengarsipan Dokumen Teknis & Manual Operasi TIK', kategoriTingkat: 'Menengah' },
+];
+
+// Rekapitulasi Data Layanan TI per Kategori (Menampilkan: Nama Layanan dan Jumlah Sub-Layanan, Total 44)
+export const PDSI_DATA_LAYANAN_TI: PdsiDataLayananItem[] = [
+  {
+    id: 'lyn-01',
+    kode: 'ITSM.4',
+    namaLayanan: 'Layanan PDSI - Penanganan Insiden TIK BP Batam',
+    jumlah: 8,
+    kategori: 'Penanganan Insiden TIK',
+    subLayananContoh: '4.1 Insiden Aplikasi, 4.2 Basis Data, 4.3 Integrasi, 4.6 Keamanan TIK',
+    subditPengelola: 'Subdit Infrastruktur & Operasional TIK',
+  },
+  {
+    id: 'lyn-02',
+    kode: 'ITSM.8',
+    namaLayanan: 'Layanan PDSI - Data dan Informasi',
+    jumlah: 7,
+    kategori: 'Data & Informasi',
+    subLayananContoh: '8.4 Performance Tuning DB, 8.3 Backup/Restore DB, 8.5 Dashboard, 8.1 Data Eksternal',
+    subditPengelola: 'Subdit Pengelolaan Data & Informasi',
+  },
+  {
+    id: 'lyn-03',
+    kode: 'ITSM.2',
+    namaLayanan: 'Layanan PDSI - Infrastruktur Jaringan',
+    jumlah: 6,
+    kategori: 'Infrastruktur Jaringan',
+    subLayananContoh: '2.3 Pengembangan Netware, 2.5 Interkoneksi, 2.1 Domain/Subdomain, 2.2 IP Publik',
+    subditPengelola: 'Subdit Jaringan & Telekomunikasi',
+  },
+  {
+    id: 'lyn-04',
+    kode: 'ITSM.5',
+    namaLayanan: 'Layanan PDSI - Keamanan Siber',
+    jumlah: 5,
+    kategori: 'Keamanan Siber & CSIRT',
+    subLayananContoh: '5.3 Penanganan Insiden Siber (CSIRT), 5.2 Uji Kerentanan SI, 5.1 Asistensi TTE',
+    subditPengelola: 'Subdit Keamanan Informasi (CSIRT BP Batam)',
+  },
+  {
+    id: 'lyn-05',
+    kode: 'ITSM.3',
+    namaLayanan: 'Layanan PDSI - Akses Sistem BP Batam',
+    jumlah: 5,
+    kategori: 'Akses Sistem & Otentikasi',
+    subLayananContoh: '3.6 Akses Aplikasi SI, 3.7 Akses Basis Data, 3.1 Akun SSO, 3.2 Akses Server/VM',
+    subditPengelola: 'Subdit Sistem Informasi & Portal Layanan',
+  },
+  {
+    id: 'lyn-06',
+    kode: 'ITSM.1',
+    namaLayanan: 'Layanan PDSI - Pengembangan Sistem informasi',
+    jumlah: 5,
+    kategori: 'Pengembangan Aplikasi SI',
+    subLayananContoh: '1.1 Pembangunan Aplikasi Baru, 1.2 Modul Aplikasi, 1.3 Integrasi API',
+    subditPengelola: 'Subdit Pengembangan Aplikasi & SI',
+  },
+  {
+    id: 'lyn-07',
+    kode: 'ITSM.9',
+    namaLayanan: 'Layanan PDSI - Kebijakan Tata Kelola TI',
+    jumlah: 4,
+    kategori: 'Tata Kelola & Kebijakan SPBE',
+    subLayananContoh: '9.1 Penyusunan Kebijakan TI, 9.2 Evaluasi Sistem, 9.3 Evaluasi SPBE',
+    subditPengelola: 'Subdit Tata Kelola TI & Kepatuhan SPBE',
+  },
+  {
+    id: 'lyn-08',
+    kode: 'ITSM.10',
+    namaLayanan: 'Layanan PDSI - Layanan Pengelolaan Data dan Tata Usaha TI',
+    jumlah: 4,
+    kategori: 'Tata Usaha & Administrasi TIK',
+    subLayananContoh: '10.1 Persuratan & Keperluan Sehari-hari, 10.2 Administrasi Lisensi TIK',
+    subditPengelola: 'Subbagian Tata Usaha PDSI',
+  },
+];
+
+export interface PdsiPermintaanLayananItem {
+  id: string;
+  namaLayanan: string;
+  jumlah: number;
+  selesai: number;
+  dalamProses: number;
+  tingkatPenyelesaian: number;
+  kategoriPrioritas: string;
+  durasiRataRata: string;
+}
+
+// Rekapitulasi Permintaan Layanan TI melalui Bcare (Total 544 Entri, sesuai PDF)
+export const PDSI_PERMINTAAN_LAYANAN_TI: PdsiPermintaanLayananItem[] = [
+  {
+    id: 'req-01',
+    namaLayanan: 'Layanan Pengembangan Modul Aplikasi',
+    jumlah: 146,
+    selesai: 142,
+    dalamProses: 4,
+    tingkatPenyelesaian: 97.3,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '3,2 Hari',
+  },
+  {
+    id: 'req-02',
+    namaLayanan: 'Layanan Pengembangan Integrasi / Pertukaran Data',
+    jumlah: 98,
+    selesai: 96,
+    dalamProses: 2,
+    tingkatPenyelesaian: 98.0,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '2,5 Hari',
+  },
+  {
+    id: 'req-03',
+    namaLayanan: 'Layanan Akses Aplikasi Sistem Informasi',
+    jumlah: 86,
+    selesai: 85,
+    dalamProses: 1,
+    tingkatPenyelesaian: 98.8,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '45 Menit',
+  },
+  {
+    id: 'req-04',
+    namaLayanan: 'Layanan Penanganan Insiden Aplikasi Sistem Informasi TIK',
+    jumlah: 64,
+    selesai: 63,
+    dalamProses: 1,
+    tingkatPenyelesaian: 98.4,
+    kategoriPrioritas: 'Menengah',
+    durasiRataRata: '1,8 Jam',
+  },
+  {
+    id: 'req-05',
+    namaLayanan: 'Layanan Permintaan Penyajian Informasi Dashboard',
+    jumlah: 48,
+    selesai: 46,
+    dalamProses: 2,
+    tingkatPenyelesaian: 95.8,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '2,0 Hari',
+  },
+  {
+    id: 'req-06',
+    namaLayanan: 'Layanan Pengembangan IP Publik / Load Balance',
+    jumlah: 38,
+    selesai: 37,
+    dalamProses: 1,
+    tingkatPenyelesaian: 97.4,
+    kategoriPrioritas: 'Menengah',
+    durasiRataRata: '1,2 Hari',
+  },
+  {
+    id: 'req-07',
+    namaLayanan: 'Layanan Penanganan Insiden Keamanan Siber (CSIRT)',
+    jumlah: 34,
+    selesai: 33,
+    dalamProses: 1,
+    tingkatPenyelesaian: 97.1,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '1,5 Jam',
+  },
+  {
+    id: 'req-08',
+    namaLayanan: 'Layanan Permintaan Replikasi/Backup/Restore Basis Data',
+    jumlah: 30,
+    selesai: 29,
+    dalamProses: 1,
+    tingkatPenyelesaian: 96.7,
+    kategoriPrioritas: 'Tinggi',
+    durasiRataRata: '2,8 Jam',
   },
 ];
 

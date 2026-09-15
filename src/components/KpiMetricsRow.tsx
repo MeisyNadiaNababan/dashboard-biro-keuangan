@@ -16,6 +16,34 @@ interface KpiMetricsRowProps {
   onSelectMetric?: (metricId: string) => void;
 }
 
+const MicroBarSparkline: React.FC<{ data?: number[]; color?: string }> = ({
+  data = [],
+  color = '#1F4E79',
+}) => {
+  if (!data || data.length === 0) return null;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+
+  return (
+    <div className="flex items-end gap-1 h-5 shrink-0" title="Tren Historis Performa (MoM)">
+      {data.map((val, idx) => {
+        const heightPct = Math.max(20, Math.round(((val - min) / range) * 80 + 20));
+        return (
+          <div
+            key={idx}
+            className="w-1.5 rounded-t-xs transition-all duration-300"
+            style={{
+              height: `${heightPct}%`,
+              backgroundColor: idx === data.length - 1 ? color : `${color}55`,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectMetric }) => {
   const getKpiConfig = (id: string) => {
     switch (id) {
@@ -26,18 +54,18 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeBg: 'bg-emerald-600',
           badgeText: 'text-white',
           themeColor: '#059669', // Emerald
-          subLabel: 'Target Perkin Rp 2.447,5 M',
-          pctLabel: '40,1% Perkin',
+          subLabel: 'Target: Rp 2.447,5 M • Capaian: 40,1%',
+          bottomText: 'Capaian: (Realisasi/Target) × 100% = 40,1%',
         };
       case 'belanja':
         return {
-          acronym: 'PAGU',
+          acronym: 'BELANJA',
           icon: CreditCard,
           badgeBg: 'bg-[#1F4E79]',
           badgeText: 'text-white',
           themeColor: '#1F4E79', // Navy Blue
-          subLabel: 'Pagu DIPA Rp 3.318,5 M',
-          pctLabel: '28,5% Serapan',
+          subLabel: 'Pagu DIPA: Rp 3.318,5 M • Serapan: 28,5%',
+          bottomText: 'Serapan: (Realisasi/Pagu) × 100% = 28,5%',
         };
       case 'kas_bank':
         return {
@@ -47,7 +75,7 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeText: 'text-white',
           themeColor: '#0D9488', // Teal
           subLabel: 'Cadangan 3,89 Bulan Operasional',
-          pctLabel: 'Solven Prima',
+          bottomText: 'Likuiditas Kas: Solven Prima (≥ 2 Bln)',
         };
       case 'piutang':
         return {
@@ -56,18 +84,18 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeBg: 'bg-rose-600',
           badgeText: 'text-white',
           themeColor: '#E11D48', // Rose
-          subLabel: 'Tunggakan 305 Debitur',
-          pctLabel: '73,8% Kolektibel',
+          subLabel: '73,8% Kolektibel (305 Debitur)',
+          bottomText: 'Kolektibilitas 1 (Lancar): Rp 230,5 M',
         };
       case 'coverage_ratio':
         return {
-          acronym: 'COV',
+          acronym: 'CCR',
           icon: Scale,
           badgeBg: 'bg-purple-600',
           badgeText: 'text-white',
           themeColor: '#7C3AED', // Purple
-          subLabel: 'PNBP Rp 981,2 M / Belanja Rp 945,0 M',
-          pctLabel: '103,8% Mandiri',
+          subLabel: '103,8% Mandiri (Surplus Kas Operasional)',
+          bottomText: 'Benchmark Kemandirian: ≥ 0,80x',
         };
       case 'ipa':
         return {
@@ -76,8 +104,8 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeBg: 'bg-amber-600',
           badgeText: 'text-white',
           themeColor: '#D97706', // Amber
-          subLabel: 'Kemenkeu Kategori Sangat Baik',
-          pctLabel: 'Opini WTP',
+          subLabel: 'Kategori Sangat Baik • Opini WTP BPK',
+          bottomText: 'Standar Akuntansi Pemerintah (SAP) WTP',
         };
       default:
         return {
@@ -87,7 +115,7 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
           badgeText: 'text-white',
           themeColor: '#475569',
           subLabel: 'Indikator Utama',
-          pctLabel: '100% Target',
+          bottomText: 'Target & Realisasi 2026',
         };
     }
   };
@@ -110,36 +138,16 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
 
       {/* Grid of 6 Clean KPI Cards with Spacious Layout (3 columns on lg) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-        {biroKeuanganMetrics.map((metric) => {
+        {biroKeuanganMetrics.map((metric, idx) => {
           const config = getKpiConfig(metric.id);
           const Icon = config.icon;
-
-          // Color assignment for values
-          const getValueColor = (id: string) => {
-            switch (id) {
-              case 'pendapatan':
-                return 'text-slate-900';
-              case 'belanja':
-                return 'text-blue-700';
-              case 'kas_bank':
-                return 'text-teal-700';
-              case 'piutang':
-                return 'text-rose-600';
-              case 'coverage_ratio':
-                return 'text-purple-700';
-              case 'ipa':
-                return 'text-amber-600';
-              default:
-                return 'text-slate-900';
-            }
-          };
 
           return (
             <div
               key={metric.id}
               id={`kpi-card-${metric.id}`}
               onClick={() => onSelectMetric && onSelectMetric(metric.id)}
-              className="bg-white rounded-2xl border border-slate-200/90 hover:border-blue-400 p-4 sm:p-5 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group hover:-translate-y-0.5 active:scale-[0.99] relative overflow-hidden"
+              className="bg-white rounded-2xl border border-slate-200/90 hover:border-blue-400 p-4 sm:p-4.5 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group hover:-translate-y-0.5 active:scale-[0.99] relative overflow-hidden"
               title="Klik untuk membuka formula perhitungan & rincian katalog data"
             >
               {/* Subtle top indicator bar */}
@@ -148,44 +156,51 @@ export const KpiMetricsRow: React.FC<KpiMetricsRowProps> = ({ metrics, onSelectM
                 style={{ backgroundColor: config.themeColor }}
               />
 
-              {/* Card Top: Title on left with acronym badge, Icon on right */}
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2 min-w-0">
-                  <span
-                    className={`${config.badgeBg} ${config.badgeText} text-[10px] font-black font-mono px-1.5 py-0.5 rounded shadow-2xs shrink-0`}
-                  >
-                    {config.acronym}
-                  </span>
-                  <span className="text-xs font-bold text-slate-700 group-hover:text-blue-700 transition-colors truncate">
-                    {metric.title}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-[10px] font-mono text-blue-600 bg-blue-50 group-hover:bg-blue-100 border border-blue-200/80 px-1.5 py-0.5 rounded transition-colors flex items-center gap-0.5">
+              <div>
+                {/* Card Top: Index Number + Acronym with Icon + Title, Rumus button on right */}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                      #{idx + 1}
+                    </span>
+                    <div
+                      className={`${config.badgeBg} ${config.badgeText} text-[10px] font-black font-mono px-1.5 py-0.5 rounded shadow-2xs shrink-0 flex items-center gap-1`}
+                    >
+                      <Icon className="w-3 h-3" />
+                      <span>{config.acronym}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-800 leading-tight group-hover:text-blue-700 transition-colors truncate">
+                      {metric.title}
+                    </h4>
+                  </div>
+
+                  <span className="text-[10px] font-mono text-blue-600 bg-blue-50 group-hover:bg-blue-100 border border-blue-200/80 px-1.5 py-0.5 rounded transition-colors flex items-center gap-0.5 shrink-0">
                     <Calculator className="w-2.5 h-2.5" />
                     <span>Rumus</span>
                   </span>
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
-                    style={{ backgroundColor: `${config.themeColor}15`, color: config.themeColor }}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
+                </div>
+
+                {/* Card Center: Big Bold Number & SubLabel */}
+                <div className="my-1.5">
+                  <div className="text-2xl sm:text-[26px] font-black text-slate-900 font-mono tracking-tight leading-none">
+                    {metric.value}
+                  </div>
+                  <div className="text-[11px] text-slate-500 font-medium mt-1 truncate">
+                    {config.subLabel}
                   </div>
                 </div>
               </div>
 
-              {/* Card Center: Big Bold Colored Number */}
-              <div className="my-1.5">
-                <div
-                  className={`text-2xl sm:text-[26px] font-black tracking-tight leading-tight font-mono truncate ${getValueColor(
-                    metric.id
-                  )}`}
-                >
-                  {metric.value}
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium mt-1 truncate">
-                  {config.subLabel}
-                </div>
+              {/* Bottom Row: Target / Summary text & Micro Bar Sparkline */}
+              <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                <span className="text-[10.5px] text-slate-500 font-medium truncate">
+                  {config.bottomText}
+                </span>
+
+                <MicroBarSparkline
+                  data={metric.sparkline}
+                  color={config.themeColor}
+                />
               </div>
             </div>
           );

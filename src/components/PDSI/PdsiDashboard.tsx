@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { PdsiKpiRow } from './PdsiKpiRow';
-import { PdsiDataCenterCard } from './PdsiDataCenterCard';
-import { PdsiCyberSecurityCard } from './PdsiCyberSecurityCard';
-import { PdsiHelpdeskSection } from './PdsiHelpdeskSection';
-import { PdsiFiberOpticAndApps } from './PdsiFiberOpticAndApps';
+import { PdsiDataCenterConsolidatedSwap } from './PdsiDataCenterConsolidatedSwap';
+import { PdsiItServicesConsolidatedSwap } from './PdsiItServicesConsolidatedSwap';
 import { PdsiKamusRumusView } from './PdsiKamusRumusView';
 import { KpiWordDocumentView } from '../KpiWordDocumentView';
 import { PdsiFilters } from './PdsiFilters';
@@ -73,47 +71,39 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
         onOpenExportModal={onOpenExportModal}
       />
 
-      {/* 2. Main Content Area based on activeSubMenu and selectedDomain */}
+      {/* 2. Main Content Area: Strictly adhering to Points 1 - 10, all other views removed (Point 11) */}
       {activeSubMenu === 'kpi_word_doc' ? (
         <KpiWordDocumentView activeUnitId="pdsi" onBackToDashboard={() => onSelectSubMenu('ikhtisar')} />
       ) : activeSubMenu === 'kamus_rumus' ? (
         <PdsiKamusRumusView />
-      ) : activeSubMenu === 'helpdesk' || selectedDomain === 'helpdesk' ? (
-        <div className="space-y-4">
-          <PdsiHelpdeskSection onOpenFormulaModal={handleKpiCardClick} />
-        </div>
       ) : activeSubMenu === 'datacenter' || selectedDomain === 'datacenter' ? (
         <div className="space-y-4">
-          <PdsiDataCenterCard onOpenFormulaModal={handleKpiCardClick} />
+          <PdsiDataCenterConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
         </div>
-      ) : activeSubMenu === 'cyber' || selectedDomain === 'cyber' ? (
+      ) : activeSubMenu === 'layanan_ti' || activeSubMenu === 'helpdesk' || selectedDomain === 'layanan_ti' ? (
         <div className="space-y-4">
-          <PdsiCyberSecurityCard onOpenFormulaModal={handleKpiCardClick} />
-        </div>
-      ) : activeSubMenu === 'fiber' || selectedDomain === 'fiber' ? (
-        <div className="space-y-4">
-          <PdsiFiberOpticAndApps onOpenFormulaModal={handleKpiCardClick} />
+          <PdsiItServicesConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
         </div>
       ) : (
-        /* Default: Ikhtisar PDSI Overview */
-        <div className="space-y-4">
-          {/* Key Performance Indicators BAN Row with formula pop-up trigger */}
-          <PdsiKpiRow
-            onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
-            onSelectMetric={handleKpiCardClick}
-          />
+        /* Default Overview: Strictly 10 Points Requested by User */
+        <div className="space-y-5">
+          {/* Poin 1 s/d 8: 8 KPI BANS */}
+          <section id="pdsi-kpi-bans">
+            <PdsiKpiRow
+              onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
+              onSelectMetric={handleKpiCardClick}
+            />
+          </section>
 
-          {/* Row 1: Data Center & Keamanan Siber */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <PdsiDataCenterCard onOpenFormulaModal={handleKpiCardClick} />
-            <PdsiCyberSecurityCard onOpenFormulaModal={handleKpiCardClick} />
-          </div>
+          {/* Poin 9: Sheet Swap Rekap Data Center, Data Tenant dan Server & Storage */}
+          <section id="pdsi-sheet-swap-datacenter">
+            <PdsiDataCenterConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
+          </section>
 
-          {/* Row 2: IT Helpdesk & Fiber Optic / SPBE */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <PdsiHelpdeskSection onOpenFormulaModal={handleKpiCardClick} />
-            <PdsiFiberOpticAndApps onOpenFormulaModal={handleKpiCardClick} />
-          </div>
+          {/* Poin 10: Sheet Swap Data Layanan TI & Permintaan Layanan TI */}
+          <section id="pdsi-sheet-swap-layanan-ti">
+            <PdsiItServicesConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
+          </section>
         </div>
       )}
     </div>

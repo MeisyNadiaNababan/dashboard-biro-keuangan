@@ -50,7 +50,7 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
-                Monitoring Rekapitulasi Piutang &amp; Mutasi Faktur
+                Rekapitulasi Piutang dan Mutasi Faktur
               </h3>
               {onExplainKpi && (
                 <button
@@ -137,56 +137,52 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
               referenceLine="Toleransi Macet Kemenkeu ≤ 10,0%"
             />
 
-            {/* Visual Horizontal Bar (Without trailing % on the right edge) */}
-            <div className="rounded-xl border border-slate-200/80 p-4 bg-white space-y-3 shadow-2xs">
-              <div className="space-y-3">
+            {/* Visual Horizontal Bar (Narrow, compact bars with minimal spacing) */}
+            <div className="rounded-xl border border-slate-200/80 p-3 bg-white space-y-2 shadow-2xs">
+              <div className="space-y-1">
                 {AGING_BUCKETS.map((bucket) => {
                   const pct = (bucket.amount / RECEIVABLES_TOTAL.nilaiPiutang) * 100;
                   const maxScale = 150; // max scale in Miliar for relative bar length
-                  const barWidth = Math.min(100, Math.max(12, (bucket.amount / maxScale) * 100));
+                  const barWidth = Math.min(100, Math.max(8, (bucket.amount / maxScale) * 100));
 
                   return (
                     <div
                       key={bucket.range}
                       onClick={() => onExplainKpi?.('piutang')}
-                      className="group space-y-1 cursor-pointer p-2 rounded-lg hover:bg-slate-50 transition-colors"
+                      className="group space-y-0.5 cursor-pointer p-1.5 rounded-lg hover:bg-slate-50 transition-colors"
                       title="Klik untuk membuka penjelasan formula kolektibilitas"
                     >
                       <div className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2 min-w-0">
+                        <div className="flex items-center gap-1.5 min-w-0">
                           <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
                             {bucket.range}
                           </span>
                           <span className="text-[11px] text-slate-500 font-sans truncate">
                             ({bucket.label})
                           </span>
-                          <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded font-mono border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="text-[10px] text-blue-600 bg-blue-50 px-1 py-0.2 rounded font-mono border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
                             Rumus
                           </span>
                         </div>
-                        {/* Point 10: Hanya tampilkan Rp nominal saja di ujung kanan, % porsi total sudah ada di dalam bar */}
                         <div className="flex items-center gap-2 font-mono text-xs shrink-0">
-                          <span className="font-bold text-slate-900 sm:text-sm">
+                          <span className="font-bold text-slate-900">
                             Rp {bucket.amount.toFixed(1)} M
+                          </span>
+                          <span className="text-[10px] font-bold text-blue-700 bg-slate-100 px-1 rounded">
+                            {pct.toFixed(1)}%
                           </span>
                         </div>
                       </div>
 
-                      {/* Bar Track with Visual Progress */}
-                      <div className="relative h-6 bg-slate-100 rounded-md overflow-hidden flex items-center">
-                        {/* Reference Guide Grid Line at 50% */}
-                        <div className="absolute inset-y-0 left-[50%] border-r border-slate-300/80 z-0" />
+                      {/* Narrow Compact Bar Track */}
+                      <div className="relative h-2.5 sm:h-3 bg-slate-100 rounded overflow-hidden flex items-center">
                         <div
-                          className="h-full rounded-r-md transition-all duration-500 flex items-center px-2.5 z-10"
+                          className="h-full rounded transition-all duration-500 flex items-center px-1.5 z-10"
                           style={{
                             width: `${barWidth}%`,
                             backgroundColor: bucket.color,
                           }}
-                        >
-                          <span className="text-[10px] font-bold text-white whitespace-nowrap drop-shadow-2xs">
-                            {pct.toFixed(1)}% Porsi Total
-                          </span>
-                        </div>
+                        />
                       </div>
                     </div>
                   );
@@ -194,10 +190,10 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
               </div>
 
               {/* X-Axis scale */}
-              <div className="pt-2 border-t border-slate-200 flex justify-between text-[10px] text-slate-400 font-mono">
+              <div className="pt-1.5 border-t border-slate-200 flex justify-between text-[10px] text-slate-400 font-mono">
                 <span>0 M</span>
                 <span>35 M</span>
-                <span>75 M (Reference)</span>
+                <span>75 M (Ref)</span>
                 <span>110 M</span>
                 <span>150 M (Rp Miliar)</span>
               </div>
@@ -210,36 +206,32 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
           <div className="space-y-3">
             <TableauShelvesBadge
               showMe="Show Me #1 (Crosstab with In-Cell Balances)"
-              rows="[nomorFaktur], [tanggalTerbitFaktur], [namaPelanggan]"
+              rows="[tanggalTerbitFaktur], [namaPelanggan]"
               columns="SUM([jumlahPiutang]), SUM([perhitunganDenda]), SUM([bayarFaktur]), SUM([saldoPiutangTakTertagih])"
               color="[saldoPiutangTakTertagih]"
               detail="Item 20 SIMKEU: Rekapitulasi Piutang Tak Tertagih (FBMS)"
             />
 
-            {/* Point 12: Kolom No Faktur dan Tanggal Dipisahkan */}
             <div className="overflow-x-auto max-h-[340px] overflow-y-auto rounded-xl border border-slate-200/80 shadow-2xs">
-              <table className="w-full text-left text-xs border-collapse min-w-[850px]">
+              <table className="w-full text-left text-xs border-collapse min-w-[750px]">
                 <thead className="sticky top-0 z-10 bg-[#0B2545] text-white font-bold text-[10.5px] tracking-tight">
                   <tr>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-center w-[12%]">
-                      No Faktur
-                    </th>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-center w-[11%]">
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-center w-[14%]">
                       Tanggal Faktur
                     </th>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 w-[22%]">
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 w-[26%]">
                       Nama Pelanggan / Debitur (Klik Rumus)
                     </th>
-                    <th className="py-2.5 px-2.5 text-center border-r border-blue-900/60 w-[10%]">
+                    <th className="py-2.5 px-2.5 text-center border-r border-blue-900/60 w-[12%]">
                       Jatuh Tempo
                     </th>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[11%]">
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[12%]">
                       Jml Piutang
                     </th>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[11%]">
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[12%]">
                       Denda (+)
                     </th>
-                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[11%]">
+                    <th className="py-2.5 px-3 border-r border-blue-900/60 text-right w-[12%]">
                       Bayar (-)
                     </th>
                     <th className="py-2.5 px-3 text-right w-[12%]">
@@ -260,11 +252,6 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
                         }`}
                         title="Klik untuk melihat formula perhitungan piutang"
                       >
-                        {/* Point 12: No Faktur terpisah */}
-                        <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-center font-mono font-bold text-[#1F4E79] group-hover:text-blue-700 align-middle">
-                          {item.nomorFaktur}
-                        </td>
-                        {/* Point 12: Tanggal terpisah */}
                         <td className="py-2.5 px-3 border-r border-[#E2E8F0] text-center font-mono text-slate-500 align-middle text-[10.5px]">
                           {item.tanggalTerbitFaktur}
                         </td>
@@ -295,7 +282,7 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
                 </tbody>
                 <tfoot className="bg-slate-100 font-bold text-slate-800 text-[11px] border-t-2 border-slate-300">
                   <tr>
-                    <td colSpan={4} className="py-2.5 px-3 text-right uppercase tracking-wider text-[10px] text-slate-600">
+                    <td colSpan={3} className="py-2.5 px-3 text-right uppercase tracking-wider text-[10px] text-slate-600">
                       Total Rekapitulasi (Formula: Piutang + Denda - Bayar - Koreksi):
                     </td>
                     <td className="py-2.5 px-3 text-right font-mono text-slate-800">
@@ -339,7 +326,7 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
-                Laporan Saldo Bank Real Time &amp; Ketahanan Kas
+                Saldo Bank
               </h3>
               {onExplainKpi && (
                 <button
@@ -359,64 +346,9 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
 
           {/* Right Status Tag */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300/80 text-xs font-bold uppercase font-mono rounded-full whitespace-nowrap shadow-2xs flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-              <span>Likuiditas Prima (3,89 Bln)</span>
+            <span className="px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase font-mono rounded-full whitespace-nowrap shadow-2xs flex items-center gap-1">
+              <span>Total Saldo: Rp 1.520,0 M</span>
             </span>
-          </div>
-        </div>
-
-        {/* Executive BAN Strip (3 Tiles Matching Revenue & Budget Cards) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          <div
-            onClick={() => onExplainKpi?.('saldo_kas')}
-            className="p-3 bg-slate-50/90 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
-            title="Klik untuk membuka formula perhitungan Kas & Setara Kas"
-          >
-            <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              <span>Total Kas &amp; Setara Kas</span>
-              <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-[#002B49] font-mono leading-tight">
-              Rp 1.520,0 M
-            </div>
-            <div className="text-[10px] text-slate-500 font-medium mt-0.5 truncate">
-              Setara Rp 1,52 Triliun di 4 Bank Mitra
-            </div>
-          </div>
-
-          <div
-            onClick={() => onExplainKpi?.('liquidity_runway')}
-            className="p-3 bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200/80 hover:border-emerald-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
-            title="Klik untuk membuka formula Ketahanan Kas (Cash Runway)"
-          >
-            <div className="flex items-center justify-between text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-1">
-              <span>Ketahanan Cadangan Kas</span>
-              <ShieldCheck className="w-3 h-3 text-emerald-600" />
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-emerald-700 font-mono leading-tight">
-              3,89 Bulan
-            </div>
-            <div className="text-[10px] text-emerald-700 font-bold mt-0.5 truncate">
-              Standar PMK &ge; 3,00 Bulan • Status Solven
-            </div>
-          </div>
-
-          <div
-            onClick={() => onExplainKpi?.('saldo_kas')}
-            className="p-3 bg-slate-50/90 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 rounded-xl transition-all cursor-pointer group shadow-2xs"
-            title="Klik untuk melihat porsi Bank Mandiri"
-          >
-            <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              <span>Bank Pengelola Utama</span>
-              <HelpCircle className="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-[#1F4E79] font-mono leading-tight">
-              Mandiri Rp 640,5 M
-            </div>
-            <div className="text-[10px] text-blue-700 font-semibold mt-0.5 truncate">
-              42,1% Porsi • Rekening Penerimaan
-            </div>
           </div>
         </div>
 
@@ -557,42 +489,6 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
 
           <div className="text-[10px] text-slate-500 text-center font-sans pt-1">
             * Ukuran blok mewakili proporsi nilai saldo kas perbankan pada marks card Tableau (Size: SUM([nilai]), Color: [kategori_rekening])
-          </div>
-        </div>
-
-        {/* Interpretasi Daya Tahan Kas Operasional */}
-        <div className="pt-3 border-t border-slate-100 space-y-2.5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-700 gap-1.5">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-800">Standar Ketahanan Likuiditas (Cash Runway):</span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                Kategori Sangat Sehat (Prima)
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-emerald-800 font-mono text-sm sm:text-base whitespace-nowrap">
-                3,89 Bulan Operasional Rutin
-              </span>
-              {onExplainKpi && (
-                <button
-                  onClick={() => onExplainKpi?.('liquidity_runway')}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1F4E79] bg-white border border-blue-200 px-2 py-0.5 rounded shadow-2xs hover:bg-blue-50 cursor-pointer"
-                  title="Formula & Penjelasan Ketahanan Kas"
-                >
-                  <HelpCircle className="w-3 h-3 text-[#1F4E79]" />
-                  <span>Formula</span>
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="p-3 bg-slate-50 border border-slate-200/90 rounded-xl text-xs text-slate-700 leading-relaxed shadow-2xs">
-            <span className="font-bold text-[#002B49] block mb-1">
-              💡 Analisis &amp; Interpretasi Daya Tahan Kas Operasional (3,89 Bulan):
-            </span>
-            <p className="text-[11.5px] text-slate-600">
-              Angka <strong>3,89 bulan</strong> ini menunjukkan daya tahan kas BP Batam (Cash Runway). Artinya, jika seluruh penerimaan kas baru terhenti sementara, <strong>saldo kas dan simpanan bank yang ada saat ini (Rp 1,52 Triliun) sanggup menjamin kelancaran pembayaran operasional rutin, listrik/air, pemeliharaan aset, dan belanja layanan selama 3,89 bulan ke depan</strong> tanpa memerlukan pinjaman pihak ketiga. Standar aman Kementerian Keuangan adalah minimal 3 bulan, membuktikan likuiditas BP Batam sangat prima.
-            </p>
           </div>
         </div>
       </div>

@@ -1528,3 +1528,511 @@ export const PTSP_CATALOG_17_ITEMS: PtspCatalogItem[] = [
     deskripsi: 'Data performa ketepatan waktu penyelesaian izin terhadap janji layanan publik (SLA).',
   },
 ];
+
+// =========================================================================
+// 12 POIN SPESIFIK DASHBOARD EKSEKUTIF PTSP BP BATAM
+// Sesuai Instruksi User:
+// 1. KPI IKM PTSP (Dataset Baru)
+// 2. KPI SLA Perizinan Tepat Waktu (Dataset 17)
+// 3. KPI Total Permohonan Masuk (Dataset 14 & 9)
+// 4. KPI Total Izin Berhasil Terbit (Dataset 7)
+// 5. KPI Non Perizinan (Dataset 16)
+// 6. KPI Jumlah Pengaduan (Dataset 6)
+// 7. Jenis Layanan BP Batam (Dataset 14)
+// 8. Daftar Perizinan BP Batam (Dataset 7)
+// 9. Daftar Non Perizinan (Dataset 16)
+// 10. Sheet Swap (8 & 9)
+// 11. Perizinan Berusaha Berdasarkan Sektor (Dataset 9)
+// 12. Pengaduan Pelayanan PTSP (Dataset 6)
+// =========================================================================
+
+export interface PtspOfficial6Kpi {
+  pointNo: number;
+  id: string;
+  code: string;
+  title: string;
+  datasetNo: string;
+  datasetName: string;
+  value: string;
+  subValue: string;
+  target: string;
+  statusBadge: string;
+  badgeVariant: 'success' | 'info' | 'warning' | 'purple';
+  description: string;
+  formula: string;
+}
+
+export const PTSP_OFFICIAL_6_KPIS: PtspOfficial6Kpi[] = [
+  {
+    pointNo: 1,
+    id: 'ikm_ptsp',
+    code: 'IKM_PTSP',
+    title: 'IKM PTSP',
+    datasetNo: 'Dataset Baru (Permenpan RB 14/2017)',
+    datasetName: 'Indeks Kepuasan Masyarakat (IKM) 9 Unsur Pelayanan PTSP',
+    value: '89,24',
+    subValue: 'Mutu A (Sangat Baik) • 1.480 Responden',
+    target: 'Target Renstra: ≥ 88,00',
+    statusBadge: 'Mutu A',
+    badgeVariant: 'success',
+    description: 'Skor survei elektronik 9 unsur pelayanan publik di MPP Batam Centre & portal digital PTSP.',
+    formula: '(SUM([Nilai Rata-rata Unsur U1-U9] * 0.111) * 25) = 89,24 (Skala 100)',
+  },
+  {
+    pointNo: 2,
+    id: 'sla_tepat_waktu',
+    code: 'SLA_TEPAT_WAKTU',
+    title: 'SLA Perizinan Tepat Waktu',
+    datasetNo: 'Dataset Item #17',
+    datasetName: 'DATA PENYELESAIAN PERIZINAN YANG TEPAT WAKTU',
+    value: '94,6%',
+    subValue: '12.480 Berkas Selesai Sesuai SLA',
+    target: 'Target Standar SLA: ≥ 90,0%',
+    statusBadge: 'Tepat Waktu',
+    badgeVariant: 'success',
+    description: 'Tingkat kepatuhan waktu terbit berkas izin sesuai Service Level Agreement.',
+    formula: '(SUM([PERMOHONAN SELESAI <= SLA]) / SUM([PERMOHONAN SELESAI])) * 100% = 94,60%',
+  },
+  {
+    pointNo: 3,
+    id: 'permohonan_masuk',
+    code: 'TOTAL_MASUK',
+    title: 'Total Permohonan Masuk',
+    datasetNo: 'Dataset Item #14 & #9',
+    datasetName: 'JENIS LAYANAN BP BATAM & PERIZINAN BERUSAHA',
+    value: '13.820',
+    subValue: 'Akumulasi YTD Jan - Apr 2026',
+    target: 'Target Demand: ~13.000 Dokumen',
+    statusBadge: 'High Demand',
+    badgeVariant: 'purple',
+    description: 'Volume seluruh berkas permohonan perizinan berusaha OSS RBA, maritim, dan non-izin.',
+    formula: 'SUM([JUMLAH LAYANAN MASUK]) & COUNTD([NOMOR PERMOHONAN]) = 13.820 Berkas',
+  },
+  {
+    pointNo: 4,
+    id: 'izin_terbit',
+    code: 'IZIN_TERBIT',
+    title: 'Total Izin Berhasil Terbit',
+    datasetNo: 'Dataset Item #7',
+    datasetName: 'DAFTAR INFORMASI PERIZINAN BP BATAM',
+    value: '13.192',
+    subValue: 'Realisasi 95,4% dari Permohonan Masuk',
+    target: 'Target Terbit: ≥ 95,0%',
+    statusBadge: '95,4% Terbit',
+    badgeVariant: 'success',
+    description: 'Izin berusaha resmi terbit dengan validasi elektronik TTE BSrE.',
+    formula: 'SUM([JUMLAH LAYANAN TERSELESAIKAN]) / SUM([JUMLAH LAYANAN MASUK]) * 100% = 95,45%',
+  },
+  {
+    pointNo: 5,
+    id: 'non_perizinan',
+    code: 'NON_PERIZINAN',
+    title: 'Non Perizinan',
+    datasetNo: 'Dataset Item #16',
+    datasetName: 'JUMLAH NON PERIZINAN',
+    value: '2.140',
+    subValue: '1.985 Selesai (92,8%) • 125 Proses • 30 Tolak',
+    target: 'Tingkat Selesai: 92,8%',
+    statusBadge: '1.985 Selesai',
+    badgeVariant: 'info',
+    description: 'Layanan administrasi non-perizinan: legalisir, rekomendasi bea cukai, domisili, dan asistensi MPP.',
+    formula: 'SUM([JUMLAH STATUS MASUK]) = 2.140, SUM([JUMLAH STATUS SELESAI]) = 1.985',
+  },
+  {
+    pointNo: 6,
+    id: 'jumlah_pengaduan',
+    code: 'JUMLAH_PENGADUAN',
+    title: 'Jumlah Pengaduan',
+    datasetNo: 'Dataset Item #6',
+    datasetName: 'DATA MONITORING DAN EVALUASI PENGELOLAAN PENGADUAN MASYARAKAT',
+    value: '188',
+    subValue: '185 Selesai (98,4%) • 3 Belum Ditangani',
+    target: 'Tingkat Penanganan: 98,4%',
+    statusBadge: '98,4% Selesai',
+    badgeVariant: 'success',
+    description: 'Rekapitulasi komplain dan aspirasi masyarakat melalui SP4N-LAPOR!, meja MPP, & helpdesk.',
+    formula: 'SUM([JUMLAH PENGADUAN]) = 188, SUM([PENYELESAIAN PENGADUAN]) = 185',
+  },
+];
+
+// -------------------------------------------------------------------------
+// POIN 7: JENIS LAYANAN BP BATAM (DATASET 14)
+// Informasi: Jenis Layanan, Permohonan Masuk, Selesai, Belum Selesai
+// -------------------------------------------------------------------------
+export interface PtspJenisLayananItem {
+  id: string;
+  jenisLayanan: string;
+  permohonanMasuk: number;
+  selesai: number;
+  belumSelesai: number;
+  persentaseSelesai: number;
+  kategori: string;
+}
+
+export const PTSP_DATASET_14_JENIS_LAYANAN: PtspJenisLayananItem[] = [
+  {
+    id: 'layanan-1',
+    jenisLayanan: 'Perizinan Berusaha OSS RBA & KBLI',
+    permohonanMasuk: 5420,
+    selesai: 5180,
+    belumSelesai: 240,
+    persentaseSelesai: 95.6,
+    kategori: 'Perizinan Usaha',
+  },
+  {
+    id: 'layanan-2',
+    jenisLayanan: 'Surat Keterangan Kerja Bongkar Muat (SKKBM)',
+    permohonanMasuk: 3120,
+    selesai: 3010,
+    belumSelesai: 110,
+    persentaseSelesai: 96.5,
+    kategori: 'Transportasi Laut',
+  },
+  {
+    id: 'layanan-3',
+    jenisLayanan: 'Surat Keterangan Kerja Angkut Barang (SKKAB)',
+    permohonanMasuk: 2180,
+    selesai: 2095,
+    belumSelesai: 85,
+    persentaseSelesai: 96.1,
+    kategori: 'Logistik & Distribusi',
+  },
+  {
+    id: 'layanan-4',
+    jenisLayanan: 'Persetujuan Jadwal Kapal Feri & Angkutan Laut',
+    permohonanMasuk: 1480,
+    selesai: 1445,
+    belumSelesai: 35,
+    persentaseSelesai: 97.6,
+    kategori: 'Operasional Pelayaran',
+  },
+  {
+    id: 'layanan-5',
+    jenisLayanan: 'Rekomendasi Terminal Khusus (TERSUS & TUKS)',
+    permohonanMasuk: 640,
+    selesai: 582,
+    belumSelesai: 58,
+    persentaseSelesai: 90.9,
+    kategori: 'Infrastruktur Pelabuhan',
+  },
+  {
+    id: 'layanan-6',
+    jenisLayanan: 'Layanan Asistensi MPP & Administrasi Non-Perizinan',
+    permohonanMasuk: 980,
+    selesai: 880,
+    belumSelesai: 100,
+    persentaseSelesai: 89.8,
+    kategori: 'Layanan Umum MPP',
+  },
+];
+
+// -------------------------------------------------------------------------
+// POIN 8: DAFTAR PERIZINAN BP BATAM (DATASET 7)
+// Informasi: Jenis Perizinan, Status (Masuk, Ditolak, Proses, Selesai)
+// -------------------------------------------------------------------------
+export interface PtspDaftarPerizinanItem {
+  id: string;
+  jenisPerizinan: string;
+  masuk: number;
+  ditolak: number;
+  proses: number;
+  selesai: number;
+  persentaseSelesai: number;
+  slaRataRataHari: number;
+}
+
+export const PTSP_DATASET_7_DAFTAR_PERIZINAN: PtspDaftarPerizinanItem[] = [
+  {
+    id: 'izin-1',
+    jenisPerizinan: 'Izin Usaha Manufaktur & Perakitan (KBLI 26, 28, 29)',
+    masuk: 2450,
+    ditolak: 30,
+    proses: 80,
+    selesai: 2340,
+    persentaseSelesai: 95.5,
+    slaRataRataHari: 2.1,
+  },
+  {
+    id: 'izin-2',
+    jenisPerizinan: 'Surat Keterangan Kerja Bongkar Muat (SKKBM Pelabuhan)',
+    masuk: 3120,
+    ditolak: 20,
+    proses: 90,
+    selesai: 3010,
+    persentaseSelesai: 96.5,
+    slaRataRataHari: 1.4,
+  },
+  {
+    id: 'izin-3',
+    jenisPerizinan: 'Surat Keterangan Kerja Angkut Barang (SKKAB Logistik)',
+    masuk: 2180,
+    ditolak: 20,
+    proses: 65,
+    selesai: 2095,
+    persentaseSelesai: 96.1,
+    slaRataRataHari: 1.6,
+  },
+  {
+    id: 'izin-4',
+    jenisPerizinan: 'Persetujuan Jadwal Pengoperasian Kapal Laut & Feri',
+    masuk: 1480,
+    ditolak: 10,
+    proses: 25,
+    selesai: 1445,
+    persentaseSelesai: 97.6,
+    slaRataRataHari: 1.2,
+  },
+  {
+    id: 'izin-5',
+    jenisPerizinan: 'Izin Operasi Terminal Khusus & TUKS Industri',
+    masuk: 640,
+    ditolak: 15,
+    proses: 43,
+    selesai: 582,
+    persentaseSelesai: 90.9,
+    slaRataRataHari: 3.4,
+  },
+  {
+    id: 'izin-6',
+    jenisPerizinan: 'SKKAA (Asal & Kepemilikan Alat Berat Konstruksi)',
+    masuk: 890,
+    ditolak: 8,
+    proses: 32,
+    selesai: 850,
+    persentaseSelesai: 95.5,
+    slaRataRataHari: 1.9,
+  },
+  {
+    id: 'izin-7',
+    jenisPerizinan: 'Izin Usaha Jasa Komersial, Perhotelan & Restoran',
+    masuk: 1540,
+    ditolak: 15,
+    proses: 55,
+    selesai: 1470,
+    persentaseSelesai: 95.5,
+    slaRataRataHari: 1.8,
+  },
+  {
+    id: 'izin-8',
+    jenisPerizinan: 'Izin Pengerukan & Penataan Reklamasi Pantai',
+    masuk: 120,
+    ditolak: 7,
+    proses: 18,
+    selesai: 95,
+    persentaseSelesai: 79.2,
+    slaRataRataHari: 4.8,
+  },
+];
+
+// -------------------------------------------------------------------------
+// POIN 9: DAFTAR NON PERIZINAN (DATASET 16)
+// Informasi: Jenis Non Perizinan, Status (Masuk, Ditolak, Proses, Selesai)
+// -------------------------------------------------------------------------
+export interface PtspDaftarNonPerizinanItem {
+  id: string;
+  jenisNonPerizinan: string;
+  unitPelayanan: string;
+  masuk: number;
+  ditolak: number;
+  proses: number;
+  selesai: number;
+  persentaseSelesai: number;
+  slaRataRataHari: number;
+}
+
+export const PTSP_DATASET_16_DAFTAR_NON_PERIZINAN: PtspDaftarNonPerizinanItem[] = [
+  {
+    id: 'non-1',
+    jenisNonPerizinan: 'Surat Keterangan Domisili Usaha & Fasilitas Kawasan',
+    unitPelayanan: 'Subdit Fasilitas Usaha',
+    masuk: 680,
+    ditolak: 7,
+    proses: 28,
+    selesai: 645,
+    persentaseSelesai: 94.9,
+    slaRataRataHari: 1.1,
+  },
+  {
+    id: 'non-2',
+    jenisNonPerizinan: 'Legalisir & Pengesahan Dokumen Perizinan TTE',
+    unitPelayanan: 'Seksi Pengelolaan Dokumen',
+    masuk: 520,
+    ditolak: 2,
+    proses: 10,
+    selesai: 508,
+    persentaseSelesai: 97.7,
+    slaRataRataHari: 0.5,
+  },
+  {
+    id: 'non-3',
+    jenisNonPerizinan: 'Surat Rekomendasi Pemasukan Komoditi Bebas PPN/PPnBM',
+    unitPelayanan: 'Subdit Verifikasi Berusaha',
+    masuk: 430,
+    ditolak: 9,
+    proses: 26,
+    selesai: 395,
+    persentaseSelesai: 91.9,
+    slaRataRataHari: 1.8,
+  },
+  {
+    id: 'non-4',
+    jenisNonPerizinan: 'Konsultasi & Asistensi Validasi OSS RBA di Gerai MPP',
+    unitPelayanan: 'Layanan Front-Desk MPP',
+    masuk: 310,
+    ditolak: 7,
+    proses: 18,
+    selesai: 285,
+    persentaseSelesai: 91.9,
+    slaRataRataHari: 0.8,
+  },
+  {
+    id: 'non-5',
+    jenisNonPerizinan: 'Surat Rekomendasi Pengantar Visa & RPTKA Asing',
+    unitPelayanan: 'Subdit Hubungan Kelembagaan',
+    masuk: 200,
+    ditolak: 5,
+    proses: 43,
+    selesai: 152,
+    persentaseSelesai: 76.0,
+    slaRataRataHari: 2.6,
+  },
+];
+
+// -------------------------------------------------------------------------
+// POIN 11: PERIZINAN BERUSAHA BERDASARKAN SEKTOR (DATASET 9)
+// Informasi: Sektor, Permohonan, Terbit
+// -------------------------------------------------------------------------
+export interface PtspSektorBerusahaItem {
+  id: string;
+  sektor: string;
+  permohonan: number;
+  terbit: number;
+  tingkatTerbit: number;
+  investasiMiliar: number;
+  pmaShare: number;
+}
+
+export const PTSP_DATASET_9_SEKTOR_BERUSAHA: PtspSektorBerusahaItem[] = [
+  {
+    id: 'sektor-1',
+    sektor: 'Industri Manufaktur & Perakitan',
+    permohonan: 4820,
+    terbit: 4610,
+    tingkatTerbit: 95.6,
+    investasiMiliar: 4850,
+    pmaShare: 72,
+  },
+  {
+    id: 'sektor-2',
+    sektor: 'Maritim & Galangan Kapal',
+    permohonan: 3240,
+    terbit: 3105,
+    tingkatTerbit: 95.8,
+    investasiMiliar: 2940,
+    pmaShare: 64,
+  },
+  {
+    id: 'sektor-3',
+    sektor: 'Logistik, Pergudangan & Rantai Pasok',
+    permohonan: 2450,
+    terbit: 2360,
+    tingkatTerbit: 96.3,
+    investasiMiliar: 1780,
+    pmaShare: 38,
+  },
+  {
+    id: 'sektor-4',
+    sektor: 'Teknologi Informasi & KEK Digital',
+    permohonan: 1540,
+    terbit: 1490,
+    tingkatTerbit: 96.8,
+    investasiMiliar: 2420,
+    pmaShare: 85,
+  },
+  {
+    id: 'sektor-5',
+    sektor: 'Jasa Komersial & Pariwisata',
+    permohonan: 1120,
+    terbit: 1082,
+    tingkatTerbit: 96.6,
+    investasiMiliar: 890,
+    pmaShare: 29,
+  },
+  {
+    id: 'sektor-6',
+    sektor: 'Energi Baru Terbarukan & Infrastruktur',
+    permohonan: 650,
+    terbit: 545,
+    tingkatTerbit: 83.8,
+    investasiMiliar: 1460,
+    pmaShare: 78,
+  },
+];
+
+// -------------------------------------------------------------------------
+// POIN 12: PENGADUAN PELAYANAN PTSP (DATASET 6)
+// Informasi: Jenis Pengaduan, Total, Selesai, Belum Ditangani
+// -------------------------------------------------------------------------
+export interface PtspPengaduanLayananItem {
+  id: string;
+  jenisPengaduan: string;
+  total: number;
+  selesai: number;
+  belumDitangani: number;
+  tingkatPenyelesaian: number;
+  saluranUtama: string;
+  rataRataHariPenyelesaian: number;
+}
+
+export const PTSP_DATASET_6_PENGADUAN: PtspPengaduanLayananItem[] = [
+  {
+    id: 'aduan-1',
+    jenisPengaduan: 'Konfirmasi Pembayaran PNBP & Billing SIMPONI/Bank',
+    total: 64,
+    selesai: 64,
+    belumDitangani: 0,
+    tingkatPenyelesaian: 100.0,
+    saluranUtama: 'SP4N-LAPOR! & Kasir Digital',
+    rataRataHariPenyelesaian: 1.0,
+  },
+  {
+    id: 'aduan-2',
+    jenisPengaduan: 'Konsultasi Persyaratan KBLI & Kelengkapan Teknis',
+    total: 48,
+    selesai: 47,
+    belumDitangani: 1,
+    tingkatPenyelesaian: 97.9,
+    saluranUtama: 'WhatsApp Helpdesk & Gerai MPP',
+    rataRataHariPenyelesaian: 1.2,
+  },
+  {
+    id: 'aduan-3',
+    jenisPengaduan: 'Sinkronisasi Akun OSS RBA ke Portal Internal IBIS',
+    total: 32,
+    selesai: 32,
+    belumDitangani: 0,
+    tingkatPenyelesaian: 100.0,
+    saluranUtama: 'Portal Web PTSP',
+    rataRataHariPenyelesaian: 1.1,
+  },
+  {
+    id: 'aduan-4',
+    jenisPengaduan: 'Koreksi & Ralat Data Sertifikat Izin Terbit (TTE BSrE)',
+    total: 26,
+    selesai: 25,
+    belumDitangani: 1,
+    tingkatPenyelesaian: 96.2,
+    saluranUtama: 'Meja Pengaduan MPP',
+    rataRataHariPenyelesaian: 1.5,
+  },
+  {
+    id: 'aduan-5',
+    jenisPengaduan: 'Kapasitas Antrean Loket Fisik Jam Istirahat MPP',
+    total: 18,
+    selesai: 17,
+    belumDitangani: 1,
+    tingkatPenyelesaian: 94.4,
+    saluranUtama: 'WhatsApp Helpdesk',
+    rataRataHariPenyelesaian: 2.0,
+  },
+];

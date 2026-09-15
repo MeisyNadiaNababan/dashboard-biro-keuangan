@@ -99,7 +99,7 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
-                Keseimbangan Surplus &amp; Defisit per Unit Kerja
+                Surplus dan Defisit per Unit Kerja
               </h3>
               {onExplainKpi && (
                 <button
@@ -241,12 +241,12 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
 
                 {/* Center Zero Gridline across chart */}
                 <div
-                  className="absolute top-12 bottom-6 w-0.5 bg-slate-400/90 z-10 pointer-events-none"
+                  className="absolute top-10 bottom-4 w-0.5 bg-slate-400/90 z-10 pointer-events-none"
                   style={{ left: `calc(${zeroPosPercent}% + 16px)` }}
                 />
 
-                {/* Rows of Diverging Bars */}
-                <div className="space-y-3 relative z-20">
+                {/* Rows of Diverging Bars (Narrow, compact spacing) */}
+                <div className="space-y-1.5 relative z-20">
                   {SURPLUS_DEFISIT_DATA.map((item) => {
                     const isPositive = item.net >= 0;
                     const barWidthPct = (Math.abs(item.net) / totalRange) * 100;
@@ -258,7 +258,7 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                         onClick={() => onExplainKpi?.('keseimbangan_surplus')}
                         onMouseEnter={() => setHoveredUnit(item.unit)}
                         onMouseLeave={() => setHoveredUnit(null)}
-                        className={`p-2.5 rounded-xl transition-all cursor-pointer border ${
+                        className={`p-1.5 sm:p-2 rounded-xl transition-all cursor-pointer border ${
                           isHovered
                             ? 'bg-blue-50/60 border-blue-300 shadow-2xs ring-1 ring-blue-200'
                             : 'bg-slate-50/60 border-slate-200/70 hover:bg-slate-50'
@@ -266,19 +266,19 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                         title="Klik untuk membuka formula perhitungan Keseimbangan Fiskal"
                       >
                         {/* Unit Label and details */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1 mb-1.5">
-                          <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1 mb-1">
+                          <div className="flex items-center gap-1.5">
                             <span className="font-bold text-slate-900 group-hover:text-blue-700">
                               {item.unit}
                             </span>
-                            <span className="text-[10.5px] text-slate-500 font-sans hidden sm:inline">
+                            <span className="text-[10px] text-slate-500 font-sans hidden sm:inline">
                               ({item.keterangan})
                             </span>
-                            <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded font-mono border border-blue-200">
+                            <span className="text-[9px] text-blue-600 bg-blue-50 px-1 py-0.2 rounded font-mono border border-blue-200">
                               Rumus
                             </span>
                           </div>
-                          <div className="flex items-center gap-2.5 text-[11px] font-mono shrink-0">
+                          <div className="flex items-center gap-2 text-[10.5px] font-mono shrink-0">
                             <span className="text-slate-500">
                               P: <strong className="text-slate-800">Rp {item.pendapatan.toFixed(1)} M</strong>
                             </span>
@@ -288,7 +288,7 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                             </span>
                             <span className="text-slate-300">|</span>
                             <span
-                              className={`font-black px-2 py-0.5 rounded text-[10.5px] ${
+                              className={`font-black px-1.5 py-0.2 rounded text-[10px] ${
                                 isPositive
                                   ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                                   : 'bg-rose-100 text-rose-800 border border-rose-200'
@@ -299,8 +299,8 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                           </div>
                         </div>
 
-                        {/* Bar Track */}
-                        <div className="relative h-6 bg-slate-200/80 rounded-md overflow-hidden">
+                        {/* Narrow Bar Track */}
+                        <div className="relative h-2.5 sm:h-3 bg-slate-200/80 rounded overflow-hidden">
                           {/* Zero Line Marker inside bar */}
                           <div
                             className="absolute top-0 bottom-0 w-0.5 bg-slate-500 z-10"
@@ -310,24 +310,20 @@ export const FiscalInsightsRow: React.FC<FiscalInsightsRowProps> = ({
                           {/* Colored Tableau Bar */}
                           {isPositive ? (
                             <div
-                              className="absolute top-0 bottom-0 bg-[#59A14F] hover:bg-[#4E8F45] rounded-r-md transition-all flex items-center pl-2.5 text-[10px] font-mono font-bold text-white shadow-2xs"
+                              className="absolute top-0 bottom-0 bg-[#59A14F] hover:bg-[#4E8F45] rounded-r transition-all flex items-center pl-1.5 text-[9px] font-mono font-bold text-white shadow-2xs"
                               style={{
                                 left: `${zeroPosPercent}%`,
                                 width: `${barWidthPct}%`,
                               }}
-                            >
-                              +{item.net.toFixed(1)} M
-                            </div>
+                            />
                           ) : (
                             <div
-                              className="absolute top-0 bottom-0 bg-[#E15759] hover:bg-[#C94749] rounded-l-md transition-all flex items-center justify-end pr-2.5 text-[10px] font-mono font-bold text-white shadow-2xs"
+                              className="absolute top-0 bottom-0 bg-[#E15759] hover:bg-[#C94749] rounded-l transition-all flex items-center justify-end pr-1.5 text-[9px] font-mono font-bold text-white shadow-2xs"
                               style={{
                                 right: `${100 - zeroPosPercent}%`,
                                 width: `${barWidthPct}%`,
                               }}
-                            >
-                              -{Math.abs(item.net).toFixed(1)} M
-                            </div>
+                            />
                           )}
                         </div>
                       </div>

@@ -85,11 +85,9 @@ export const PdsiFilters: React.FC<PdsiFiltersProps> = ({
   ];
 
   const domainOptions = [
-    { value: 'ALL', label: 'Semua Domain Layanan TI (Konsolidasi PDSI)' },
-    { value: 'datacenter', label: 'Data Center Tier III & Infrastruktur Server' },
-    { value: 'helpdesk', label: 'Layanan IT Helpdesk & Dukungan Pengguna' },
-    { value: 'cyber', label: 'Keamanan Siber & CSIRT / SOC BP Batam' },
-    { value: 'fiber', label: 'Jaringan Fiber Optik & Portofolio SPBE' },
+    { value: 'ALL', label: 'Semua 10 Poin Eksekutif PDSI (Lengkap)' },
+    { value: 'datacenter', label: 'Poin 9: Rekap Data Center, Tenant & Server' },
+    { value: 'layanan_ti', label: 'Poin 10: Layanan & Permintaan TI' },
   ];
 
   const statusOptions = [

@@ -33,6 +33,15 @@ import {
   ArrowRightLeft,
   Briefcase,
   MapPin,
+  Megaphone,
+  Users,
+  Anchor,
+  Activity,
+  Pill,
+  Stethoscope,
+  Gavel,
+  FolderOpen,
+  Plane,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -72,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const currentUnit = BP_BATAM_24_UNITS.find((u) => u.id === activeUnitId) || BP_BATAM_24_UNITS[0];
+  const activeUnitsCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length;
 
   // Dynamic Sub-Menu tabs based on active unit
   const getSubMenus = () => {
@@ -111,6 +121,82 @@ export const Header: React.FC<HeaderProps> = ({
         { id: 'profil_kek', label: 'Profil 3 KEK (Dataset 2)', icon: MapPin },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus & 12 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-investasi') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar Eksekutif Investasi', icon: LayoutDashboard },
+        { id: 'sektor_minat', label: 'Sektor Minat Investasi (DS 14)', icon: Briefcase },
+        { id: 'infrastruktur', label: 'Infrastruktur Multi-Tahun (DS 6)', icon: Building2 },
+        { id: 'promosi', label: 'Tentatif Promosi (DS 11)', icon: Megaphone },
+        { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & Satu Data', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-lalu-lintas-barang') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar & Komposisi Izin', icon: LayoutDashboard },
+        { id: 'kuota', label: 'Realisasi Kuota Konsumsi (DS 2)', icon: Package },
+        { id: 'sla', label: 'Kinerja SLA Waktu Jam (DS 8 & 9)', icon: CheckCircle2 },
+        { id: 'kbli', label: 'KBLI Kawasan & Alur Izin (DS 1 & 5)', icon: Building2 },
+        { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Data & Rumus (9 Dataset)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-pelabuhan') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 6 KPI Kepelabuhanan', icon: LayoutDashboard },
+        { id: 'keuangan', label: 'PNBP & Belanja (DS 3 & 2)', icon: TrendingUp },
+        { id: 'kunjungan', label: 'Kunjungan Kapal (DS 5 & 7)', icon: Ship },
+        { id: 'penumpang', label: 'Penumpang & IKM (DS 25 & 21)', icon: Users },
+        { id: 'dermaga', label: 'Dermaga & Batu Ampar (DS 4 & Logistik)', icon: Anchor },
+        { id: 'kpi_word_doc', label: 'Dokumen KPI & Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & 25 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'bu-rumah-sakit') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 6 KPI RSBP', icon: LayoutDashboard },
+        { id: 'keuangan', label: 'PNBP & Belanja (DS 2 & 12)', icon: TrendingUp },
+        { id: 'kunjungan', label: 'Kunjungan Pasien (DS 5 & 6)', icon: Users },
+        { id: 'efisiensi', label: 'Indikator Efisiensi / BOR (DS 9)', icon: Activity },
+        { id: 'sewa', label: 'Sewa Ruangan Tenant (DS 14)', icon: Building2 },
+        { id: 'penyakit_obat', label: 'Morbiditas & Obat (DS 4 & 17)', icon: Pill },
+        { id: 'kpi_word_doc', label: 'Dokumen KPI & Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & 18 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'biro-hukum') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 4 KPI & Summary', icon: LayoutDashboard },
+        { id: 'kegiatan_perkara', label: 'Kegiatan Perkara (DS #4)', icon: Gavel },
+        { id: 'komparasi_litigasi', label: 'Litigasi vs Non-Litigasi (DS #9 & #10)', icon: Scale },
+        { id: 'jdihn_nasional', label: 'Penilaian JDIHN (Skor 100)', icon: Award },
+        { id: 'pipeline_regulasi', label: 'Pipeline Regulasi (DS #5-#8)', icon: FolderOpen },
+        { id: 'kajian_mitigasi', label: 'Kajian & Pendampingan JPN', icon: ShieldCheck },
+        { id: 'kpi_word_doc', label: 'Dokumen Laporan Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & 10 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-pengendalian-usaha') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar Pengendalian Kemitraan', icon: LayoutDashboard },
+        { id: 'kpi_ds3_ds4', label: 'KPI % Pengawasan & Tindak Lanjut', icon: ShieldCheck },
+        { id: 'skema_kemitraan', label: 'Skema KSO, BTO & Konsesi', icon: Briefcase },
+        { id: 'kpi_word_doc', label: 'Kamus KPI Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus 4 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-bandara') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar Bandara Hang Nadim', icon: LayoutDashboard },
+        { id: 'kpi_pnbp_arus', label: 'KPI PNBP & Penerbangan (DS 1 & 2)', icon: Plane },
+        { id: 'operator_maskapai', label: 'Operator & Tren Penumpang', icon: Users },
+        { id: 'kpi_word_doc', label: 'Kamus KPI Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus 12 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'biro-organisasi') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar Tata Kelola & 7 KPI', icon: LayoutDashboard },
+        { id: 'sakip', label: 'SAKIP & Akuntabilitas (DS #2)', icon: Activity },
+        { id: 'spip', label: 'Maturitas SPIP (DS #17)', icon: ShieldCheck },
+        { id: 'pengaduan', label: 'Pengaduan & SKM (DS #10 & #11)', icon: MessageSquare },
+        { id: 'blu', label: 'Penyelesaian BLU (DS #6 & #7)', icon: Award },
+        { id: 'kpi_word_doc', label: 'Kamus KPI Word (.docx)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus 18 Dataset (PDF)', icon: FileCode2 },
       ];
     } else {
       return [
@@ -170,11 +256,14 @@ export const Header: React.FC<HeaderProps> = ({
           {/* 24 Units Directory Button */}
           <button
             onClick={onOpenUnitsDrawer}
-            className="flex items-center gap-1.5 text-xs bg-[#162D4D] hover:bg-[#203D68] text-sky-200 px-3 py-1.5 rounded-lg border border-sky-500/30 font-semibold cursor-pointer transition-all"
-            title="Buka Direktori 24 Unit Kerja BP Batam"
+            className="flex items-center gap-1.5 text-xs bg-[#162D4D] hover:bg-[#203D68] text-sky-200 px-3 py-1.5 rounded-lg border border-sky-500/30 font-semibold cursor-pointer transition-all shadow-xs"
+            title={`Buka Direktori 24 Unit Kerja BP Batam (${activeUnitsCount} Unit Aktif)`}
           >
             <Layers className="w-3.5 h-3.5 text-sky-400" />
             <span>24 Unit Kerja</span>
+            <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-emerald-500/30 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-400/40">
+              {activeUnitsCount} Aktif
+            </span>
           </button>
 
           {/* Fullscreen */}

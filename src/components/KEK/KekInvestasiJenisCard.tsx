@@ -154,21 +154,7 @@ export const KekInvestasiJenisCard: React.FC<KekInvestasiJenisCardProps> = ({
                 </div>
               </div>
 
-              {/* Detail KEK Utama PMA */}
-              <div className="mt-3 pt-3 border-t border-sky-100 text-xs text-slate-600 space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Kawasan Utama:</span>
-                  <span className="font-semibold text-slate-800">KEK Nongsa (Digital Park)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Fokus Sektor:</span>
-                  <span className="font-semibold text-slate-800">Data Center Hyperscale, Cloud &amp; AI</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Asal Investor:</span>
-                  <span className="font-semibold text-slate-800">Singapura, Hong Kong, AS, Australia</span>
-                </div>
-              </div>
+              {/* Detail dihapus sesuai permintaan agar ringkas dan fokus pada nilai KPI */}
             </div>
 
             {/* Kartu PMDN */}
@@ -194,22 +180,6 @@ export const KekInvestasiJenisCard: React.FC<KekInvestasiJenisCardProps> = ({
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
                   <Building className="w-5 h-5" />
-                </div>
-              </div>
-
-              {/* Detail KEK Utama PMDN */}
-              <div className="mt-3 pt-3 border-t border-indigo-100 text-xs text-slate-600 space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Kawasan Utama:</span>
-                  <span className="font-semibold text-slate-800">KEK Batam Teknik &amp; KEK Pariwisata</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Fokus Sektor:</span>
-                  <span className="font-semibold text-slate-800">MRO Pesawat Terbang &amp; Fasilitas Medis</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Entitas Pengembang:</span>
-                  <span className="font-semibold text-slate-800">Lion Air Group &amp; Mayapada Group</span>
                 </div>
               </div>
             </div>

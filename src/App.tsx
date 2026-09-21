@@ -13,6 +13,20 @@ import { FiscalInsightsRow } from './components/FiscalInsightsRow';
 import { PdsiDashboard } from './components/PDSI/PdsiDashboard';
 import { PtspDashboard } from './components/PTSP/PtspDashboard';
 import { KekDashboard } from './components/KEK/KekDashboard';
+import { InvestasiDashboard } from './components/Investasi/InvestasiDashboard';
+import { LaluLintasBarangDashboard } from './components/LaluLintasBarang/LaluLintasBarangDashboard';
+import { KepelabuhananDashboard } from './components/Kepelabuhanan/KepelabuhananDashboard';
+import { RumahSakitDashboard } from './components/RumahSakit/RumahSakitDashboard';
+import { BiroHukumDashboard } from './components/BiroHukum/BiroHukumDashboard';
+import { PengelolaanLahanDashboard } from './components/PengelolaanLahan/PengelolaanLahanDashboard';
+import { PengendalianLahanDashboard } from './components/PengendalianLahan/PengendalianLahanDashboard';
+import { PesisirReklamasiDashboard } from './components/PesisirReklamasi/PesisirReklamasiDashboard';
+import { PengamananAsetDashboard } from './components/PengamananAset/PengamananAsetDashboard';
+import { PembangunanInfrastrukturDashboard } from './components/PembangunanInfrastruktur/PembangunanInfrastrukturDashboard';
+import { PerencanaanInfrastrukturDashboard } from './components/PerencanaanInfrastruktur/PerencanaanInfrastrukturDashboard';
+import { PengendalianPengusahaanDashboard } from './components/PengendalianPengusahaan/PengendalianPengusahaanDashboard';
+import { PengelolaanBandaraDashboard } from './components/PengelolaanBandara/PengelolaanBandaraDashboard';
+import { BiroOrganisasiDashboard } from './components/BiroOrganisasi/BiroOrganisasiDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
 import { KpiWordDocumentView } from './components/KpiWordDocumentView';
@@ -25,8 +39,8 @@ import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State
-  const [activeUnitId, setActiveUnitId] = useState<string>('dit-pengembangan-kek');
+  // Navigation & Multi-Unit State - Set default to biro-organisasi as requested
+  const [activeUnitId, setActiveUnitId] = useState<string>('biro-organisasi');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
@@ -346,8 +360,83 @@ export default function App() {
                   setIsKpiFormulaModalOpen(true);
                 }}
               />
+            ) : activeUnitId === 'dit-investasi' ? (
+              /* --- DIREKTORAT INVESTASI DASHBOARD --- */
+              <InvestasiDashboard
+                activeSubMenu={activeSheet}
+                onSubMenuChange={handleSelectSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'dit-lalu-lintas-barang' ? (
+              /* --- DIREKTORAT LALU LINTAS BARANG DASHBOARD --- */
+              <LaluLintasBarangDashboard
+                activeSubMenu={activeSheet}
+                onSelectSubMenu={handleSelectSheet}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'dit-pelabuhan' ? (
+              /* --- DIREKTORAT PENGELOLAAN KEPELABUHANAN DASHBOARD --- */
+              <KepelabuhananDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'bu-rumah-sakit' ? (
+              /* --- BADAN USAHA RUMAH SAKIT (RSBP BATAM) DASHBOARD --- */
+              <RumahSakitDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'biro-hukum' ? (
+              /* --- BIRO HUKUM BP BATAM DASHBOARD --- */
+              <BiroHukumDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeUnitId === 'dit-perencanaan-infrastruktur' ? (
+              /* --- DIREKTORAT PERENCANAAN INFRASTRUKTUR DASHBOARD --- */
+              <PerencanaanInfrastrukturDashboard />
+            ) : activeUnitId === 'dit-pembangunan-infrastruktur' ? (
+              /* --- DIREKTORAT PEMBANGUNAN INFRASTRUKTUR DASHBOARD --- */
+              <PembangunanInfrastrukturDashboard />
+            ) : activeUnitId === 'dit-pam-aset' ? (
+              /* --- DIREKTORAT PENGAMANAN ASET DAN KAWASAN DASHBOARD --- */
+              <PengamananAsetDashboard />
+            ) : activeUnitId === 'dit-pesisir-reklamasi' ? (
+              /* --- DIREKTORAT PENGELOLAAN KAWASAN PESISIR DAN REKLAMASI DASHBOARD --- */
+              <PesisirReklamasiDashboard />
+            ) : activeUnitId === 'dit-pengendalian-lahan' ? (
+              /* --- DIREKTORAT PENGENDALIAN PENGELOLAAN LAHAN, PESISIR DAN REKLAMASI DASHBOARD --- */
+              <PengendalianLahanDashboard />
+            ) : activeUnitId === 'dit-lahan' ? (
+              /* --- DIREKTORAT PENGELOLAAN LAHAN DASHBOARD --- */
+              <PengelolaanLahanDashboard />
+            ) : activeUnitId === 'dit-pengendalian-usaha' ? (
+              /* --- DIREKTORAT PENGENDALIAN PENGUSAHAAN DASHBOARD --- */
+              <PengendalianPengusahaanDashboard />
+            ) : activeUnitId === 'dit-bandara' ? (
+              /* --- DIREKTORAT PENGELOLAAN KAWASAN BANDARA DASHBOARD --- */
+              <PengelolaanBandaraDashboard />
+            ) : activeUnitId === 'biro-organisasi' ? (
+              /* --- BIRO ORGANISASI, KEPATUHAN DAN MANAJEMEN RISIKO (BOKMR) DASHBOARD --- */
+              <BiroOrganisasiDashboard />
             ) : (
-              /* --- OTHER 21 UNITS DASHBOARD & DESIGNER --- */
+              /* --- OTHER 20 UNITS DASHBOARD & DESIGNER --- */
               <OtherUnitPlaceholder
                 unit={currentUnit}
                 onOpen24UnitsDrawer={() => setIsUnitsDrawerOpen(true)}
@@ -370,7 +459,10 @@ export default function App() {
               <span>Unit Aktif: {currentUnit.name} ({currentUnit.code})</span>
             </button>
             <span className="text-slate-300">|</span>
-            <span className="hidden sm:inline font-mono">24 Unit Tersedia</span>
+            <span className="hidden sm:inline font-mono text-emerald-700 font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>{BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length} dari 24 Unit Aktif Siap Pakai</span>
+            </span>
             <span className="text-slate-300 hidden sm:inline">|</span>
             <span className="hidden md:inline font-mono">
               {activeUnitId === 'biro-keuangan'

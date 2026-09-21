@@ -20,7 +20,7 @@ import {
 
 export interface KpiFormulaDetail {
   id: string;
-  unit: 'biro-keuangan' | 'pdsi' | 'ptsp' | 'dit-pengembangan-kek';
+  unit: 'biro-keuangan' | 'pdsi' | 'ptsp' | 'dit-pengembangan-kek' | 'dit-investasi' | 'dit-lalu-lintas-barang' | 'dit-pelabuhan' | 'bu-rumah-sakit' | 'biro-hukum';
   title: string;
   codeTag: string;
   category: string;
@@ -2504,6 +2504,56 @@ MEDIAN(DATEDIFF('day', [TANGGAL REKAP AWAL], [TANGGAL REKAP AKHIR]))`,
     executiveAction: 'Pertahankan sistem verifikasi online 24/7 untuk dokumen jadwal kapal demi kelancaran arus logistik ekspor-impor di Batam.',
   },
 
+  ptsp_sektor_kbli: {
+    id: 'ptsp_sektor_kbli',
+    unit: 'ptsp',
+    title: 'Sebaran Perizinan Berusaha Berdasarkan Sektor KBLI',
+    codeTag: 'PTSP_SEKTOR_KBLI',
+    category: 'Sebaran Sektor & OSS RBA',
+    currentValue: '13.820 Permohonan (13.192 Terbit - 95,5%)',
+    targetValue: 'Tingkat Penyelesaian Sektor: ≥ 90,0%',
+    statusText: 'Rasio Penerbitan Sangat Efektif (95,5%)',
+    statusVariant: 'success',
+    summary: 'Pemetaan volume permohonan dan penerbitan izin berusaha berdasarkan Klasifikasi Baku Lapangan Usaha Indonesia (KBLI) dari sistem OSS RBA BP Batam.',
+    presentationPitch: 'Distribusi perizinan berusaha menurut sektor KBLI menunjukkan sektor Industri Pengolahan dan Perdagangan Besar/Eceran mendominasi volume pengajuan izin dengan konversi penerbitan rata-rata 95,5%. Sektor industri manufaktur menyumbang 4.210 permohonan dengan 4.050 izin terbit.',
+    formulaConceptual: '(SUM([JUMLAH TERBIT]) ÷ SUM([JUMLAH PERMOHONAN])) × 100%',
+    numerator: {
+      label: 'Total Izin Terbit per Sektor',
+      realValue: '13.192 Berkas Terbit',
+      source: 'Dataset No. 9: SUM([JUMLAH TERBIT])',
+    },
+    denominator: {
+      label: 'Total Permohonan Masuk per Sektor',
+      realValue: '13.820 Berkas Masuk',
+      source: 'Dataset No. 9: SUM([JUMLAH PERMOHONAN])',
+    },
+    calculationResult: 'Bagaimana Dihasilkan: (13.192 terbit ÷ 13.820 masuk) × 100% = 95,46%',
+    tableauCalculatedField: `// Calculated Field: [Rasio Izin Terbit Sektor %]
+// Rumus Tableau:
+SUM([JUMLAH TERBIT]) / SUM([JUMLAH PERMOHONAN])`,
+    tableauShelvesGuide: {
+      showMe: 'Horizontal Clustered Bar Chart / Pivot Crosstab (Sheet Swap)',
+      rows: '[SEKTOR USAHA (KBLI)]',
+      columns: 'Measure Values: SUM([JUMLAH PERMOHONAN]), SUM([JUMLAH TERBIT])',
+      marks: 'Bar (Color: Measure Names)',
+      filters: '[TAHUN] = 2026, [STATUS VALIDASI] = "Valid"',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #9: DATA PERMOHONAN PERIZINAN BERUSAHA (Hal 25)',
+      tableName: 'ptsp_perizinan_berusaha_kbli',
+      attributes: ['SEKTOR USAHA', 'KODE KBLI', 'JUMLAH PERMOHONAN', 'JUMLAH TERBIT', 'TINGKAT RISIKO', 'TAHUN'],
+      updateFrequency: 'Bulanan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0% Rasio Terbit per Sektor',
+      warning: '80,0% - 89,9%',
+      critical: '< 80,0%',
+      standardOrigin: 'Standar Pelayanan OSS RBA & Kemeninves/BKPM',
+    },
+    executiveAction: 'Prioritaskan asistensi teknis pada sektor padat karya dan teknologi tinggi untuk menjamin kelancaran realisasi investasi.',
+  },
+
   // DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK
   kpi_kek_investasi: {
     id: 'kpi_kek_investasi',
@@ -2749,6 +2799,1480 @@ COUNT([NAMAPERIZINAN])`,
     },
     executiveAction: 'Dorong penyelesaian telaahan ke-12 terkait insentif green data center agar capaian mencapai 100% sempurna sebelum akhir tahun anggaran.',
   },
+
+  // DIREKTORAT INVESTASI
+  kpi_investasi_realisasi: {
+    id: 'kpi_investasi_realisasi',
+    unit: 'dit-investasi',
+    title: 'Persentase Capaian Realisasi Investasi PMA & PMDN (Dataset No. 13)',
+    codeTag: 'INV-01',
+    category: 'Realisasi Investasi',
+    currentValue: 'Rp 21,38 T (114,3%)',
+    targetValue: 'Target Investasi: Rp 18,70 T',
+    statusText: 'Melampaui Target (114,3% Capaian)',
+    statusVariant: 'success',
+    summary: 'Realisasi investasi PMA dan PMDN di Kawasan Perdagangan Bebas dan Pelabuhan Bebas Batam mencapai Rp 21,38 Triliun dari target Rp 18,70 Triliun, setara 114,3% capaian.',
+    presentationPitch: 'Bapak/Ibu Pimpinan, realisasi investasi di BP Batam melampaui target tahunan sebesar 114,3% dengan total capaian Rp 21,38 Triliun dari target Rp 18,70 Triliun didorong oleh ekspansi industri manufaktur semikonduktor, data center KEK Nongsa, dan energi terbarukan.',
+    formulaConceptual: '% Capaian Realisasi Investasi = (Total Realisasi Investasi / Target Investasi) × 100%',
+    numerator: {
+      label: 'Total Realisasi Investasi (PMA + PMDN)',
+      realValue: 'Rp 21.380.000.000.000 (Rp 21,38 T)',
+      source: 'Dataset No. 13: Laporan Realisasi Investasi KPBPBB (LKPM & OSS)',
+    },
+    denominator: {
+      label: 'Target Investasi Tahunan BP Batam',
+      realValue: 'Rp 18.700.000.000.000 (Rp 18,70 T)',
+      source: 'Target Perjanjian Kinerja (Perkin) Direktorat Investasi',
+    },
+    calculationResult: '(Rp 21,38 T / Rp 18,70 T) × 100% = 114,33%',
+    tableauCalculatedField: '// [1. % Capaian Realisasi Investasi]\n(SUM([Realisasi Investasi]) / SUM([Target Investasi])) * 100',
+    tableauShelvesGuide: {
+      showMe: 'Bullet Graphs / KPI Card BAN',
+      rows: 'Measure Values (Realisasi & Target)',
+      columns: 'Tahun, Triwulan',
+      marks: 'Bar (Realisasi) dengan Reference Line (Target)',
+      filters: '[Tahun] = 2025, [Jenis] = ALL',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 13: Laporan Realisasi Investasi di Kawasan Perdagangan Bebas dan Pelabuhan Bebas',
+      tableName: 'investasi_realisasi_lkpm',
+      attributes: ['TRIWULAN', 'TAHUN', 'SEKTOR', 'NEGARA ASAL', 'JENIS (PMA/PMDN)', 'TARGET INVESTASI', 'REALISASI INVESTASI', 'JUMLAH PROYEK', 'TENAGA KERJA'],
+      updateFrequency: 'Pertriwulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 100,0%',
+      warning: '85,0% - 99,9%',
+      critical: '< 85,0%',
+      standardOrigin: 'Target Renstra & Perjanjian Kinerja (Perkin) Direktorat Investasi BP Batam',
+    },
+    executiveAction: 'Akselerasi debottlenecking perizinan dan penyediaan infrastruktur pendukung untuk mempertahankan momentum realisasi di atas target.',
+  },
+
+  kpi_investasi_website: {
+    id: 'kpi_investasi_website',
+    unit: 'dit-investasi',
+    title: 'Jumlah Kunjungan Website Invest In-Batam (Dataset No. 10)',
+    codeTag: 'INV-02',
+    category: 'Promosi & Digital Portal',
+    currentValue: '236.950 Kunjungan (Hits)',
+    targetValue: 'Target: 200.000 Kunjungan/Tahun',
+    statusText: 'Tinggi (+24,6% YoY Growth)',
+    statusVariant: 'success',
+    summary: 'Total kunjungan investor global ke portal resmi promosi investasi investinbatam.bpbatam.go.id mencapai 236.950 sesi dengan 158.400 pengguna unik.',
+    presentationPitch: 'Minat informasi investor terhadap Batam terbukti sangat tinggi melalui portal digital Invest In-Batam dengan 236.950 kunjungan sepanjang tahun berjalan, dengan asal pengunjung dominan dari Singapura, Jepang, Tiongkok, dan Amerika Serikat.',
+    formulaConceptual: 'Total Kunjungan Web = ∑ Kunjungan Bulanan (Sessions/Hits)',
+    numerator: {
+      label: 'Akumulasi Kunjungan / Sessions Web Portal',
+      realValue: '236.950 Kunjungan (Sessions)',
+      source: 'Dataset No. 10: Google Analytics / Web Server Logs investinbatam.bpbatam.go.id',
+    },
+    denominator: {
+      label: 'Periode Analisis',
+      realValue: '12 Bulan (Januari - Desember)',
+      source: 'Laporan Berkala Traffic Web Satu Data BP Batam',
+    },
+    calculationResult: '236.950 Sesi Kunjungan (Rata-rata 19.746 sesi/bulan)',
+    tableauCalculatedField: '// [2. Total Traffic Portal Investasi]\nSUM([Traffic Kunjungan])',
+    tableauShelvesGuide: {
+      showMe: 'Area Chart / Line Chart Tren Bulanan',
+      rows: 'SUM([Traffic Kunjungan])',
+      columns: 'Bulan / Triwulan',
+      marks: 'Area dengan gradient fill biru',
+      filters: '[Tahun] = 2025',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 10: Jumlah Kunjungan Website Invest In-Batam',
+      tableName: 'investasi_website_traffic',
+      attributes: ['TRIWULAN', 'TAHUN', 'BULAN', 'TRAFFIC KUNJUNGAN', 'PENGUNJUNG UNIK', 'PAGEVIEWS', 'ASAL NEGARA PENGUNJUNG'],
+      updateFrequency: 'Bulanan / Pertriwulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 200.000 Kunjungan',
+      warning: '150.000 - 199.999 Kunjungan',
+      critical: '< 150.000 Kunjungan',
+      standardOrigin: 'Standar Layanan Informasi & Promosi Digital BP Batam',
+    },
+    executiveAction: 'Tingkatkan materi promosi multibahasa (Mandarin, Jepang) dan optimasi SEO landing page panduan insentif KEK Batam.',
+  },
+
+  kpi_investasi_minat: {
+    id: 'kpi_investasi_minat',
+    unit: 'dit-investasi',
+    title: 'Minat Investasi Hasil Kunjungan dan Pameran Dalam dan Luar Negeri (Dataset No. 14)',
+    codeTag: 'INV-03',
+    category: 'Peminat & Pameran',
+    currentValue: '16 Calon Investor (Rp 28,67 T)',
+    targetValue: 'Target: 12 Investor (LoI)',
+    statusText: 'Sangat Baik (133% Target LoI)',
+    statusVariant: 'success',
+    summary: 'Sebanyak 16 perusahaan calon investor menandatangani Letter of Intent (LoI) / pernyataan minat investasi dengan total estimasi nilai Rp 28,67 Triliun dari expo dalam dan luar negeri.',
+    presentationPitch: 'Hasil aktifitas pameran dan kunjungan kerja diplomatik luar negeri berhasil mengamankan 16 komitmen minat investasi (LoI) dengan potensi nilai Rp 28,67 Triliun, didominasi sektor data center, semikonduktor, dan logistik maritim.',
+    formulaConceptual: 'Jumlah Minat Investasi = ∑ Investor Menandatangani LoI / Inkuiri Resmi dari Pameran & Kunjungan',
+    numerator: {
+      label: 'Jumlah Perusahaan Pemohon / Penandatangan LoI',
+      realValue: '16 Perusahaan (11 PMA, 5 PMDN)',
+      source: 'Dataset No. 14: Pencatatan Hasil Expo & Kunjungan Kerja Promosi',
+    },
+    denominator: {
+      label: 'Target Komitmen LoI Perkin',
+      realValue: '12 Perusahaan Calon Investor',
+      source: 'Indikator Kinerja Program Promosi Direktorat Investasi',
+    },
+    calculationResult: '16 Calon Investor (Nilai Potensi Rp 28.670 Miliar)',
+    tableauCalculatedField: '// [3. Jumlah Minat Investasi]\nCOUNTD([Nama Perusahaan])',
+    tableauShelvesGuide: {
+      showMe: 'Horizontal Bar Chart Berdasarkan Sektor',
+      rows: '[Sektor]',
+      columns: 'COUNTD([Nama Perusahaan]), SUM([Nilai Minat])',
+      marks: 'Bar bertingkat (Color by [Kategori Luar/Dalam Negeri])',
+      filters: '[Status Minat] = ALL',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 14: Data Minat Investasi dari Kunjungan dan Pameran Dalam dan Luar Negeri',
+      tableName: 'investasi_minat_pameran',
+      attributes: ['SEMESTER', 'TAHUN', 'NAMA PERUSAHAAN', 'SEKTOR', 'MINAT INVESTASI (NILAI RP)', 'NEGARA ASAL', 'KATEGORI (DALAM/LUAR NEGERI)', 'STATUS MINAT'],
+      updateFrequency: 'Per Kegiatan / Semester',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 12 Perusahaan LoI',
+      warning: '8 - 11 Perusahaan LoI',
+      critical: '< 8 Perusahaan LoI',
+      standardOrigin: 'Standar Efektivitas Promosi & Expo Investasi BP Batam',
+    },
+    executiveAction: 'Lakukan tindak lanjut (one-on-one facilitation) intensif bersama Tim Fasilitasi Investasi untuk mengonversi LoI menjadi izin OSS dan realisasi fisik.',
+  },
+
+  kpi_investasi_infrastruktur: {
+    id: 'kpi_investasi_infrastruktur',
+    unit: 'dit-investasi',
+    title: 'Informasi Infrastruktur yang Akan Dibangun di Batam (Dataset No. 6)',
+    codeTag: 'INV-04',
+    category: 'Pipeline Infrastruktur',
+    currentValue: 'Rp 31,27 T (11 Proyek, 845,4 Ha)',
+    targetValue: 'Multi-Tahun (2024 - 2027)',
+    statusText: 'Pipeline Strategis Berjalan',
+    statusVariant: 'info',
+    summary: 'Daftar proyek infrastruktur strategis publik dan skema KPBU di Batam dengan komparasi nilai investasi dan luas lahan per tahun pelaksanaan.',
+    presentationPitch: 'Pipeline infrastruktur penopang investasi di Batam mencakup 11 proyek strategis dengan total nilai Rp 31,27 Triliun dan alokasi lahan 845,4 Hektar yang terjadwal dari tahun 2024 hingga 2027.',
+    formulaConceptual: '∑ Nilai Investasi per Tahun & ∑ Luas Lahan (Ha) per Proyek',
+    numerator: {
+      label: 'Total Nilai Investasi Pipeline Multi-Tahun',
+      realValue: 'Rp 31.270.000.000.000 (Rp 31,27 T)',
+      source: 'Dataset No. 6: Informasi Infrastruktur yang Akan Dibangun di Batam',
+    },
+    denominator: {
+      label: 'Total Luas Area Lahan Proyek',
+      realValue: '845,4 Hektar (11 Proyek Strategis)',
+      source: 'Master Plan Pengembangan Infrastruktur Batam BP Batam',
+    },
+    calculationResult: '2024: Rp 1,42 T (45,8 Ha) | 2025: Rp 4,96 T (183,6 Ha) | 2026: Rp 10,19 T (196,0 Ha) | 2027: Rp 14,70 T (420,0 Ha)',
+    tableauCalculatedField: '// [4. Nilai Investasi Infrastruktur per Tahun]\nSUM([Nilai Investasi])',
+    tableauShelvesGuide: {
+      showMe: 'Dual-Axis Bar and Line Chart',
+      rows: 'SUM([Nilai Investasi]), SUM([Luas Area Ha])',
+      columns: '[Tahun Pelaksanaan]',
+      marks: 'Bar (Nilai Rp) & Line (Luas Ha)',
+      filters: '[Tahun] = 2024 - 2027',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 6: Informasi Infrastruktur yang Akan di Bangun di Batam',
+      tableName: 'investasi_infrastruktur_pipeline',
+      attributes: ['TAHUN', 'NAMA PROJECT', 'LOKASI', 'LUAS', 'STATUS PROJECT', 'PEMILIK PROJECT', 'AKTIFITAS UTAMA', 'SKEMA BISNIS', 'NILAI INVESTASI', 'JADWAL PROJECT', 'KAPASITAS PROJECT'],
+      updateFrequency: 'Pertahun',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: 'On Schedule Proyek Perencanaan',
+      warning: '1 - 2 Proyek Tertunda Pembebasan Lahan',
+      critical: '> 2 Proyek Terhambat Pendanaan',
+      standardOrigin: 'Dokumen Rencana Pembangunan Jangka Menengah & Master Plan BP Batam',
+    },
+    executiveAction: 'Pastikan kesiapan penlok dan percepatan lelang KPBU untuk proyek flyover, pelebaran jalan arteri pelabuhan, dan jetty terminal kargo.',
+  },
+
+  kpi_investasi_promosi: {
+    id: 'kpi_investasi_promosi',
+    unit: 'dit-investasi',
+    title: 'Tentatif Kegiatan Promosi Investasi (Dataset No. 11)',
+    codeTag: 'INV-05',
+    category: 'Agenda Promosi & Tamu',
+    currentValue: '16 Agenda • 10.600 Tamu / Delegasi',
+    targetValue: 'Target Pelaksanaan: 16 Kegiatan',
+    statusText: 'Berjalan Sesuai Kalender',
+    statusVariant: 'success',
+    summary: 'Penyelenggaraan kegiatan promosi investasi menurut kategori: Pameran Luar Negeri, Pameran Dalam Negeri, Business Forum, Misi Diplomatik, dan Inbound Delegasi.',
+    presentationPitch: 'Kalender tentatif promosi investasi mencakup 16 pelaksanaan kegiatan di dalam dan luar negeri dengan estimasi jangkauan 10.600 tamu investor dan pelaku usaha global.',
+    formulaConceptual: 'Matriks Promosi: ∑ Jumlah Tamu per Kategori & ∑ Jumlah Pelaksanaan Kegiatan',
+    numerator: {
+      label: 'Total Estimasi Tamu / Delegasi Investor',
+      realValue: '10.600 Orang Tamu / Peserta',
+      source: 'Dataset No. 11: Tentatif Kegiatan Promosi Investasi BP Batam',
+    },
+    denominator: {
+      label: 'Total Sesi / Pelaksanaan Kegiatan',
+      realValue: '16 Agenda / Sesi Pelaksanaan',
+      source: 'Kalender Kerja Promosi Investasi Terpadu',
+    },
+    calculationResult: 'Rata-rata 662 Tamu per Pelaksanaan Kegiatan Promosi',
+    tableauCalculatedField: '// [5. Tamu Promosi per Kategori]\nSUM([Jumlah Tamu]) / SUM([Jumlah Pelaksanaan])',
+    tableauShelvesGuide: {
+      showMe: 'Comparative Dual Bar / Side-by-Side Bar',
+      rows: '[Kategori Kegiatan]',
+      columns: 'SUM([Jumlah Tamu]), SUM([Jumlah Pelaksanaan])',
+      marks: 'Color by [Status]',
+      filters: '[Tahun] = 2025',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset No. 11: Tentatif Kegiatan Promosi',
+      tableName: 'investasi_tentatif_promosi',
+      attributes: ['TAHUN', 'KATEGORI KEGIATAN', 'NAMA KEGIATAN', 'NAMA PENYELENGGARA', 'TANGGAL PELAKSANAAN', 'JUMLAH TAMU/JUMLAH PELAKSANAAN KEGIATAN'],
+      updateFrequency: 'Per Semester / Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 85% Agenda Terlaksana Sesuai Jadwal',
+      warning: '70% - 84% Agenda Terlaksana',
+      critical: '< 70% Agenda Terlaksana',
+      standardOrigin: 'Kalender Kegiatan Promosi Investasi BP Batam',
+    },
+    executiveAction: 'Matangkan persiapan delegasi paviliun BP Batam pada expo mancanegara dan kurasi calon buyer/investor potensial.',
+  },
+
+  // -------------------------------------------------------------
+  // DIREKTORAT LALU LINTAS BARANG
+  // -------------------------------------------------------------
+  llb_pnbp: {
+    id: 'llb_pnbp',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Realisasi PNBP Pelayanan Lalu Lintas Barang',
+    codeTag: 'DLLB-01',
+    category: 'Penerimaan Negara Bukan Pajak',
+    currentValue: 'Rp 36,12 Miliar (85,0%)',
+    targetValue: 'Target DIPA 2026: Rp 42,50 Miliar',
+    statusText: 'Kinerja Sangat Baik (+14.2% YoY)',
+    statusVariant: 'success',
+    summary: 'Penerimaan PNBP atas jasa perizinan lalu lintas barang: pemasukan bahan baku (Rp 18,40 M), pengeluaran produk olahan (Rp 9,80 M), izin usaha kawasan (Rp 5,22 M), dan kuota perdagangan konsumsi (Rp 2,70 M).',
+    presentationPitch: 'Realisasi PNBP DLLB telah mencapai Rp 36,12 Miliar atau 85,0% dari target tahunan Rp 42,50 Miliar, didorong oleh akselerasi arus barang industri manufaktur di KPBPBB Batam.',
+    formulaConceptual: 'Persentase Capaian PNBP = (Total Realisasi PNBP Pelayanan / Target PNBP Tahunan) × 100%',
+    numerator: {
+      label: 'Total Realisasi Penerimaan PNBP Jasa Layanan YTD',
+      realValue: 'Rp 36.125.000.000,-',
+      source: 'Sistem Informasi Keuangan (SIMKEU) & Modul Pembayaran PNBP Perizinan',
+    },
+    denominator: {
+      label: 'Target Penerimaan PNBP Tahunan DIPA 2026',
+      realValue: 'Rp 42.500.000.000,-',
+      source: 'DIPA BP Batam TA 2026 Satker Direktorat Lalu Lintas Barang',
+    },
+    calculationResult: '85,0% Terlampaui (Sisa Target: Rp 6,375 Miliar)',
+    tableauCalculatedField: '// [1. Capaian PNBP DLLB (%)]\n(SUM([Realisasi PNBP]) / SUM([Target PNBP])) * 100',
+    tableauShelvesGuide: {
+      showMe: 'Show Me #10 (Dual Axis: Bar & Line)',
+      rows: '[Kategori Layanan Perizinan]',
+      columns: 'SUM([Realisasi PNBP]), SUM([Target PNBP])',
+      marks: 'Color by [Status Capaian]',
+      filters: '[Tahun]=2026, [Kode Satker]=\'DLLB\'',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #3, #4, #6, #7 Konsolidasi Keuangan & Perizinan',
+      tableName: 'pnbp_lalu_lintas_barang',
+      attributes: ['TAHUN', 'KATEGORI', 'TARGET_RP', 'REALISASI_RP', 'PERSENTASE', 'PERTUMBUHAN_YOY'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBATAS',
+    },
+    benchmarkThreshold: {
+      target: '≥ 80% Capaian pada Semester I',
+      warning: '65% - 79% Capaian',
+      critical: '< 65% Capaian',
+      standardOrigin: 'Target Kinerja Renstra & Perjanjian Kinerja BP Batam 2026',
+    },
+    executiveAction: 'Pertahankan simplifikasi verifikasi dokumen impor/ekspor untuk mendukung target PNBP Rp 42,50 Miliar tercapai sebelum Q4 2026.',
+  },
+
+  llb_total_izin: {
+    id: 'llb_total_izin',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Total Seluruh Penerbitan Izin Layanan LLB',
+    codeTag: 'DLLB-02',
+    category: 'Pelayanan Perizinan Terbit',
+    currentValue: '1.842 Dokumen Surat/SK',
+    targetValue: 'Target Proyeksi 2026: 5.500 Dokumen',
+    statusText: 'Pertumbuhan Bulanan +8.4% MoM',
+    statusVariant: 'success',
+    summary: 'Akumulasi seluruh perizinan yang diterbitkan Direktorat Lalu Lintas Barang: 845 SK Pemasukan, 520 SK Pengeluaran, 265 SK Izin Usaha Kawasan, dan 212 SK Perdagangan/Kuota Konsumsi.',
+    presentationPitch: 'Sebanyak 1.842 SK perizinan telah diterbitkan secara resmi melalui sistem digital terintegrasi BP Batam dengan tingkat kepatuhan persetujuan 98,2%.',
+    formulaConceptual: 'Total Izin Terbit = ∑(Izin Pemasukan) + ∑(Izin Pengeluaran) + ∑(Izin Usaha Kawasan) + ∑(Izin Perdagangan)',
+    numerator: {
+      label: 'Jumlah Dokumen Izin dengan Status "Disetujui / Terbit"',
+      realValue: '1.842 Surat Keputusan (SK)',
+      source: 'Dataset No. 3, 4, 6, 7 Satu Data BP Batam (Halaman 8-9)',
+    },
+    denominator: {
+      label: 'Konstanta Total Keseluruhan',
+      realValue: '1.842 Dokumen',
+      source: 'Basis Data Terpadu IBOSS & INSW',
+    },
+    calculationResult: '1.842 Dokumen (Rata-rata 460 Dokumen/Bulan)',
+    tableauCalculatedField: '// [2. Total Perizinan DLLB]\nCOUNTD(IF [Status] = \'Disetujui\' THEN [No Izin] END)',
+    tableauShelvesGuide: {
+      showMe: 'Show Me #8 (Pie/Donut) & Show Me #3 (Stacked Bar)',
+      rows: '[Bulan Penerbitan]',
+      columns: 'COUNTD([No Izin])',
+      marks: 'Color by [Kategori Layanan]',
+      filters: '[Status]=\'Disetujui\', [Tahun]=2026',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #3, #4, #6, #7 Satu Data BP Batam',
+      tableName: 'perizinan_lalu_lintas_barang',
+      attributes: ['NAMA PERUSAHAAN', 'NIB', 'NO PENDAFTARAN', 'NO IJIN', 'STATUS', 'TANGGAL DAFTAR'],
+      updateFrequency: 'Per Bulan & Real-Time',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 400 SK / Bulan',
+      warning: '300 - 399 SK / Bulan',
+      critical: '< 300 SK / Bulan',
+      standardOrigin: 'Standar Pelayanan Minimum (SPM) BP Batam',
+    },
+    executiveAction: 'Tingkatkan kapasitas server sistem IBOSS untuk mengakomodasi lonjakan permohonan izin impor akhir tahun.',
+  },
+
+  llb_izin_industri: {
+    id: 'llb_izin_industri',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Penerbitan Izin Sektor Industri (Pemasukan & Pengeluaran)',
+    codeTag: 'DLLB-03',
+    category: 'Perizinan Industri KPBPBB',
+    currentValue: '1.365 SK (74,1% Total Izin)',
+    targetValue: 'Porsi Dominan Sektor Industri (≥ 70%)',
+    statusText: 'Kontributor Utama Arus Barang',
+    statusVariant: 'info',
+    summary: 'Rincian izin lalu lintas barang khusus manufaktur: 845 izin pemasukan bahan baku industri dan 520 izin pengeluaran produk olahan kawasan bebas Batam.',
+    presentationPitch: 'Sektor industri manufaktur mendominasi volume perizinan dengan total 1.365 SK (74,1%), mencerminkan utilisasi tinggi pabrik-pabrik di Batam.',
+    formulaConceptual: 'Izin Industri = ∑(Izin Pemasukan Industri) + ∑(Izin Pengeluaran Industri)',
+    numerator: {
+      label: 'Volume Dokumen Izin Pemasukan & Pengeluaran Industri',
+      realValue: '1.365 SK (845 Pemasukan + 520 Pengeluaran)',
+      source: 'Dataset No. 6 & No. 7 Satu Data BP Batam (Halaman 9)',
+    },
+    denominator: {
+      label: 'Total Seluruh Izin Diterbitkan',
+      realValue: '1.842 SK',
+      source: 'Rekapitulasi Konsolidasi Perizinan DLLB',
+    },
+    calculationResult: '74,1% Pangsa Sektor Industri terhadap Total Izin',
+    tableauCalculatedField: '// [3. Pangsa Izin Industri (%)]\n(SUM(IF [Kategori] IN (\'Pemasukan\', \'Pengeluaran\') THEN [Volume] END) / SUM([Volume])) * 100',
+    tableauShelvesGuide: {
+      showMe: 'Side-by-side Bar / Dual Column Bar',
+      rows: '[Sektor], [Jenis Izin]',
+      columns: 'SUM([Volume])',
+      marks: 'Color by [Jenis Izin]',
+      filters: '[Sektor]=\'Industri\'',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #6 (Izin Pemasukan) & #7 (Izin Pengeluaran)',
+      tableName: 'izin_industri_llb',
+      attributes: ['URAIAN IZIN', 'JUMLAH PENERBITAN', 'NAMA PERUSAHAAN', 'NIB', 'NO PENDAFTARAN', 'STATUS'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 70% Pangsa Industri',
+      warning: '60% - 69%',
+      critical: '< 60%',
+      standardOrigin: 'Rencana Induk Kawasan Industri Batam',
+    },
+    executiveAction: 'Optimalkan jalur hijau perizinan (green lane) bagi perusahaan industri bersertifikat AEO.',
+  },
+
+  llb_izin_perdagangan: {
+    id: 'llb_izin_perdagangan',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Perizinan Perdagangan & Alokasi Kuota Konsumsi',
+    codeTag: 'DLLB-04',
+    category: 'Stabilisasi Pasokan Pangan',
+    currentValue: '212 SK • 84.060 Ton/KL (77,8%)',
+    targetValue: 'Total Kuota Alokasi: 108.000 Ton/KL',
+    statusText: 'Stok Sembako KPBPBB Aman',
+    statusVariant: 'success',
+    summary: 'Pengendalian alokasi kuota induk komoditas konsumsi: Beras (24.800 Ton), Gula Pasir (18.600 Ton), Daging Sapi (7.450 Ton), Tepung Terigu (12.200 Ton), Minyak Goreng (9.800 KL), Bawang & Cabai (4.650 Ton), Susu Olahan (6.560 Ton). Total nilai devisa Rp 1,82 Triliun.',
+    presentationPitch: 'Serapan kuota impor barang konsumsi mencapai 84.060 Ton/KL (77,8%) dengan estimasi nilai ekonomi Rp 1,82 Triliun guna menjamin stabilitas harga pangan di Batam.',
+    formulaConceptual: 'Persentase Serapan Kuota = (Total Realisasi Impor / Total Alokasi Kuota SK) × 100%',
+    numerator: {
+      label: 'Volume Realisasi Impor Terverifikasi',
+      realValue: '84.060 Ton/KL',
+      source: 'Dataset No. 2: Realisasi Kuota Induk Barang Konsumsi (Halaman 8)',
+    },
+    denominator: {
+      label: 'Total Kuota Alokasi Berdasarkan SK Kepala BP Batam',
+      realValue: '108.000 Ton/KL',
+      source: 'SK Kuota Induk Barang Konsumsi BP Batam',
+    },
+    calculationResult: '77,8% Terserap (Sisa Kuota: 23.940 Ton/KL)',
+    tableauCalculatedField: '// [4. Serapan Kuota Konsumsi (%)]\n(SUM([Realisasi]) / SUM([Kuota])) * 100',
+    tableauShelvesGuide: {
+      showMe: 'Show Me #2 (Horizontal Bullet Bar)',
+      rows: '[Kode HS], [Komoditas]',
+      columns: 'SUM([Realisasi]), SUM([Kuota])',
+      marks: 'Color by [Status Kecukupan]',
+      filters: '[Tahun]=2026',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #2 (Realisasi Kuota) & #3 (Rekap Izin Perdagangan)',
+      tableName: 'kuota_barang_konsumsi',
+      attributes: ['KODE HS', 'KUOTA', 'SATUAN', 'NILAI', 'NO SK', 'TANGGAL SK', 'STATUS'],
+      updateFrequency: 'Jika Update',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '75% - 90% Serapan Terkendali',
+      warning: '90% - 98% Mendekati Habis',
+      critical: '> 98% Kuota Habis',
+      standardOrigin: 'Ketahanan Pangan Kota Batam & BP Batam',
+    },
+    executiveAction: 'Lakukan evaluasi stok penyangga bersama Satgas Pangan menjelang perayaan hari besar keagamaan.',
+  },
+
+  llb_izin_kawasan: {
+    id: 'llb_izin_kawasan',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Penerbitan Izin Usaha Kawasan (IUK) Industri',
+    codeTag: 'DLLB-05',
+    category: 'Legalitas Kawasan Industri',
+    currentValue: '265 SK • 34 Kawasan Aktif',
+    targetValue: 'Target Pelayanan IUK: 300 SK',
+    statusText: '1.420 Hektar Lahan Terkelola',
+    statusVariant: 'success',
+    summary: 'Penerbitan dokumen legalitas operasional kawasan industri, meliputi Batamindo Industrial Park, Kabil Integrated Industrial Estate, Panbil Industrial Estate, Cammo Industrial Park, dan 30 kawasan lainnya.',
+    presentationPitch: 'Telah diterbitkan 265 SK Izin Usaha Kawasan yang menaungi 34 kawasan industri aktif dengan luas lahan terkelola mencapai 1.420 hektar.',
+    formulaConceptual: 'Total IUK Terbit = ∑(SK Izin Usaha Kawasan Baru + Perpanjangan)',
+    numerator: {
+      label: 'Jumlah SK Izin Usaha Kawasan Diterbitkan',
+      realValue: '265 SK',
+      source: 'Dataset No. 4 & No. 5 Satu Data BP Batam (Halaman 9)',
+    },
+    denominator: {
+      label: 'Total Luas Lahan Terkelola Kawasan Industri',
+      realValue: '1.420 Hektar',
+      source: 'Master Data KBLI Kawasan Industri DLLB',
+    },
+    calculationResult: '88,3% dari Target Tahunan (300 SK)',
+    tableauCalculatedField: '// [5. Kerapatan Kawasan Industri]\nCOUNTD([No Izin Usaha Kawasan])',
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 (Matrix Table & Treemap)',
+      rows: '[Nama Perusahaan Kawasan], [KBLI]',
+      columns: 'SUM([Luas Lahan M2]), COUNTD([No IUK])',
+      marks: 'Detail by [Alamat]',
+      filters: '[Status]=\'Aktif Beroperasi\'',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #4 & #5 Satu Data BP Batam',
+      tableName: 'izin_usaha_kawasan_kbli',
+      attributes: ['NO', 'NAMA PERUSAHAAN', 'NO IZIN USAHA KAWASAN', 'ALAMAT', 'KBLI', 'STATUS'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBATAS',
+    },
+    benchmarkThreshold: {
+      target: '≥ 80% Kepatuhan Perpanjangan IUK',
+      warning: '70% - 79%',
+      critical: '< 70%',
+      standardOrigin: 'Peraturan Kepala BP Batam tentang Kawasan Industri',
+    },
+    executiveAction: 'Percepat integrasi perizinan AMDAL dan tata ruang industri pada portal perizinan digital.',
+  },
+
+  llb_sla: {
+    id: 'llb_sla',
+    unit: 'dit-lalu-lintas-barang',
+    title: 'Kepatuhan SLA & Rata-Rata Waktu Layanan',
+    codeTag: 'DLLB-06',
+    category: 'Kinerja Layanan & Kecepatan',
+    currentValue: '96,8% Tepat Waktu • 3,5 Jam',
+    targetValue: 'Target SLA ≥ 95,0% • Batas Maks: 6,0 Jam',
+    statusText: 'Target Standar Pelayanan Terlampaui',
+    statusVariant: 'success',
+    summary: 'Evaluasi kecepatan penyelesaian permohonan izin dari pendaftaran hingga penerbitan SK. Sektor industri mencatat 97,4% tepat waktu (2,9 jam), dan sektor perdagangan 95,7% (4,7 jam).',
+    presentationPitch: 'Tingkat kepatuhan SLA mencapai 96,8% dengan rata-rata waktu penyelesaian 3,5 jam per dokumen, 2,5 jam lebih cepat dari batas toleransi maksimal 6,0 jam.',
+    formulaConceptual: 'Persentase Kepatuhan SLA = (Jumlah Dokumen Selesai Sesuai Standar / Total Dokumen Terlayani) × 100%',
+    numerator: {
+      label: 'Jumlah Dokumen Terlayani Tepat Waktu (≤ Batas SLA)',
+      realValue: '1.783 Dokumen',
+      source: 'Dataset No. 8 & No. 9 Satu Data BP Batam (Halaman 9)',
+    },
+    denominator: {
+      label: 'Total Dokumen Permohonan Selesai',
+      realValue: '1.842 Dokumen',
+      source: 'Sistem Tracking Dokumen IBOSS BP Batam',
+    },
+    calculationResult: '96,8% Kepatuhan (Standar Target: ≥ 95,0%)',
+    tableauCalculatedField: '// [6. Kepatuhan SLA Tepat Waktu (%)]\n(SUM([Dokumen Tepat Waktu]) / SUM([Total Dokumen])) * 100',
+    tableauShelvesGuide: {
+      showMe: 'Comparative Bullet Bar & Gantt Chart Duration',
+      rows: '[Sektor], [Uraian Izin]',
+      columns: 'AVG([Rata-Rata Waktu Jam]), AVG([Standar SLA Jam])',
+      marks: 'Color by [Persentase Tepat Waktu]',
+      filters: '[Tahun]=2026',
+    },
+    databaseSource: {
+      catalogItem: 'Dataset Item #8 (SLA Perdagangan) & #9 (SLA Industri)',
+      tableName: 'sla_layanan_llb',
+      attributes: ['NO', 'URAIAN IZIN', 'PERSENTASE TEPAT WAKTU', 'RATA-RATA WAKTU (JAM)', 'STANDAR SLA (JAM)'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 95,0% Tepat Waktu',
+      warning: '90,0% - 94,9%',
+      critical: '< 90,0%',
+      standardOrigin: 'Standar Operasional Prosedur (SOP) Dit. Lalu Lintas Barang',
+    },
+    executiveAction: 'Terapkan otomasi validasi dokumen berulang untuk memangkas waktu verifikasi di bawah 2 jam.',
+  },
+
+  // =========================================================================
+  // DIREKTORAT PENGELOLAAN KEPELABUHANAN (DPKPL)
+  // Berdasarkan "Atribut Daftar Data Satu Data.pdf" (Halaman 14 - 17)
+  // =========================================================================
+  pelabuhan_pnbp: {
+    id: 'pelabuhan_pnbp',
+    unit: 'dit-pelabuhan',
+    title: 'Realisasi PNBP Kepelabuhanan',
+    codeTag: 'DPKPL-01',
+    category: 'Keuangan & Pendapatan Maritim',
+    currentValue: 'Rp 428,50 Miliar (89,3%)',
+    targetValue: 'Target DIPA 2026: Rp 480,00 Miliar',
+    statusText: 'Kinerja Sangat Baik (+12,4% YoY)',
+    statusVariant: 'success',
+    summary: 'Total penerimaan bukan pajak jasa labuh kapal, tambat, dermaga, pandu/tunda, pass penumpang terminal feri internasional, dan penumpukan peti kemas di seluruh gugus pelabuhan BP Batam.',
+    presentationPitch: 'Realisasi PNBP Direktorat Pengelolaan Kepelabuhanan mencapai Rp 428,50 Miliar atau 89,3% dari target tahunan Rp 480 Miliar (+12,4% pertumbuhan tahunan). Pelabuhan Batu Ampar menyumbang porsi terbesar yaitu Rp 218,50 Miliar (51,0%) berkat percepatan bongkar muat kontainer dan modernisasi STS Crane.',
+    formulaConceptual: 'Capaian PNBP Kepelabuhanan = (Total Realisasi Penerimaan Kas PNBP / Target PNBP Tahunan) × 100%',
+    numerator: {
+      label: 'Pembilang (Akumulasi Realisasi PNBP Kepelabuhanan)',
+      realValue: 'Rp 428.500.000.000 (Kas Masuk Kasda & Bank Mitra)',
+      source: 'Satu Data Item #3: SUM([pnbp_kepelabuhanan].[jumlah])',
+    },
+    denominator: {
+      label: 'Penyebut (Target Penetapan DIPA PNBP 2026)',
+      realValue: 'Rp 480.000.000.000 (Rencana Bisnis Anggaran BLU)',
+      source: 'RBA DIPA BP Batam TA 2026',
+    },
+    calculationResult: '(428.500.000.000 ÷ 480.000.000.000) × 100% = 89,27% ≈ 89,3%',
+    tableauCalculatedField: `// Calculated Field: [% Capaian PNBP Kepelabuhanan]
+SUM([pnbp_kepelabuhanan].[jumlah]) / SUM([target_pnbp_kepelabuhanan]) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #3 Dual-Axis Bar & Line',
+      rows: 'SUM([jumlah]), [% Capaian PNBP Kepelabuhanan]',
+      columns: '[bulan], [terminal_satker]',
+      marks: 'Bar Mark (Realisasi) + Line Reference (Target DIPA)',
+      filters: "[tahun] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #3: Realisasi Penerimaan Negara Bukan Pajak (PNBP) Kepelabuhanan (Hal. 15)',
+      tableName: 'pnbp_kepelabuhanan',
+      attributes: ['MATA UANG', 'JUMLAH', 'BULAN', 'TANGGAL', 'COA / JENIS LAYANAN', 'PERUSAHAAN', 'TERMINAL/SATKER'],
+      updateFrequency: 'Per Tahun (Sinkronisasi Bulanan)',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 85,0% pada Triwulan III',
+      warning: '70,0% - 84,9%',
+      critical: '< 70,0%',
+      standardOrigin: 'Perjanjian Kinerja (Perkin) Direktur Pengelolaan Kepelabuhanan',
+    },
+    executiveAction: 'Percepat integrasi penagihan otomatis Batam Maritime System (BMS) untuk jasa labuh tambat kapal tanker di Kabil guna memaksimalkan penerimaan kuartal berikutnya.',
+  },
+
+  pelabuhan_belanja: {
+    id: 'pelabuhan_belanja',
+    unit: 'dit-pelabuhan',
+    title: 'Realisasi Belanja Direktorat Kepelabuhanan',
+    codeTag: 'DPKPL-02',
+    category: 'Belanja & Investasi Maritim',
+    currentValue: 'Rp 184,25 Miliar (85,7%)',
+    targetValue: 'Pagu DIPA: Rp 215,00 Miliar',
+    statusText: 'Penyerapan Anggaran Optimal',
+    statusVariant: 'success',
+    summary: 'Tingkat penyerapan alokasi anggaran belanja modal infrastruktur dermaga, pemeliharaan alur pelayaran, pengadaan suku cadang crane, dan operasional layanan kepelabuhanan.',
+    presentationPitch: 'Realisasi belanja kepelabuhanan terealisasi Rp 184,25 Miliar atau 85,7% dari total pagu Rp 215,00 Miliar. Alokasi terbesar terserap pada pemeliharaan dermaga dan modernisasi alat bongkar muat STS Batu Ampar. Dengan pendapatan Rp 428,50 M, direktorat membukukan surplus operasional bersih +Rp 244,25 Miliar (Cost-to-Income 43,0%).',
+    formulaConceptual: 'Persentase Serapan Belanja = (Total Realisasi Belanja SP2D / Total Pagu Anggaran Kepelabuhanan) × 100%',
+    numerator: {
+      label: 'Pembilang (Akumulasi Realisasi Belanja Terbit)',
+      realValue: 'Rp 184.250.000.000 (SP2D Terbayar)',
+      source: 'Satu Data Item #2: SUM([belanja_kepelabuhanan].[nilai])',
+    },
+    denominator: {
+      label: 'Penyebut (Total Pagu Anggaran DIPA DPKPL)',
+      realValue: 'Rp 215.000.000.000 (Pagu DIPA 2026)',
+      source: 'DIPA BP Batam Unit Kepelabuhanan',
+    },
+    calculationResult: '(184.250.000.000 ÷ 215.000.000.000) × 100% = 85,70% ≈ 85,7%',
+    tableauCalculatedField: `// Calculated Field: [% Serapan Belanja Kepelabuhanan]
+SUM([belanja_kepelabuhanan].[nilai]) / SUM([pagu_belanja_kepelabuhanan]) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #6 Horizontal Bar with Reference Line',
+      rows: '[mata_anggaran], [keterangan]',
+      columns: 'SUM([nilai]), [% Serapan Belanja]',
+      marks: 'Color by [% Serapan Belanja]',
+      filters: "[tahun] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #2: Data Realisasi Belanja Direktorat Pengelolaan Kepelabuhanan (Hal. 14 - 15)',
+      tableName: 'belanja_kepelabuhanan',
+      attributes: ['TANGGAL', 'BULAN', 'COA (CHART OF ACCOUNT)', 'MATA ANGGARAN', 'KETERANGAN', 'NILAI'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 80,0% s/d Triwulan III',
+      warning: '65,0% - 79,9%',
+      critical: '< 65,0%',
+      standardOrigin: 'Target Indikator Kinerja Pelaksanaan Anggaran (IKPA) Kemenkeu',
+    },
+    executiveAction: 'Pertahankan efisiensi belanja operasional dan pastikan termin pembayaran kontrak pemeliharaan alur pelayaran dermaga diselesaikan tepat jadwal.',
+  },
+
+  pelabuhan_ikm: {
+    id: 'pelabuhan_ikm',
+    unit: 'dit-pelabuhan',
+    title: 'Indeks Kepuasan Masyarakat (IKM) Layanan Kepelabuhanan',
+    codeTag: 'DPKPL-03',
+    category: 'Mutu Layanan Publik',
+    currentValue: '88,40 (Predikat: Sangat Baik)',
+    targetValue: 'Target Standar Perkin: ≥ 85,00',
+    statusText: 'Kategori Mutu A (Terlampaui)',
+    statusVariant: 'success',
+    summary: 'Pengukuran tingkat kepuasan asosiasi pelayaran, pengguna jasa feri internasional, agen kapal, dan eksportir terhadap 9 unsur pelayanan kepelabuhanan sesuai PermenPAN-RB.',
+    presentationPitch: 'Indeks Kepuasan Masyarakat layanan kepelabuhanan mencapai skor 88,40 dengan predikat Mutu A (Sangat Baik), melampaui target perjanjian kinerja 85,00. Seluruh 9 unsur pelayanan mencatatkan skor di atas 86, dengan apresiasi tertinggi pada kompetensi petugas kepanduan (90,1) dan kesesuaian produk layanan dermaga (89,6).',
+    formulaConceptual: 'Skor IKM Tertimbang = (∑ Nilai Rata-rata 9 Unsur Pelayanan / 9) × 25',
+    numerator: {
+      label: 'Pembilang (Total Akumulasi Rata-rata 9 Unsur)',
+      realValue: '31,82 (dari 9 Unsur Skala 4,00)',
+      source: 'Satu Data Item #21: Survei Kepuasan Pengguna Jasa Kepelabuhanan',
+    },
+    denominator: {
+      label: 'Penyebut (Konversi Standar PermenPAN-RB)',
+      realValue: '9 Unsur Pelayanan (Faktor Pengali 25)',
+      source: 'PermenPAN-RB No. 14 Tahun 2017',
+    },
+    calculationResult: '(31,82 ÷ 9) × 25 = 88,40 (Kategori A - Sangat Baik)',
+    tableauCalculatedField: `// Calculated Field: [Nilai IKM Pelabuhan Konversi 100]
+(AVG([skor_unsur_1_sd_9]) / 4) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #23 Bullet Graph & Radar Chart',
+      rows: '[nama_unsur_pelayanan]',
+      columns: 'AVG([nilai_skor])',
+      marks: 'Bar with Target Line (85.00)',
+      filters: "[tahun] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #21: Indeks Kepuasan Masyarakat Layanan Kepelabuhanan (Hal. 17)',
+      tableName: 'ikm_layanan_kepelabuhanan',
+      attributes: ['TAHUN', 'NILAI INDEKS KEPUASAN MASYARAKAT', '9 UNSUR PERMENPAN-RB'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 85,00 (Kategori Mutu A - Sangat Baik)',
+      warning: '76,61 - 84,99 (Kategori Mutu B - Baik)',
+      critical: '< 76,61 (Kategori Mutu C - Kurang Baik)',
+      standardOrigin: 'PermenPAN-RB No. 14 Tahun 2017 tentang Pedoman Penyusunan SKM',
+    },
+    executiveAction: 'Tingkatkan kebersihan ruang tunggu terminal penyeberangan domestik Sekupang & Telaga Punggur untuk mengerek unsur sarana prasarana menuju 90+.',
+  },
+
+  pelabuhan_penumpang: {
+    id: 'pelabuhan_penumpang',
+    unit: 'dit-pelabuhan',
+    title: 'Jumlah Penumpang Pelabuhan Domestik & Internasional',
+    codeTag: 'DPKPL-04',
+    category: 'Mobilitas & Trafik Penumpang',
+    currentValue: '7,43 Juta Pax',
+    targetValue: 'Target Tahunan: 9,50 Juta Pax',
+    statusText: 'Trafik Tinggi (78,2% Target)',
+    statusVariant: 'success',
+    summary: 'Total arus penumpang kapal feri cepat dan kapal roro yang dilayani di seluruh terminal penumpang Batam, mencakup rute internasional (Singapura & Malaysia) dan rute domestik.',
+    presentationPitch: 'Trafik penumpang di 5 terminal pelabuhan Batam menembus 7,43 Juta Pax (3,68 Juta kedatangan dan 3,75 Juta keberangkatan). Terminal Batam Centre mendominasi dengan 2,87 Juta Pax (38,7%), disusul Harbour Bay 1,71 Juta Pax (23,0%) dan Sekupang 1,60 Juta Pax (21,5%). Proporsi internasional mencapai 34,7% yang menjadi motor devisa pariwisata Batam.',
+    formulaConceptual: 'Total Penumpang = ∑ Jumlah Kedatangan (Arrival) + ∑ Jumlah Keberangkatan (Departure)',
+    numerator: {
+      label: 'Pembilang (Total Pergerakan Penumpang Terdaftar)',
+      realValue: '7.425.800 Pax (Datang: 3.680.200, Berangkat: 3.745.600)',
+      source: 'Satu Data Item #25: SUM([penumpang_pelabuhan].[kedatangan]) + SUM([penumpang_pelabuhan].[keberangkatan])',
+    },
+    denominator: {
+      label: 'Penyebut (Target Prognosa Penumpang 2026)',
+      realValue: '9.500.000 Pax (Target Kapasitas Terminal)',
+      source: 'Master Plan Transportasi Laut BP Batam',
+    },
+    calculationResult: '7.425.800 Pax (78,2% dari Target 9,50 Juta Pax)',
+    tableauCalculatedField: `// Calculated Field: [Total Arus Penumpang]
+SUM([penumpang_pelabuhan].[jumlah_kedatangan]) + SUM([penumpang_pelabuhan].[jumlah_keberangkatan])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #12 Stacked Bar Chart & Area',
+      rows: '[nama_terminal], [kategori_domestik_internasional]',
+      columns: 'SUM([jumlah_kedatangan]), SUM([jumlah_keberangkatan])',
+      marks: 'Color by [kategori_domestik_internasional]',
+      filters: "[tahun] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #25: Jumlah Penumpang Pelabuhan Domestik dan Internasional (Hal. 17)',
+      tableName: 'penumpang_pelabuhan_dom_int',
+      attributes: ['NAMA TERMINAL', 'JENIS PENUMPANG', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'PENUMPANG DOMESTIK/INTERNASIONAL', 'JUMLAH KEDATANGAN', 'JUMLAH KEBERANGKATAN', 'KEWARGANEGARAAN PENUMPANG', 'TAHUN'],
+      updateFrequency: 'Per Tahun (Update Bulanan)',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 9,0 Juta Pax / Tahun',
+      warning: '7,5 - 8,9 Juta Pax',
+      critical: '< 7,5 Juta Pax',
+      standardOrigin: 'Kapasitas Terpasang Fasilitas Terminal Penumpang BP Batam',
+    },
+    executiveAction: 'Perluas implementasi pintu autogate paspor elektronik di Batam Centre dan Harbour Bay guna mengantisipasi antrean pada saat puncak libur akhir pekan (weekend peak).',
+  },
+
+  pelabuhan_dermaga: {
+    id: 'pelabuhan_dermaga',
+    unit: 'dit-pelabuhan',
+    title: 'Jumlah Dermaga & Tingkat Okupansi (BOR)',
+    codeTag: 'DPKPL-05',
+    category: 'Infrastruktur & Kapasitas Sandar',
+    currentValue: '24 Dermaga • BOR 64,8%',
+    targetValue: 'Standar Optimal UNCTAD: 60,0% - 70,0%',
+    statusText: 'Utilitas Ideal & Bebas Kongesti',
+    statusVariant: 'success',
+    summary: 'Jumlah fasilitas dermaga aktif yang dikelola BP Batam dengan total panjang 3.840 meter dan kedalaman hingga -14 MLWS, serta indikator pemanfaatan dermaga (Berth Occupancy Ratio / BOR).',
+    presentationPitch: 'BP Batam mengelola 24 fasilitas dermaga aktif di 6 gugus pelabuhan dengan total panjang 3.840 meter dan kedalaman sandar mencapai -14 MLWS. Rata-rata tingkat pemakaian dermaga (BOR) berada di angka 64,8%, sangat ideal menurut standar internasional UNCTAD (60-70%), menjamin kelancaran sandar tanpa terjadi antrean kapal di alur laut.',
+    formulaConceptual: 'Berth Occupancy Ratio (BOR %) = (Total Jam Sandar Kapal / (Jumlah Dermaga × 24 Jam × Jumlah Hari)) × 100%',
+    numerator: {
+      label: 'Pembilang (Total Waktu Tambat Kapal di Dermaga)',
+      realValue: '67.240 Jam Waktu Sandar Akumulasi',
+      source: 'Satu Data Item #4: Rekapitulasi Waktu Tambat Dermaga',
+    },
+    denominator: {
+      label: 'Penyebut (Kapasitas Maksimum Jam Sandar Tersedia)',
+      realValue: '103.680 Jam (Kapasitas 24 Dermaga × 24 Jam × Hari Operasi)',
+      source: 'Spesifikasi Teknis 24 Dermaga BP Batam',
+    },
+    calculationResult: '(67.240 ÷ 103.680) × 100% = 64,85% ≈ 64,8%',
+    tableauCalculatedField: `// Calculated Field: [Berth Occupancy Ratio BOR %]
+(SUM([waktu_tambat_jam]) / (COUNTD([dermaga]) * 24 * [jumlah_hari])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 Matrix & Gauge Indicator',
+      rows: '[pelabuhan], [dermaga]',
+      columns: 'AVG([kedalaman_mlws]), SUM([panjang_m]), [Berth Occupancy Ratio BOR %]',
+      marks: 'Color by [Status Operasional]',
+      filters: "[status] = 'Aktif Beroperasi'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #4: Daftar Dermaga yang Dikelola BP Batam (Hal. 15)',
+      tableName: 'dermaga_bp_batam',
+      attributes: ['PELABUHAN', 'LETAK LINTANG UTARA', 'LETAK BUJUR TIMUR', 'DERMAGA', 'KEDALAMAN (MLWS)', 'PANJANG (M)', 'LEBAR (M2)', 'PERUNTUKAN', 'KAPASITAS (TOP M2)'],
+      updateFrequency: 'Jika Update',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '60,0% - 70,0% (Standar UNCTAD Paling Produktif)',
+      warning: '70,1% - 80,0% (Mulai padat, risiko waktu tunggu)',
+      critical: '> 80,0% (Kongesti sandar) atau < 40,0% (Underutilized)',
+      standardOrigin: 'United Nations Conference on Trade and Development (UNCTAD) Port Manual',
+    },
+    executiveAction: 'Lanjutkan pengerukan alur di Dermaga Utara Batu Ampar hingga -14 MLWS agar kapal peti kemas generasi Panamax dapat sandar 24 jam tanpa tergantung pasang surut.',
+  },
+
+  pelabuhan_kunjungan: {
+    id: 'pelabuhan_kunjungan',
+    unit: 'dit-pelabuhan',
+    title: 'Kunjungan Kapal Barang & Penumpang (Call & GT)',
+    codeTag: 'DPKPL-06',
+    category: 'Trafik Kapal & Alur Pelayaran',
+    currentValue: '48.650 Call • 61,4 Jt GT',
+    targetValue: 'Target Tahunan: 60.000 Call',
+    statusText: 'Volume Trafik Sangat Tinggi (81,1%)',
+    statusVariant: 'success',
+    summary: 'Agregasi jumlah panggilan kapal (call) dan tonase kotor kapal (Gross Tonnage) yang masuk dan sandar di perairan Batam, diklasifikasikan atas Kapal Barang (DS-5) dan Kapal Penumpang (DS-7).',
+    presentationPitch: 'Trafik kunjungan kapal di perairan Batam mencapai 48.650 Call dengan total bobot 61,4 Juta GT. Kapal barang menyumbang 16.240 Call namun menguasai 69,7% total bobot tonase (42,8 Juta GT), sedangkan kapal feri penumpang mencatatkan 32.410 Call (18,6 Juta GT) yang mencerminkan frekuensi pelayaran antarpulau dan internasional yang sangat padat.',
+    formulaConceptual: 'Total Kunjungan Kapal = ∑ Call Kapal Barang (DS-5) + ∑ Call Kapal Penumpang (DS-7)',
+    numerator: {
+      label: 'Pembilang (Total Panggilan Kapal Masuk Labuh/Tambat)',
+      realValue: '48.650 Call (Barang: 16.240 Call | Penumpang: 32.410 Call)',
+      source: 'Satu Data Item #5 (Barang) & Item #7 (Penumpang)',
+    },
+    denominator: {
+      label: 'Penyebut (Target Prognosa Panggilan Kapal 2026)',
+      realValue: '60.000 Call (Target RBA Kepelabuhanan)',
+      source: 'RBA DIPA BP Batam TA 2026',
+    },
+    calculationResult: '48.650 Call (81,1% dari Target 60.000 Call)',
+    tableauCalculatedField: `// Calculated Field: [Total Call Kapal Pelabuhan]
+SUM([kunjungan_kapal_barang].[call_kapal]) + SUM([kunjungan_kapal_penumpang].[call_kapal])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #14 Side-by-Side Bars',
+      rows: '[tipe_kapal], [pelabuhan]',
+      columns: 'SUM([call_kapal]), SUM([gt_kapal]), [call_dalam], [call_luar]',
+      marks: 'Color by [tipe_kapal]',
+      filters: "[tahun] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #5 (Kapal Barang) & Item #7 (Kapal Penumpang) Hal. 15 Satu Data BP Batam',
+      tableName: 'kunjungan_kapal_barang & kunjungan_kapal_penumpang',
+      attributes: ['PELABUHAN', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'CALL KAPAL', 'GT KAPAL', 'TIPE KAPAL', 'CALL DALAM', 'CALL LUAR', 'GT DALAM', 'GT LUAR', 'TON DALAM', 'TON LUAR'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 55.000 Call / Tahun',
+      warning: '45.000 - 54.999 Call',
+      critical: '< 45.000 Call',
+      standardOrigin: 'Standar Kapasitas Alur Pelayaran & Pemanduan BP Batam',
+    },
+    executiveAction: 'Optimalkan sistem pemanduan kapal dan stasiun VTS (Vessel Traffic Service) untuk mempertahankan kecepatan response time pemanduan di bawah 30 menit.',
+  },
+
+  // ==========================================
+  // BADAN USAHA RUMAH SAKIT (RSBP BATAM)
+  // KATALOG SATU DATA HALAMAN 19 - 21
+  // ==========================================
+  rsbp_pnbp: {
+    id: 'rsbp_pnbp',
+    unit: 'bu-rumah-sakit',
+    title: 'Capaian Realisasi PNBP Rumah Sakit (Dataset No. 2)',
+    codeTag: 'BURS-02',
+    category: 'Keuangan & Pendapatan BLU RS',
+    currentValue: 'Rp 121,80 M (84,0%)',
+    targetValue: 'Target RBA: Rp 145,00 M',
+    statusText: 'Realisasi Sangat Baik (84,0%)',
+    statusVariant: 'success',
+    summary: 'Pengukuran penerimaan fungsional jasa layanan kesehatan BLU RSBP Batam terhadap target yang ditetapkan dalam Rencana Bisnis dan Anggaran (RBA) DIPA.',
+    presentationPitch: 'Realisasi PNBP RSBP Batam mencapai Rp 121,80 Miliar atau 84,0% dari target Rp 145,00 Miliar. Kontributor terbesar berasal dari Instalasi Rawat Inap (Rp 38,6 M) dan Poliklinik Rawat Jalan (Rp 27,4 M), didorong oleh pemulihan volume pasien pasca ekspansi layanan unggulan.',
+    formulaConceptual: 'Persentase Realisasi PNBP RSBP = (Total Realisasi PNBP ÷ Total Target PNBP) × 100%',
+    numerator: {
+      label: 'Pembilang (Total Realisasi Penerimaan PNBP RSBP)',
+      realValue: 'Rp 121.800.000.000 (Akumulasi Realisasi Kas Masuk Fungsional)',
+      source: 'Satu Data Item #2 (Hal. 19-20): Realisasi Penerimaan PNBP BU RS',
+    },
+    denominator: {
+      label: 'Penyebut (Target Penetapan PNBP RBA DIPA)',
+      realValue: 'Rp 145.000.000.000 (Target Penerimaan Penetapan DIPA 2026)',
+      source: 'Satu Data Item #2: Atribut TOTAL TARGET PNBP',
+    },
+    calculationResult: '(121.800.000.000 ÷ 145.000.000.000) × 100% = 84,00%',
+    tableauCalculatedField: `// Calculated Field: [% Realisasi PNBP RSBP]
+(SUM([TOTAL REALISASI PNBP]) / SUM([TOTAL TARGET PNBP])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #2 Horizontal Bars / Bullet Graph',
+      rows: '[pos_layanan_rs]',
+      columns: 'SUM([TOTAL REALISASI PNBP]), SUM([TOTAL TARGET PNBP])',
+      marks: 'Color by [% Realisasi PNBP RSBP]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #2: Realisasi Penerimaan PNBP Badan Usaha Rumah Sakit (Hal. 19-20)',
+      tableName: 'pnbp_bu_rumah_sakit',
+      attributes: ['TAHUN', 'TOTAL TARGET PNBP', 'TOTAL REALISASI PNBP'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 85,0% (Prognosa Triwulan Berjalan)',
+      warning: '70,0% - 84,9%',
+      critical: '< 70,0%',
+      standardOrigin: 'Target Kinerja RBA BLU Rumah Sakit Kemenkeu & BP Batam',
+    },
+    executiveAction: 'Akselerasi penagihan klaim pending BPJS Kesehatan (unclaimed dispute) dan maksimalkan paket pemeriksaan MCU korporasi di Kawasan Industri KEK Batam.',
+  },
+
+  rsbp_belanja: {
+    id: 'rsbp_belanja',
+    unit: 'bu-rumah-sakit',
+    title: 'Penyerapan Pagu Belanja Rumah Sakit (Dataset No. 12)',
+    codeTag: 'BURS-12',
+    category: 'Akuntabilitas Anggaran RS',
+    currentValue: 'Rp 109,35 M (81,0%)',
+    targetValue: 'Pagu DIPA: Rp 135,00 M',
+    statusText: 'Penyerapan Optimal (81,0%)',
+    statusVariant: 'success',
+    summary: 'Realisasi penyerapan anggaran belanja operasional, obat/BMHP medis, jasa pelayanan nakes, dan belanja modal pemeliharaan alkes RSBP Batam terhadap total pagu.',
+    presentationPitch: 'Serapan belanja RSBP telah mencapai Rp 109,35 Miliar atau 81,0% dari pagu Rp 135,00 Miliar dengan sisa pagu Rp 25,65 Miliar. Belanja terbesar dialokasikan untuk obat, reagen lab, dan BMHP medis (Rp 43,8 M) untuk menjamin ketersediaan stok farmasi prima.',
+    formulaConceptual: 'Persentase Realisasi Belanja = (Total Nilai Realisasi ÷ Total Nilai Pagu) × 100%',
+    numerator: {
+      label: 'Pembilang (Total Realisasi Pengeluaran Belanja RSBP)',
+      realValue: 'Rp 109.350.000.000 (Kas Keluar SP2D & Pengesahan BLU)',
+      source: 'Satu Data Item #12 (Hal. 20-21): Atribut TOTAL NILAI REALISASI',
+    },
+    denominator: {
+      label: 'Penyebut (Total Alokasi Pagu Anggaran Belanja)',
+      realValue: 'Rp 135.000.000.000 (Alokasi Pagu DIPA RSBP 2026)',
+      source: 'Satu Data Item #12: Atribut TOTAL NILAI PAGU',
+    },
+    calculationResult: '(109.350.000.000 ÷ 135.000.000.000) × 100% = 81,00%',
+    tableauCalculatedField: `// Calculated Field: [% Penyerapan Belanja RSBP]
+(SUM([TOTAL NILAI REALISASI]) / SUM([TOTAL NILAI PAGU])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #5 Treemap / Stacked Bars',
+      rows: '[kategori_belanja]',
+      columns: 'SUM([TOTAL NILAI REALISASI]), SUM([TOTAL NILAI SISA PAGU])',
+      marks: 'Detail by [PERSENTASE NILAI REALISASI BELANJA]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #12: Nilai Realisasi Belanja dan Penerimaan BP Batam (Hal. 20-21)',
+      tableName: 'belanja_bu_rumah_sakit',
+      attributes: ['TAHUN', 'TOTAL NILAI PAGU', 'TOTAL NILAI REALISASI', 'TOTAL NILAI SISA PAGU', 'PERSENTASE NILAI REALISASI BELANJA'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '80,0% - 95,0% (Serapan Efisien & Proporsional)',
+      warning: '65,0% - 79,9%',
+      critical: '< 65,0% atau > 98,0% (Defisit Fiskal)',
+      standardOrigin: 'Indikator Kinerja Pelaksanaan Anggaran (IKPA) Kemenkeu',
+    },
+    executiveAction: 'Jaga efisiensi belanja obat non-formularium dan optimalkan negosiasi e-katalog LKPP untuk pembelian reagen dan alat kesehatan.',
+  },
+
+  rsbp_ikm: {
+    id: 'rsbp_ikm',
+    unit: 'bu-rumah-sakit',
+    title: 'Indeks Kepuasan Masyarakat (IKM) Layanan RSBP (Dataset No. 1)',
+    codeTag: 'BURS-01',
+    category: 'Mutu Layanan Klinis & Pasien',
+    currentValue: '86,95 (Mutu A)',
+    targetValue: 'Target IKU: ≥ 85,00',
+    statusText: 'Predikat Sangat Baik (Mutu A)',
+    statusVariant: 'success',
+    summary: 'Indeks persepsi kepuasan pasien terhadap 9 unsur pelayanan rawat jalan, rawat inap, IGD, dan farmasi di RSBP Batam sesuai standar PermenPAN-RB No. 14 Tahun 2017.',
+    presentationPitch: 'Indeks Kepuasan Masyarakat RSBP Batam mencatatkan skor 86,95 dengan predikat Mutu A (Sangat Baik). Skor tertinggi diraih oleh unsur Kompetensi Dokter (91,5) dan Kepastian Biaya/Klaim (89,1), menegaskan kepercayaan tinggi publik terhadap kualitas klinis RSBP.',
+    formulaConceptual: 'IKM RSBP = (∑ (Rata-rata Skor per Unsur × 0,111)) × 25',
+    numerator: {
+      label: 'Pembilang (Total Nilai Tertimbang 9 Unsur Pelayanan)',
+      realValue: '3,478 dari skala 4,00 (Hasil survei 1.200 responden pasien)',
+      source: 'Satu Data Item #1 (Hal. 19): Indeks Kepuasan Masyarakat RSBP',
+    },
+    denominator: {
+      label: 'Penyebut (Skala Konversi Maksimum PermenPAN-RB)',
+      realValue: 'Konversi Skala 100 (Skor Tertimbang × 25)',
+      source: 'PermenPAN-RB Nomor 14 Tahun 2017',
+    },
+    calculationResult: '3,478 × 25 = 86,95 (Mutu Pelayanan A / Sangat Baik)',
+    tableauCalculatedField: `// Calculated Field: [Nilai Konversi IKM RSBP]
+(AVG([NILAI_UNSUR_SKOR]) / 4.0) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 Radial Gauge & Radar Chart',
+      rows: '[PELAYANAN PER UNSUR]',
+      columns: 'AVG([SKOR])',
+      marks: 'Color by [KATEGORI MUTU]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #1: Indeks Kepuasan Masyarakat Layanan BU RS BP Batam (Hal. 19)',
+      tableName: 'ikm_bu_rumah_sakit',
+      attributes: ['TAHUN', 'INDIKATOR MUTU', 'KATEGORI MUTU', 'PELAYANAN PER UNSUR'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '88,31 - 100,00 (Mutu A: Sangat Baik)',
+      warning: '76,61 - 88,30 (Mutu B: Baik)',
+      critical: '< 76,60 (Mutu C / D: Kurang / Tidak Baik)',
+      standardOrigin: 'Kementerian Pendayagunaan Aparatur Negara dan Reformasi Birokrasi (PAN-RB)',
+    },
+    executiveAction: 'Tingkatkan kecepatan waktu tunggu di loket farmasi rawat jalan melalui sistem antrean digital terintegrasi di aplikasi mobile RSBP.',
+  },
+
+  rsbp_kunjungan: {
+    id: 'rsbp_kunjungan',
+    unit: 'bu-rumah-sakit',
+    title: 'Jumlah Kunjungan Pasien & Layanan Unggulan (Dataset No. 5 & 6)',
+    codeTag: 'BURS-05',
+    category: 'Utilisasi & Volume Pelayanan',
+    currentValue: '184.620 Pasien',
+    targetValue: 'Target Tahunan: 200.000 Pasien',
+    statusText: 'Trafik Pasien Sangat Tinggi',
+    statusVariant: 'success',
+    summary: 'Agregasi jumlah kunjungan pasien di seluruh instalasi RSBP Batam, terdistribusi atas Rawat Jalan, IGD, Rawat Inap, Hemodialisa, MCU, dan 6 Pusat Layanan Unggulan.',
+    presentationPitch: 'Total kunjungan pasien RSBP mencapai 184.620 pasien. Rawat Jalan Poliklinik mendominasi 61,9% (114.250 kunjungan). Sebanyak 38.450 kasus ditangani di Pusat Layanan Unggulan, dipimpin oleh Cardiac Center (12.450 kasus) dan Trauma Center (9.120 kasus).',
+    formulaConceptual: 'Total Pasien = ∑ Kunjungan Rawat Jalan + ∑ Kunjungan IGD + ∑ Kunjungan Rawat Inap + ∑ Kunjungan Hemodialisa + ∑ Kunjungan MCU',
+    numerator: {
+      label: 'Pembilang (Total Kunjungan Pasien Seluruh Instalasi)',
+      realValue: '184.620 Kunjungan (Rawat Jalan: 114.250 | IGD: 32.480 | Ranap: 21.850 | HD: 9.840 | MCU: 6.200)',
+      source: 'Satu Data Item #5 (Hal. 20): Atribut JUMLAH KUNJUNGAN',
+    },
+    denominator: {
+      label: 'Penyebut (Target Prognosa Kunjungan Pasien 2026)',
+      realValue: '200.000 Pasien / Tahun',
+      source: 'Renstra RSBP Batam & RBA DIPA',
+    },
+    calculationResult: '(184.620 ÷ 200.000) × 100% = 92,31% Capaian Target',
+    tableauCalculatedField: `// Calculated Field: [Total Pasien RSBP]
+SUM([JUMLAH KUNJUNGAN])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 Stacked Bars / Donut',
+      rows: '[BAGIAN LAYANAN]',
+      columns: 'SUM([JUMLAH KUNJUNGAN])',
+      marks: 'Color by [CARA BAYAR], Detail by [JENIS KELAMIN]',
+      filters: "[JENIS RAWAT] IN ('Rawat Jalan', 'Rawat Inap', 'IGD')",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #5 (Hal. 20) & Item #6 (Hal. 20) Satu Data BP Batam',
+      tableName: 'kunjungan_pasien_rsbp & layanan_unggulan_rsbp',
+      attributes: ['BAGIAN LAYANAN', 'JENIS KUNJUNGAN', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'JUMLAH KUNJUNGAN', 'JENIS KELAMIN', 'CARA BAYAR'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '≥ 15.000 Pasien / Bulan',
+      warning: '12.000 - 14.999 Pasien',
+      critical: '< 12.000 Pasien',
+      standardOrigin: 'Kapasitas Pelayanan Klinis Terpasang RSBP Batam',
+    },
+    executiveAction: 'Perluas kemitraan faskes primer (Klinik & Puskesmas) rujukan berjenjang BPJS dan perluas jam praktik dokter poliklinik sore/malam hari.',
+  },
+
+  rsbp_efisiensi_bor: {
+    id: 'rsbp_efisiensi_bor',
+    unit: 'bu-rumah-sakit',
+    title: 'Indikator Efisiensi Rawat Inap / BOR (Dataset No. 9)',
+    codeTag: 'BURS-09',
+    category: 'Efisiensi Tempat Tidur (Barber Johnson)',
+    currentValue: 'BOR: 74,2% • ALOS: 4,2 Hari',
+    targetValue: 'Standar Ideal Kemenkes: 60% - 85%',
+    statusText: 'Efisiensi Prima Sesuai Standar',
+    statusVariant: 'success',
+    summary: 'Tingkat pemanfaatan tempat tidur rawat inap (Bed Occupancy Rate) dan indikator Barber Johnson RSBP Batam (ALOS, TOI, BTO, NDR, GDR) berdasarkan standar Kemenkes RI.',
+    presentationPitch: 'BOR RSBP berada di level 74,2%, tepat di koridor ideal standar Kemenkes (60%–85%). Rata-rata lama rawat (ALOS) 4,2 hari dan Turn Over Interval (TOI) 1,5 hari mencerminkan efisiensi penanganan medis tanpa memperpanjang masa rawat inap yang membebani klaim INA-CBGs.',
+    formulaConceptual: 'BOR (%) = (Jumlah Hari Perawatan ÷ (Jumlah Tempat Tidur × Jumlah Hari Periode)) × 100%',
+    numerator: {
+      label: 'Pembilang (Akumulasi Hari Rawat Pasien Inap / Patient Days)',
+      realValue: '57.416 Hari Perawatan (Kompilasi Buku Register Rawat Inap)',
+      source: 'Satu Data Item #9 & Item #16: HARI RAWAT (Rawat Inap)',
+    },
+    denominator: {
+      label: 'Penyebut (Kapasitas Maksimum Hari Tempat Tidur Tersedia)',
+      realValue: '77.380 TT-Hari (212 Tempat Tidur Aktif × 365 Hari)',
+      source: 'Kapasitas Operasional Tempat Tidur RSBP Batam',
+    },
+    calculationResult: '(57.416 ÷ 77.380) × 100% = 74,20%',
+    tableauCalculatedField: `// Calculated Field: [Bed Occupancy Rate BOR %]
+(SUM([HARI RAWAT]) / (COUNTD([TEMPAT TIDUR]) * [JUMLAH HARI PERIODE])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 Barber Johnson Scatter Quadrant',
+      rows: 'AVG([NILAI]) WHERE [INDIKATOR] = "BOR"',
+      columns: 'AVG([NILAI]) WHERE [INDIKATOR] = "ALOS"',
+      marks: 'Detail by [INDIKATOR]',
+      filters: "[TANGGAL REKAP AWAL] >= '2026-01-01'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #9: Nilai Indikator Efisiensi Rumah Sakit BP Batam (Hal. 20)',
+      tableName: 'indikator_efisiensi_rsbp',
+      attributes: ['INDIKATOR', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'NILAI'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '60,0% - 85,0% (Standar Barber Johnson Kemenkes RI)',
+      warning: '85,1% - 90,0% (Kepadatan tinggi) atau 50,0% - 59,9%',
+      critical: '> 90,0% (Overcapacity) atau < 50,0% (Underutilized)',
+      standardOrigin: 'Buku Pedoman Pengelolaan Rekam Medis Rumah Sakit Kemenkes RI',
+    },
+    executiveAction: 'Pertahankan utilisasi bangsal kelas 1 dan 2 dengan mempercepat proses verifikasi resume medis untuk kepulangan pasien.',
+  },
+
+  rsbp_sewa_tenant: {
+    id: 'rsbp_sewa_tenant',
+    unit: 'bu-rumah-sakit',
+    title: 'Rekapitulasi Sewa Ruangan & Fasilitas RS (Dataset No. 14)',
+    codeTag: 'BURS-14',
+    category: 'Optimalisasi Aset Non-Medis',
+    currentValue: '8 Tenant • Rp 2,06 M/Thn',
+    targetValue: 'Tingkat Kepatuhan: 100%',
+    statusText: 'Utilisasi Komersial Aktif',
+    statusVariant: 'success',
+    summary: 'Pemantauan masa berlaku, nomor perjanjian (PKS), dan tanggal jatuh tempo sewa ruangan tenant komersial dan penunjang medis di lingkungan RSBP Batam.',
+    presentationPitch: 'RSBP mengelola 8 mitra penyewa fasilitas ruangan aktif dengan kontribusi penerimaan sewa tahunan sebesar Rp 2,06 Miliar. Terdapat 2 tenant yang berada dalam periode H-60 jatuh tempo (Apotek Kimia Farma dan ATM Gallery), saat ini sedang dalam proses review addendum perpanjangan.',
+    formulaConceptual: 'Sisa Masa Berlaku (Hari) = Tanggal Jatuh Tempo - Tanggal Rekap Hari Ini',
+    numerator: {
+      label: 'Pembilang (Jumlah Hari Tersisa Menuju Tanggal Jatuh Tempo)',
+      realValue: '15 s.d 625 Hari Tersisa (Bervariasi per Tenant PKS)',
+      source: 'Satu Data Item #14 (Hal. 21): Atribut JATUH TEMPO & MASA BERLAKU',
+    },
+    denominator: {
+      label: 'Penyebut (Total Masa Kontrak Perjanjian Kerjasama)',
+      realValue: '365 s.d 1.095 Hari (Durasi Kontrak 1 - 3 Tahun)',
+      source: 'Satu Data Item #14: Atribut NOMOR PERJANJIAN',
+    },
+    calculationResult: '8 Mitra Penyewa Aktif (100% Legalitas PKS Terverifikasi)',
+    tableauCalculatedField: `// Calculated Field: [Sisa Hari Kontrak Tenant]
+DATEDIFF('day', TODAY(), [JATUH TEMPO])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 Gantt Chart / Matrix Table',
+      rows: '[NAMA TENANT], [NOMOR PERJANJIAN]',
+      columns: '[MASA BERLAKU], [JATUH TEMPO], [Sisa Hari Kontrak Tenant]',
+      marks: 'Color by [Status Kepatuhan]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #14: Daftar Penyewa Fasilitas Rumah Sakit BP Batam (Hal. 21)',
+      tableName: 'sewa_fasilitas_rsbp',
+      attributes: ['TAHUN', 'NAMA TENANT', 'NOMOR PERJANJIAN', 'MASA BERLAKU', 'JATUH TEMPO'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '> 60 Hari Sebelum Jatuh Tempo (Status Aman)',
+      warning: '30 - 60 Hari Sebelum Jatuh Tempo (Kirim Notifikasi Perpanjangan)',
+      critical: '< 30 Hari atau Kedaluwarsa (Tindakan Penagihan / Relokasi)',
+      standardOrigin: 'Standar Pengelolaan Kerjasama Pemanfaatan BMN BP Batam',
+    },
+    executiveAction: 'Terbitkan surat konfirmasi perpanjangan sewa kepada PT Kimia Farma dan pihak perbankan 30 hari sebelum batas akhir masa berlaku.',
+  },
+
+  rsbp_morbiditas: {
+    id: 'rsbp_morbiditas',
+    unit: 'bu-rumah-sakit',
+    title: '10 Besar Kasus Penyakit Terbanyak / Morbiditas (Dataset No. 4)',
+    codeTag: 'BURS-04',
+    category: 'Surveilans Epidemiologi Klinis',
+    currentValue: '14.850 Kasus Teratas (I11.9)',
+    targetValue: 'Surveilans 100% ICD-10',
+    statusText: 'Terkendali & Termonitor',
+    statusVariant: 'info',
+    summary: 'Pemetaan 10 besar penyakit terbanyak yang ditangani di rawat jalan dan rawat inap RSBP Batam berdasarkan standar klasifikasi internasional ICD-10.',
+    presentationPitch: 'Penyakit kardiovaskular dan metabolik mendominasi morbiditas RSBP, dipimpin oleh Hypertensive Heart Disease (14.850 kasus) dan Diabetes Mellitus Tipe 2 (12.620 kasus). Data ini menjadi dasar alokasi pengadaan obat kronis dan penyediaan cathlab serta hemodialisa.',
+    formulaConceptual: 'Persentase Kasus = (Jumlah Kasus Penyakit Tertentu ÷ Total Kasus Terdata) × 100%',
+    numerator: {
+      label: 'Pembilang (Jumlah Pasien Terdiagnosa Penyakit Spesifik)',
+      realValue: '14.850 Kasus Hipertensi (Kode ICD I11.9)',
+      source: 'Satu Data Item #4 (Hal. 20): Atribut JUMLAH KASUS & KODE ICD',
+    },
+    denominator: {
+      label: 'Penyebut (Total Seluruh Kasus Morbiditas Terdata)',
+      realValue: '74.990 Kasus Akumulasi 10 Besar Morbiditas',
+      source: 'Satu Data Item #4: Rekapitulasi Kasus Penyakit',
+    },
+    calculationResult: '(14.850 ÷ 74.990) × 100% = 19,80% Proporsi Kasus',
+    tableauCalculatedField: `// Calculated Field: [% Morbiditas ICD]
+(SUM([JUMLAH KASUS]) / TOTAL(SUM([JUMLAH KASUS]))) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #2 Horizontal Ranked Bars',
+      rows: '[NAMA PENYAKIT], [KODE ICD]',
+      columns: 'SUM([JUMLAH KASUS])',
+      marks: 'Color by [JENIS RAWAT]',
+      filters: "[TANGGAL REKAP AWAL] >= '2026-01-01'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #4: Jumlah Kasus Penyakit Terbanyak di Rumah Sakit BP Batam (Hal. 20)',
+      tableName: 'morbiditas_penyakit_rsbp',
+      attributes: ['TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'JENIS RAWAT', 'NAMA PENYAKIT', 'JUMLAH KASUS', 'KODE ICD'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '100% Kasus Tervalidasi Kode ICD-10',
+      warning: '< 95% Koding Terverifikasi',
+      critical: '< 90% Validasi Rekam Medis',
+      standardOrigin: 'Standar Akreditasi KARS & WHO ICD-10 Classification',
+    },
+    executiveAction: 'Optimalkan program Prolanis (Program Pengelolaan Penyakit Kronis) bersama BPJS Kesehatan untuk mengontrol pasien hipertensi dan diabetes di Batam.',
+  },
+
+  rsbp_resep_generik: {
+    id: 'rsbp_resep_generik',
+    unit: 'bu-rumah-sakit',
+    title: 'Rasio Resep Obat Generik vs Non-Generik (Dataset No. 17)',
+    codeTag: 'BURS-17',
+    category: 'Rasionalitas Penggunaan Obat (Fornas)',
+    currentValue: '83,44% Generik',
+    targetValue: 'Standar Kemenkes RI: > 80,0%',
+    statusText: 'Sesuai Standar Fornas Kemenkes',
+    statusVariant: 'success',
+    summary: 'Pengukuran kepatuhan penulisan resep obat generik oleh dokter spesialis di Rawat Jalan, Rawat Inap, dan IGD terhadap Formularium Nasional (Fornas).',
+    presentationPitch: 'Rasio resep obat generik RSBP Batam mencapai 83,44% dari total 183.660 lembar resep yang dilayani. Capaian ini melampaui ambang batas Kementerian Kesehatan (>80%) dan menjamin efisiensi pengendalian biaya operasional farmasi RS BLU.',
+    formulaConceptual: 'Persentase Resep Generik = (Total Resep Obat Generik ÷ Total Seluruh Resep) × 100%',
+    numerator: {
+      label: 'Pembilang (Total Lembar Resep Obat Golongan Generik)',
+      realValue: '153.240 Lembar Resep (Rawat Jalan: 98.450 | Ranap: 31.250 | IGD: 23.540)',
+      source: 'Satu Data Item #17 (Hal. 21): Atribut GOLONGAN OBAT (Generik)',
+    },
+    denominator: {
+      label: 'Penyebut (Total Seluruh Lembar Resep Dilayani Instalasi Farmasi)',
+      realValue: '183.660 Lembar Resep (Generik + Non-Generik)',
+      source: 'Satu Data Item #17: Rekapitulasi Resep Dispens Obat',
+    },
+    calculationResult: '(153.240 ÷ 183.660) × 100% = 83,44%',
+    tableauCalculatedField: `// Calculated Field: [% Resep Obat Generik]
+(SUM([resep_generik]) / (SUM([resep_generik]) + SUM([resep_non_generik]))) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 100% Stacked Bar',
+      rows: '[instalasi_layanan]',
+      columns: '[% Resep Obat Generik]',
+      marks: 'Color by [GOLONGAN OBAT]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #17: Rekapitulasi Resep Dispens Obat Generik dan Non Generik (Hal. 21)',
+      tableName: 'resep_farmasi_rsbp',
+      attributes: ['TAHUN', 'BULAN', 'GOLONGAN OBAT', 'RAWAT JALAN', 'RAWAT INAP', 'GAWAT DARURAT'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 80,0% (Standar Kemenkes RS BLU Pemerintah)',
+      warning: '70,0% - 79,9%',
+      critical: '< 70,0% (Kepatuhan Fornas Rendah)',
+      standardOrigin: 'Kepmenkes RI tentang Formularium Nasional (Fornas)',
+    },
+    executiveAction: 'Pantau komite farmasi dan terapi (KFT) untuk audit berkala resep antibiotik dan obat non-formularium pada dokter penanggung jawab pelayanan (DPJP).',
+  },
+
+  // ===================================================================
+  // BIRO HUKUM BP BATAM (Satu Data Hal. 2)
+  // ===================================================================
+  hukum_perkara: {
+    id: 'hukum_perkara',
+    unit: 'biro-hukum',
+    title: 'Jumlah Penanganan Perkara (Dataset No. 4 Hal. 2)',
+    codeTag: 'BHUK-04',
+    category: 'Kegiatan Penanganan Perkara Persidangan',
+    currentValue: '10 Perkara Aktif (192 Berkas Dokumen)',
+    targetValue: 'Monitoring & Pendampingan Penuh (100%)',
+    statusText: 'Semua Perkara Terkendali & Berkas Lengkap',
+    statusVariant: 'success',
+    summary: 'Jumlah kumulatif perkara litigasi aktif yang dihadapi BP Batam di Pengadilan Negeri Batam, PTUN Tanjungpinang, Pengadilan Hubungan Industrial, dan Badan Arbitrase Nasional Indonesia (BANI).',
+    presentationPitch: 'Biro Hukum saat ini mengawal 10 perkara aktif di persidangan dengan total 192 dokumen berkas perkara lengkap. Rata-rata berkas mencapai 19,2 dokumen per kasus, meliputi memori kasasi, surat kuasa khusus, replik-duplik, dan bukti alas hak HPL.',
+    formulaConceptual: 'Total Penanganan Perkara = COUNT(Nomor_Perkara_Teregister [Dataset #4])',
+    numerator: {
+      label: 'Volume Berkas Dokumen Perkara',
+      realValue: '192 Berkas Dokumen Hukum (Alat Bukti, Putusan Sela, Eksepsi)',
+      source: 'Satu Data Item #4 (Hal. 2): Atribut JUMLAH DOKUMEN',
+    },
+    denominator: {
+      label: 'Basis Registrasi Perkara Aktif',
+      realValue: '10 Perkara Pengadilan (PN Batam, PTUN Tanjungpinang, BANI)',
+      source: 'Satu Data Item #4: Atribut TANGGAL & TENTANG',
+    },
+    calculationResult: 'Total = 10 Perkara Aktif | Total Dokumen = 192 Berkas',
+    tableauCalculatedField: `// Calculated Field: [Jumlah Perkara & Dokumen]
+COUNTD([nomor_perkara])`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #3 Horizontal Bars / Data Table',
+      rows: '[instansi_pengadilan], [klasifikasi_hukum]',
+      columns: 'SUM([JUMLAH DOKUMEN])',
+      marks: 'Color by [STATUS TAHAPAN SIDANG]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #4: KEGIATAN PENANGANAN PERKARA (Hal. 2)',
+      tableName: 'kegiatan_perkara_bp_batam',
+      attributes: ['TANGGAL', 'TENTANG', 'JUMLAH DOKUMEN', 'INSTANSI PENGADILAN', 'TAHAPAN SIDANG'],
+      updateFrequency: 'Per Bulan',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '100% Berkas Perkara Terinventarisir Tepat Waktu',
+      warning: 'Terdapat perkara tanpa update tahapan > 30 hari',
+      critical: 'Kekalahan perkara akibat kelalaian kehadiran sidang',
+      standardOrigin: 'Standar Operasional Prosedur Penanganan Perkara Biro Hukum BP Batam',
+    },
+    executiveAction: 'Pastikan sinergi intensif bersama Jaksa Pengacara Negara (JPN) dan penyiapan saksi ahli tata ruang sebelum agenda pembuktian di PTUN Tanjungpinang.',
+  },
+
+  hukum_jdihn: {
+    id: 'hukum_jdihn',
+    unit: 'biro-hukum',
+    title: 'Penilaian Kinerja JDIHN Se-Indonesia (Kemenkumham RI)',
+    codeTag: 'BHUK-JDIHN',
+    category: 'Jaringan Dokumentasi & Informasi Hukum Nasional',
+    currentValue: '100 / 100 (Sempurna)',
+    targetValue: 'Skor Maksimal: 100 Poin',
+    statusText: 'Predikat Anggota JDIHN Terbaik Nasional',
+    statusVariant: 'success',
+    summary: 'Hasil evaluasi komprehensif Kementerian Hukum dan HAM Republik Indonesia (BPHN) terhadap pemenuhan 5 pilar standar tata kelola dokumentasi dan informasi hukum digital BP Batam.',
+    presentationPitch: 'BP Batam meraih skor sempurna 100 dalam penilaian nasional JDIHN Kemenkumham RI, dinobatkan sebagai Anggota JDIHN Terbaik Nasional Kategori Lembaga Non-Kementerian. Seluruh 1.240+ regulasi telah terintegrasi 100% via API ke portal nasional jdihn.go.id.',
+    formulaConceptual: 'Skor JDIHN = SUM(Skor 5 Pilar: Kelembagaan [20] + SDM [15] + Koleksi Dokumen [30] + IT/Website [25] + Sosialisasi [10])',
+    numerator: {
+      label: 'Total Nilai Capaian 5 Pilar Evaluasi',
+      realValue: '100 Poin (Mencapai batas nilai tertinggi di setiap indikator)',
+      source: 'Berita Acara Hasil Evaluasi Tahunan BPHN Kemenkumham RI',
+    },
+    denominator: {
+      label: 'Skor Maksimal Penilaian Nasional',
+      realValue: '100 Poin Standar Akreditasi JDIHN',
+      source: 'Permenkumham No. 8 Tahun 2019 tentang Standar JDIHN',
+    },
+    calculationResult: '20 + 15 + 30 + 25 + 10 = 100 / 100 (100%)',
+    tableauCalculatedField: `// Calculated Field: [Capaian Indikator JDIHN]
+SUM([skor_capaian]) / SUM([skor_maksimal]) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #14 Bullet Graph / Radar Chart',
+      rows: '[pilar_penilaian]',
+      columns: '[skor_capaian]',
+      marks: 'Color by [STATUS AKREDITASI]',
+      filters: "[TAHUN EVALUASI] = '2025/2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Evaluasi Tahunan JDIHN Nasional Kemenkumham RI',
+      tableName: 'evaluasi_jdihn_nasional',
+      attributes: ['PILAR_PENILAIAN', 'BOBOT_PERSEN', 'SKOR_MAKSIMAL', 'SKOR_CAPAIAN', 'STATUS_INTEGRASI_API'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERBUKA',
+    },
+    benchmarkThreshold: {
+      target: '100 (Predikat Terbaik Nasional LPNK)',
+      warning: '85 - 94 (Predikat Baik)',
+      critical: '< 80 (Predikat Cukup / Belum Terakreditasi)',
+      standardOrigin: 'Pedoman Penilaian Kinerja Anggota JDIHN BPHN Kemenkumham RI',
+    },
+    executiveAction: 'Pertahankan uptime server API 99,95% dan percepat upload naskah regulasi baru maksimal 1x24 jam pasca penetapan oleh Kepala BP Batam.',
+  },
+
+  hukum_litigasi: {
+    id: 'hukum_litigasi',
+    unit: 'biro-hukum',
+    title: 'Persentase Penanganan Perkara Selesai / Inkracht (Dataset No. 9)',
+    codeTag: 'BHUK-09',
+    category: 'Efektivitas Pembelaan Litigasi',
+    currentValue: '87,50%',
+    targetValue: 'Target Perkin: ≥ 85,00%',
+    statusText: 'Melampaui Target Perkin (100% Kasus Selesai Dimenangkan)',
+    statusVariant: 'success',
+    summary: 'Rasio perkara litigasi di pengadilan yang berhasil diselesaikan hingga berkekuatan hukum tetap (Inkracht) dan seluruh putusannya memenangkan posisi yuridis BP Batam.',
+    presentationPitch: 'Tingkat penyelesaian perkara litigasi BP Batam mencapai 87,50%, melampaui target perkin 85%. Dari 8 perkara yang telah inkracht, 100% putusan menolak gugatan penggugat dan menyelamatkan aset strategis senilai Rp 505,7 Miliar.',
+    formulaConceptual: 'Persentase Perkara Litigasi Selesai = (Jumlah Perkara Inkracht ÷ Total Perkara Litigasi) × 100%',
+    numerator: {
+      label: 'Pembilang (Perkara Litigasi Inkracht / Selesai)',
+      realValue: '7 Perkara Inkracht Menang (1 Perkara Dading Sukarela)',
+      source: 'Satu Data Item #9 (Hal. 2): Atribut TANGGAL & TENTANG (Status Inkracht)',
+    },
+    denominator: {
+      label: 'Penyebut (Total Perkara Litigasi Berjalan)',
+      realValue: '8 Perkara Teregister dalam Periode Evaluasi',
+      source: 'Satu Data Item #9: Rekapitulasi Gugatan Terdaftar',
+    },
+    calculationResult: '(7 ÷ 8) × 100% = 87,50%',
+    tableauCalculatedField: `// Calculated Field: [% Selesai Litigasi]
+(COUNT(IIF([status] = 'Selesai (Inkracht)', [nomor_perkara], NULL)) / COUNT([nomor_perkara])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #1 Pie / Donut Chart',
+      rows: '[status_perkara]',
+      columns: '[% Selesai Litigasi]',
+      marks: 'Color by [HASIL PUTUSAN]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #9: PERSENTASE PENANGANAN PERKARA YANG DISELESAIKAN (Hal. 2)',
+      tableName: 'perkara_litigasi_bp_batam',
+      attributes: ['TANGGAL', 'TENTANG', 'STATUS INKRACHT', 'HASIL PUTUSAN', 'NILAI_SENGKETA_RP'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 85,0% Selesai Inkracht Menang',
+      warning: '75,0% - 84,9%',
+      critical: '< 75,0% (Risiko Kerugian Negara Tinggi)',
+      standardOrigin: 'Perjanjian Kinerja (Perkin) Biro Hukum BP Batam',
+    },
+    executiveAction: 'Lanjutkan koordinasi dengan Pengadilan Negeri untuk proses eksekusi pengosongan lahan HPL yang telah inkracht secara persuasif dan terukur.',
+  },
+
+  hukum_non_litigasi: {
+    id: 'hukum_non_litigasi',
+    unit: 'biro-hukum',
+    title: 'Persentase Pelayanan Permasalahan Hukum Non-Litigasi (Dataset No. 10)',
+    codeTag: 'BHUK-10',
+    category: 'Penyelesaian Sengketa Non-Litigasi & Mediasi',
+    currentValue: '92,30%',
+    targetValue: 'Target Perkin: ≥ 90,00%',
+    statusText: 'Sangat Memuaskan (Mediasi Tuntas & Akta Damai)',
+    statusVariant: 'success',
+    summary: 'Rasio pelayanan konsultasi hukum, klarifikasi sengketa lahan, pendampingan legal opinion, dan mediasi non-litigasi yang diselesaikan secara tuntas dan damai.',
+    presentationPitch: 'Persentase pelayanan non-litigasi mencapai 92,30%, berhasil menyelesaikan 48 dari 52 permohonan konsultasi dan mediasi sengketa. Pendekatan alternatif ini menghemat biaya operasional persidangan hingga miliaran rupiah dan mempercepat kepastian hukum investasi.',
+    formulaConceptual: 'Persentase Layanan Non-Litigasi = (Jumlah Masalah Selesai Non-Litigasi ÷ Total Permohonan Layanan) × 100%',
+    numerator: {
+      label: 'Pembilang (Permasalahan Non-Litigasi Selesai Tuntas)',
+      realValue: '48 Layanan Hukum (Konsultasi, Mediasi, Pendapat Hukum)',
+      source: 'Satu Data Item #10 (Hal. 2): Atribut TANGGAL & TENTANG (Status Tuntas)',
+    },
+    denominator: {
+      label: 'Penyebut (Total Permasalahan Masuk)',
+      realValue: '52 Permohonan Layanan Non-Litigasi Teregister',
+      source: 'Satu Data Item #10: Buku Register Konsultasi & Mediasi',
+    },
+    calculationResult: '(48 ÷ 52) × 100% = 92,30%',
+    tableauCalculatedField: `// Calculated Field: [% Pelayanan Non-Litigasi]
+(COUNT(IIF([status] = 'Selesai Tuntas', [nomor_registrasi], NULL)) / COUNT([nomor_registrasi])) * 100`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 Stacked Bar Chart',
+      rows: '[jenis_layanan]',
+      columns: '[% Pelayanan Non-Litigasi]',
+      marks: 'Color by [STATUS PENYELESAIAN]',
+      filters: "[TAHUN] = '2026'",
+    },
+    databaseSource: {
+      catalogItem: 'Katalog Data Item #10: PERSENTASE PELAYANAN DAN PENANGANAN PERMASALAHAN HUKUM YANG DISELESAIKAN (Hal. 2)',
+      tableName: 'pelayanan_non_litigasi_bp_batam',
+      attributes: ['TANGGAL', 'TENTANG', 'JENIS LAYANAN', 'PEMOHON', 'STATUS PENYELESAIAN'],
+      updateFrequency: 'Per Tahun',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: '≥ 90,0% Masalah Selesai Melalui Mediasi Tuntas',
+      warning: '80,0% - 89,9%',
+      critical: '< 80,0% (Banyak Sengketa Eskalasi ke Pengadilan)',
+      standardOrigin: 'Standar Pelayanan Prima Non-Litigasi Biro Hukum BP Batam',
+    },
+    executiveAction: 'Optimalkan ruang mediasi terpadu dan tim negosiator bersertifikasi Mahkamah Agung untuk mempercepat akta dading sengketa UWT dan sewa tenant.',
+  },
+
+  hukum_formula_agregat: {
+    id: 'hukum_formula_agregat',
+    unit: 'biro-hukum',
+    title: 'Formula Agregasi Litigasi & Non-Litigasi per Tentang (Dataset #9 + #10)',
+    codeTag: 'BHUK-AGREGAT',
+    category: 'Formula Agregasi Pokok Perkara',
+    currentValue: '118 Total Kasus Terkelola',
+    targetValue: 'Integrasi Data 100% Akurat',
+    statusText: 'Formula Berjalan Otomatis & Terverifikasi',
+    statusVariant: 'success',
+    summary: 'Formula penggabungan otomatis jumlah perkara persidangan (Litigasi [DS 9]) dan permohonan mediasi damai (Non-Litigasi [DS 10]) yang memiliki pokok materi sengketa ("TENTANG") yang identik.',
+    presentationPitch: 'Melalui formula agregasi terpadu: Total Kasus = SUM(Litigasi) + SUM(Non-Litigasi) untuk setiap pokok perkara yang sama. Sengketa Lahan HPL mendominasi dengan 30 kasus (12 Litigasi + 18 Non-Litigasi), disusul Wanprestasi Aset BMN sebanyak 22 kasus.',
+    formulaConceptual: 'Total Kasus per Tema = SUM(Kasus_Litigasi [Dataset #9]) + SUM(Kasus_NonLitigasi [Dataset #10])',
+    numerator: {
+      label: 'Jumlah Kasus Litigasi (Pengadilan)',
+      realValue: '47 Kasus Persidangan (PN Batam, PTUN Tanjungpinang, MA)',
+      source: 'Dataset #9: Sub-Total Litigasi per Kluster Tentang',
+    },
+    denominator: {
+      label: 'Jumlah Kasus Non-Litigasi (Mediasi / Konsultasi)',
+      realValue: '71 Kasus Mediasi Damai & Negosiasi ADR',
+      source: 'Dataset #10: Sub-Total Non-Litigasi per Kluster Tentang',
+    },
+    calculationResult: '47 Litigasi + 71 Non-Litigasi = 118 Total Kasus Sengketa',
+    tableauCalculatedField: `// Calculated Field: [Total Kasus Gabungan per Tema]
+ZN(SUM([Kasus_Litigasi])) + ZN(SUM([Kasus_NonLitigasi]))`,
+    tableauShelvesGuide: {
+      showMe: 'Show Me #13 Stacked Bar Horizontal',
+      rows: '[TENTANG / POKOK PERKARA]',
+      columns: '[Total Kasus Gabungan per Tema]',
+      marks: 'Color by [JALUR PENYELESAIAN]',
+      filters: "[STATUS] = 'SEMUA'",
+    },
+    databaseSource: {
+      catalogItem: 'Kombinasi Dataset #9 & #10: Matriks Komparasi Litigasi vs Non-Litigasi',
+      tableName: 'agregasi_perkara_tema_hukum',
+      attributes: ['TENTANG', 'JUMLAH_LITIGASI', 'JUMLAH_NON_LITIGASI', 'TOTAL_PENANGANAN', 'TINGKAT_KEBERHASILAN'],
+      updateFrequency: 'Per Semester',
+      dataClassification: 'TERTUTUP',
+    },
+    benchmarkThreshold: {
+      target: 'Rasio Non-Litigasi ≥ 60% (Efisiensi Biaya Perkara)',
+      warning: 'Rasio Non-Litigasi 40% - 59%',
+      critical: 'Rasio Non-Litigasi < 40% (Beban Litigasi Pengadilan Terlalu Berat)',
+      standardOrigin: 'Kebijakan Restorative Justice & Alternatif Penyelesaian Sengketa BP Batam',
+    },
+    executiveAction: 'Fokuskan energi mediasi pada sengketa wanprestasi sewa tenant dan HPL perumahan agar tidak meluncur menjadi gugatan perdata berbiaya tinggi di pengadilan.',
+  },
 };
 
 /**
@@ -2894,6 +4418,47 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     maritim: 'kpi_ptsp_maritim',
     skkbm: 'kpi_ptsp_maritim',
     pelabuhan_ptsp: 'kpi_ptsp_maritim',
+
+    // Kepelabuhanan (DPKPL)
+    pelabuhan_pnbp: 'pelabuhan_pnbp',
+    pnbp_pelabuhan: 'pelabuhan_pnbp',
+    pelabuhan_belanja: 'pelabuhan_belanja',
+    belanja_pelabuhan: 'pelabuhan_belanja',
+    pelabuhan_ikm: 'pelabuhan_ikm',
+    ikm_pelabuhan: 'pelabuhan_ikm',
+    pelabuhan_penumpang: 'pelabuhan_penumpang',
+    penumpang_pelabuhan: 'pelabuhan_penumpang',
+    pelabuhan_dermaga: 'pelabuhan_dermaga',
+    dermaga_pelabuhan: 'pelabuhan_dermaga',
+    bor_pelabuhan: 'pelabuhan_dermaga',
+    pelabuhan_kunjungan: 'pelabuhan_kunjungan',
+    kunjungan_kapal: 'pelabuhan_kunjungan',
+    kunjungan_pelabuhan: 'pelabuhan_kunjungan',
+    call_kapal: 'pelabuhan_kunjungan',
+
+    // Biro Hukum BP Batam
+    'hukum-kpi-1': 'hukum_perkara',
+    'hukum-kpi-2': 'hukum_jdihn',
+    'hukum-kpi-3': 'hukum_litigasi',
+    'hukum-kpi-4': 'hukum_non_litigasi',
+    'hukum-kpi-5': 'hukum_formula_agregat',
+    hukum_perkara: 'hukum_perkara',
+    penanganan_perkara: 'hukum_perkara',
+    perkara_hukum: 'hukum_perkara',
+    hukum_jdihn: 'hukum_jdihn',
+    jdihn: 'hukum_jdihn',
+    jdihn_skor: 'hukum_jdihn',
+    jdihn_se_indonesia: 'hukum_jdihn',
+    hukum_litigasi: 'hukum_litigasi',
+    litigasi: 'hukum_litigasi',
+    perkara_mitigasi: 'hukum_litigasi',
+    perkara_litigasi: 'hukum_litigasi',
+    hukum_non_litigasi: 'hukum_non_litigasi',
+    non_litigasi: 'hukum_non_litigasi',
+    nonlitigasi: 'hukum_non_litigasi',
+    mediasi_hukum: 'hukum_non_litigasi',
+    hukum_formula_agregat: 'hukum_formula_agregat',
+    formula_agregat_hukum: 'hukum_formula_agregat',
   };
 
   const mappedKey = aliasMap[kpiId];
@@ -2903,6 +4468,62 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
 
   // 3. Prefix & Domain-based Fallback
   const lowerId = kpiId.toLowerCase();
+
+  if (
+    lowerId.includes('hukum') ||
+    lowerId.includes('perkara') ||
+    lowerId.includes('jdihn') ||
+    lowerId.includes('litigasi') ||
+    lowerId.includes('gugatan') ||
+    lowerId.includes('sidang') ||
+    lowerId.includes('bhuk')
+  ) {
+    if (lowerId.includes('jdihn') || lowerId.includes('100') || lowerId.includes('kemenkumham')) return KPI_FORMULA_DETAILS.hukum_jdihn;
+    if (lowerId.includes('non') || lowerId.includes('mediasi') || lowerId.includes('konsultasi') || lowerId.includes('10')) return KPI_FORMULA_DETAILS.hukum_non_litigasi;
+    if (lowerId.includes('litigasi') || lowerId.includes('mitigasi') || lowerId.includes('inkracht') || lowerId.includes('9')) return KPI_FORMULA_DETAILS.hukum_litigasi;
+    if (lowerId.includes('agregat') || lowerId.includes('formula') || lowerId.includes('komparasi')) return KPI_FORMULA_DETAILS.hukum_formula_agregat;
+    return KPI_FORMULA_DETAILS.hukum_perkara;
+  }
+
+  if (
+    lowerId.includes('rsbp') ||
+    lowerId.includes('rumah_sakit') ||
+    lowerId.includes('rumah-sakit') ||
+    lowerId.includes('pasien') ||
+    lowerId.includes('tenant') ||
+    lowerId.includes('morbiditas') ||
+    lowerId.includes('resep') ||
+    lowerId.includes('efisiensi_bor') ||
+    lowerId.includes('bor_rs')
+  ) {
+    if (lowerId.includes('pnbp') || lowerId.includes('pendapatan')) return KPI_FORMULA_DETAILS.rsbp_pnbp;
+    if (lowerId.includes('belanja') || lowerId.includes('anggaran') || lowerId.includes('serapan')) return KPI_FORMULA_DETAILS.rsbp_belanja;
+    if (lowerId.includes('ikm') || lowerId.includes('kepuasan')) return KPI_FORMULA_DETAILS.rsbp_ikm;
+    if (lowerId.includes('kunjungan') || lowerId.includes('pasien') || lowerId.includes('layanan')) return KPI_FORMULA_DETAILS.rsbp_kunjungan;
+    if (lowerId.includes('bor') || lowerId.includes('efisiensi') || lowerId.includes('alos') || lowerId.includes('toi')) return KPI_FORMULA_DETAILS.rsbp_efisiensi_bor;
+    if (lowerId.includes('tenant') || lowerId.includes('sewa') || lowerId.includes('ruangan')) return KPI_FORMULA_DETAILS.rsbp_sewa_tenant;
+    if (lowerId.includes('morbiditas') || lowerId.includes('penyakit') || lowerId.includes('icd')) return KPI_FORMULA_DETAILS.rsbp_morbiditas;
+    if (lowerId.includes('resep') || lowerId.includes('obat') || lowerId.includes('generik') || lowerId.includes('fornas')) return KPI_FORMULA_DETAILS.rsbp_resep_generik;
+    return KPI_FORMULA_DETAILS.rsbp_pnbp;
+  }
+
+  if (
+    lowerId.includes('pelabuhan') ||
+    lowerId.includes('dermaga') ||
+    lowerId.includes('kapal') ||
+    lowerId.includes('dpkpl') ||
+    lowerId.includes('bor_') ||
+    lowerId.includes('batu_ampar')
+  ) {
+    if (lowerId.includes('pnbp') || lowerId.includes('pendapatan') || lowerId.includes('tarif')) return KPI_FORMULA_DETAILS.pelabuhan_pnbp;
+    if (lowerId.includes('belanja') || lowerId.includes('anggaran') || lowerId.includes('serapan')) return KPI_FORMULA_DETAILS.pelabuhan_belanja;
+    if (lowerId.includes('ikm') || lowerId.includes('kepuasan') || lowerId.includes('mutu')) return KPI_FORMULA_DETAILS.pelabuhan_ikm;
+    if (lowerId.includes('penumpang') || lowerId.includes('pax') || lowerId.includes('datang') || lowerId.includes('berangkat')) return KPI_FORMULA_DETAILS.pelabuhan_penumpang;
+    if (lowerId.includes('dermaga') || lowerId.includes('bor') || lowerId.includes('tambat') || lowerId.includes('draf')) return KPI_FORMULA_DETAILS.pelabuhan_dermaga;
+    if (lowerId.includes('kunjungan') || lowerId.includes('kapal') || lowerId.includes('call') || lowerId.includes('gt')) return KPI_FORMULA_DETAILS.pelabuhan_kunjungan;
+    return KPI_FORMULA_DETAILS.pelabuhan_pnbp;
+  }
+
   if (
     lowerId.startsWith('kpi_dc') ||
     lowerId.startsWith('kpi_cyber') ||
@@ -2930,6 +4551,40 @@ export function resolveKpiFormulaDetail(kpiId: string | null): KpiFormulaDetail 
     lowerId.includes('oss')
   ) {
     return KPI_FORMULA_DETAILS.ikss_ikm;
+  }
+
+  if (
+    lowerId.includes('kpi_investasi') ||
+    lowerId.includes('dinv') ||
+    lowerId.includes('invest_in_batam') ||
+    lowerId.includes('promosi') ||
+    lowerId.includes('sektor_minat') ||
+    lowerId.includes('infrastruktur')
+  ) {
+    if (lowerId.includes('realisasi') || lowerId.includes('target')) return KPI_FORMULA_DETAILS.kpi_investasi_realisasi;
+    if (lowerId.includes('web') || lowerId.includes('kunjungan') || lowerId.includes('traffic')) return KPI_FORMULA_DETAILS.kpi_investasi_website;
+    if (lowerId.includes('minat') || lowerId.includes('pameran') || lowerId.includes('expo') || lowerId.includes('loi')) return KPI_FORMULA_DETAILS.kpi_investasi_minat;
+    if (lowerId.includes('infra') || lowerId.includes('proyek') || lowerId.includes('lahan') || lowerId.includes('luas')) return KPI_FORMULA_DETAILS.kpi_investasi_infrastruktur;
+    if (lowerId.includes('promosi') || lowerId.includes('tamu') || lowerId.includes('agenda')) return KPI_FORMULA_DETAILS.kpi_investasi_promosi;
+    return KPI_FORMULA_DETAILS.kpi_investasi_realisasi;
+  }
+
+  if (
+    lowerId.includes('llb') ||
+    lowerId.includes('lalu_lintas_barang') ||
+    lowerId.includes('lalu-lintas-barang') ||
+    lowerId.includes('pemasukan') ||
+    lowerId.includes('pengeluaran') ||
+    lowerId.includes('kuota') ||
+    lowerId.includes('sembako')
+  ) {
+    if (lowerId.includes('pnbp') || lowerId.includes('tarif') || lowerId.includes('pendapatan')) return KPI_FORMULA_DETAILS.llb_pnbp;
+    if (lowerId.includes('total') || lowerId.includes('perizinan') || lowerId.includes('dokumen')) return KPI_FORMULA_DETAILS.llb_total_izin;
+    if (lowerId.includes('industri') || lowerId.includes('pemasukan') || lowerId.includes('pengeluaran')) return KPI_FORMULA_DETAILS.llb_izin_industri;
+    if (lowerId.includes('dagang') || lowerId.includes('perdagangan') || lowerId.includes('kuota') || lowerId.includes('sembako')) return KPI_FORMULA_DETAILS.llb_izin_perdagangan;
+    if (lowerId.includes('kawasan') || lowerId.includes('iuk') || lowerId.includes('kbli')) return KPI_FORMULA_DETAILS.llb_izin_kawasan;
+    if (lowerId.includes('sla') || lowerId.includes('waktu') || lowerId.includes('durasi') || lowerId.includes('jam')) return KPI_FORMULA_DETAILS.llb_sla;
+    return KPI_FORMULA_DETAILS.llb_pnbp;
   }
 
   if (lowerId.includes('kek') || lowerId.includes('investasi') || lowerId.includes('perkin')) {
@@ -2975,6 +4630,12 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
   const biroKeuanganKpis = availableKpis.filter((k) => k.unit === 'biro-keuangan');
   const pdsiKpis = availableKpis.filter((k) => k.unit === 'pdsi');
   const ptspKpis = availableKpis.filter((k) => k.unit === 'ptsp');
+  const kekKpis = availableKpis.filter((k) => k.unit === 'dit-pengembangan-kek');
+  const investasiKpis = availableKpis.filter((k) => k.unit === 'dit-investasi');
+  const llbKpis = availableKpis.filter((k) => k.unit === 'dit-lalu-lintas-barang');
+  const pelabuhanKpis = availableKpis.filter((k) => k.unit === 'dit-pelabuhan');
+  const rsbpKpis = availableKpis.filter((k) => k.unit === 'bu-rumah-sakit');
+  const hukumKpis = availableKpis.filter((k) => k.unit === 'biro-hukum');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto font-sans select-none animate-in fade-in duration-200">
@@ -3002,7 +4663,19 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
                     ? 'Biro Keuangan'
                     : detail.unit === 'pdsi'
                     ? 'Pusat Data & Sistem Informasi (PDSI)'
-                    : 'Pusat Pelayanan Terpadu Satu Pintu (PTSP)'}
+                    : detail.unit === 'ptsp'
+                    ? 'Pusat Pelayanan Terpadu Satu Pintu (PTSP)'
+                    : detail.unit === 'dit-investasi'
+                    ? 'Direktorat Investasi'
+                    : detail.unit === 'dit-lalu-lintas-barang'
+                    ? 'Direktorat Lalu Lintas Barang'
+                    : detail.unit === 'dit-pelabuhan'
+                    ? 'Direktorat Pengelolaan Kepelabuhanan'
+                    : detail.unit === 'bu-rumah-sakit'
+                    ? 'Badan Usaha Rumah Sakit (RSBP Batam)'
+                    : detail.unit === 'biro-hukum'
+                    ? 'Biro Hukum BP Batam'
+                    : 'Direktorat Pengembangan KEK'}
                 </span>
                 <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-medium">
                   {detail.statusText}
@@ -3034,7 +4707,19 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
                 ? biroKeuanganKpis
                 : detail.unit === 'pdsi'
                 ? pdsiKpis
-                : ptspKpis
+                : detail.unit === 'ptsp'
+                ? ptspKpis
+                : detail.unit === 'dit-investasi'
+                ? investasiKpis
+                : detail.unit === 'dit-lalu-lintas-barang'
+                ? llbKpis
+                : detail.unit === 'dit-pelabuhan'
+                ? pelabuhanKpis
+                : detail.unit === 'bu-rumah-sakit'
+                ? rsbpKpis
+                : detail.unit === 'biro-hukum'
+                ? hukumKpis
+                : kekKpis
               ).map((item) => (
                 <button
                   key={item.id}
@@ -3054,12 +4739,57 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
           {/* Unit Toggle */}
           <div className="flex items-center gap-1 text-[11px] shrink-0">
             <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('hukum_perkara')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'biro-hukum' ? 'text-amber-900 font-bold bg-amber-100' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Biro Hukum ({hukumKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('rsbp_pnbp')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'bu-rumah-sakit' ? 'text-emerald-900 font-bold bg-emerald-100' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              RSBP Batam ({rsbpKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('pelabuhan_pnbp')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'dit-pelabuhan' ? 'text-teal-900 font-bold bg-teal-100' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Kepelabuhanan ({pelabuhanKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('llb_pnbp')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'dit-lalu-lintas-barang' ? 'text-blue-900 font-bold bg-blue-100' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Dit. LLB ({llbKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('kpi_investasi_realisasi')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'dit-investasi' ? 'text-emerald-700 font-bold bg-emerald-50' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Dit. Investasi ({investasiKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
               onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('pendapatan')}
               className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
                 detail.unit === 'biro-keuangan' ? 'text-blue-700 font-bold bg-blue-50' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              Biro Keuangan ({biroKeuanganKpis.length})
+              Keuangan ({biroKeuanganKpis.length})
             </button>
             <span className="text-slate-300">•</span>
             <button
@@ -3078,6 +4808,15 @@ export const KpiFormulaExplanationModal: React.FC<KpiFormulaExplanationModalProp
               }`}
             >
               PTSP ({ptspKpis.length})
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              onClick={() => onSelectAnotherKpi && onSelectAnotherKpi('kpi_kek_investasi')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                detail.unit === 'dit-pengembangan-kek' ? 'text-blue-700 font-bold bg-blue-50' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              KEK ({kekKpis.length})
             </button>
           </div>
         </div>

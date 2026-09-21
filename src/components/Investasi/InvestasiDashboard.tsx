@@ -271,6 +271,7 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
           />
           <InvestasiInfrastrukturCard
             onOpenFormulaModal={onOpenFormulaModal}
+            filterYear={filters.tahun}
           />
         </div>
       ) : activeSubMenu === 'promosi' ? (
@@ -316,6 +317,7 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
           <section id="investasi-infrastruktur-section" aria-label="Infrastruktur yang Akan Dibangun">
             <InvestasiInfrastrukturCard
               onOpenFormulaModal={onOpenFormulaModal}
+              filterYear={filters.tahun}
             />
           </section>
 

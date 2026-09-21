@@ -136,33 +136,6 @@ export const FundingSourcesTreemapCard: React.FC<FiscalIndependenceDonutCardsPro
           </div>
         </div>
 
-        {/* Top 3 Executive Metric Tiles */}
-        <div className="grid grid-cols-3 gap-2 text-center">
-          {fundingSources.map((source) => (
-            <div
-              key={source.id}
-              onClick={() => onExplainKpi?.('sumber_pendanaan')}
-              className={`p-2 rounded-xl transition-all cursor-pointer group shadow-2xs border ${
-                hoveredId === source.id
-                  ? 'border-blue-400 bg-blue-50/70'
-                  : 'border-slate-200/80 bg-slate-50/70 hover:border-blue-300'
-              }`}
-              onMouseEnter={() => setHoveredId(source.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <div className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider truncate">
-                {source.label}
-              </div>
-              <div className="text-xs sm:text-sm font-black text-slate-900 font-mono mt-0.5">
-                Rp {source.nominal.toFixed(1)} M
-              </div>
-              <span className="text-[9px] font-bold text-blue-700 font-mono block truncate">
-                {source.percentage}% Porsi
-              </span>
-            </div>
-          ))}
-        </div>
-
         {/* Treemap Shelves Badge */}
         <TableauShelvesBadge
           showMe="Show Me #10 (Treemap)"
@@ -174,50 +147,40 @@ export const FundingSourcesTreemapCard: React.FC<FiscalIndependenceDonutCardsPro
 
         {/* Visualization Area */}
         {viewMode === 'treemap' ? (
-          <div className="space-y-2">
-            {/* Interactive Treemap Container */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-2 h-64 sm:h-72">
+          <div className="space-y-1.5">
+            {/* Interactive Treemap Container (Kecilkan Treemap & Tonjolkan Angka M) */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-2 h-28 sm:h-32">
               {/* Block 1: PNBP (64.1% - takes 7 of 12 cols) */}
               <div
                 onClick={() => onExplainKpi?.('sumber_pendanaan')}
                 onMouseEnter={() => setHoveredId('pnbp')}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`md:col-span-7 rounded-xl p-3.5 sm:p-4 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
-                  hoveredId === 'pnbp' ? 'ring-2 ring-blue-300 scale-[1.01]' : ''
+                className={`md:col-span-7 rounded-xl p-2.5 sm:p-3 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
+                  hoveredId === 'pnbp' ? 'ring-2 ring-blue-300 scale-[1.005]' : ''
                 }`}
                 style={{ backgroundColor: '#002B49' }}
                 title="Klik untuk membuka formula PNBP Layanan BLU"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                      <Coins className="w-4 h-4 text-sky-300" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-sky-200 block uppercase tracking-wider">
-                        Porsi Terbesar (64,1%)
-                      </span>
-                      <h4 className="text-sm sm:text-base font-black text-white">
-                        PNBP Layanan BLU
-                      </h4>
-                    </div>
+                <div className="flex items-center justify-between gap-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <Coins className="w-3.5 h-3.5 text-sky-300 shrink-0" />
+                    <span className="text-xs sm:text-sm font-bold text-white truncate">
+                      PNBP Layanan BLU
+                    </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-white/15 text-[10px] font-mono font-bold text-white">
-                    Rp 681,0 M
+                  <span className="text-[10px] font-normal text-sky-200 font-mono shrink-0">
+                    64,1%
                   </span>
                 </div>
 
-                <div className="space-y-1.5 my-auto py-2">
-                  <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-white">
-                    64,1%
+                <div className="my-auto py-0.5">
+                  <div className="text-xl sm:text-2xl font-black font-mono tracking-tight text-white">
+                    Rp 681,0 M
                   </div>
-                  <p className="text-[11px] text-slate-200/90 leading-snug line-clamp-2">
-                    {fundingSources[0].description}
-                  </p>
                 </div>
 
-                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-sky-200/80 font-mono">
-                  <span>Pagu DIPA: Rp 980,0 M</span>
+                <div className="pt-1 border-t border-white/15 flex items-center justify-between text-[9.5px] text-sky-200/90 font-mono">
+                  <span>Pagu: Rp 980,0 M</span>
                   <span className="text-emerald-300 font-semibold">Capaian: 69,5%</span>
                 </div>
               </div>
@@ -229,36 +192,33 @@ export const FundingSourcesTreemapCard: React.FC<FiscalIndependenceDonutCardsPro
                   onClick={() => onExplainKpi?.('sumber_pendanaan')}
                   onMouseEnter={() => setHoveredId('apbn')}
                   onMouseLeave={() => setHoveredId(null)}
-                  className={`flex-1 rounded-xl p-3 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
-                    hoveredId === 'apbn' ? 'ring-2 ring-sky-300 scale-[1.01]' : ''
+                  className={`flex-1 rounded-xl p-2 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
+                    hoveredId === 'apbn' ? 'ring-2 ring-sky-300 scale-[1.005]' : ''
                   }`}
                   style={{ backgroundColor: '#0284C7' }}
                   title="Klik untuk membuka formula Alokasi APBN"
                 >
-                  <div className="flex items-start justify-between gap-1">
+                  <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <Landmark className="w-3.5 h-3.5 text-sky-100 shrink-0" />
+                      <Landmark className="w-3 h-3 text-sky-100 shrink-0" />
                       <span className="text-xs font-bold text-white truncate">
                         Rupiah Murni (APBN)
                       </span>
                     </div>
-                    <span className="px-1.5 py-0.5 rounded bg-white/20 text-[9px] font-mono font-bold text-white shrink-0">
+                    <span className="text-[9.5px] font-normal text-sky-100/90 font-mono shrink-0">
                       21,1%
                     </span>
                   </div>
 
-                  <div className="my-auto py-1">
-                    <div className="text-lg sm:text-xl font-black font-mono text-white">
+                  <div className="my-auto py-0.5">
+                    <div className="text-base sm:text-lg font-black font-mono text-white leading-tight">
                       Rp 224,0 M
                     </div>
-                    <p className="text-[10px] text-sky-100/90 leading-tight truncate">
-                      {fundingSources[1].role}
-                    </p>
                   </div>
 
-                  <div className="text-[9.5px] text-sky-100/80 font-mono flex items-center justify-between">
+                  <div className="text-[9px] text-sky-100/80 font-mono flex items-center justify-between pt-0.5 border-t border-white/10">
                     <span>Pagu: Rp 250,0 M</span>
-                    <span className="text-sky-200 font-bold">89,6%</span>
+                    <span className="text-sky-200 font-semibold">89,6%</span>
                   </div>
                 </div>
 
@@ -267,36 +227,33 @@ export const FundingSourcesTreemapCard: React.FC<FiscalIndependenceDonutCardsPro
                   onClick={() => onExplainKpi?.('sumber_pendanaan')}
                   onMouseEnter={() => setHoveredId('hibah')}
                   onMouseLeave={() => setHoveredId(null)}
-                  className={`flex-1 rounded-xl p-3 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
-                    hoveredId === 'hibah' ? 'ring-2 ring-emerald-300 scale-[1.01]' : ''
+                  className={`flex-1 rounded-xl p-2 text-white flex flex-col justify-between cursor-pointer transition-all shadow-xs relative overflow-hidden group ${
+                    hoveredId === 'hibah' ? 'ring-2 ring-emerald-300 scale-[1.005]' : ''
                   }`}
                   style={{ backgroundColor: '#059669' }}
                   title="Klik untuk membuka formula Hibah & Treasury"
                 >
-                  <div className="flex items-start justify-between gap-1">
+                  <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <Building2 className="w-3.5 h-3.5 text-emerald-100 shrink-0" />
+                      <Building2 className="w-3 h-3 text-emerald-100 shrink-0" />
                       <span className="text-xs font-bold text-white truncate">
                         Hibah &amp; Treasury
                       </span>
                     </div>
-                    <span className="px-1.5 py-0.5 rounded bg-white/20 text-[9px] font-mono font-bold text-white shrink-0">
+                    <span className="text-[9.5px] font-normal text-emerald-100/90 font-mono shrink-0">
                       14,8%
                     </span>
                   </div>
 
-                  <div className="my-auto py-1">
-                    <div className="text-lg sm:text-xl font-black font-mono text-white">
+                  <div className="my-auto py-0.5">
+                    <div className="text-base sm:text-lg font-black font-mono text-white leading-tight">
                       Rp 157,2 M
                     </div>
-                    <p className="text-[10px] text-emerald-100/90 leading-tight truncate">
-                      {fundingSources[2].role}
-                    </p>
                   </div>
 
-                  <div className="text-[9.5px] text-emerald-100/80 font-mono flex items-center justify-between">
+                  <div className="text-[9px] text-emerald-100/80 font-mono flex items-center justify-between pt-0.5 border-t border-white/10">
                     <span>Pagu: Rp 160,0 M</span>
-                    <span className="text-emerald-200 font-bold">98,3%</span>
+                    <span className="text-emerald-200 font-semibold">98,3%</span>
                   </div>
                 </div>
               </div>

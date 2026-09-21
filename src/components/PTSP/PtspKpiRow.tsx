@@ -105,6 +105,13 @@ export const PtspKpiRow: React.FC<PtspKpiRowProps> = ({
   onSelectMetric,
   onOpenKamusRumus,
 }) => {
+  // Hanya 3 KPI Utama yang Dipertahankan Sesuai Instruksi User:
+  // 1. Total Berkas Permohonan Masuk
+  // 2. Total Berkas Selesai
+  // 3. Indeks Kepuasan Masyarakat (IKM)
+  const allowedKpiIds = ['permohonan_masuk', 'izin_terbit', 'ikm_ptsp'];
+  const retainedKpis = PTSP_OFFICIAL_6_KPIS.filter((kpi) => allowedKpiIds.includes(kpi.id));
+
   return (
     <div className="space-y-3">
       {/* Header Row */}
@@ -112,7 +119,7 @@ export const PtspKpiRow: React.FC<PtspKpiRowProps> = ({
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <h2 className="text-xs font-bold tracking-wider uppercase text-slate-700">
-            INDIKATOR KINERJA UTAMA PTSP BP BATAM (6 KPI EKSEKUTIF)
+            INDIKATOR KINERJA UTAMA PTSP BP BATAM (3 KPI EKSEKUTIF)
           </h2>
         </div>
         {onOpenKamusRumus && (
@@ -126,9 +133,9 @@ export const PtspKpiRow: React.FC<PtspKpiRowProps> = ({
         )}
       </div>
 
-      {/* Grid of 6 KPI Cards: Arranged 3 Top, 3 Bottom (CRMS Model matching Biro Keuangan & PDSI) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PTSP_OFFICIAL_6_KPIS.map((kpi, idx) => {
+      {/* Grid of 3 KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {retainedKpis.map((kpi, idx) => {
           const config = PTSP_CARD_CONFIG[kpi.id] || {
             acronym: 'PTSP',
             icon: Award,

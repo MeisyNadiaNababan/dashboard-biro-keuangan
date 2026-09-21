@@ -7,11 +7,24 @@ import {
   TrendingUp,
   Building2,
   ArrowUpDown,
+  HelpCircle,
+  Layers,
 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts';
 import {
   PTSP_DATASET_9_SEKTOR_BERUSAHA,
   PtspSektorBerusahaItem,
 } from '../../data/ptspData';
+import { TableauShelvesBadge } from '../TableauShelvesBadge';
 
 interface PtspSektorBerusahaSectionProps {
   onExplainKpi?: (kpiId: string) => void;
@@ -32,7 +45,6 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
 
   const totalPermohonan = data.reduce((acc, curr) => acc + curr.permohonan, 0);
   const totalTerbit = data.reduce((acc, curr) => acc + curr.terbit, 0);
-  const maxPermohonan = Math.max(...data.map((d) => d.permohonan));
 
   const handleSort = (field: 'permohonan' | 'terbit' | 'tingkatTerbit') => {
     if (sortField === field) {
@@ -42,6 +54,16 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
       setSortAsc(false);
     }
   };
+
+  // Prepare chart data for Recharts
+  const chartData = data.map((item) => ({
+    sektor: item.sektor.length > 22 ? `${item.sektor.slice(0, 20)}...` : item.sektor,
+    fullSektor: item.sektor,
+    permohonan: item.permohonan,
+    terbit: item.terbit,
+    belumTerbit: item.permohonan - item.terbit,
+    tingkatTerbit: item.tingkatTerbit,
+  }));
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
@@ -58,18 +80,18 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
           </div>
           <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
             <Briefcase className="w-4 h-4 text-[#002B49]" />
-            Perizinan Berusaha Berdasarkan Sektor
+            Perizinan Berusaha Berdasarkan Sektor (KBLI)
           </h2>
           <p className="text-xs text-slate-500">
-            Sebaran volume permohonan dan izin terbit berdasarkan sektor ekonomi strategis BP Batam
+            Sebaran volume permohonan dan penerbitan izin per sektor ekonomi strategis BP Batam
           </p>
         </div>
 
-        {/* View Controls & Totals */}
+        {/* View Controls, Totals & Formula Trigger */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-3 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
+          <div className="hidden sm:flex items-center gap-3 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
             <div className="flex items-center gap-1.5">
-              <span className="text-slate-500">Total Permohonan:</span>
+              <span className="text-slate-500">Total Masuk:</span>
               <span className="font-mono font-bold text-[#002B49]">{totalPermohonan.toLocaleString('id-ID')}</span>
             </div>
             <span className="text-slate-300">|</span>
@@ -86,6 +108,7 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
             </div>
           </div>
 
+          {/* Sheet Swap Toggle Button */}
           <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
             <button
               onClick={() => setViewMode('chart')}
@@ -96,7 +119,7 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
-              <span>Visual Bar</span>
+              <span>Visual Bar (Tableau)</span>
             </button>
             <button
               onClick={() => setViewMode('table')}
@@ -107,91 +130,98 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
               }`}
             >
               <Table className="w-3.5 h-3.5" />
-              <span>Tabel</span>
+              <span>Pivot Crosstab</span>
             </button>
           </div>
+
+          {/* Formula Popup Button */}
+          <button
+            onClick={() => onExplainKpi && onExplainKpi('ptsp_sektor_kbli')}
+            className="flex items-center gap-1 text-xs text-sky-700 hover:text-sky-900 font-semibold bg-sky-50 px-2.5 py-1.5 rounded-lg border border-sky-200 transition-colors cursor-pointer"
+            title="Buka Formula & Kamus Calculated Field Tableau"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Formula</span>
+          </button>
         </div>
       </div>
 
-      {/* Content Area */}
+      {/* Tableau Configuration Shelves */}
+      <div className="px-4 py-2 bg-slate-50 border-b border-slate-100">
+        <TableauShelvesBadge
+          columns="Measure Values (SUM([Permohonan]), SUM([Terbit]))"
+          rows="[Sektor Usaha KBLI]"
+          marks="Bar (Clustered / Side-by-Side)"
+          filters="[Tahun]=2026, [Status Validasi]='Valid'"
+        />
+      </div>
+
+      {/* Content Area with Sheet Swap */}
       <div className="p-4">
         {viewMode === 'chart' ? (
           <div className="space-y-3">
-            {/* Chart Legend */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 text-xs">
-              <span className="font-medium text-slate-500">Sektor Usaha</span>
-              <div className="flex items-center gap-4 text-[11px]">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded bg-blue-200" />
-                  <span className="text-slate-600">Permohonan</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded bg-emerald-600" />
-                  <span className="text-slate-600">Terbit</span>
-                </div>
-              </div>
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  layout="vertical"
+                  margin={{ top: 10, right: 30, left: 110, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
+                  <XAxis type="number" tick={{ fill: '#64748B', fontSize: 11 }} />
+                  <YAxis
+                    dataKey="sektor"
+                    type="category"
+                    tick={{ fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                    width={105}
+                  />
+                  <Tooltip
+                    formatter={(value: any, name: string) => [
+                      `${Number(value).toLocaleString('id-ID')} Berkas`,
+                      name === 'permohonan' ? 'Permohonan Masuk' : 'Izin Terbit Selesai',
+                    ]}
+                    labelFormatter={(label, payload) => {
+                      if (payload && payload[0]) {
+                        return payload[0].payload.fullSektor;
+                      }
+                      return label;
+                    }}
+                    contentStyle={{
+                      backgroundColor: '#0F172A',
+                      color: '#FFF',
+                      borderRadius: '8px',
+                      fontSize: '11px',
+                    }}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="right"
+                    wrapperStyle={{ fontSize: '11px', paddingBottom: '8px' }}
+                    formatter={(val) => (val === 'permohonan' ? 'Permohonan Masuk' : 'Izin Terbit Selesai')}
+                  />
+                  <Bar dataKey="permohonan" fill="#93C5FD" radius={[0, 4, 4, 0]} name="permohonan" />
+                  <Bar dataKey="terbit" fill="#059669" radius={[0, 4, 4, 0]} name="terbit" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-
-            {/* Compact Bar Visual */}
-            <div className="space-y-2.5">
-              {data.map((item) => {
-                const terbitRatio = (item.terbit / item.permohonan) * 100;
-                const barWidth = (item.permohonan / maxPermohonan) * 100;
-                const terbitBarWidth = (item.terbit / maxPermohonan) * 100;
-
-                return (
-                  <div
-                    key={item.id}
-                    className="p-2.5 rounded-lg border border-slate-100 hover:border-slate-200 hover:bg-slate-50/50 transition-colors"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-800">{item.sektor}</span>
-                        <span className="text-[10px] px-2 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
-                          {item.tingkatTerbit}% Terbit
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 font-mono text-xs">
-                        <span className="text-slate-600">
-                          Permohonan: <strong className="text-slate-900">{item.permohonan.toLocaleString('id-ID')}</strong>
-                        </span>
-                        <span className="text-emerald-700">
-                          Terbit: <strong>{item.terbit.toLocaleString('id-ID')}</strong>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Dual Stacked / Overlapped Clean Bar */}
-                    <div className="relative w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-                      {/* Permohonan Background Bar */}
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-blue-200 rounded-full transition-all duration-500"
-                        style={{ width: `${barWidth}%` }}
-                      />
-                      {/* Terbit Foreground Bar */}
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-emerald-600 rounded-full transition-all duration-500"
-                        style={{ width: `${terbitBarWidth}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="text-[11px] text-slate-500 flex items-center justify-between bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+              <span>Sektor Industri Pengolahan dan Perdagangan mendominasi volume pengajuan izin (OSS RBA).</span>
+              <span className="font-bold text-emerald-700">Rata-rata Konversi Terbit: 95.5%</span>
             </div>
           </div>
         ) : (
-          /* Table View */
-          <div className="overflow-x-auto">
+          /* Pivot Crosstab View */
+          <div className="overflow-x-auto border border-slate-200 rounded-lg">
             <table className="w-full text-left text-xs text-slate-600">
               <thead className="bg-slate-50 text-slate-700 border-b border-slate-200">
                 <tr>
-                  <th className="py-2.5 px-3 font-semibold">Sektor</th>
+                  <th className="py-2.5 px-3 font-semibold">Sektor Usaha (KBLI)</th>
                   <th
                     className="py-2.5 px-3 font-semibold text-right cursor-pointer hover:text-[#002B49]"
                     onClick={() => handleSort('permohonan')}
                   >
                     <div className="flex items-center justify-end gap-1">
-                      <span>Permohonan</span>
+                      <span>Permohonan Masuk</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-400" />
                     </div>
                   </th>
@@ -200,7 +230,7 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
                     onClick={() => handleSort('terbit')}
                   >
                     <div className="flex items-center justify-end gap-1">
-                      <span>Terbit</span>
+                      <span>Izin Terbit</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-400" />
                     </div>
                   </th>
@@ -209,11 +239,11 @@ export const PtspSektorBerusahaSection: React.FC<PtspSektorBerusahaSectionProps>
                     onClick={() => handleSort('tingkatTerbit')}
                   >
                     <div className="flex items-center justify-end gap-1">
-                      <span>% Terbit</span>
+                      <span>Rasio (%)</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-400" />
                     </div>
                   </th>
-                  <th className="py-2.5 px-3 font-semibold text-right">Belum Terbit</th>
+                  <th className="py-2.5 px-3 font-semibold text-right">Sisa Dalam Proses</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">

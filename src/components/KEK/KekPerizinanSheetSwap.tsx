@@ -232,15 +232,15 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
         </div>
       </div>
 
-      {/* 4. TABEL HANYA MENAMPILKAN NAMA PERIZINAN/NON/LAINNYA DAN TANGGAL SAJA */}
-      <div className="overflow-x-auto">
+      {/* 4. TABEL HANYA MENAMPILKAN 5 DATA AWAL, SISANYA DAPAT DI-SCROLL SECARA VERTIKAL */}
+      <div className="overflow-x-auto overflow-y-auto max-h-[260px] divide-y divide-slate-100 relative">
         {activeSheet === 'berusaha' && (
           <table className="w-full text-xs font-sans text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
-                <th className="py-2.5 px-4 w-14 text-center">No</th>
-                <th className="py-2.5 px-4">Nama Perizinan Berusaha</th>
-                <th className="py-2.5 px-4 w-60 whitespace-nowrap">Tanggal Perizinan Berusaha</th>
+            <thead className="sticky top-0 z-10 bg-slate-100 text-slate-700 shadow-xs">
+              <tr className="border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
+                <th className="py-2.5 px-4 w-14 text-center bg-slate-100">No</th>
+                <th className="py-2.5 px-4 bg-slate-100">Nama Perizinan Berusaha</th>
+                <th className="py-2.5 px-4 w-60 whitespace-nowrap bg-slate-100">Tanggal Perizinan Berusaha</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -253,13 +253,13 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
               ) : (
                 filteredBerusaha.map((row, idx) => (
                   <tr key={row.id} className="hover:bg-blue-50/40 transition-colors">
-                    <td className="py-3 px-4 text-center font-mono text-slate-400 font-bold">
+                    <td className="py-2.5 px-4 text-center font-mono text-slate-400 font-bold">
                       {idx + 1}
                     </td>
-                    <td className="py-3 px-4 font-semibold text-slate-900">
+                    <td className="py-2.5 px-4 font-semibold text-slate-900">
                       {row.namaPerizinan}
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap font-mono text-slate-700">
+                    <td className="py-2.5 px-4 whitespace-nowrap font-mono text-slate-700">
                       <div className="flex items-center gap-1.5 text-xs">
                         <Calendar className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                         <span>{row.tanggalPerizinan}</span>
@@ -274,11 +274,11 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
 
         {activeSheet === 'non_perizinan' && (
           <table className="w-full text-xs font-sans text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
-                <th className="py-2.5 px-4 w-14 text-center">No</th>
-                <th className="py-2.5 px-4">Nama Non Perizinan</th>
-                <th className="py-2.5 px-4 w-60 whitespace-nowrap">Tanggal</th>
+            <thead className="sticky top-0 z-10 bg-slate-100 text-slate-700 shadow-xs">
+              <tr className="border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
+                <th className="py-2.5 px-4 w-14 text-center bg-slate-100">No</th>
+                <th className="py-2.5 px-4 bg-slate-100">Nama Non Perizinan</th>
+                <th className="py-2.5 px-4 w-60 whitespace-nowrap bg-slate-100">Tanggal</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -291,13 +291,13 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
               ) : (
                 filteredNonPerizinan.map((row, idx) => (
                   <tr key={row.id} className="hover:bg-amber-50/40 transition-colors">
-                    <td className="py-3 px-4 text-center font-mono text-slate-400 font-bold">
+                    <td className="py-2.5 px-4 text-center font-mono text-slate-400 font-bold">
                       {idx + 1}
                     </td>
-                    <td className="py-3 px-4 font-semibold text-slate-900">
+                    <td className="py-2.5 px-4 font-semibold text-slate-900">
                       {row.namaNonPerizinan}
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap font-mono text-slate-700">
+                    <td className="py-2.5 px-4 whitespace-nowrap font-mono text-slate-700">
                       <div className="flex items-center gap-1.5 text-xs">
                         <Calendar className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                         <span>{row.tanggal}</span>
@@ -312,11 +312,11 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
 
         {activeSheet === 'lainnya' && (
           <table className="w-full text-xs font-sans text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
-                <th className="py-2.5 px-4 w-14 text-center">No</th>
-                <th className="py-2.5 px-4">Nama Perizinan Lainnya</th>
-                <th className="py-2.5 px-4 w-60 whitespace-nowrap">Tanggal Perizinan</th>
+            <thead className="sticky top-0 z-10 bg-slate-100 text-slate-700 shadow-xs">
+              <tr className="border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
+                <th className="py-2.5 px-4 w-14 text-center bg-slate-100">No</th>
+                <th className="py-2.5 px-4 bg-slate-100">Nama Perizinan Lainnya</th>
+                <th className="py-2.5 px-4 w-60 whitespace-nowrap bg-slate-100">Tanggal Perizinan</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -329,13 +329,13 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
               ) : (
                 filteredLainnya.map((row, idx) => (
                   <tr key={row.id} className="hover:bg-purple-50/40 transition-colors">
-                    <td className="py-3 px-4 text-center font-mono text-slate-400 font-bold">
+                    <td className="py-2.5 px-4 text-center font-mono text-slate-400 font-bold">
                       {idx + 1}
                     </td>
-                    <td className="py-3 px-4 font-semibold text-slate-900">
+                    <td className="py-2.5 px-4 font-semibold text-slate-900">
                       {row.namaPerizinan}
                     </td>
-                    <td className="py-3 px-4 whitespace-nowrap font-mono text-slate-700">
+                    <td className="py-2.5 px-4 whitespace-nowrap font-mono text-slate-700">
                       <div className="flex items-center gap-1.5 text-xs">
                         <Calendar className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                         <span>{row.tanggalPerizinan}</span>
@@ -350,16 +350,21 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
       </div>
 
       {/* Footer baris status count */}
-      <div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-600 font-mono">
-        <span>
-          Menampilkan{' '}
-          {activeSheet === 'berusaha'
-            ? `${filteredBerusaha.length} dari ${KEK_PERIZINAN_BERUSAHA.length}`
-            : activeSheet === 'non_perizinan'
-            ? `${filteredNonPerizinan.length} dari ${KEK_NON_PERIZINAN.length}`
-            : `${filteredLainnya.length} dari ${KEK_PERIZINAN_LAINNYA.length}`}{' '}
-          entri perizinan
-        </span>
+      <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 font-mono">
+        <div className="flex items-center gap-2">
+          <span>
+            Menampilkan{' '}
+            {activeSheet === 'berusaha'
+              ? `${filteredBerusaha.length} dari ${KEK_PERIZINAN_BERUSAHA.length}`
+              : activeSheet === 'non_perizinan'
+              ? `${filteredNonPerizinan.length} dari ${KEK_NON_PERIZINAN.length}`
+              : `${filteredLainnya.length} dari ${KEK_PERIZINAN_LAINNYA.length}`}{' '}
+            entri perizinan
+          </span>
+          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10.5px] font-sans font-medium">
+            Tampilan 5 baris • Scroll ke bawah untuk data berikutnya
+          </span>
+        </div>
         <span className="text-slate-400 text-[11px] font-sans">
           Kolom: [Nama Perizinan] dan [Tanggal]
         </span>

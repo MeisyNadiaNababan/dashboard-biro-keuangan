@@ -44,8 +44,16 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'active' | 'ready_to_build'>('ALL');
 
   const categories = ['ALL', 'Biro', 'Direktorat', 'Pusat', 'Badan Usaha', 'Satuan'];
+
+  // Realtime dynamic metrics computed from actual unit definitions
+  const totalUnits = BP_BATAM_24_UNITS.length;
+  const activeUnits = useMemo(() => BP_BATAM_24_UNITS.filter((u) => u.status === 'active'), []);
+  const readyUnits = useMemo(() => BP_BATAM_24_UNITS.filter((u) => u.status === 'ready_to_build'), []);
+  const activeCount = activeUnits.length;
+  const readyCount = readyUnits.length;
 
   const filteredUnits = useMemo(() => {
     return BP_BATAM_24_UNITS.filter((unit) => {
@@ -57,9 +65,11 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
         unit.description.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchCategory = selectedCategory === 'ALL' || unit.category === selectedCategory;
-      return matchSearch && matchCategory;
+      const matchStatus = statusFilter === 'ALL' || unit.status === statusFilter;
+
+      return matchSearch && matchCategory && matchStatus;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, statusFilter]);
 
   if (!isOpen) return null;
 
@@ -69,20 +79,24 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
         {/* Top Header */}
         <div className="bg-[#0F1E36] text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#2E75B6] flex items-center justify-center text-white font-bold text-xs shadow-xs">
-              24
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-extrabold text-sm shadow-xs border border-blue-400/30">
+              {totalUnits}
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-sm font-bold tracking-tight">
                   Direktori 24 Unit Kerja BP Batam
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 bg-blue-900/60 border border-blue-400/40 text-blue-200 rounded">
+                <span className="text-[10.5px] font-bold px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 rounded-full flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {activeCount} Dashboard Aktif (Realtime)
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 bg-blue-900/60 border border-blue-400/40 text-blue-200 rounded hidden md:inline">
                   BP_Batam_KPI_Dictionary_Updated.pdf
                 </span>
               </div>
-              <p className="text-xs text-slate-300">
-                Pilih unit kerja untuk membuka dashboard eksekutif, ikhtisar kinerja, dan kamus rumus
+              <p className="text-xs text-slate-300 mt-0.5">
+                Monitoring status operasional: <span className="text-emerald-300 font-semibold">{activeCount} Unit Dashboard Siap Pakai</span> &amp; <span className="text-slate-300">{readyCount} Unit Tahap Pengembangan</span>
               </p>
             </div>
           </div>
@@ -96,28 +110,68 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Cari unit kerja, biro, direktorat, atau kata kunci..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-            />
-            {searchTerm && (
+        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Cari unit kerja, biro, direktorat, kode, atau kata kunci..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
+            {/* Status Quick Filter (Realtime) */}
+            <div className="flex items-center gap-1.5 text-xs">
               <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                onClick={() => setStatusFilter('ALL')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
+                  statusFilter === 'ALL'
+                    ? 'bg-[#1F3864] text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                }`}
               >
-                ×
+                Semua ({totalUnits})
               </button>
-            )}
+
+              <button
+                onClick={() => setStatusFilter('active')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-all flex items-center gap-1.5 ${
+                  statusFilter === 'active'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Aktif Siap Pakai ({activeCount})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('ready_to_build')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap cursor-pointer transition-all ${
+                  statusFilter === 'ready_to_build'
+                    ? 'bg-slate-700 text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                Siap Rancang ({readyCount})
+              </button>
+            </div>
           </div>
 
           {/* Category Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto text-xs">
+          <div className="flex items-center gap-1 overflow-x-auto text-xs pt-1 border-t border-slate-200/60">
+            <span className="text-[11px] font-semibold text-slate-500 mr-1 shrink-0">Kategori:</span>
             {categories.map((cat) => {
               const count = cat === 'ALL'
                 ? BP_BATAM_24_UNITS.length
@@ -126,13 +180,13 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap cursor-pointer transition-all ${
                     selectedCategory === cat
-                      ? 'bg-[#1F3864] text-white shadow-xs'
+                      ? 'bg-blue-100 text-blue-900 font-bold border border-blue-300'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  {cat === 'ALL' ? 'Semua Unit' : cat} ({count})
+                  {cat === 'ALL' ? 'Semua Kategori' : cat} ({count})
                 </button>
               );
             })}
@@ -168,7 +222,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                           isActive
                             ? 'bg-blue-600 text-white shadow-xs'
                             : isImplemented
-                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                             : 'bg-slate-100 text-slate-600 border border-slate-200 group-hover:bg-blue-50 group-hover:text-blue-600'
                         }`}
                       >
@@ -191,7 +245,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
 
                     {/* Status Pill */}
                     {isImplemented ? (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center gap-1 shrink-0">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center gap-1 shrink-0 shadow-2xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         Aktif
                       </span>
@@ -230,24 +284,46 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
           })}
         </div>
 
-        {/* Drawer Footer */}
-        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-600">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-slate-800">
-              Total: 24 Unit Kerja Resmi BP Batam
+        {/* Drawer Footer - Realtime Active Count */}
+        <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="font-bold text-slate-800">
+              Total: {totalUnits} Unit Kerja Resmi BP Batam
             </span>
-            <span className="text-slate-400">|</span>
-            <span className="text-emerald-700 font-semibold flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5" /> 2 Unit Dashboard Siap Pakai (Biro Keuangan &amp; PDSI)
+            <span className="text-slate-300 hidden sm:inline">|</span>
+            <span className="text-emerald-700 font-bold flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-300 shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>{activeCount} Unit Dashboard Aktif Siap Pakai</span>
+              <span className="text-[10px] bg-emerald-600 text-white font-mono px-1.5 py-0.2 rounded-full font-extrabold">
+                {Math.round((activeCount / totalUnits) * 100)}%
+              </span>
+            </span>
+            <span className="text-slate-300 hidden sm:inline">|</span>
+            <span className="text-slate-500 font-medium text-[11px]">
+              {readyCount} Unit Siap Rancang
             </span>
           </div>
 
-          <button
-            onClick={onClose}
-            className="px-4 py-1.5 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-lg border border-slate-300 cursor-pointer"
-          >
-            Tutup
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setStatusFilter(statusFilter === 'active' ? 'ALL' : 'active')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer flex items-center gap-1.5 ${
+                statusFilter === 'active'
+                  ? 'bg-emerald-600 text-white border-emerald-700'
+                  : 'bg-white text-emerald-700 border-emerald-300 hover:bg-emerald-50'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-current" />
+              <span>{statusFilter === 'active' ? 'Tampilkan Semua' : `Filter ${activeCount} Unit Aktif`}</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="px-4 py-1.5 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-lg border border-slate-300 cursor-pointer transition-colors"
+            >
+              Tutup
+            </button>
+          </div>
         </div>
       </div>
     </div>

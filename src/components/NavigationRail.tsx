@@ -68,6 +68,8 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
   onSelectUnit,
   onOpenUnitsDrawer,
 }) => {
+  const activeCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length;
+
   return (
     <nav
       id="bp-batam-left-rail"
@@ -110,7 +112,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
             <span className="w-2 h-2 rounded-full bg-sky-400" />
             <span>Direktori 24 Unit Kerja BP Batam</span>
           </div>
-          <span className="text-[10px] text-slate-400 font-normal block">Klik untuk memilih unit kerja</span>
+          <span className="text-[10px] text-emerald-400 font-bold block">{activeCount} Unit Dashboard Aktif</span>
         </div>
       </button>
 
@@ -118,20 +120,21 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
       <button
         onClick={onOpenUnitsDrawer}
         className="w-11 h-11 mb-2 rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all relative group bg-[#132742] hover:bg-[#1a3559] border border-[#2a4d7d] text-sky-300 shrink-0"
-        title="Buka Direktori Lengkap 24 Unit Kerja BP Batam"
+        title={`Buka Direktori Lengkap 24 Unit Kerja BP Batam (${activeCount} Aktif)`}
       >
         <Layers className="w-4 h-4 text-sky-300" />
         <span className="text-[7.5px] font-bold text-sky-200 mt-0.5">24 UNIT</span>
 
         {/* Notification / Count badge */}
-        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 text-white font-mono text-[9px] font-extrabold flex items-center justify-center shadow-xs">
-          24
+        <span className="absolute -top-1 -right-1 px-1 min-w-[17px] h-4 rounded-full bg-emerald-500 text-white font-mono text-[8.5px] font-extrabold flex items-center justify-center shadow-xs" title={`${activeCount} Unit Aktif Siap Pakai`}>
+          {activeCount}
         </span>
 
         {/* Tooltip */}
         <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#0F1E36] text-white text-xs font-semibold whitespace-nowrap rounded-md border border-slate-700 shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
           <div className="font-bold text-sky-300">Direktori 24 Unit BP Batam</div>
-          <div className="text-[10px] text-slate-300">Biro, Direktorat, Pusat, &amp; Badan Usaha</div>
+          <div className="text-[10px] text-emerald-400 font-bold">{activeCount} Unit Dashboard Aktif (Realtime)</div>
+          <div className="text-[9.5px] text-slate-300">Biro, Direktorat, Pusat, &amp; Badan Usaha</div>
         </div>
       </button>
 

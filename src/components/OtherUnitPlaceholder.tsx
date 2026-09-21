@@ -167,23 +167,23 @@ export const OtherUnitPlaceholder: React.FC<OtherUnitPlaceholderProps> = ({
           {/* Quick Switch to Working Dashboards Banner */}
           <div className="p-4 bg-slate-900 text-white rounded-xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
             <div>
-              <h4 className="text-sm font-bold">Ingin melihat dashboard yang sudah aktif sepenuhnya?</h4>
-              <p className="text-xs text-slate-300 mt-0.5">
-                Biro Keuangan dan PDSI telah terkonfigurasi dengan data visual interaktif dan kamus rumus lengkap.
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h4 className="text-sm font-bold">
+                  Tersedia {BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length} Unit Dashboard yang Telah Aktif Beroperasi Penuh
+                </h4>
+              </div>
+              <p className="text-xs text-slate-300 mt-1">
+                Dit. Perencanaan, Dit. Pembangunan, Pengamanan Aset, Reklamasi, Lahan, PTSP, KEK, Investasi, LL-Barang, Pelabuhan, RSBP, Biro Hukum, Keuangan, dan PDSI telah siap pakai lengkap dengan visualisasi data interaktif.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <button
-                onClick={onSwitchToKeuangan}
-                className="px-3.5 py-1.5 bg-[#2E75B6] hover:bg-blue-600 text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors shadow-xs"
+                onClick={onOpen24UnitsDrawer}
+                className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg cursor-pointer transition-colors shadow-xs flex items-center gap-1.5"
               >
-                Buka Biro Keuangan
-              </button>
-              <button
-                onClick={onSwitchToPdsi}
-                className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-600 cursor-pointer transition-colors"
-              >
-                Buka PDSI
+                <Layers className="w-3.5 h-3.5" />
+                <span>Pilih dari {BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length} Dashboard Aktif</span>
               </button>
             </div>
           </div>

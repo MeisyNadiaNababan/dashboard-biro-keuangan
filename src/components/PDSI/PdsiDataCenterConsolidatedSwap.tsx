@@ -22,6 +22,18 @@ import {
   Building,
   Info,
 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Cell,
+  ReferenceLine,
+} from 'recharts';
 import { TableauShelvesBadge } from '../TableauShelvesBadge';
 
 type ActiveSheet = 'rak_dc' | 'data_tenant' | 'server_storage';
@@ -34,7 +46,8 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
   onOpenFormulaModal,
 }) => {
   const [activeSheet, setActiveSheet] = useState<ActiveSheet>('rak_dc');
-  const [displayMode, setDisplayMode] = useState<'both' | 'chart' | 'table'>('both');
+  const [displayMode, setDisplayMode] = useState<'chart' | 'table'>('chart');
+  const [serverVisualType, setServerVisualType] = useState<'bar' | 'treemap'>('bar');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Calculations for Rack DC
@@ -77,6 +90,105 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
     );
   }, [searchQuery]);
 
+  // Chart Data for Okupansi Rak DC
+  const chartDataRacks = useMemo(() => {
+    return filteredRacks.map((rack) => {
+      let shortName = rack.ruangan
+        .replace('Ruang Server ', 'R. Server ')
+        .replace('Ruang Data Center ', 'R. DC ');
+      return {
+        id: rack.id,
+        name: shortName,
+        fullName: rack.ruangan,
+        jenisRak: rack.jenisRak,
+        terisi: rack.rakTerisi,
+        kosong: rack.rakKosong,
+        total: rack.totalRak,
+        okupansi: rack.okupansiPersen,
+      };
+    });
+  }, [filteredRacks]);
+
+  // Chart Data for Tenants
+  const chartDataTenants = useMemo(() => {
+    return filteredTenants.map((t) => ({
+      id: t.id,
+      name: t.kategori,
+      jumlah: t.jumlah,
+      persen: t.persentase,
+      tipe: t.tipeLayanan,
+      contoh: t.contohTenant,
+      kapasitas: t.kapasitasRak,
+    }));
+  }, [filteredTenants]);
+
+  // Tooltip for Racks
+  const CustomTooltipRack = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5 max-w-xs select-none">
+          <div className="font-bold text-sky-300 border-b border-slate-800 pb-1">
+            {data.fullName}
+          </div>
+          <div className="text-[11px] text-slate-400">
+            Tipe Rak: <span className="text-slate-200">{data.jenisRak}</span>
+          </div>
+          <div className="pt-1 border-t border-slate-800 space-y-1 text-[11px]">
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Total Rak:</span>
+              <span className="font-bold font-mono text-slate-200">{data.total} Unit</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-sky-400">Rak Terisi:</span>
+              <span className="font-bold font-mono text-sky-300">
+                {data.terisi} Unit ({data.okupansi}%)
+              </span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-amber-400">Rak Kosong:</span>
+              <span className="font-bold font-mono text-amber-300">{data.kosong} Unit</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Tooltip for Tenants
+  const CustomTooltipTenant = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5 max-w-xs select-none">
+          <div className="font-bold text-sky-300 border-b border-slate-800 pb-1">
+            {data.name}
+          </div>
+          <div className="text-[11px] text-slate-300">
+            Layanan: <span className="text-slate-200 font-medium">{data.tipe}</span>
+          </div>
+          <div className="pt-1 border-t border-slate-800 space-y-1 text-[11px]">
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Jumlah Tenant:</span>
+              <span className="font-bold font-mono text-sky-300">
+                {data.jumlah} Tenant ({data.persen}%)
+              </span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Kapasitas Rak:</span>
+              <span className="font-mono text-slate-200">{data.kapasitas}</span>
+            </div>
+            <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+              Mitra: {data.contoh}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   // Filtered Server & Storage
   const filteredServers = useMemo(() => {
     if (!searchQuery.trim()) return SERVER_STORAGE_DATA;
@@ -88,6 +200,91 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
         s.statusGaransi.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
+
+  // Chart Data for Server & Storage (Horizontal Bar Tableau Show Me #2)
+  const chartDataServers = useMemo(() => {
+    return filteredServers.map((s) => {
+      let shortName = s.namaServer
+        .replace('Cluster Nutanix Enterprise Cloud', 'Nutanix HCI Cloud')
+        .replace('Cisco UCS Blade B200 Compute Cluster', 'Cisco UCS B200')
+        .replace('Dell PowerEdge R750 Enterprise Server', 'Dell PowerEdge R750')
+        .replace('SAN Storage All-Flash OceanStor', 'Huawei OceanStor')
+        .replace('Database Server Cluster (Exadata X8M)', 'Oracle Exadata X8M')
+        .replace('HP ProLiant DL380 Gen10 Application Host', 'HP ProLiant DL380')
+        .replace('IBM Tape Library TS4300 Cold Storage Backup', 'IBM Tape TS4300')
+        .replace('Gateway Edge & Security Appliance NGFW', 'Next-Gen NGFW');
+
+      const isWarrantyActive = srvStatusColor(s.statusGaransi);
+
+      return {
+        id: s.id,
+        name: shortName,
+        fullName: s.namaServer,
+        brand: s.brand,
+        tipe: s.tipe,
+        unit: s.jumlahUnit,
+        statusGaransi: s.statusGaransi,
+        eosStatus: s.eosStatus,
+        penggunaan: s.penggunaan,
+        tanggalGaransi: s.tanggalGaransi,
+        fillColor: isWarrantyActive,
+      };
+    });
+  }, [filteredServers]);
+
+  function srvStatusColor(status: string) {
+    if (status === 'Aktif') return '#1F4E79';
+    if (status === 'Masa Perpanjangan') return '#d97706';
+    return '#e11d48';
+  }
+
+  // Custom Tooltip for Server & Storage
+  const CustomTooltipServer = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5 max-w-xs select-none">
+          <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
+            <span className="font-bold text-sky-300">{data.fullName}</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+              {data.brand}
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-300">
+            Tipe: <span className="text-white font-medium">{data.tipe}</span>
+          </div>
+          <div className="pt-1 border-t border-slate-800 space-y-1 text-[11px]">
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Jumlah Unit:</span>
+              <span className="font-bold font-mono text-sky-300">{data.unit} Unit</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Status Garansi:</span>
+              <span
+                className={`font-bold ${
+                  data.statusGaransi === 'Aktif'
+                    ? 'text-emerald-400'
+                    : data.statusGaransi === 'Masa Perpanjangan'
+                    ? 'text-amber-400'
+                    : 'text-rose-400'
+                }`}
+              >
+                {data.statusGaransi} ({data.tanggalGaransi})
+              </span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Support EOS:</span>
+              <span className="font-mono text-slate-300">{data.eosStatus}</span>
+            </div>
+            <div className="text-[10.5px] text-slate-400 pt-1 border-t border-slate-800">
+              Penggunaan: {data.penggunaan}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
@@ -112,36 +309,90 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
           </div>
         </div>
 
-        {/* Action Controls: View Switcher */}
+        {/* Action Controls: View Switcher (Grafis & Tabel) */}
         <div className="flex items-center gap-2 self-start md:self-auto">
           <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs text-xs font-medium">
             <button
-              onClick={() => setDisplayMode('both')}
-              className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer ${
-                displayMode === 'both' ? 'bg-[#1F4E79] text-white font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              onClick={() => setDisplayMode('chart')}
+              className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 cursor-pointer font-bold ${
+                displayMode === 'chart'
+                  ? 'bg-[#1F4E79] text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <BarChart3 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Visual & Tabel</span>
-            </button>
-            <button
-              onClick={() => setDisplayMode('chart')}
-              className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer ${
-                displayMode === 'chart' ? 'bg-[#1F4E79] text-white font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <PieChartIcon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Grafis Saja</span>
+              <span>Grafis</span>
             </button>
             <button
               onClick={() => setDisplayMode('table')}
-              className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer ${
-                displayMode === 'table' ? 'bg-[#1F4E79] text-white font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 cursor-pointer font-bold ${
+                displayMode === 'table'
+                  ? 'bg-[#1F4E79] text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <TableIcon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Tabel Saja</span>
+              <span>Tabel</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Persistent Static KPI Row: Tetap Tampil di Atas (Tidak Ikut Sheet Swap) */}
+      <div className="bg-slate-50/75 border-b border-slate-200 px-4 py-3 sm:px-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {/* KPI 1: JUMLAH RAK */}
+          <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-2xs flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                Jumlah Rak Data Center
+              </span>
+              <div className="text-xl sm:text-2xl font-black font-mono text-[#1F4E79] mt-0.5">
+                {totalRakAll} <span className="text-xs font-normal text-slate-500">Unit Rak</span>
+              </div>
+              <div className="text-[11px] text-slate-600 font-medium mt-0.5">
+                <span className="text-emerald-700 font-bold">{terisiRakAll} Terisi ({okupansiPersenAll}%)</span> • {kosongRakAll} Kosong
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center shrink-0">
+              <Layers className="w-5 h-5 text-[#1F4E79]" />
+            </div>
+          </div>
+
+          {/* KPI 2: JUMLAH TENANT DATA */}
+          <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-2xs flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                Jumlah Tenant Data
+              </span>
+              <div className="text-xl sm:text-2xl font-black font-mono text-[#0284c7] mt-0.5">
+                {totalTenant} <span className="text-xs font-normal text-slate-500">Tenant</span>
+              </div>
+              <div className="text-[11px] text-slate-600 font-medium mt-0.5">
+                Pemerintah, BUMN &amp; Swasta
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200/80 flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5 text-[#0284c7]" />
+            </div>
+          </div>
+
+          {/* KPI 3: TOTAL SERVER DAN STORAGE */}
+          <div className="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-2xs flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                Total Server &amp; Storage
+              </span>
+              <div className="text-xl sm:text-2xl font-black font-mono text-[#0d9488] mt-0.5">
+                {totalUnitServer} <span className="text-xs font-normal text-slate-500">Unit</span>
+              </div>
+              <div className="text-[11px] text-slate-600 font-medium mt-0.5">
+                <span className="text-emerald-700 font-bold">{garansiAktifUnit} Garansi Aktif</span> • {totalUnitServer - eosUnits} Supported
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200/80 flex items-center justify-center shrink-0">
+              <HardDrive className="w-5 h-5 text-[#0d9488]" />
+            </div>
           </div>
         </div>
       </div>
@@ -239,98 +490,71 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
               detail="Sheet Swap 1: Visualisasi Okupansi Ruang Data Center Tier III BP Batam"
             />
 
-            {/* Quick KPI Summary Badges for Racks (Rasio Okupansi Global Dihapus Sesuai Permintaan) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3">
-                <span className="text-[11px] font-semibold text-blue-900 block">Total Kapasitas Rak</span>
-                <span className="text-xl sm:text-2xl font-black font-mono text-blue-950 block mt-0.5">
-                  {totalRakAll} <span className="text-xs font-normal">Unit</span>
-                </span>
-                <span className="text-[10.5px] text-blue-700 mt-0.5 block">Standar 42U Cabinet</span>
-              </div>
-              <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-xl p-3">
-                <span className="text-[11px] font-semibold text-emerald-900 block">Jumlah Rak Terisi</span>
-                <span className="text-xl sm:text-2xl font-black font-mono text-emerald-950 block mt-0.5">
-                  {terisiRakAll} <span className="text-xs font-normal">Rak</span>
-                </span>
-                <span className="text-[10.5px] text-emerald-700 mt-0.5 block">Utilisasi Aktif</span>
-              </div>
-              <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3">
-                <span className="text-[11px] font-semibold text-amber-900 block">Jumlah Rak Kosong</span>
-                <span className="text-xl sm:text-2xl font-black font-mono text-amber-950 block mt-0.5">
-                  {kosongRakAll} <span className="text-xs font-normal">Slot</span>
-                </span>
-                <span className="text-[10.5px] text-amber-700 mt-0.5 block">Kapasitas Tersedia</span>
-              </div>
-            </div>
-
-            {/* VISUAL CHART: Horizontal Bar Comparison */}
-            {(displayMode === 'both' || displayMode === 'chart') && (
-              <div className="bg-slate-50/70 border border-slate-200/80 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <BarChart3 className="w-3.5 h-3.5 text-[#1F4E79]" />
-                    Visual Okupansi Rak Per Ruangan Data Center
-                  </h4>
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-[#1F4E79]" />
-                      <span className="text-slate-600 font-medium">Terisi</span>
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
-                      <span className="text-slate-600 font-medium">Kosong</span>
+            {/* VISUAL CHART: Recharts Bar Comparison (Mode Grafis) */}
+            {displayMode === 'chart' && (
+              <div className="space-y-4">
+                <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#1F4E79]" />
+                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                        Grafik Okupansi Rak per Ruangan Data Center (Terisi vs Kosong)
+                      </h4>
+                    </div>
+                    <span className="text-xs text-slate-500 font-mono">
+                      Total Kapasitas: <strong className="text-slate-800 font-bold">{terisiRakAll} Terisi</strong> dari {totalRakAll} Rak ({okupansiPersenAll}%)
                     </span>
                   </div>
-                </div>
 
-                <div className="space-y-4">
-                  {filteredRacks.map((rack) => {
-                    const terisiWidth = (rack.rakTerisi / rack.totalRak) * 100;
-                    const kosongWidth = 100 - terisiWidth;
-                    return (
-                      <div key={rack.id} className="bg-white border border-slate-200 rounded-lg p-3 shadow-2xs">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                          <div>
-                            <span className="text-xs font-bold text-slate-900 block">{rack.ruangan}</span>
-                            <span className="text-[11px] text-slate-500">{rack.jenisRak}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-right">
-                            <span className="text-xs font-bold font-mono text-[#1F4E79]">
-                              {rack.rakTerisi} Terisi / {rack.totalRak} Total
-                            </span>
-                            <span className="text-[11px] font-black font-mono px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
-                              {rack.okupansiPersen}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Visual Bar */}
-                        <div className="w-full bg-slate-200 h-4 rounded-full overflow-hidden flex">
-                          <div
-                            className="bg-[#1F4E79] h-full flex items-center justify-center text-[10px] text-white font-mono font-bold transition-all duration-500"
-                            style={{ width: `${terisiWidth}%` }}
-                            title={`Terisi: ${rack.rakTerisi} Rak (${Math.round(terisiWidth)}%)`}
-                          >
-                            {rack.rakTerisi} Rak
-                          </div>
-                          <div
-                            className="bg-slate-300 h-full flex items-center justify-center text-[10px] text-slate-700 font-mono transition-all duration-500"
-                            style={{ width: `${kosongWidth}%` }}
-                            title={`Kosong: ${rack.rakKosong} Rak`}
-                          >
-                            {rack.rakKosong > 0 ? `${rack.rakKosong} Kosong` : ''}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <div className="h-[270px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={chartDataRacks}
+                        margin={{ top: 10, right: 10, left: -10, bottom: 25 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fontSize: 11, fill: '#334155', fontWeight: 600 }}
+                          axisLine={{ stroke: '#cbd5e1' }}
+                          interval={0}
+                          angle={-10}
+                          textAnchor="end"
+                          height={38}
+                        />
+                        <YAxis
+                          tick={{ fontSize: 10, fill: '#64748b' }}
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <Tooltip content={<CustomTooltipRack />} />
+                        <Legend
+                          wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
+                          iconType="circle"
+                        />
+                        <Bar
+                          dataKey="terisi"
+                          name="Rak Terisi"
+                          fill="#1F4E79"
+                          radius={[4, 4, 0, 0]}
+                          barSize={20}
+                        />
+                        <Bar
+                          dataKey="kosong"
+                          name="Rak Kosong"
+                          fill="#94a3b8"
+                          radius={[4, 4, 0, 0]}
+                          barSize={20}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </div>
             )}
 
             {/* STRUCTURED TABLE: RUANGAN, JENIS RAK, TOTAL RAK, JUMLAH RAK TERISI */}
-            {(displayMode === 'both' || displayMode === 'table') && (
+            {displayMode === 'table' && (
               <div className="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
                 <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
                   <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -418,72 +642,60 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
               detail="Sheet Swap 2: Rekapitulasi Data Tenant Fasilitas Colocation & Data Center BP Batam"
             />
 
-            {/* Quick KPI Summary Badge for Tenants (Hanya Total Tenant Terdaftar Sesuai Permintaan) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3 sm:col-span-1">
-                <span className="text-[11px] font-semibold text-blue-900 block">Total Tenant Terdaftar</span>
-                <span className="text-xl sm:text-2xl font-black font-mono text-blue-950 block mt-0.5">
-                  {totalTenant} <span className="text-xs font-normal">Tenant</span>
-                </span>
-                <span className="text-[10.5px] text-blue-700 mt-0.5 block">Instansi Pemerintah, BUMN & Kemitraan Swasta</span>
-              </div>
-            </div>
+            {/* VISUAL CHART: Recharts BarChart per Kategori Tenant (Mode Grafis) */}
+            {displayMode === 'chart' && (
+              <div className="space-y-4">
+                <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#1F4E79]" />
+                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                        Grafik Komposisi Tenant Data Center Berdasarkan Kategori
+                      </h4>
+                    </div>
+                    <span className="text-xs text-slate-500 font-mono">
+                      Total Tenant: <strong className="text-slate-800 font-bold">{totalTenant} Tenant</strong> (100% Portofolio)
+                    </span>
+                  </div>
 
-            {/* VISUAL CHART: Horizontal Proportion Bars per Kategori */}
-            {(displayMode === 'both' || displayMode === 'chart') && (
-              <div className="bg-slate-50/70 border border-slate-200/80 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <BarChart3 className="w-3.5 h-3.5 text-[#1F4E79]" />
-                    Distribusi Tenant Data Center Berdasarkan Kategori
-                  </h4>
-                  <span className="text-xs text-slate-500 font-mono">Total 100% Portofolio</span>
-                </div>
-
-                <div className="space-y-3">
-                  {filteredTenants.map((tenant, idx) => {
-                    const colors = [
-                      { bg: 'bg-[#1F4E79]', text: 'text-blue-900', light: 'bg-blue-50' },
-                      { bg: 'bg-teal-600', text: 'text-teal-900', light: 'bg-teal-50' },
-                      { bg: 'bg-indigo-600', text: 'text-indigo-900', light: 'bg-indigo-50' },
-                      { bg: 'bg-emerald-600', text: 'text-emerald-900', light: 'bg-emerald-50' },
-                      { bg: 'bg-purple-600', text: 'text-purple-900', light: 'bg-purple-50' },
-                    ];
-                    const color = colors[idx % colors.length];
-
-                    return (
-                      <div key={tenant.id} className="bg-white border border-slate-200 rounded-lg p-3 shadow-2xs">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
-                          <div>
-                            <span className="text-xs font-bold text-slate-900">{tenant.kategori}</span>
-                            <span className="text-[11px] text-slate-500 block">{tenant.tipeLayanan}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono font-bold text-slate-800">
-                              {tenant.jumlah} Tenant
-                            </span>
-                            <span className="text-[11px] font-black font-mono px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 border border-slate-200">
-                              {tenant.persentase}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Bar */}
-                        <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                          <div
-                            className={`${color.bg} h-full rounded-full transition-all duration-500`}
-                            style={{ width: `${tenant.persentase}%` }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <div className="h-[260px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={chartDataTenants}
+                        margin={{ top: 10, right: 10, left: -10, bottom: 25 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fontSize: 11, fill: '#334155', fontWeight: 600 }}
+                          axisLine={{ stroke: '#cbd5e1' }}
+                          interval={0}
+                          angle={-10}
+                          textAnchor="end"
+                          height={38}
+                        />
+                        <YAxis
+                          tick={{ fontSize: 10, fill: '#64748b' }}
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <Tooltip content={<CustomTooltipTenant />} />
+                        <Bar
+                          dataKey="jumlah"
+                          name="Jumlah Tenant"
+                          radius={[4, 4, 0, 0]}
+                          barSize={24}
+                          fill="#1F4E79"
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </div>
             )}
 
             {/* STRUCTURED TABLE: KATEGORI DAN JUMLAH */}
-            {(displayMode === 'both' || displayMode === 'table') && (
+            {displayMode === 'table' && (
               <div className="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
                 <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
                   <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -560,84 +772,198 @@ export const PdsiDataCenterConsolidatedSwap: React.FC<PdsiDataCenterConsolidated
         {activeSheet === 'server_storage' && (
           <div className="space-y-4">
             <TableauShelvesBadge
-              showMe="Show Me #1 (Matrix Table & Status Indicators) — Server x Brand x Garansi x EOS"
-              columns="[Nama Server], [Brand], [Tipe]"
-              rows="[Status Garansi], [EOS], SUM([Jumlah Unit])"
-              filters="[Satker]='PDSI', [Kategori]='Hardware DC'"
-              detail="Sheet Swap 3: Inventarisasi Perangkat Server & Storage Fisik BP Batam"
+              showMe="Show Me #2 (Horizontal Bar Chart) & Show Me #10 (Treemap)"
+              columns="SUM([Jumlah Unit])"
+              rows="[Brand], [Nama Server]"
+              filters="[Status Garansi], [Tipe Hardware]"
+              detail="Sheet Swap 3: Visualisasi Standar Tableau Show Me Distribusi Unit Hardware Server & Storage (58 Unit)"
             />
 
-            {/* Quick KPI Summary Badge for Server & Storage (Hanya Total Server dan Storage Sesuai Permintaan) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3 sm:col-span-1">
-                <span className="text-[11px] font-semibold text-blue-900 block">Total Server dan Storage</span>
-                <span className="text-xl sm:text-2xl font-black font-mono text-blue-950 block mt-0.5">
-                  {totalUnitServer} <span className="text-xs font-normal">Unit</span>
-                </span>
-                <span className="text-[10.5px] text-blue-700 mt-0.5 block">HCI, Blade Compute & Storage SAN/NAS</span>
-              </div>
-            </div>
+            {/* VISUAL CHART: Standar Tableau Show Me (Horizontal Bar & Treemap) */}
+            {displayMode === 'chart' && (
+              <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4 pb-3 border-b border-slate-200">
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                      <BarChart3 className="w-3.5 h-3.5 text-[#1F4E79]" />
+                      Visual Distribusi Unit Hardware Server & Storage (Tableau Show Me)
+                    </h4>
+                    <span className="text-[11px] text-slate-500 font-mono mt-0.5 block">
+                      Columns: SUM([Jumlah Unit]) • Rows: [Brand], [Nama Server] • Total {totalUnitServer} Unit
+                    </span>
+                  </div>
 
-            {/* VISUAL CHART: Brand & Type Breakdown */}
-            {(displayMode === 'both' || displayMode === 'chart') && (
-              <div className="bg-slate-50/70 border border-slate-200/80 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <BarChart3 className="w-3.5 h-3.5 text-[#1F4E79]" />
-                    Visual Distribusi Unit Hardware Server & Storage
-                  </h4>
-                  <span className="text-xs text-slate-500 font-mono">Berdasarkan Tipe & Merek</span>
+                  {/* Tableau Show Me Option Switcher */}
+                  <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs self-start sm:self-auto">
+                    <button
+                      onClick={() => setServerVisualType('bar')}
+                      className={`px-2.5 py-1 rounded text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer ${
+                        serverVisualType === 'bar'
+                          ? 'bg-[#1F4E79] text-white shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Tableau Show Me #2: Horizontal Bar Chart"
+                    >
+                      <BarChart3 className="w-3 h-3" />
+                      <span>Bar Chart (Show Me #2)</span>
+                    </button>
+                    <button
+                      onClick={() => setServerVisualType('treemap')}
+                      className={`px-2.5 py-1 rounded text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer ${
+                        serverVisualType === 'treemap'
+                          ? 'bg-[#1F4E79] text-white shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Tableau Show Me #10: Treemap"
+                    >
+                      <Layers className="w-3 h-3" />
+                      <span>Treemap (Show Me #10)</span>
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {filteredServers.map((srv) => {
-                    const isWarrantyActive = srv.statusGaransi === 'Aktif';
-                    const isEos = srv.eosStatus.includes('EOS');
+                {/* Option 1: Tableau Horizontal Bar Chart (Show Me #2) via Recharts */}
+                {serverVisualType === 'bar' && (
+                  <div className="space-y-3">
+                    <div className="h-[360px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                          layout="vertical"
+                          data={chartDataServers}
+                          margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
+                          <XAxis
+                            type="number"
+                            domain={[0, 18]}
+                            tick={{ fontSize: 10, fill: '#64748b' }}
+                            axisLine={{ stroke: '#cbd5e1' }}
+                            label={{
+                              value: 'Jumlah Unit Hardware (Columns: SUM([Jumlah Unit]))',
+                              position: 'insideBottom',
+                              offset: -10,
+                              fontSize: 11,
+                              fill: '#64748b',
+                            }}
+                          />
+                          <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fontSize: 11, fill: '#1e293b', fontWeight: 600 }}
+                            width={165}
+                            axisLine={false}
+                            tickLine={false}
+                          />
+                          <Tooltip content={<CustomTooltipServer />} />
+                          <ReferenceLine
+                            x={7.25}
+                            stroke="#d97706"
+                            strokeDasharray="4 4"
+                            label={{
+                              value: 'Garis Referensi (Rata-rata: 7.3 Unit)',
+                              position: 'top',
+                              fill: '#b45309',
+                              fontSize: 10,
+                              fontWeight: 700,
+                            }}
+                          />
+                          <Bar dataKey="unit" name="Jumlah Unit" radius={[0, 6, 6, 0]} barSize={22}>
+                            {chartDataServers.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.fillColor} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
 
-                    return (
-                      <div key={srv.id} className="bg-white border border-slate-200 rounded-lg p-3 shadow-2xs flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
-                              {srv.brand}
-                            </span>
-                            <span className="text-xs font-mono font-black text-[#1F4E79]">
-                              {srv.jumlahUnit} Unit
-                            </span>
-                          </div>
-                          <h5 className="text-xs font-bold text-slate-900 leading-snug">{srv.namaServer}</h5>
-                          <span className="text-[11px] text-slate-500 mt-0.5 block">{srv.tipe}</span>
-                        </div>
-
-                        <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-[10px]">
-                          <span
-                            className={`px-1.5 py-0.5 rounded font-medium flex items-center gap-0.5 ${
-                              isWarrantyActive
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}
-                          >
-                            {isWarrantyActive ? <CheckCircle2 className="w-2.5 h-2.5" /> : <AlertTriangle className="w-2.5 h-2.5" />}
-                            {srv.statusGaransi}
-                          </span>
-
-                          <span
-                            className={`px-1.5 py-0.5 rounded font-mono font-bold ${
-                              isEos ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-blue-50 text-blue-700 border border-blue-200'
-                            }`}
-                          >
-                            EOS: {srv.eosStatus.split(' ')[0]}
-                          </span>
-                        </div>
+                    {/* Tableau Continuous Measure Axis & Legend */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-2 border-t border-slate-200 text-[11px] text-slate-600">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="font-semibold text-slate-700">Warna Markah (Status Garansi):</span>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#1F4E79]" />
+                          <span>Garansi Aktif ({garansiAktifUnit} Unit • 82,8%)</span>
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#d97706]" />
+                          <span>Masa Perpanjangan (4 Unit • 6,9%)</span>
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#e11d48]" />
+                          <span>Habis Garansi ({eosUnits} Unit • 10,3%)</span>
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="text-[10.5px] font-mono text-slate-500">
+                        Formula Tableau: <code>SUM([Jumlah Unit]) By [Brand]</code>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Option 2: Tableau Treemap (Show Me #10) */}
+                {serverVisualType === 'treemap' && (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-12 gap-2 min-h-[300px]">
+                      {filteredServers.map((srv, idx) => {
+                        const pct = Math.round((srv.jumlahUnit / totalUnitServer) * 1000) / 10;
+                        const isWarrantyActive = srv.statusGaransi === 'Aktif';
+                        const isPerpanjangan = srv.statusGaransi === 'Masa Perpanjangan';
+
+                        // Col span proportional to unit size in a 12-col grid
+                        const colSpanClass =
+                          srv.jumlahUnit >= 16
+                            ? 'col-span-12 md:col-span-6 row-span-2'
+                            : srv.jumlahUnit >= 12
+                            ? 'col-span-12 md:col-span-6'
+                            : srv.jumlahUnit >= 10
+                            ? 'col-span-6 md:col-span-4'
+                            : srv.jumlahUnit >= 6
+                            ? 'col-span-6 md:col-span-4'
+                            : 'col-span-6 md:col-span-3';
+
+                        const bgClass = isWarrantyActive
+                          ? 'bg-blue-900 text-white'
+                          : isPerpanjangan
+                          ? 'bg-amber-700 text-white'
+                          : 'bg-rose-800 text-white';
+
+                        return (
+                          <div
+                            key={srv.id}
+                            className={`${colSpanClass} ${bgClass} rounded-lg p-3.5 flex flex-col justify-between shadow-2xs transition-transform hover:scale-[1.01]`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between gap-1 mb-1">
+                                <span className="text-[10px] font-mono uppercase tracking-wider opacity-85 font-bold">
+                                  {srv.brand}
+                                </span>
+                                <span className="text-xs font-mono font-black">
+                                  {srv.jumlahUnit} Unit ({pct}%)
+                                </span>
+                              </div>
+                              <h5 className="text-xs font-bold leading-snug">{srv.namaServer}</h5>
+                              <span className="text-[10px] opacity-80 block mt-0.5">{srv.tipe}</span>
+                            </div>
+
+                            <div className="mt-2 pt-2 border-t border-white/20 flex items-center justify-between text-[10px]">
+                              <span>{srv.statusGaransi}</span>
+                              <span className="font-mono">EOS: {srv.eosStatus.split(' ')[0]}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="text-[11px] text-slate-500 font-mono text-center">
+                      Ukuran Kotak Treemap = SUM([Jumlah Unit]) • Warna = [Status Garansi]
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
             {/* STRUCTURED TABLE: NAMA SERVER, TIPE, BRAND, STATUS GARANSI, JUMLAH, EOS */}
-            {(displayMode === 'both' || displayMode === 'table') && (
+            {displayMode === 'table' && (
               <div className="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
                 <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
                   <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">

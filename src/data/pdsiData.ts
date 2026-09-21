@@ -61,26 +61,6 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     formulaRef: 'Poin #2: Total Rak = SUM([TOTAL RAK]) di Fasilitas Main Data Center & DRC Sekupang',
   },
   {
-    id: 'rak_terisi',
-    title: 'Jumlah Rak Data yang Terisi',
-    value: '33 Rak',
-    target: 'Tingkat Okupansi: 78,6%',
-    percentage: '33 Terisi • 9 Slot Kosong',
-    trend: {
-      direction: 'up',
-      value: '+2 Rak',
-      period: '(QoQ)',
-      isPositive: true,
-    },
-    sparkline: [28, 29, 30, 31, 32, 32, 33],
-    badge: {
-      text: '78,6% Okupansi',
-      variant: 'success',
-    },
-    colorTheme: 'emerald',
-    formulaRef: 'Poin #3: Rak Data Terisi = SUM([JUMLAH RAK TERISI]) • Okupansi = (Terisi / Total) * 100%',
-  },
-  {
     id: 'kepuasan_dc',
     title: 'SLA Kepuasan Pelanggan Data Center',
     value: '94,2%',
@@ -139,26 +119,6 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
     },
     colorTheme: 'blue',
     formulaRef: 'Poin #6: Jumlah Core FO = SUM([JMLHCORE]) di Seluruh Bentang Kabel Serat Optik BP Batam',
-  },
-  {
-    id: 'total_serangan',
-    title: 'Total Serangan',
-    value: '14.820',
-    target: '14.627 Termitigasi (98,7%)',
-    percentage: 'Threat Activity Terdeteksi CSIRT YTD',
-    trend: {
-      direction: 'up',
-      value: '+1.420',
-      period: '(MoM)',
-      isPositive: false,
-    },
-    sparkline: [11200, 11800, 12400, 13100, 13750, 14200, 14820],
-    badge: {
-      text: 'SOC Protected',
-      variant: 'info',
-    },
-    colorTheme: 'teal',
-    formulaRef: 'Poin #7: Total Serangan IT = SUM([JML SERANGAN]) • Mitigasi = SUM([TERMITIGASI])',
   },
   {
     id: 'jumlah_aplikasi',

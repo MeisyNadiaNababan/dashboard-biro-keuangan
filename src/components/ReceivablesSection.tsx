@@ -313,182 +313,117 @@ export const ReceivablesSection: React.FC<ReceivablesSectionProps> = ({
       {/* ========================================================================= */}
       {/* 2. SEKSI SALDO BANK: STANDARISASI VISUALISASI HANYA TREEMAP SAJA (POINT 13) */}
       {/* ========================================================================= */}
-      <div id="kas-bank-section" className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all p-5 sm:p-6 space-y-4">
+      <div id="kas-bank-section" className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all p-4 sm:p-5 space-y-3">
         {/* Modern Executive Card Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
           <div>
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-0.5">
               <span className="w-2 h-2 rounded-full bg-[#1F4E79]" />
               <span>REKENING OPERASIONAL &amp; TATA KELOLA KAS BANK</span>
               <span className="text-[10px] text-slate-400 font-mono bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">
                 Item #13
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h3 className="text-lg sm:text-xl font-black text-[#002B49] tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base sm:text-lg font-black text-[#002B49] tracking-tight">
                 Saldo Bank
               </h3>
               {onExplainKpi && (
                 <button
                   onClick={() => onExplainKpi('saldo_kas')}
-                  className="px-2.5 py-1 text-xs font-semibold text-[#1F4E79] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                  className="px-2 py-0.5 text-xs font-semibold text-[#1F4E79] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
                   title="Lihat Formula Lengkap & Penjelasan Insight untuk Atasan"
                 >
-                  <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Formula &amp; Insight</span>
+                  <HelpCircle className="w-3 h-3 text-blue-600" />
+                  <span>Formula</span>
                 </button>
               )}
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Data Konsolidasi Rekening Bank Mitra BLU BP Batam • Tabel: <code>keu_saldo_bank_realtime</code>
-            </p>
           </div>
 
           {/* Right Status Tag */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase font-mono rounded-full whitespace-nowrap shadow-2xs flex items-center gap-1">
-              <span>Total Saldo: Rp 1.520,0 M</span>
+            <span className="px-2.5 py-1 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold font-mono rounded-full whitespace-nowrap shadow-2xs">
+              Total Saldo: Rp 1.520,0 M
             </span>
           </div>
-        </div>
-
-        {/* Marks & Legend Shelf */}
-        <div className="px-3.5 py-2 bg-slate-50/70 rounded-xl border border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800 text-[11px]">Marks Rekening:</span>
-            <div className="flex items-center gap-3 text-[11px] flex-wrap">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#59A14F]" />
-                <span>Penerimaan (Mandiri)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#E15759]" />
-                <span>Pengeluaran (BRI)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#4E79A7]" />
-                <span>Operasional (BNI)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#B07AA1]" />
-                <span>Deposito DOC (BRK Syariah)</span>
-              </div>
-            </div>
-          </div>
-          <span className="text-[10.5px] font-mono text-slate-400">
-            Tableau Show Me #12 • Treemap Komposisi
-          </span>
         </div>
 
         {/* Tableau Shelves Mapping Badge */}
         <TableauShelvesBadge
           showMe="Show Me #12 (Treemap Komposisi Saldo Kas & Bank)"
           rows="[nama_bank]"
-          columns="SUM([nilai_saldo]), % of Total"
-          color="[kategori_rekening]"
-          detail="[nomor_rekening], [kegunaan_rekening]"
+          columns="SUM([nilai_saldo])"
+          color="[nama_bank]"
+          detail="[nomor_rekening], [nilai_saldo]"
           referenceLine="Porsi Bank: Mandiri 42,1% | BRI 31,6% | BNI 18,8% | BRK 7,5%"
         />
 
-        {/* POINT 13: VISUAL LAPORAN SALDO BANK HANYA TREEMAP SAJA */}
-        <div className="border border-slate-200/80 rounded-xl p-3.5 bg-white space-y-3 shadow-2xs">
-          <div className="grid grid-cols-12 gap-2.5 min-h-[240px]">
-            {/* Bank Mandiri: 42.1% (5 cols) */}
+        {/* VISUAL TREEMAP SALDO BANK (DIPERKECIL & HANYA NAMA BANK, NO REK, JUMLAH SALDO) */}
+        <div className="border border-slate-200/80 rounded-xl p-2.5 bg-white shadow-2xs">
+          <div className="grid grid-cols-12 gap-2 h-28 sm:h-32">
+            {/* Bank Mandiri: 5 cols */}
             <div
               onClick={() => onExplainKpi?.('saldo_kas')}
-              className="col-span-12 sm:col-span-5 bg-[#59A14F] hover:bg-[#4d8c44] transition-colors cursor-pointer text-white p-4 rounded-xl flex flex-col justify-between shadow-2xs group"
+              className="col-span-12 sm:col-span-5 bg-[#59A14F] hover:bg-[#4d8c44] transition-colors cursor-pointer text-white p-2.5 rounded-xl flex flex-col justify-between shadow-2xs group"
               title="Klik untuk membuka formula perhitungan saldo kas"
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold tracking-wider opacity-90 block">
-                    Penerimaan PNBP
-                  </span>
-                  <HelpCircle className="w-3.5 h-3.5 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <h4 className="font-black text-base leading-tight mt-1">Bank Mandiri</h4>
-                <p className="text-[11px] font-mono opacity-80 mt-0.5">No. Rek: 109-00-1971202-6</p>
-                <p className="text-[11px] opacity-90 mt-1 line-clamp-2">
-                  Rekening Giro Utama Penampungan PNBP BLU &amp; e-Billing
-                </p>
+                <h4 className="font-black text-xs sm:text-sm leading-tight">Bank Mandiri</h4>
+                <p className="text-[10px] sm:text-[11px] font-mono opacity-90 mt-0.5">No. Rek: 109-00-1971202-6</p>
               </div>
-              <div className="pt-3 border-t border-white/20 mt-3">
-                <p className="text-2xl font-black font-mono">Rp 640,5 M</p>
-                <p className="text-xs font-semibold opacity-90 mt-0.5">Porsi: 42,1% dari Total Kas BLU</p>
+              <div className="pt-1 border-t border-white/20">
+                <p className="text-base sm:text-lg font-black font-mono leading-tight">Rp 640,5 M</p>
               </div>
             </div>
 
-            {/* Bank BRI: 31.6% (4 cols) */}
+            {/* Bank BRI: 4 cols */}
             <div
               onClick={() => onExplainKpi?.('saldo_kas')}
-              className="col-span-12 sm:col-span-4 bg-[#E15759] hover:bg-[#c9494b] transition-colors cursor-pointer text-white p-4 rounded-xl flex flex-col justify-between shadow-2xs group"
+              className="col-span-12 sm:col-span-4 bg-[#E15759] hover:bg-[#c9494b] transition-colors cursor-pointer text-white p-2.5 rounded-xl flex flex-col justify-between shadow-2xs group"
               title="Klik untuk membuka formula perhitungan saldo kas"
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold tracking-wider opacity-90 block">
-                    Pengeluaran SP2D
-                  </span>
-                  <HelpCircle className="w-3.5 h-3.5 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <h4 className="font-black text-base leading-tight mt-1">Bank BRI</h4>
-                <p className="text-[11px] font-mono opacity-80 mt-0.5">No. Rek: 0065-01-000892-30-1</p>
-                <p className="text-[11px] opacity-90 mt-1 line-clamp-2">
-                  Rekening Pengeluaran Beban Pegawai &amp; Belanja Modal
-                </p>
+                <h4 className="font-black text-xs sm:text-sm leading-tight">Bank BRI</h4>
+                <p className="text-[10px] sm:text-[11px] font-mono opacity-90 mt-0.5">No. Rek: 0065-01-000892-30-1</p>
               </div>
-              <div className="pt-3 border-t border-white/20 mt-3">
-                <p className="text-2xl font-black font-mono">Rp 480,2 M</p>
-                <p className="text-xs font-semibold opacity-90 mt-0.5">Porsi: 31,6% dari Total Kas BLU</p>
+              <div className="pt-1 border-t border-white/20">
+                <p className="text-base sm:text-lg font-black font-mono leading-tight">Rp 480,2 M</p>
               </div>
             </div>
 
             {/* BNI + BRK: 3 cols total (stacked vertical) */}
-            <div className="col-span-12 sm:col-span-3 flex flex-col gap-2.5">
+            <div className="col-span-12 sm:col-span-3 flex flex-col gap-1.5">
+              {/* Bank BNI */}
               <div
                 onClick={() => onExplainKpi?.('saldo_kas')}
-                className="flex-1 bg-[#4E79A7] hover:bg-[#41678f] transition-colors cursor-pointer text-white p-3 rounded-xl flex flex-col justify-between shadow-2xs group"
+                className="flex-1 bg-[#4E79A7] hover:bg-[#41678f] transition-colors cursor-pointer text-white p-1.5 px-2 rounded-lg flex flex-col justify-between shadow-2xs group"
                 title="Klik untuk membuka formula perhitungan saldo kas"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[9.5px] uppercase font-bold tracking-wider opacity-90 block">
-                      Operasional
-                    </span>
-                    <h4 className="font-black text-sm leading-tight mt-0.5">Bank BNI</h4>
-                  </div>
-                  <HelpCircle className="w-3 h-3 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
+                <div>
+                  <h4 className="font-black text-[11px] sm:text-xs leading-tight truncate">Bank BNI</h4>
+                  <p className="text-[9.5px] font-mono opacity-90 truncate">No. Rek: 023-8891244-001</p>
                 </div>
-                <div className="mt-2">
-                  <p className="text-lg font-black font-mono">Rp 285,3 M</p>
-                  <p className="text-[11px] opacity-90 font-medium">18,8% • Rutin Satker</p>
+                <div className="pt-0.5 border-t border-white/15">
+                  <p className="text-xs sm:text-sm font-black font-mono leading-tight">Rp 285,3 M</p>
                 </div>
               </div>
 
+              {/* BRK Syariah */}
               <div
                 onClick={() => onExplainKpi?.('saldo_kas')}
-                className="flex-1 bg-[#B07AA1] hover:bg-[#976489] transition-colors cursor-pointer text-white p-3 rounded-xl flex flex-col justify-between shadow-2xs group"
+                className="flex-1 bg-[#B07AA1] hover:bg-[#976489] transition-colors cursor-pointer text-white p-1.5 px-2 rounded-lg flex flex-col justify-between shadow-2xs group"
                 title="Klik untuk membuka formula perhitungan saldo kas"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[9.5px] uppercase font-bold tracking-wider opacity-90 block">
-                      Deposito DOC
-                    </span>
-                    <h4 className="font-black text-sm leading-tight mt-0.5">BRK Syariah</h4>
-                  </div>
-                  <HelpCircle className="w-3 h-3 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
+                <div>
+                  <h4 className="font-black text-[11px] sm:text-xs leading-tight truncate">BRK Syariah</h4>
+                  <p className="text-[9.5px] font-mono opacity-90 truncate">No. Rek: 101-20-00452-9</p>
                 </div>
-                <div className="mt-2">
-                  <p className="text-lg font-black font-mono">Rp 114,0 M</p>
-                  <p className="text-[11px] opacity-90 font-medium">7,5% • Yield 5,2% p.a.</p>
+                <div className="pt-0.5 border-t border-white/15">
+                  <p className="text-xs sm:text-sm font-black font-mono leading-tight">Rp 114,0 M</p>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="text-[10px] text-slate-500 text-center font-sans pt-1">
-            * Ukuran blok mewakili proporsi nilai saldo kas perbankan pada marks card Tableau (Size: SUM([nilai]), Color: [kategori_rekening])
           </div>
         </div>
       </div>

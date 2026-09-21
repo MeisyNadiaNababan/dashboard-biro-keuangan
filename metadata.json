@@ -1,6 +1,6 @@
 {
   "name": "Dashboard Eksekutif Biro Keuangan BP Batam",
-  "description": "Dashboard Eksekutif Command Center BP Batam (Biro Keuangan, PDSI, PTSP, dan Direktorat Pengembangan KPBPBB & KEK) dengan realisasi investasi KEK PMA/PMDN, perizinan berusaha administrator, profil KEK, dan kamus rumus KPI.",
+  "description": "Dashboard Eksekutif Command Center BP Batam (Biro Organisasi, Kepatuhan dan Manajemen Risiko - BOKMR, Dit. Pengelolaan Kawasan Bandara, Dit. Pengendalian Pengusahaan, Dit. Perencanaan Infrastruktur, Dit. Pembangunan Infrastruktur, Dit. Pengamanan Aset dan Kawasan, Dit. Pengelolaan Kawasan Pesisir dan Reklamasi, Dit. Pengendalian Pengelolaan Lahan, Dit. Pengelolaan Lahan, Biro Keuangan, Biro Hukum, PDSI, PTSP, Dit. KEK, Dit. Investasi, Dit. Lalu Lintas Barang, Dit. Pelabuhan, RSBP) mencakup SAKIP, maturitas SPIP, IKM layanan, pengaduan masyarakat, rekomendasi & modernisasi BLU, piagam risiko, realisasi PNBP bandara, serta tata kelola institusi.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

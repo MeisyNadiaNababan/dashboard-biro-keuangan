@@ -103,3 +103,40 @@ export interface PekpppItem {
   kategori: string; // "A (Pelayanan Prima)", "A- (Sangat Baik)", "B (Baik)"
   predikat: string;
 }
+
+// DATASET NO. 5: KONTRAK KINERJA DAN IKU
+export interface KontrakKinerjaItem {
+  id: string;
+  triwulan: 'Triwulan I' | 'Triwulan II' | 'Triwulan III' | 'Triwulan IV';
+  tahun: string;
+  unitKerja: string;
+  sasaranStrategis: string;
+  iku: string;
+  targetNilaiIku: number;
+  nilaiRealisasiIku: number;
+  capaianPersen: number;
+  status: 'Tercapai' | 'On Track' | 'Perlu Perhatian';
+}
+
+// DATASET NO. 13: ANALISA JABATAN & BEBAN KERJA (ANJAB/ABK)
+export interface AnjabAbkItem {
+  id: string;
+  namaJabatan: string;
+  unitKerja: string;
+  jumlahPegawaiDibutuhkan: number;
+  jumlahPegawaiEksisting: number;
+  gapPegawai: number;
+  bebanKerjaPersen: number;
+  iktisarJabatan: string;
+}
+
+// DATASET NO. 18: INDEKS MANAJEMEN RISIKO (MRI)
+export interface MriItem {
+  periodePenilaian: string;
+  tahun: string;
+  skor: number; // Skala 1 - 5
+  level: string;
+  keterangan: string;
+  persentaseMitigasi: number;
+}
+

@@ -70,13 +70,12 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
   // Ekspor CSV Matriks Kategori
   const handleExportCsv = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'No,Kategori Kegiatan,Jumlah Pelaksanaan (Kali),Jumlah Tamu / Delegasi (Orang),Rata-rata Tamu per Sesi,% Kontribusi Tamu\n';
+    csvContent += 'No,Kategori Kegiatan,Jumlah Pelaksanaan (Kali),Jumlah Tamu / Delegasi (Orang),% Kontribusi Tamu\n';
     categoryMatrix.forEach((r, idx) => {
-      const avgTamu = Math.round(r.jumlahTamu / r.jumlahPelaksanaan);
       const pct = ((r.jumlahTamu / grandTotalTamu) * 100).toFixed(1);
-      csvContent += `${idx + 1},"${r.kategori}",${r.jumlahPelaksanaan},${r.jumlahTamu},${avgTamu},${pct}%\n`;
+      csvContent += `${idx + 1},"${r.kategori}",${r.jumlahPelaksanaan},${r.jumlahTamu},${pct}%\n`;
     });
-    csvContent += `Total,Semua Kategori,${grandTotalPelaksanaan},${grandTotalTamu},${Math.round(grandTotalTamu / grandTotalPelaksanaan)},100.0%\n`;
+    csvContent += `Total,Semua Kategori,${grandTotalPelaksanaan},${grandTotalTamu},100.0%\n`;
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
@@ -172,7 +171,7 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
       </div>
 
       {/* 3. Ringkasan Eksekutif Matriks */}
-      <div className="px-4 py-3 bg-purple-50/30 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+      <div className="px-4 py-3 bg-purple-50/30 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
             <Users className="w-4 h-4" />
@@ -193,18 +192,6 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
             <span className="text-[10.5px] font-medium text-slate-500 block">Total Pelaksanaan Kegiatan</span>
             <span className="text-sm font-black font-mono text-blue-900">
               {grandTotalPelaksanaan} Kali Sesi
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-            <Layers className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10.5px] font-medium text-slate-500 block">Rata-rata Tamu per Sesi</span>
-            <span className="text-sm font-black font-mono text-emerald-900">
-              {Math.round(grandTotalTamu / grandTotalPelaksanaan)} Orang / Sesi
             </span>
           </div>
         </div>
@@ -255,7 +242,7 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
                         </span>
                       </div>
                       <span className="text-[11px] font-mono text-slate-400">
-                        Rata² {avgTamu} Tamu / Sesi
+                        {item.jumlahPelaksanaan} Sesi Kegiatan
                       </span>
                     </div>
 
@@ -308,7 +295,6 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
                   <th className="py-2.5 px-4">Kategori Kegiatan</th>
                   <th className="py-2.5 px-4 text-right">Jumlah Pelaksanaan</th>
                   <th className="py-2.5 px-4 text-right">Jumlah Tamu / Delegasi</th>
-                  <th className="py-2.5 px-4 text-right">Rata-rata Tamu/Sesi</th>
                   <th className="py-2.5 px-4 text-right">% Kontribusi Tamu</th>
                   <th className="py-2.5 px-4 w-40 text-center">Intensitas Tamu</th>
                 </tr>
@@ -317,7 +303,6 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
                 {categoryMatrix.map((item, idx) => {
                   const percentage = ((item.jumlahTamu / grandTotalTamu) * 100).toFixed(1);
                   const barWidth = Math.round((item.jumlahTamu / maxTamu) * 100);
-                  const avgTamu = Math.round(item.jumlahTamu / item.jumlahPelaksanaan);
 
                   return (
                     <tr key={item.kategori} className="hover:bg-purple-50/30 transition-colors">
@@ -332,9 +317,6 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
                       </td>
                       <td className="py-3 px-4 text-right font-mono font-black text-purple-800">
                         {item.jumlahTamu.toLocaleString('id-ID')} Orang
-                      </td>
-                      <td className="py-3 px-4 text-right font-mono font-semibold text-slate-700">
-                        {avgTamu} Org/Sesi
                       </td>
                       <td className="py-3 px-4 text-right font-mono font-semibold text-slate-700">
                         {percentage}%
@@ -360,9 +342,6 @@ export const InvestasiPromosiCard: React.FC<InvestasiPromosiCardProps> = ({
                   </td>
                   <td className="py-3 px-4 text-right font-mono font-black text-purple-900">
                     {grandTotalTamu.toLocaleString('id-ID')} Orang
-                  </td>
-                  <td className="py-3 px-4 text-right font-mono font-black text-slate-900">
-                    {Math.round(grandTotalTamu / grandTotalPelaksanaan)} Org/Sesi
                   </td>
                   <td className="py-3 px-4 text-right font-mono font-black">
                     100,0%

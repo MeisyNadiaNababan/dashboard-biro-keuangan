@@ -13,6 +13,7 @@ import { KekInvestasiJenisCard } from './KekInvestasiJenisCard';
 import { KekPerizinanSheetSwap } from './KekPerizinanSheetSwap';
 import { KekProfilCard } from './KekProfilCard';
 import { KekKamusRumusView } from './KekKamusRumusView';
+import { KekPerencanaanPipelineCard } from './KekPerencanaanPipelineCard';
 import {
   PieChart,
   Layers,
@@ -146,6 +147,25 @@ export const KekDashboard: React.FC<KekDashboardProps> = ({
       {/* VIEW ROUTING BASED ON HEADER SUB-MENUS */}
       {activeSubMenu === 'kamus_rumus' ? (
         <KekKamusRumusView />
+      ) : activeSubMenu === 'perencanaan_kek' ? (
+        /* Focused view on Daftar Perencanaan & Pengusulan KEK (Dataset 5) */
+        <div className="space-y-4">
+          <KekKpiRow
+            totalRealisasiInvestasi={totalRealisasi}
+            totalTargetInvestasi={totalTarget}
+            capaianInvestasiPersen={capaianInvestasiPersen}
+            totalPerizinanBerusaha={filteredPerizinanBerusahaCount}
+            totalNonPerizinan={filteredNonPerizinanCount}
+            totalPerizinanLainnya={filteredPerizinanLainnyaCount}
+            totalDokumenAnalisis={totalDokumenAnalisis}
+            totalAnalisisDitindaklanjuti={totalDitindaklanjuti}
+            capaianKajianPersen={capaianKajianPersen}
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+          <KekPerencanaanPipelineCard
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+        </div>
       ) : activeSubMenu === 'investasi' ? (
         /* Focused view on Investment */
         <div className="space-y-4">
@@ -200,9 +220,9 @@ export const KekDashboard: React.FC<KekDashboardProps> = ({
           />
         </div>
       ) : (
-        /* DEFAULT EXECUTIVE VIEW: ALL 9 REQUESTED SECTIONS */
+        /* DEFAULT EXECUTIVE VIEW: CLEAN, ACCESSIBLE, HARMONIOUS */
         <div className="space-y-4">
-          {/* A. 5 KPI METRICS ROW (Clean model matching reference screenshot) */}
+          {/* A. 5 KPI METRICS ROW (Nilai Investasi & Perizinan KEK) */}
           <section id="kek-kpi-cards" aria-label="KPI Nilai Investasi dan Perizinan KEK">
             <KekKpiRow
               totalRealisasiInvestasi={totalRealisasi}
@@ -218,7 +238,14 @@ export const KekDashboard: React.FC<KekDashboardProps> = ({
             />
           </section>
 
-          {/* B. INVESTASI BERDASARKAN JENIS (PMA vs PMDN) */}
+          {/* B. DAFTAR PERENCANAAN / PENGUSULAN KEK (TABEL EKSEKUTIF BERSIH) */}
+          <section id="kek-perencanaan-pipeline" aria-label="Daftar Perencanaan dan Pengusulan KEK">
+            <KekPerencanaanPipelineCard
+              onOpenFormulaModal={onOpenFormulaModal}
+            />
+          </section>
+
+          {/* C. INVESTASI BERDASARKAN JENIS (PMA vs PMDN) */}
           <section id="kek-investasi-jenis" aria-label="Investasi Berdasarkan Jenis PMA dan PMDN">
             <KekInvestasiJenisCard
               investasiList={filteredInvestasi}
@@ -226,7 +253,7 @@ export const KekDashboard: React.FC<KekDashboardProps> = ({
             />
           </section>
 
-          {/* C. TABEL INFORMASI PERIZINAN (SHEET SWAP: PERIZINAN ADM, NON ADM, LAINNYA) */}
+          {/* D. TABEL INFORMASI PERIZINAN (SHEET SWAP: PERIZINAN ADM, NON ADM, LAINNYA) */}
           <section id="kek-perizinan-sheet-swap" aria-label="Tabel Informasi Perizinan Sheet Swap">
             <KekPerizinanSheetSwap
               selectedKekFilter={selectedKek}
@@ -234,7 +261,7 @@ export const KekDashboard: React.FC<KekDashboardProps> = ({
             />
           </section>
 
-          {/* D. PROFIL KAWASAN EKONOMI KHUSUS (KAWASAN, LOKASI, LUAS AREA, KEGIATAN) */}
+          {/* E. PROFIL KAWASAN EKONOMI KHUSUS (KAWASAN, LOKASI, LUAS AREA, KEGIATAN) */}
           <section id="kek-profil-kawasan" aria-label="Profil Kawasan Ekonomi Khusus">
             <KekProfilCard
               selectedKek={selectedKek}

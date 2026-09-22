@@ -7,6 +7,9 @@ import {
   ModernisasiBluItem,
   PiagamRisikoItem,
   PekpppItem,
+  KontrakKinerjaItem,
+  AnjabAbkItem,
+  MriItem,
   BokmrFilterState,
 } from './types';
 
@@ -529,7 +532,125 @@ export const SOP_BOKMR_SUMMARY = {
   petaProsesBisnisLevel: 'Level 0 s.d Level 3 (Terstandarisasi SPBE)',
 };
 
-// 11. DEFAULT FILTER STATE
+// 11. DATASET NO. 5: PRESENTASI PEMENUHAN KONTRAK KINERJA BP BATAM (IKU TRIWULANAN)
+export const KONTRAK_KINERJA_IKU_DATA: KontrakKinerjaItem[] = [
+  {
+    id: 'kki_1',
+    triwulan: 'Triwulan I',
+    tahun: '2026',
+    unitKerja: 'Badan Usaha Pelabuhan',
+    sasaranStrategis: 'Optimalisasi Throughput Bongkar Muat Petikemas',
+    iku: 'Volume Arus Petikemas (TEUs)',
+    targetNilaiIku: 165000,
+    nilaiRealisasiIku: 172400,
+    capaianPersen: 104.5,
+    status: 'Tercapai',
+  },
+  {
+    id: 'kki_2',
+    triwulan: 'Triwulan I',
+    tahun: '2026',
+    unitKerja: 'Badan Usaha Rumah Sakit BP Batam',
+    sasaranStrategis: 'Peningkatan Mutu Akreditasi & Layanan Spesialistik',
+    iku: 'Tingkat Kepuasan Pasien (IKM Klinis)',
+    targetNilaiIku: 85.0,
+    nilaiRealisasiIku: 88.5,
+    capaianPersen: 104.1,
+    status: 'Tercapai',
+  },
+  {
+    id: 'kki_3',
+    triwulan: 'Triwulan I',
+    tahun: '2026',
+    unitKerja: 'Pusat Pelayanan Terpadu Satu Pintu',
+    sasaranStrategis: 'Kecepatan dan Ketepatan Penerbitan Izin Berusaha',
+    iku: 'Kepatuhan SLA Perizinan Berusaha (%)',
+    targetNilaiIku: 95.0,
+    nilaiRealisasiIku: 96.8,
+    capaianPersen: 101.9,
+    status: 'Tercapai',
+  },
+  {
+    id: 'kki_4',
+    triwulan: 'Triwulan I',
+    tahun: '2026',
+    unitKerja: 'Badan Usaha Fasilitas & Lingkungan',
+    sasaranStrategis: 'Keandalan Distribusi Air Minum Perpipaan',
+    iku: 'Kontinuitas Aliran Air 24 Jam (%)',
+    targetNilaiIku: 96.0,
+    nilaiRealisasiIku: 94.2,
+    capaianPersen: 98.1,
+    status: 'On Track',
+  },
+  {
+    id: 'kki_5',
+    triwulan: 'Triwulan I',
+    tahun: '2026',
+    unitKerja: 'Badan Usaha Bandar Udara Hang Nadim',
+    sasaranStrategis: 'Konektivitas Rute & Keselamatan Penerbangan',
+    iku: 'On-Time Performance Penerbangan Komersial (%)',
+    targetNilaiIku: 88.0,
+    nilaiRealisasiIku: 89.6,
+    capaianPersen: 101.8,
+    status: 'Tercapai',
+  },
+];
+
+// 12. DATASET NO. 13: REKAPITULASI ANALISA JABATAN DAN BEBAN KERJA (ANJAB/ABK)
+export const ANJAB_ABK_DATA: AnjabAbkItem[] = [
+  {
+    id: 'abk_1',
+    namaJabatan: 'Analis Kebijakan & Manajemen Risiko',
+    unitKerja: 'Biro OKMR',
+    jumlahPegawaiDibutuhkan: 8,
+    jumlahPegawaiEksisting: 7,
+    gapPegawai: -1,
+    bebanKerjaPersen: 114.2,
+    iktisarJabatan: 'Perumusan profil risiko unit kerja dan asistensi maturitas SPIP',
+  },
+  {
+    id: 'abk_2',
+    namaJabatan: 'Auditor & Pengawas Kepatuhan Internal',
+    unitKerja: 'Satuan Pemeriksaan Intern',
+    jumlahPegawaiDibutuhkan: 14,
+    jumlahPegawaiEksisting: 12,
+    gapPegawai: -2,
+    bebanKerjaPersen: 116.6,
+    iktisarJabatan: 'Pemeriksaan kepatuhan regulasi operasional dan review LAKIP',
+  },
+  {
+    id: 'abk_3',
+    namaJabatan: 'Analis Akuntabilitas Kinerja (SAKIP)',
+    unitKerja: 'Biro OKMR',
+    jumlahPegawaiDibutuhkan: 6,
+    jumlahPegawaiEksisting: 6,
+    gapPegawai: 0,
+    bebanKerjaPersen: 100.0,
+    iktisarJabatan: 'Evaluasi cascading kinerja organisasi dan pelaporan LKjIP',
+  },
+  {
+    id: 'abk_4',
+    namaJabatan: 'Petugas Pengelolaan Pengaduan Publik',
+    unitKerja: 'Pusat PTSP',
+    jumlahPegawaiDibutuhkan: 10,
+    jumlahPegawaiEksisting: 9,
+    gapPegawai: -1,
+    bebanKerjaPersen: 111.1,
+    iktisarJabatan: 'Verifikasi, mediasi, dan monitoring tindak lanjut SP4N LAPOR!',
+  },
+];
+
+// 13. DATASET NO. 18: NILAI MANAGEMEN RESIKO INDEKS (MRI)
+export const MRI_DATA: MriItem = {
+  periodePenilaian: 'Tahun 2025/2026',
+  tahun: '2026',
+  skor: 3.65,
+  level: 'Tingkat 3 (Terkelola / Managed)',
+  keterangan: 'Praktik manajemen risiko telah terintegrasi dalam perencanaan strategis dan evaluasi BLU BP Batam.',
+  persentaseMitigasi: 94.2,
+};
+
+// 14. DEFAULT FILTER STATE
 export const DEFAULT_BOKMR_FILTERS: BokmrFilterState = {
   tahun: '2026',
   klaster: 'Semua',

@@ -124,9 +124,6 @@ export const JenisPembangunanCard: React.FC<JenisPembangunanCardProps> = ({
                     <span className="text-slate-600 font-medium font-mono text-[11px]">
                       Rp {(item.totalPagu / 1000000000).toFixed(1)} M
                     </span>
-                    <span className="bg-sky-100 text-sky-800 font-bold px-1.5 py-0.2 rounded text-[10px]">
-                      {percentageOfTotal}%
-                    </span>
                   </div>
                 </div>
 

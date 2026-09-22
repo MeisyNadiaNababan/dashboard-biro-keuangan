@@ -42,6 +42,9 @@ import {
   Gavel,
   FolderOpen,
   Plane,
+  Map,
+  Compass,
+  BarChart3,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -49,6 +52,7 @@ interface HeaderProps {
   onOpenExportModal?: () => void;
   onOpenTableauGuide?: () => void;
   onOpenUnitsDrawer?: () => void;
+  onOpenVisualCatalog?: () => void;
   onRefresh?: () => void;
   isRefreshing?: boolean;
   activeSheet: string;
@@ -61,6 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenExportModal,
   onOpenTableauGuide,
   onOpenUnitsDrawer,
+  onOpenVisualCatalog,
   onRefresh,
   isRefreshing = false,
   activeSheet,
@@ -116,6 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (activeUnitId === 'dit-pengembangan-kek') {
       return [
         { id: 'ikhtisar', label: 'Ikhtisar Eksekutif KEK', icon: LayoutDashboard },
+        { id: 'perencanaan_kek', label: 'Daftar Perencanaan & Usulan KEK', icon: Compass },
         { id: 'investasi', label: 'Investasi PMA vs PMDN (Dataset 1)', icon: TrendingUp },
         { id: 'sheet_swap', label: 'Sheet Swap Perizinan (DS 3, 4, 7)', icon: ArrowRightLeft },
         { id: 'profil_kek', label: 'Profil 3 KEK (Dataset 2)', icon: MapPin },
@@ -302,6 +308,21 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <div className="h-4 w-px bg-slate-300 mx-1 hidden sm:block" />
+
+          {/* Katalog Nama Visualisasi Button */}
+          {onOpenVisualCatalog && (
+            <button
+              onClick={onOpenVisualCatalog}
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 rounded-md cursor-pointer text-xs font-bold transition-all shadow-2xs"
+              title="Daftar Nama Visualisasi di Setiap Informasi Seluruh Dashboard"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-sky-600" />
+              <span>Katalog Nama Visualisasi</span>
+              <span className="hidden lg:inline text-[9.5px] bg-sky-700 text-white px-1.5 py-0.2 rounded font-mono">
+                Semua Dashboard
+              </span>
+            </button>
+          )}
         </div>
 
         {/* Right Action: Export / Download */}

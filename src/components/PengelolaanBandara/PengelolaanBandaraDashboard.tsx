@@ -153,7 +153,7 @@ export const PengelolaanBandaraDashboard: React.FC = () => {
             totalFilteredCount={filteredOperatorCount}
           />
 
-          {/* 3 HERO KPIS (PNBP, FLIGHTS, PASSENGERS) */}
+          {/* 5 HERO KPIS (PNBP, FLIGHTS, PASSENGERS, SLF, KARGO EMPU) */}
           <BandaraKpis onOpenFormulaModal={handleOpenFormulaModal} />
 
           {/* DUA VISUALISASI INOVATIF UTAMA SESUAI PERMINTAAN USER (ITEMS 4 & 5) */}

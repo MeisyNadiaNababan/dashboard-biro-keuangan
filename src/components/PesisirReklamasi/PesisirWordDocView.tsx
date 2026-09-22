@@ -120,7 +120,7 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
                   {kpi.kpi1_luasIzinInvestasiHa.toLocaleString('id-ID')} Hektar
                 </span>
                 <p className="text-[10px] text-slate-600 mt-1">
-                  Luas Izin Pemanfaatan Kawasan Pesisir &amp; Izin Reklamasi untuk Investasi ({kpi.kpi1_totalIzinTerbit} Proyek, Total Rp {kpi.kpi1_totalNilaiInvestasiT} T)
+                  Luas Izin Pemanfaatan Kawasan Pesisir &amp; Izin Reklamasi untuk Investasi ({kpi.kpi1_totalIzinTerbit} Izin PKKPRL, Rata-rata {kpi.kpi1_rataRataLuasHa} Ha/Izin)
                 </p>
               </div>
 
@@ -164,11 +164,12 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
                 <tr className="bg-slate-100 text-slate-800">
                   <th className="p-2 border border-slate-300">No</th>
                   <th className="p-2 border border-slate-300">Nama Perusahaan</th>
+                  <th className="p-2 border border-slate-300">Nomor Izin PKKPRL</th>
+                  <th className="p-2 border border-slate-300">Koordinat</th>
+                  <th className="p-2 border border-slate-300">Wilayah</th>
                   <th className="p-2 border border-slate-300">Luas (Ha)</th>
                   <th className="p-2 border border-slate-300">Luas (m²)</th>
-                  <th className="p-2 border border-slate-300">Tahun</th>
-                  <th className="p-2 border border-slate-300">Tahun Terbit</th>
-                  <th className="p-2 border border-slate-300">Sektor Industri</th>
+                  <th className="p-2 border border-slate-300 text-center">Tahun Penerbitan</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,11 +177,12 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
                   <tr key={item.id}>
                     <td className="p-2 border border-slate-300 text-center">{idx + 1}</td>
                     <td className="p-2 border border-slate-300 font-bold">{item.namaPerusahaan}</td>
-                    <td className="p-2 border border-slate-300 font-mono">{item.luasHa.toFixed(1)} Ha</td>
+                    <td className="p-2 border border-slate-300 font-mono">{item.nomorIzinPkkprl}</td>
+                    <td className="p-2 border border-slate-300 font-mono text-[10px]">{item.koordinat}</td>
+                    <td className="p-2 border border-slate-300">{item.wilayah}</td>
+                    <td className="p-2 border border-slate-300 font-mono font-bold">{item.luasHa.toFixed(1)} Ha</td>
                     <td className="p-2 border border-slate-300 font-mono">{item.luasM2.toLocaleString('id-ID')} m²</td>
-                    <td className="p-2 border border-slate-300 text-center font-mono">{item.tahun}</td>
                     <td className="p-2 border border-slate-300 text-center font-mono font-bold">{item.tahunPenerbitan}</td>
-                    <td className="p-2 border border-slate-300">{item.sektorIndustri}</td>
                   </tr>
                 ))}
               </tbody>
@@ -193,7 +195,7 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
               III. DATA RENCANA PEMANFAATAN WILAYAH PESISIR DAN REKLAMASI (DATASET NO. 2)
             </h4>
             <p className="text-xs text-slate-600">
-              Kolom wajib: Nama Perusahaan, Luas (Ha), Tahun Penerbitan, dan Luas Konversi (m²).
+              Atribut Spasial Resmi: Nama Perusahaan, Nomor Izin PKKPRL, Koordinat, Wilayah, Status Kegiatan, Luas (Ha / m²), dan Tahun Penerbitan.
             </p>
 
             <table className="w-full text-left border-collapse text-xs">
@@ -201,10 +203,12 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
                 <tr className="bg-slate-100 text-slate-800">
                   <th className="p-2 border border-slate-300">No</th>
                   <th className="p-2 border border-slate-300">Nama Perusahaan</th>
+                  <th className="p-2 border border-slate-300">Nomor Izin PKKPRL</th>
+                  <th className="p-2 border border-slate-300">Koordinat</th>
+                  <th className="p-2 border border-slate-300">Wilayah</th>
+                  <th className="p-2 border border-slate-300">Status Kegiatan</th>
                   <th className="p-2 border border-slate-300">Luas (Ha)</th>
-                  <th className="p-2 border border-slate-300">Tahun Penerbitan</th>
-                  <th className="p-2 border border-slate-300">Luas (m²)</th>
-                  <th className="p-2 border border-slate-300">Zona Rencana Ruang Laut</th>
+                  <th className="p-2 border border-slate-300 text-center">Tahun Penerbitan</th>
                 </tr>
               </thead>
               <tbody>
@@ -212,10 +216,12 @@ export const PesisirWordDocView: React.FC<PesisirWordDocViewProps> = ({ onBack }
                   <tr key={item.id}>
                     <td className="p-2 border border-slate-300 text-center">{idx + 1}</td>
                     <td className="p-2 border border-slate-300 font-bold">{item.namaPerusahaan}</td>
-                    <td className="p-2 border border-slate-300 font-mono">{item.luasHa.toFixed(1)} Ha</td>
+                    <td className="p-2 border border-slate-300 font-mono">{item.nomorIzinPkkprl}</td>
+                    <td className="p-2 border border-slate-300 font-mono text-[10px]">{item.koordinat}</td>
+                    <td className="p-2 border border-slate-300">{item.wilayah}</td>
+                    <td className="p-2 border border-slate-300">{item.statusKegiatan}</td>
+                    <td className="p-2 border border-slate-300 font-mono font-bold">{item.luasHa.toFixed(1)} Ha</td>
                     <td className="p-2 border border-slate-300 text-center font-mono font-bold">{item.tahunPenerbitan}</td>
-                    <td className="p-2 border border-slate-300 font-mono">{item.luasM2.toLocaleString('id-ID')} m²</td>
-                    <td className="p-2 border border-slate-300">{item.zonaRencana}</td>
                   </tr>
                 ))}
               </tbody>

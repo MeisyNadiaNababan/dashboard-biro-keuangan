@@ -15,6 +15,8 @@ import {
   DollarSign as DollarIcon,
   Info as InfoIcon,
   CheckCircle2,
+  Plane,
+  ArrowRight,
 } from 'lucide-react';
 import {
   AIRPORT_TOP_ROUTES,
@@ -71,11 +73,11 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
           <div className="flex items-center gap-2">
             <span className="w-2 h-5 bg-sky-600 rounded-full inline-block" />
             <h3 className="text-sm font-bold text-slate-900">
-              Pemantauan Strategis Pimpinan: Rute Langsung &amp; Tren Realisasi PNBP
+              Konektivitas Jaringan Rute &amp; Realisasi PNBP
             </h3>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Visualisasi Grafis Standar Tableau: Rute Penerbangan Langsung (DS #9) &amp; Tren Realisasi PNBP Kebandarudaraan (DS #1)
+            Monitoring frekuensi penerbangan rute langsung (Dataset #9) dan tren penerimaan kas PNBP bulanan (Dataset #1)
           </p>
         </div>
 
@@ -123,7 +125,7 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
               className="inline-flex items-center gap-1 text-[11px] text-sky-700 hover:text-sky-900 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200 cursor-pointer font-medium"
             >
               <InfoIcon className="w-3.5 h-3.5" />
-              <span>Formula Rute Langsung di Tableau</span>
+              <span>Formula Rute Langsung</span>
             </button>
           </div>
 
@@ -139,7 +141,7 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
                 <XAxis
                   type="number"
                   tick={{ fill: '#64748B', fontSize: 11 }}
-                  unit=" Fl/W"
+                  unit=" Fl/Mg"
                 />
                 <YAxis
                   dataKey="kotaTujuan"
@@ -149,11 +151,18 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
                 />
                 <Tooltip
                   formatter={(value: any, name: any) => {
-                    if (name === 'frekuensiMingguan') return [`${value} Flights / Minggu`, 'Frekuensi Penerbangan'];
+                    if (name === 'frekuensiMingguan') return [`${value} Penerbangan / Minggu`, 'Frekuensi Mingguan'];
                     return [value, name];
                   }}
-                  labelFormatter={(label: any) => `Rute: BTH ⇄ ${label}`}
-                  contentStyle={{ backgroundColor: '#0F172A', color: '#F8FAFC', borderRadius: '8px', fontSize: '11px' }}
+                  labelFormatter={(label: any) => `Rute Langsung: Batam (BTH) ➔ ${label}`}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    color: '#0f172a',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '11px',
+                  }}
                 />
                 <Bar dataKey="frekuensiMingguan" radius={[0, 6, 6, 0]}>
                   {filteredRoutes.map((entry, index) => (
@@ -177,28 +186,67 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
             </ResponsiveContainer>
           </div>
 
-          {/* INTUITIVE ROUTE METRICS TABLEAU-FRIENDLY STRIP */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
-            {filteredRoutes.slice(0, 6).map((route) => (
-              <div
-                key={route.kodeRute}
-                className="bg-slate-50 rounded-xl p-3 border border-slate-200 hover:border-sky-300 transition-colors flex items-center justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-900">{route.kodeRute}</span>
-                    <span className="text-[11px] text-slate-500">({route.kotaTujuan})</span>
+          {/* KARTU KONEKTIVITAS RUTE LANGSUNG & JUMLAH FLIGHT KESELURUHAN (HANYA RUTE & TOTAL FLIGHT) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 pt-3 border-t border-slate-100">
+            {filteredRoutes.map((route) => {
+              const destCode = route.kodeRute.replace('BTH-', '');
+              const annualFlights = route.frekuensiMingguan * 52;
+              return (
+                <div
+                  key={route.kodeRute}
+                  className="bg-white rounded-xl p-3.5 border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Visual Konektivitas Rute Langsung */}
+                    <div className="flex items-center justify-between gap-1 mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-900 font-bold text-xs font-mono">
+                          BTH
+                        </span>
+                        <div className="flex items-center text-sky-600">
+                          <Plane className="w-3.5 h-3.5 rotate-90 text-sky-600" />
+                          <ArrowRight className="w-3.5 h-3.5 -ml-1 text-sky-600" />
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-bold text-xs font-mono">
+                          {destCode}
+                        </span>
+                      </div>
+                      <span className="text-[9.5px] font-bold tracking-wide uppercase px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+                        Rute Langsung
+                      </span>
+                    </div>
+
+                    <div className="text-xs font-bold text-slate-900 mb-0.5 line-clamp-1" title={route.kotaTujuan}>
+                      {route.kotaTujuan}
+                    </div>
+                    <div className="text-[11px] text-slate-500 line-clamp-1">
+                      {route.namaBandara}
+                    </div>
                   </div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">
-                    Pax: <strong className="text-slate-800">{formatNumber(route.totalPenumpangTahunan)}</strong> / Thn
+
+                  {/* Jumlah Flight Keseluruhan (Tahunan & Mingguan) */}
+                  <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block">
+                        Jumlah Flight
+                      </span>
+                      <span className="text-xs font-semibold text-sky-700">
+                        {route.frekuensiMingguan} Flight / Minggu
+                      </span>
+                    </div>
+
+                    <div className="text-right">
+                      <div className="text-sm font-black text-slate-900 font-mono tracking-tight">
+                        {formatNumber(annualFlights)}
+                      </div>
+                      <span className="text-[10px] font-semibold text-slate-600">
+                        Total Flight / Thn
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs font-black text-sky-700">{route.frekuensiMingguan} Fl/Mg</div>
-                  <div className="text-[10px] text-emerald-700 font-semibold">SLF: {route.seatLoadFactor}%</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -217,7 +265,7 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
               className="inline-flex items-center gap-1 text-[11px] text-amber-800 hover:text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 cursor-pointer font-medium"
             >
               <InfoIcon className="w-3.5 h-3.5" />
-              <span>Formula PNBP di Tableau</span>
+              <span>Formula PNBP</span>
             </button>
           </div>
 
@@ -241,7 +289,14 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
                     if (name === 'targetM') return [`Rp ${val} Miliar`, 'Target Anggaran'];
                     return [`Rp ${val} Miliar`, name];
                   }}
-                  contentStyle={{ backgroundColor: '#0F172A', color: '#F8FAFC', borderRadius: '8px', fontSize: '11px' }}
+                  contentStyle={{
+                    backgroundColor: '#ffffff',
+                    color: '#0f172a',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '11px',
+                  }}
                 />
                 <Legend
                   wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }}

@@ -142,7 +142,7 @@ export const PDSI_KPI_METRICS: PdsiKpiMetric[] = [
   },
 ];
 
-// Data Center Racks (Item #8 di PDF)
+// Data Center Racks (Item #8 di PDF: DATA RAK DATA CENTER)
 export interface DcRackItem {
   id: string;
   ruangan: string;
@@ -150,6 +150,10 @@ export interface DcRackItem {
   totalRak: number;
   rakTerisi: number;
   rakKosong: number;
+  jumlahRakTerisi: number;
+  jumlahRakKosong: number;
+  tanggalRekapAwal: string;
+  tanggalRekapAkhir: string;
   okupansiPersen: number;
   suhuRataRata: string;
   pueScore: number;
@@ -163,6 +167,10 @@ export const DC_RACKS_DATA: DcRackItem[] = [
     totalRak: 26,
     rakTerisi: 22,
     rakKosong: 4,
+    jumlahRakTerisi: 22,
+    jumlahRakKosong: 4,
+    tanggalRekapAwal: '01/01/2026',
+    tanggalRekapAkhir: '31/03/2026',
     okupansiPersen: 84.6,
     suhuRataRata: '19.4°C',
     pueScore: 1.42,
@@ -174,6 +182,10 @@ export const DC_RACKS_DATA: DcRackItem[] = [
     totalRak: 12,
     rakTerisi: 8,
     rakKosong: 4,
+    jumlahRakTerisi: 8,
+    jumlahRakKosong: 4,
+    tanggalRekapAwal: '01/01/2026',
+    tanggalRekapAkhir: '31/03/2026',
     okupansiPersen: 66.7,
     suhuRataRata: '20.1°C',
     pueScore: 1.48,
@@ -185,6 +197,10 @@ export const DC_RACKS_DATA: DcRackItem[] = [
     totalRak: 4,
     rakTerisi: 3,
     rakKosong: 1,
+    jumlahRakTerisi: 3,
+    jumlahRakKosong: 1,
+    tanggalRekapAwal: '01/01/2026',
+    tanggalRekapAkhir: '31/03/2026',
     okupansiPersen: 75.0,
     suhuRataRata: '20.5°C',
     pueScore: 1.45,
@@ -820,7 +836,328 @@ export const FIBER_OPTIC_ROUTES: FiberOpticRoute[] = [
   },
 ];
 
-// Data Aplikasi BP Batam (Item #14 di PDF: DAFTAR APLIKASI)
+// =========================================================================
+// DATASET NO. 5 (Hal. 41): DATA JALUR FIBER OPTIC (FO)
+// Atribut Resmi: TAHUN, BAGIAN WILAYAH, LOKASI
+// =========================================================================
+export interface PdsiJalurFoItem {
+  id: string;
+  tahun: string;
+  bagianWilayah: string;
+  lokasi: string;
+  panjangKm?: number;
+  kapasitasCore?: number;
+  statusKoneksi?: 'Aktif Normal' | 'Optimal' | 'Siaga Redundan';
+  tipeJalur?: string;
+}
+
+export const DATA_JALUR_FIBER_OPTIC: PdsiJalurFoItem[] = [
+  {
+    id: 'fo-jlr-01',
+    tahun: '2026',
+    bagianWilayah: 'Batam Kota',
+    lokasi: 'Koridor Pusat Pemerintahan Gedung BIDA Batam Centre - Kantor Walikota & DPRD',
+    panjangKm: 14.8,
+    kapasitasCore: 96,
+    statusKoneksi: 'Aktif Normal',
+    tipeJalur: 'Backbone Ring 1',
+  },
+  {
+    id: 'fo-jlr-02',
+    tahun: '2026',
+    bagianWilayah: 'Batu Ampar',
+    lokasi: 'Trunk Dermaga Peti Kemas Batu Ampar - Kantor Bea Cukai & Hub Terminal Logistik',
+    panjangKm: 18.5,
+    kapasitasCore: 72,
+    statusKoneksi: 'Aktif Normal',
+    tipeJalur: 'Interkoneksi Maritim',
+  },
+  {
+    id: 'fo-jlr-03',
+    tahun: '2026',
+    bagianWilayah: 'Sekupang',
+    lokasi: 'Jalur Replikasi Disaster Recovery Center (DRC) Sekupang - RSBP Batam & Pelabuhan Domestik',
+    panjangKm: 26.4,
+    kapasitasCore: 96,
+    statusKoneksi: 'Optimal',
+    tipeJalur: 'Backbone Replikasi DRC',
+  },
+  {
+    id: 'fo-jlr-04',
+    tahun: '2026',
+    bagianWilayah: 'Nongsa',
+    lokasi: 'Kawasan Ekonomi Khusus (KEK) Nongsa Digital Park - Hub Data Center & Kabel Laut',
+    panjangKm: 22.1,
+    kapasitasCore: 96,
+    statusKoneksi: 'Optimal',
+    tipeJalur: 'Konektivitas KEK Digital',
+  },
+  {
+    id: 'fo-jlr-05',
+    tahun: '2026',
+    bagianWilayah: 'Kabil / Nongsa Selatan',
+    lokasi: 'Kawasan Industri Terpadu Kabil - Pelabuhan Curah CPO & Fasilitas KPLI B3',
+    panjangKm: 19.3,
+    kapasitasCore: 48,
+    statusKoneksi: 'Aktif Normal',
+    tipeJalur: 'Distribusi Industri',
+  },
+  {
+    id: 'fo-jlr-06',
+    tahun: '2026',
+    bagianWilayah: 'Batam Kota / Hang Nadim',
+    lokasi: 'Spur Link Terminal Bandara Hang Nadim - KEK Kedirgantaraan Batam Aero Technic (BAT)',
+    panjangKm: 16.7,
+    kapasitasCore: 48,
+    statusKoneksi: 'Aktif Normal',
+    tipeJalur: 'Spur Link Bandara',
+  },
+  {
+    id: 'fo-jlr-07',
+    tahun: '2026',
+    bagianWilayah: 'Lubuk Baja / Nagoya',
+    lokasi: 'Sentra Finansial Nagoya - Perkantoran Perbankan Mitra & Pelayanan Terpadu',
+    panjangKm: 12.4,
+    kapasitasCore: 72,
+    statusKoneksi: 'Siaga Redundan',
+    tipeJalur: 'Distribusi Komersial',
+  },
+  {
+    id: 'fo-jlr-08',
+    tahun: '2026',
+    bagianWilayah: 'Batu Aji / Sagulung',
+    lokasi: 'Kawasan Pelayanan Publik Terpadu Selatan - Koridor Mukakuning Industri & Simpang Barelang',
+    panjangKm: 21.0,
+    kapasitasCore: 48,
+    statusKoneksi: 'Aktif Normal',
+    tipeJalur: 'Distribusi Pelayanan',
+  },
+];
+
+// =========================================================================
+// DATASET NO. 9 (Hal. 41-42): DAFTAR SOFTWARE BP BATAM
+// Atribut Resmi: ID, NAMA SOFTWARE, DESKRIPSI, TIPE PERANGKAT LUNAK, JENIS SISTEM OPERASI,
+// JENIS SISTEM UTILITAS, JENIS SISTEM DATABASE, JENIS LISENSI, PEMILIK LISENSI, VALIDASI LISENSI
+// =========================================================================
+export interface PdsiSoftwareItem {
+  id: string;
+  namaSoftware: string;
+  deskripsi: string;
+  tipePerangkatLunak: string;
+  jenisSistemOperasi: string;
+  jenisSistemUtilitas: string;
+  jenisSistemDatabase: string;
+  jenisLisensi: string;
+  pemilikLisensi: string;
+  validasiLisensi: string;
+  kategori: string;
+}
+
+export const DAFTAR_SOFTWARE_BP_BATAM: PdsiSoftwareItem[] = [
+  {
+    id: 'SW-01',
+    namaSoftware: 'VMware vSphere Enterprise Plus',
+    deskripsi: 'Platform virtualisasi server bare-metal hypervisor untuk konsolidasi node komputasi Data Center',
+    tipePerangkatLunak: 'Sistem Virtualisasi Server Hypervisor',
+    jenisSistemOperasi: 'VMware ESXi / Linux Core',
+    jenisSistemUtilitas: 'vCenter Server High Availability & DRS',
+    jenisSistemDatabase: 'Embedded PostgreSQL Database',
+    jenisLisensi: 'Perpetual Enterprise License with SnS',
+    pemilikLisensi: 'BP Batam (PDSI)',
+    validasiLisensi: 'Aktif (Valid s.d. 2027)',
+    kategori: 'Virtualisasi & Cloud',
+  },
+  {
+    id: 'SW-02',
+    namaSoftware: 'Oracle Database Enterprise Edition 19c',
+    deskripsi: 'Sistem manajemen basis data relasional enterprise mission-critical transaksi SIMKEU & Lahan',
+    tipePerangkatLunak: 'RDBMS (Relational Database Management System)',
+    jenisSistemOperasi: 'Oracle Linux / Red Hat Enterprise Linux 8/9',
+    jenisSistemUtilitas: 'Oracle Data Guard & Real Application Clusters (RAC)',
+    jenisSistemDatabase: 'Oracle Database 19c Multi-Tenant',
+    jenisLisensi: 'Processor License Enterprise',
+    pemilikLisensi: 'BP Batam',
+    validasiLisensi: 'Aktif (Support Contract Valid)',
+    kategori: 'Database Server',
+  },
+  {
+    id: 'SW-03',
+    namaSoftware: 'Red Hat Enterprise Linux (RHEL 9)',
+    deskripsi: 'Sistem operasi server standar enterprise untuk container microservices dan database production',
+    tipePerangkatLunak: 'Sistem Operasi Server Enterprise',
+    jenisSistemOperasi: 'Red Hat Enterprise Linux Server',
+    jenisSistemUtilitas: 'Red Hat Insights & SELinux Security Enforcing',
+    jenisSistemDatabase: 'Native PostgreSQL / MariaDB Support',
+    jenisLisensi: 'Enterprise Standard Subscription',
+    pemilikLisensi: 'BP Batam (PDSI)',
+    validasiLisensi: 'Aktif (Annual Subscription)',
+    kategori: 'Sistem Operasi',
+  },
+  {
+    id: 'SW-04',
+    namaSoftware: 'Microsoft Windows Server 2022 Datacenter',
+    deskripsi: 'Sistem operasi server manajemen Active Directory, Domain Controller, DNS, dan File Services',
+    tipePerangkatLunak: 'Sistem Operasi Server & Direktori Pengguna',
+    jenisSistemOperasi: 'Windows Server 2022 Datacenter 64-bit',
+    jenisSistemUtilitas: 'Active Directory Domain Services (AD DS) & Hyper-V',
+    jenisSistemDatabase: 'Microsoft SQL Server Express Built-in',
+    jenisLisensi: 'Core-based License Datacenter Edition',
+    pemilikLisensi: 'BP Batam',
+    validasiLisensi: 'Aktif (Volume Licensing Agreement)',
+    kategori: 'Sistem Operasi',
+  },
+  {
+    id: 'SW-05',
+    namaSoftware: 'FortiGate FortiOS Enterprise Security Suite',
+    deskripsi: 'Sistem operasi jaringan dan keamanan Next-Generation Firewall (NGFW) perlindungan border Data Center',
+    tipePerangkatLunak: 'Sistem Utilitas Keamanan Jaringan & UTM',
+    jenisSistemOperasi: 'FortiOS v7.4 Hardened Kernel',
+    jenisSistemUtilitas: 'Intrusion Prevention System (IPS), Anti-Botnet & SSL Inspection',
+    jenisSistemDatabase: 'FortiAnalyzer Internal Log Database',
+    jenisLisensi: 'Appliance Security Subscription',
+    pemilikLisensi: 'BP Batam (PDSI CSIRT)',
+    validasiLisensi: 'Aktif (Perpanjangan Tahunan)',
+    kategori: 'Keamanan / Cyber',
+  },
+  {
+    id: 'SW-06',
+    namaSoftware: 'Veeam Backup & Replication Enterprise Plus',
+    deskripsi: 'Perangkat lunak cadangan data otomatis, snapshot replikasi virtual machine dan Disaster Recovery ke DRC',
+    tipePerangkatLunak: 'Sistem Utilitas Pencadangan & Pemulihan Data',
+    jenisSistemOperasi: 'Windows Server / Linux Agent',
+    jenisSistemUtilitas: 'Instant VM Recovery & Deduplication Engine',
+    jenisSistemDatabase: 'PostgreSQL Dedicated Configuration DB',
+    jenisLisensi: 'Veeam Universal License (VUL)',
+    pemilikLisensi: 'BP Batam (PDSI)',
+    validasiLisensi: 'Aktif (Supported)',
+    kategori: 'Utilitas & Backup',
+  },
+  {
+    id: 'SW-07',
+    namaSoftware: 'Microsoft 365 Enterprise E3 Suite',
+    deskripsi: 'Platform kolaborasi email kedinasan, perkantoran cloud, SharePoint intranet, dan perlindungan identitas',
+    tipePerangkatLunak: 'Perangkat Lunak Produktivitas & Kolaborasi',
+    jenisSistemOperasi: 'Cross-platform (Windows, Mac, Web, Mobile)',
+    jenisSistemUtilitas: 'Microsoft Defender for Office 365 & Exchange Online',
+    jenisSistemDatabase: 'Azure Cosmos & Exchange Data Store',
+    jenisLisensi: 'User Subscription License (USL)',
+    pemilikLisensi: 'BP Batam',
+    validasiLisensi: 'Aktif (Enterprise Agreement)',
+    kategori: 'Produktivitas & Office',
+  },
+  {
+    id: 'SW-08',
+    namaSoftware: 'PostgreSQL Enterprise Open Source Edition',
+    deskripsi: 'Basis data open-source dengan ekstensi PostGIS untuk sistem informasi geografis pertanahan',
+    tipePerangkatLunak: 'Open Source Relational Database Management',
+    jenisSistemOperasi: 'Linux RHEL / Ubuntu Server',
+    jenisSistemUtilitas: 'pgAdmin Management & PostGIS Spatial Extension',
+    jenisSistemDatabase: 'PostgreSQL v16',
+    jenisLisensi: 'PostgreSQL License (Open Source Permissive)',
+    pemilikLisensi: 'BP Batam (Community / Supported)',
+    validasiLisensi: 'Valid (Verified Open Source)',
+    kategori: 'Database Server',
+  },
+  {
+    id: 'SW-09',
+    namaSoftware: 'CrowdStrike Falcon Endpoint Protection',
+    deskripsi: 'Platform EDR (Endpoint Detection and Response) pendeteksi ancaman malware dan ransomware real-time',
+    tipePerangkatLunak: 'Sistem Utilitas Keamanan Endpoint',
+    jenisSistemOperasi: 'Windows, Linux, macOS',
+    jenisSistemUtilitas: 'Falcon Threat Graph & Behavioral AI Prevention',
+    jenisSistemDatabase: 'Cloud-native Graph Database',
+    jenisLisensi: 'Cloud SaaS Subscription Per-Endpoint',
+    pemilikLisensi: 'BP Batam (CSIRT)',
+    validasiLisensi: 'Aktif (Validasi BSSN Compliance)',
+    kategori: 'Keamanan / Cyber',
+  },
+  {
+    id: 'SW-10',
+    namaSoftware: 'ArcGIS Enterprise Geodatabase Server',
+    deskripsi: 'Sistem pemetaan spasial dan manajemen data geospasial pertanahan perkotaan Batam',
+    tipePerangkatLunak: 'Sistem Informasi Geografis Enterprise',
+    jenisSistemOperasi: 'Windows Server 64-bit / Linux',
+    jenisSistemUtilitas: 'ArcGIS Server Manager & Portal for ArcGIS',
+    jenisSistemDatabase: 'Oracle Spatial / PostgreSQL PostGIS',
+    jenisLisensi: 'Esri Enterprise Agreement (Core License)',
+    pemilikLisensi: 'BP Batam (Direktorat Lahan & PDSI)',
+    validasiLisensi: 'Aktif (Maintenance Valid)',
+    kategori: 'Spasial & Pemetaan',
+  },
+];
+
+// =========================================================================
+// DATASET NO. 11 (Hal. 42): DATA KEPUASAN PELANGGAN DATA CENTRE
+// Atribut Resmi: TAHUN, KATEGORI, TINGKAT KEPUASAN, PERSENTASE
+// =========================================================================
+export interface PdsiKepuasanDcItem {
+  id: string;
+  tahun: string;
+  kategori: string;
+  tingkatKepuasan: string;
+  persentase: number;
+  skorSkala5: number;
+  jumlahResponden: number;
+}
+
+export const DATA_KEPUASAN_PELANGGAN_DC: PdsiKepuasanDcItem[] = [
+  {
+    id: 'csat-01',
+    tahun: '2026',
+    kategori: 'Keandalan Daya Listrik & Redundansi UPS',
+    tingkatKepuasan: 'Sangat Puas',
+    persentase: 96.5,
+    skorSkala5: 4.83,
+    jumlahResponden: 52,
+  },
+  {
+    id: 'csat-02',
+    tahun: '2026',
+    kategori: 'Keamanan Fisik 24/7 & Sistem Akses Biometrik',
+    tingkatKepuasan: 'Sangat Puas',
+    persentase: 95.8,
+    skorSkala5: 4.79,
+    jumlahResponden: 52,
+  },
+  {
+    id: 'csat-03',
+    tahun: '2026',
+    kategori: 'Kecepatan Respons Dukungan Teknis (SLA Helpdesk)',
+    tingkatKepuasan: 'Sangat Puas',
+    persentase: 94.2,
+    skorSkala5: 4.71,
+    jumlahResponden: 52,
+  },
+  {
+    id: 'csat-04',
+    tahun: '2026',
+    kategori: 'Stabilitas Suhu Ruang & Sistem Pendingin Presisi PAC',
+    tingkatKepuasan: 'Sangat Puas',
+    persentase: 93.6,
+    skorSkala5: 4.68,
+    jumlahResponden: 52,
+  },
+  {
+    id: 'csat-05',
+    tahun: '2026',
+    kategori: 'Kecepatan Bandwidth & Konektivitas Fiber Optic',
+    tingkatKepuasan: 'Sangat Puas',
+    persentase: 92.4,
+    skorSkala5: 4.62,
+    jumlahResponden: 52,
+  },
+  {
+    id: 'csat-06',
+    tahun: '2026',
+    kategori: 'Kemudahan Administrasi Izin Kunjungan Teknis',
+    tingkatKepuasan: 'Puas',
+    persentase: 90.5,
+    skorSkala5: 4.52,
+    jumlahResponden: 52,
+  },
+];
+
+// Data Aplikasi BP Batam (Item #14 di PDF: DATA APLIKASI BP BATAM)
 export interface BpBatamAppItem {
   id: string;
   namaAplikasi: string;
@@ -847,6 +1184,17 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
   },
   {
     id: 'app-02',
+    namaAplikasi: 'SIM-Billing & Kasir Penerimaan Kas Daerah',
+    uraianAplikasi: 'Penerbitan faktur tagihan retribusi, validasi pembayaran host-to-host bank dan cetak kuitansi digital',
+    unitOperasional: 'Biro Keuangan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Keuangan & Aset',
+    status: 'Aktif Operasional',
+    devYear: 2022,
+  },
+  {
+    id: 'app-03',
     namaAplikasi: 'Sistem Informasi Pengelolaan Lahan (LandMS / SIPRAJA)',
     uraianAplikasi: 'Penerbitan SKPT, alokasi lahan, revisi PL, faktur perubahan peruntukan, dan integrasi peta spasial',
     unitOperasional: 'Direktorat Pengelolaan Lahan',
@@ -857,7 +1205,18 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     devYear: 2020,
   },
   {
-    id: 'app-03',
+    id: 'app-04',
+    namaAplikasi: 'WebGIS Peta Alokasi & Tematik Lahan Batam',
+    uraianAplikasi: 'Visualisasi spasial batas persil, status hak pengelolaan, zona BSW dan overlay tata ruang',
+    unitOperasional: 'Direktorat Pengelolaan Lahan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Spasial GIS',
+    status: 'Aktif Operasional',
+    devYear: 2021,
+  },
+  {
+    id: 'app-05',
     namaAplikasi: 'E-Office & Tata Naskah Dinas Elektronik (TNDE)',
     uraianAplikasi: 'Distribusi surat masuk/keluar, disposisi pimpinan, nota dinas, dan pengarsipan digital',
     unitOperasional: 'Biro Umum',
@@ -868,10 +1227,21 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     devYear: 2022,
   },
   {
-    id: 'app-04',
+    id: 'app-06',
+    namaAplikasi: 'SIM-Aset & Inventarisasi BMN BP Batam',
+    uraianAplikasi: 'Pencatatan aset tetap, inventaris peralatan kantor, kendaraan dinas dan pelaporan SIMAK BMN',
+    unitOperasional: 'Biro Umum',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Keuangan & Aset',
+    status: 'Aktif Operasional',
+    devYear: 2020,
+  },
+  {
+    id: 'app-07',
     namaAplikasi: 'Batam Online Single Submission (IBOSS / MPP Digital)',
     uraianAplikasi: 'Portal layanan perizinan terpadu investasi, izin usaha kawasan, lalu lintas barang, dan perizinan non-OSS',
-    unitOperasional: 'PTSP BP Batam',
+    unitOperasional: 'Pusat Pelayanan Terpadu Satu Pintu (PTSP)',
     unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
     basisAplikasi: 'Web',
     kategoriAplikasi: 'Pelayanan Publik',
@@ -879,7 +1249,18 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     devYear: 2023,
   },
   {
-    id: 'app-05',
+    id: 'app-08',
+    namaAplikasi: 'Sistem Perizinan Usaha Kawasan & LKPM Online',
+    uraianAplikasi: 'Verifikasi kepatuhan investasi industri kawasan, tracking dokumen perizinan dan asistensi investor',
+    unitOperasional: 'Pusat Pelayanan Terpadu Satu Pintu (PTSP)',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Pelayanan Publik',
+    status: 'Aktif Operasional',
+    devYear: 2023,
+  },
+  {
+    id: 'app-09',
     namaAplikasi: 'Sistem Informasi Manajemen Pelabuhan (SIM-Pelabuhan)',
     uraianAplikasi: 'Manajemen pergerakan kapal (BMS), bongkar muat kargo peti kemas Batu Ampar, dan billing pass penumpang',
     unitOperasional: 'Direktorat Pengelolaan Kepelabuhanan',
@@ -890,7 +1271,18 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     devYear: 2021,
   },
   {
-    id: 'app-06',
+    id: 'app-10',
+    namaAplikasi: 'Vessel Traffic Management & Billing Pass Pelabuhan',
+    uraianAplikasi: 'Monitoring real-time kedatangan kapal, pergerakan peti kemas TOS dan tiket pass penumpang pelabuhan',
+    unitOperasional: 'Direktorat Pengelolaan Kepelabuhanan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Pelayanan Publik',
+    status: 'Aktif Operasional',
+    devYear: 2022,
+  },
+  {
+    id: 'app-11',
     namaAplikasi: 'SIMRS Gos v2 (Sistem Informasi Rumah Sakit BP Batam)',
     uraianAplikasi: 'Rekam medis elektronik (RME), registrasi rawat inap/jalan IGD, resep obat farmasi, dan billing klaim BPJS',
     unitOperasional: 'Badan Usaha Rumah Sakit (RSBP)',
@@ -899,6 +1291,61 @@ export const BP_BATAM_APPS_DATA: BpBatamAppItem[] = [
     kategoriAplikasi: 'Pelayanan Publik',
     status: 'Aktif Operasional',
     devYear: 2023,
+  },
+  {
+    id: 'app-12',
+    namaAplikasi: 'Portal Registrasi Pasien & RME RSBP Batam',
+    uraianAplikasi: 'Antrean daring mobile pasien poliklinik, rekam medis terpadu dan hasil laboratorium digital',
+    unitOperasional: 'Badan Usaha Rumah Sakit (RSBP)',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Hybrid',
+    kategoriAplikasi: 'Pelayanan Publik',
+    status: 'Aktif Operasional',
+    devYear: 2024,
+  },
+  {
+    id: 'app-13',
+    namaAplikasi: 'Sistem Informasi Distribusi Air & Billing SPAM Batam',
+    uraianAplikasi: 'Pencatatan meter air pelanggan, pemantauan tekanan pipa DMZ dan integrasi pembayaran air bersih',
+    unitOperasional: 'Badan Usaha SPAM, Fasilitas dan Lingkungan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Pelayanan Publik',
+    status: 'Aktif Operasional',
+    devYear: 2022,
+  },
+  {
+    id: 'app-14',
+    namaAplikasi: 'Sistem Monitoring Limbah B3 KPLI Kabil',
+    uraianAplikasi: 'Pencatatan pass masuk limbah B3 industri, manifes pengolahan limbah dan timbangan digital truk',
+    unitOperasional: 'Badan Usaha SPAM, Fasilitas dan Lingkungan',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Pelayanan Publik',
+    status: 'Aktif Operasional',
+    devYear: 2021,
+  },
+  {
+    id: 'app-15',
+    namaAplikasi: 'Bcare Helpdesk & Tiket Layanan TI BP Batam',
+    uraianAplikasi: 'Penerimaan aduan insiden TIK, permohonan modul, hak akses sistem dan monitoring SLA tim helpdesk',
+    unitOperasional: 'Pusat Data dan Sistem Informasi (PDSI)',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Administrasi Pemerintahan',
+    status: 'Aktif Operasional',
+    devYear: 2023,
+  },
+  {
+    id: 'app-16',
+    namaAplikasi: 'Portal Satu Data & Business Intelligence BP Batam',
+    uraianAplikasi: 'Repositori metadata data sektoral, visualisasi dashboard analitik kinerja dan pertukaran data API',
+    unitOperasional: 'Pusat Data dan Sistem Informasi (PDSI)',
+    unitPengembang: 'Pusat Data dan Sistem Informasi (PDSI)',
+    basisAplikasi: 'Web',
+    kategoriAplikasi: 'Administrasi Pemerintahan',
+    status: 'Aktif Operasional',
+    devYear: 2024,
   },
 ];
 

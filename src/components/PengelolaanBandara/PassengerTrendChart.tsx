@@ -156,6 +156,14 @@ export const PassengerTrendChart: React.FC<PassengerTrendChartProps> = ({ onOpen
                 fontSize={11}
               />
               <Tooltip
+                contentStyle={{
+                  backgroundColor: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  fontSize: '11px',
+                }}
                 formatter={(value: any, name: any) => [
                   `${formatNumber(Number(value))} Penumpang`,
                   name === 'penumpangDomestikArrival'
@@ -226,6 +234,14 @@ export const PassengerTrendChart: React.FC<PassengerTrendChartProps> = ({ onOpen
                 fontSize={11}
               />
               <Tooltip
+                contentStyle={{
+                  backgroundColor: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  fontSize: '11px',
+                }}
                 formatter={(value: any, name: any) => [
                   name === 'totalPenumpang'
                     ? `${formatNumber(Number(value))} Penumpang`
@@ -269,6 +285,14 @@ export const PassengerTrendChart: React.FC<PassengerTrendChartProps> = ({ onOpen
                 fontSize={11}
               />
               <Tooltip
+                contentStyle={{
+                  backgroundColor: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  fontSize: '11px',
+                }}
                 formatter={(value: any, name: any) => [
                   name === 'kargoTon'
                     ? `${formatNumber(Number(value))} Ton`

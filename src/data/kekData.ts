@@ -783,3 +783,359 @@ export const KEK_KAJIAN_DATA: KekKajianPerkin[] = [
     tanggalDokumen: '2025-12-20',
   },
 ];
+
+// ============================================================================
+// 4. DAFTAR PERENCANAAN / PENGUSULAN KAWASAN EKONOMI KHUSUS (KEK) [DATASET NO. 5]
+// Sesuai Daftar Data PDF: Halaman 10, Baris 5
+// Sifat Data: TERTUTUP | Jenis: DATA STATISTIK | Periode: JIKA UPDATE
+// Atribut Data: NAMA KEK, LOKASI, LUAS, KEGIATAN, PENGUSUL, REMARK
+// ============================================================================
+
+export type TahapanUsulanKek =
+  | 'Kajian Kelayakan & AMDAL'
+  | 'Verifikasi Usulan BP Batam'
+  | 'Rekomendasi Dewan Nasional KEK'
+  | 'Harmonisasi RPP / Menunggu Keppres';
+
+export interface KekPerencanaanItem {
+  id: number;
+  namaKek: string;
+  lokasi: string;
+  luas: number; // Dalam Hektar (Ha)
+  kegiatan: string;
+  pengusul: string;
+  remark: string;
+  // Field analitis untuk pimpinan & implementasi Tableau:
+  statusTahapan: TahapanUsulanKek;
+  progressPercent: number; // 0 - 100%
+  estimasiInvestasi: number; // Dalam Rupiah
+  targetTenagaKerja: number; // Orang
+  tahunUsulan: number;
+  targetOperasional: string;
+  sektorUtama: string;
+  delineasiWilayah: string;
+  kodeUsulan: string;
+}
+
+export const KEK_PERENCANAAN_DATA: KekPerencanaanItem[] = [
+  {
+    id: 501,
+    kodeUsulan: 'USL-KEK-2024-001',
+    namaKek: 'KEK Tanjung Sauh',
+    lokasi: 'Pulau Tanjung Sauh, Kecamatan Nongsa, Kota Batam',
+    luas: 840.67,
+    kegiatan: 'Industri Manufaktur Berat, Logistik Terpadu & Port Terminal, Energi Hijau (Solar Farm & LNG Hub), Perakitan Komponen Transportasi Maritim',
+    pengusul: 'PT Batam Shell Terminal & Konsorsium Panbil Industrial Group',
+    remark: 'Telah disetujui Sidang Dewan Nasional KEK. Tahap harmonisasi substansi Rancangan Peraturan Pemerintah (RPP) bersama Kemenko Perekonomian dan Setneg RI.',
+    statusTahapan: 'Harmonisasi RPP / Menunggu Keppres',
+    progressPercent: 92,
+    estimasiInvestasi: 199600000000000, // Rp 199,6 T
+    targetTenagaKerja: 45000,
+    tahunUsulan: 2024,
+    targetOperasional: '2026 - Q3',
+    sektorUtama: 'Industri Energi & Logistik Maritim',
+    delineasiWilayah: 'Pulau Tanjung Sauh Delineasi Penuh 840,67 Ha',
+  },
+  {
+    id: 502,
+    kodeUsulan: 'USL-KEK-2024-002',
+    namaKek: 'KEK Rempang Eco-City (Tahap I)',
+    lokasi: 'Kawasan Sembulang & Pasir Panjang, Pulau Rempang, Kecamatan Galang',
+    luas: 1200.0,
+    kegiatan: 'Industri Photovoltaic Solar Glass & Kaca Terintegrasi Skala Global (Xinyi), Pusat Riset Energi Baru Terbarukan (EBT), Kawasan Ekowisata Bahari',
+    pengusul: 'PT Makmur Elok Graha (MEG) bekerjasama dengan Konsorsium Xinyi Glass International',
+    remark: 'Dokumen AMDAL dan Studi Kelayakan Teknis telah diserahkan. Dalam proses verifikasi kesiapan tapak infrastruktur dasar dan konsolidasi alokasi ruang BP Batam.',
+    statusTahapan: 'Verifikasi Usulan BP Batam',
+    progressPercent: 68,
+    estimasiInvestasi: 175000000000000, // Rp 175,0 T
+    targetTenagaKerja: 35000,
+    tahunUsulan: 2024,
+    targetOperasional: '2027 - Q1',
+    sektorUtama: 'Manufaktur Kaca & Solar Panel Hijau',
+    delineasiWilayah: 'Kawasan Industri Terpadu Rempang Sektor A & B',
+  },
+  {
+    id: 503,
+    kodeUsulan: 'USL-KEK-2025-003',
+    namaKek: 'KEK Tembesi High-Tech & Clean Industry',
+    lokasi: 'Kelurahan Tembesi, Kecamatan Sagulung, Kota Batam',
+    luas: 380.5,
+    kegiatan: 'Fabrikasi Semikonduktor & Advanced Packaging, Ekosistem Perakitan Baterai EV, Hardware Artificial Intelligence, Laboratorium Uji Bersama Industri 4.0',
+    pengusul: 'PT Batamindo Investment Cakrawala & Asosiasi Industri Elektronika Batam',
+    remark: 'Proposal usulan telah masuk ke Direktorat Pengembangan KPBPBB & KEK. Dalam tahap penyusunan Kajian Analisis Dampak Lalu Lintas (Andalalin) dan ketersediaan pasokan daya 150 MVA PLN.',
+    statusTahapan: 'Kajian Kelayakan & AMDAL',
+    progressPercent: 42,
+    estimasiInvestasi: 28400000000000, // Rp 28,4 T
+    targetTenagaKerja: 18500,
+    tahunUsulan: 2025,
+    targetOperasional: '2027 - Q4',
+    sektorUtama: 'Semikonduktor & Perangkat AI',
+    delineasiWilayah: 'Koridor Industri Sagulung-Tembesi Selatan',
+  },
+  {
+    id: 504,
+    kodeUsulan: 'USL-KEK-2025-004',
+    namaKek: 'KEK Galang Maritim & Offshore Engineering Hub',
+    lokasi: 'Kelurahan Sijantung & Rempang Cate, Pulau Galang, Kota Batam',
+    luas: 520.0,
+    kegiatan: 'Fabrikasi Platform Anjungan Lepas Pantai (Offshore Rig), Konversi Kapal Ramah Lingkungan (Dual-Fuel Retrofit), Galangan Terpadu Kapal Khusus, Pangkalan Logistik Migas',
+    pengusul: 'PT Bandar Abadi Maritim Shipyard & Konsorsium Galang Offshore Marine',
+    remark: 'Penyusunan dokumen masterplan zonasi dermaga basah (wet berth) dan permohonan rekomendasi tata ruang laut (PKKPRL) kepada KKP dan BP Batam.',
+    statusTahapan: 'Kajian Kelayakan & AMDAL',
+    progressPercent: 35,
+    estimasiInvestasi: 15200000000000, // Rp 15,2 T
+    targetTenagaKerja: 12000,
+    tahunUsulan: 2025,
+    targetOperasional: '2028 - Q2',
+    sektorUtama: 'Galangan Kapal & Offshore Rig',
+    delineasiWilayah: 'Pesisir Barat Pulau Galang Utara',
+  },
+  {
+    id: 505,
+    kodeUsulan: 'USL-KEK-2025-005',
+    namaKek: 'KEK Marine Eco-Tourism Pulau Abang & Petong',
+    lokasi: 'Gugusan Pulau Abang & Pulau Petong, Kecamatan Galang, Kota Batam',
+    luas: 115.0,
+    kegiatan: 'Kawasan Wisata Bahari Konservasi Karang, Luxury Diving & Marina Yacht Resort, Pusat Penelitian Terumbu Karang Segitiga Karang (Coral Triangle Station)',
+    pengusul: 'PT Pesona Bahari Nusantara & Konsorsium Investasi Ekowisata Kepri',
+    remark: 'Survei batimetri kelautan dan studi daya dukung ekosistem rampung. Menunggu konsultasi publik dengan masyarakat nelayan lokal dan penetapan zona penyangga konservasi.',
+    statusTahapan: 'Verifikasi Usulan BP Batam',
+    progressPercent: 55,
+    estimasiInvestasi: 4500000000000, // Rp 4,5 T
+    targetTenagaKerja: 4800,
+    tahunUsulan: 2025,
+    targetOperasional: '2028 - Q1',
+    sektorUtama: 'Pariwisata Bahari & Konservasi',
+    delineasiWilayah: 'Kepulauan Abang Sub-Zona Pariwisata',
+  },
+];
+
+// ============================================================================
+// 5. PETA KAWASAN EKONOMI KHUSUS (KEK) [DATASET NO. 6]
+// Sesuai Daftar Data PDF: Halaman 10, Baris 6
+// Sifat Data: TERBUKA | Jenis: DATA SPASIAL | Periode: JIKA UPDATE
+// Atribut Data Lengkap (16 Atribut):
+// FCODE, METADATA, SHAPE_Leng, SHAPE_Area, SRS_ID, OBJECTID, NAMOBJ, KUTKEK,
+// NOMOR_PL, TANGGAL_PL, PEMILIK, LUAS_PENGU, DSRHKMKEK, LUASKEK, PENGUSULKE, BUPP
+// ============================================================================
+
+export interface KekPetaSpasialItem {
+  id: number;
+  objectId: number; // OBJECTID
+  namobj: string; // NAMOBJ (Nama Objek)
+  kutkek: 'Eksisting Beroperasi' | 'Tahap Konstruksi' | 'Perencanaan / Diusulkan'; // KUTKEK (Kategori Unsur KEK)
+  nomorPl: string; // NOMOR_PL (Nomor Penetapan Lokasi)
+  tanggalPl: string; // TANGGAL_PL (Tanggal Penetapan Lokasi)
+  pemilik: string; // PEMILIK
+  luasPengu: number; // LUAS_PENGU (Luas Penguasaan dalam Ha)
+  dsrhkmkek: string; // DSRHKMKEK (Dasar Hukum Penetapan KEK)
+  luaskek: number; // LUASKEK (Luas Resmi KEK dalam Ha)
+  pengusulke: string; // PENGUSULKE (Pengusul KEK)
+  bupp: string; // BUPP (Badan Usaha Pembangun & Pengelola)
+  shapeLeng: number; // SHAPE_Leng (Keliling Perimeter Poligon dalam Meter)
+  shapeArea: number; // SHAPE_Area (Luas Poligon Spasial dalam m²)
+  srsId: string; // SRS_ID (Sistem Referensi Spasial Geodetik)
+  fcode: string; // FCODE (Feature Code Geospasial Standar BIG)
+  metadata: string; // METADATA
+  // Parameter visual spasial untuk render SVG & interaktivitas map:
+  polygonSvg: string; // SVG path atau polygon point
+  centroid: { x: number; y: number }; // Titik koordinat persentase peta (0-100)
+  themeColor: string;
+  fillOpacity: number;
+  kecamatan: string;
+  statusKawasan: string;
+  zonaSpasial: string[];
+}
+
+export const KEK_PETA_SPASIAL_DATA: KekPetaSpasialItem[] = [
+  {
+    id: 601,
+    objectId: 1,
+    namobj: 'KEK Nongsa (Nongsa Digital Park)',
+    kutkek: 'Eksisting Beroperasi',
+    nomorPl: 'PL-02.08/KEK-NDP/2021/BP',
+    tanggalPl: '2021-06-12',
+    pemilik: 'Badan Pengusahaan Batam (HPL) / PT Taman Resor Internet (HGB)',
+    luasPengu: 166.45,
+    dsrhkmkek: 'PP Republik Indonesia No. 68 Tahun 2021 tentang KEK Nongsa',
+    luaskek: 166.45,
+    pengusulke: 'PT Taman Resor Internet',
+    bupp: 'PT Taman Resor Internet (Nongsa Digital Park Management)',
+    shapeLeng: 7642.85,
+    shapeArea: 1664500.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Kawasan Ekonomi Khusus Teknologi & Pariwisata)',
+    metadata: 'Satu Data BP Batam - Geoportal Spasial SIMPERUM (Dit. Pengelolaan Lahan & PDSI)',
+    // Koordinat SVG Nongsa (ujung timur laut Batam Island)
+    polygonSvg: 'M 72 26 L 79 24 L 83 29 L 77 34 L 71 31 Z',
+    centroid: { x: 76, y: 28 },
+    themeColor: '#0284c7', // Sky blue
+    fillOpacity: 0.75,
+    kecamatan: 'Nongsa',
+    statusKawasan: 'Operasional Penuh (Data Center Hyperscale, Digital Hub, Film Studio)',
+    zonaSpasial: ['Zona Ekonomi Digital (NDP Tech Hub)', 'Zona Data Center Tier-4 Nasional & Global', 'Zona Studio Animasi Infinite', 'Zona Resort Nongsa Point Marina'],
+  },
+  {
+    id: 602,
+    objectId: 2,
+    namobj: 'KEK Batam Teknik (Batam Aero Technic)',
+    kutkek: 'Eksisting Beroperasi',
+    nomorPl: 'PL-02.08/KEK-BAT/2021/BP',
+    tanggalPl: '2021-06-12',
+    pemilik: 'Badan Pengusahaan Batam (HPL Bandara) / PT Batam Teknik',
+    luasPengu: 30.0,
+    dsrhkmkek: 'PP Republik Indonesia No. 67 Tahun 2021 tentang KEK Batam Teknik',
+    luaskek: 30.0,
+    pengusulke: 'PT Batam Teknik (Lion Air Group)',
+    bupp: 'PT Batam Teknik',
+    shapeLeng: 2894.4,
+    shapeArea: 300000.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Kawasan Ekonomi Khusus Industri Aviasi MRO)',
+    metadata: 'Satu Data BP Batam - Geoportal Spasial SIMPERUM (Dit. Pengelolaan Kawasan Bandara)',
+    // Koordinat SVG Hang Nadim (tengah-timur Batam dekat runway Bandara)
+    polygonSvg: 'M 62 39 L 68 38 L 69 44 L 63 45 Z',
+    centroid: { x: 65, y: 41 },
+    themeColor: '#4f46e5', // Indigo
+    fillOpacity: 0.8,
+    kecamatan: 'Nongsa / Bandara Hang Nadim',
+    statusKawasan: 'Operasional Penuh (Hangar 1-6 Maintenance, Repair & Overhaul Pesawat)',
+    zonaSpasial: ['Zona Hangar Overhaul Narrow & Wide Body', 'Zona Bengkel Turbofan Engine Workshop', 'Zona Pergudangan Suku Cadang Bea Cukai Mandiri'],
+  },
+  {
+    id: 603,
+    objectId: 3,
+    namobj: 'KEK Pariwisata & Kesehatan Internasional Batam',
+    kutkek: 'Tahap Konstruksi',
+    nomorPl: 'PL-02.08/KEK-PKIB/2024/BP',
+    tanggalPl: '2024-10-08',
+    pemilik: 'Badan Pengusahaan Batam / Konsorsium PT Mayapada & PT Karang Kurita',
+    luasPengu: 47.17,
+    dsrhkmkek: 'PP Republik Indonesia No. 39 Tahun 2024 tentang KEK Pariwisata & Kesehatan Internasional Batam',
+    luaskek: 47.17,
+    pengusulke: 'PT Mayapada Batam Propertindo & PT Karang Kurita',
+    bupp: 'PT Karang Kurita Healthcare International',
+    shapeLeng: 4120.15,
+    shapeArea: 471700.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Kawasan Ekonomi Khusus Medis & Hospitality)',
+    metadata: 'Satu Data BP Batam - Geoportal Spasial SIMPERUM (Dit. KEK & Biro Keuangan)',
+    // Terdiri dari dua klaster: Sekupang (Barat) dan Nongsa (Timur)
+    polygonSvg: 'M 25 41 L 30 40 L 32 46 L 27 47 Z',
+    centroid: { x: 28, y: 43 },
+    themeColor: '#059669', // Emerald
+    fillOpacity: 0.8,
+    kecamatan: 'Sekupang & Nongsa',
+    statusKawasan: 'Tahap Pembangunan Konstruksi (Hospital Internasional & Wellness Resort)',
+    zonaSpasial: ['Klaster Sekupang: RS Internasional Spesialis, Fakultas Kedokteran & Riset Medis', 'Klaster Nongsa: Wellness & Aesthetic Center, Eco-Health Resort Terpadu'],
+  },
+  {
+    id: 604,
+    objectId: 4,
+    namobj: 'KEK Usulan: Tanjung Sauh (Green Energy & Port)',
+    kutkek: 'Perencanaan / Diusulkan',
+    nomorPl: 'USL-PL-02.08/KEK-TS/2024/DELIN',
+    tanggalPl: '2024-04-15',
+    pemilik: 'Pencadangan Lahan Alokasi Strategis BP Batam / Konsorsium Panbil',
+    luasPengu: 840.67,
+    dsrhkmkek: 'Rekomendasi Dewan Nasional KEK No. T-04/DN-KEK/2024 (Menunggu Penetapan RPP)',
+    luaskek: 840.67,
+    pengusulke: 'PT Batam Shell Terminal & Panbil Group',
+    bupp: 'PT Kawasan Industri Tanjung Sauh',
+    shapeLeng: 14250.6,
+    shapeArea: 8406700.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Usulan KEK Pelabuhan Laut & Energi Hijau)',
+    metadata: 'Delineasi Rencana Spasial RTRW Batam 2020-2040 & Dit. Perencanaan Infrastruktur',
+    // Lokasi di Pulau Tanjung Sauh (sebelah timur Batam)
+    polygonSvg: 'M 83 46 L 89 44 L 92 50 L 86 53 Z',
+    centroid: { x: 87, y: 48 },
+    themeColor: '#d97706', // Amber
+    fillOpacity: 0.75,
+    kecamatan: 'Nongsa (Pulau Tanjung Sauh)',
+    statusKawasan: 'Tahap Harmonisasi RPP Menko Perekonomian & Legal Drafting Setneg',
+    zonaSpasial: ['Zona Deep Sea Port Container Hub', 'Zona Solar PV 500 MW & LNG Transshipment', 'Zona Heavy Industry Assembly'],
+  },
+  {
+    id: 605,
+    objectId: 5,
+    namobj: 'KEK Usulan: Rempang Eco-City (Tahap I)',
+    kutkek: 'Perencanaan / Diusulkan',
+    nomorPl: 'USL-PL-02.08/KEK-RMP/2024/DELIN',
+    tanggalPl: '2024-08-20',
+    pemilik: 'Hak Pengelolaan (HPL) BP Batam / PT Makmur Elok Graha',
+    luasPengu: 1200.0,
+    dsrhkmkek: 'Pencanangan Proyek Strategis Nasional (PSN) & Dokumen Usulan Dewan KEK',
+    luaskek: 1200.0,
+    pengusulke: 'PT Makmur Elok Graha & Xinyi Group Global',
+    bupp: 'PT Rempang Eco-City Mandiri',
+    shapeLeng: 21800.0,
+    shapeArea: 12000000.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Usulan KEK Manufaktur & Solar Glass Terpadu)',
+    metadata: 'Geoportal Spasial BP Batam Kawasan Barelang Pulau Rempang',
+    // Lokasi di Pulau Rempang (Selatan Batam via jembatan Barelang)
+    polygonSvg: 'M 71 72 L 80 70 L 83 80 L 73 82 Z',
+    centroid: { x: 77, y: 76 },
+    themeColor: '#ea580c', // Orange
+    fillOpacity: 0.75,
+    kecamatan: 'Galang (Pulau Rempang)',
+    statusKawasan: 'Proses Verifikasi Kelayakan AMDAL & Infrastruktur Dasar BP Batam',
+    zonaSpasial: ['Zona Industri Solar Glass & Kaca Terapung', 'Zona Logistik & Pelabuhan Ekspor Rempang', 'Zona Pusat Riset EBT & RTH'],
+  },
+  {
+    id: 606,
+    objectId: 6,
+    namobj: 'KEK Usulan: Tembesi High-Tech Industrial Park',
+    kutkek: 'Perencanaan / Diusulkan',
+    nomorPl: 'USL-PL-02.08/KEK-TMB/2025/DELIN',
+    tanggalPl: '2025-01-14',
+    pemilik: 'Pencadangan Kawasan Industri BP Batam / Batamindo Group',
+    luasPengu: 380.5,
+    dsrhkmkek: 'Pengajuan Dokumen Usulan Baru Dit. Pengembangan KPBPBB & KEK',
+    luaskek: 380.5,
+    pengusulke: 'PT Batamindo Investment Cakrawala',
+    bupp: 'PT Batamindo High-Tech Park',
+    shapeLeng: 9400.0,
+    shapeArea: 3805000.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Usulan KEK Semikonduktor & Riset AI)',
+    metadata: 'Masterplan Tata Ruang Wilayah Sagulung & Tembesi BP Batam',
+    // Lokasi di Tembesi / Sagulung tengah-selatan Batam
+    polygonSvg: 'M 47 57 L 54 55 L 56 62 L 49 63 Z',
+    centroid: { x: 51, y: 59 },
+    themeColor: '#8b5cf6', // Violet
+    fillOpacity: 0.75,
+    kecamatan: 'Sagulung (Tembesi)',
+    statusKawasan: 'Penyusunan Studi Kelayakan Finansial & Andalalin Lalu Lintas',
+    zonaSpasial: ['Zona Fabrikasi Semikonduktor & Testing Chip', 'Zona Perakitan Baterai Kendaraan Listrik (EV)', 'Zona Kampus Riset Kecerdasan Artifisial (AI)'],
+  },
+  {
+    id: 607,
+    objectId: 7,
+    namobj: 'KEK Usulan: Galang Maritim & Offshore Engineering',
+    kutkek: 'Perencanaan / Diusulkan',
+    nomorPl: 'USL-PL-02.08/KEK-GLG/2025/DELIN',
+    tanggalPl: '2025-02-18',
+    pemilik: 'Alokasi Pesisir BP Batam / Konsorsium Galangan Kapal Batam',
+    luasPengu: 520.0,
+    dsrhkmkek: 'Pengajuan Proposal Awal Kawasan Industri Maritim Khusus',
+    luaskek: 520.0,
+    pengusulke: 'PT Bandar Abadi Maritim & Konsorsium Galang',
+    bupp: 'PT Galang Maritim Ekosistem',
+    shapeLeng: 11200.0,
+    shapeArea: 5200000.0,
+    srsId: 'EPSG:32648 (WGS 84 / UTM Zone 48N)',
+    fcode: 'BA0020040 (Usulan KEK Industri Maritim & Offshore)',
+    metadata: 'Geoportal Spasial Wilayah Barelang Galang Pesisir Barat',
+    // Lokasi di Pulau Galang (paling selatan)
+    polygonSvg: 'M 74 88 L 82 86 L 84 94 L 75 95 Z',
+    centroid: { x: 79, y: 91 },
+    themeColor: '#06b6d4', // Cyan
+    fillOpacity: 0.75,
+    kecamatan: 'Galang (Sijantung)',
+    statusKawasan: 'Tahap Kajian Kelayakan Lingkungan Pesisir & Rekomendasi PKKPRL KKP',
+    zonaSpasial: ['Zona Yard Fabrikasi Anjungan Lepas Pantai (Offshore Rig)', 'Zona Drydock Konversi Kapal Ramah Lingkungan', 'Zona Dermaga Logistik Heavy Lift'],
+  },
+];
+

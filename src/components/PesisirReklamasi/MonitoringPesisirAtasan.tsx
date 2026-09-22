@@ -273,7 +273,7 @@ export const MonitoringPesisirAtasan: React.FC<MonitoringPesisirAtasanProps> = (
                   <th className="py-2.5 px-3">Luas Total (Ha)</th>
                   <th className="py-2.5 px-3">Luas Reklamasi</th>
                   <th className="py-2.5 px-3">Luas Pesisir</th>
-                  <th className="py-2.5 px-3">Investasi Terikat</th>
+                  <th className="py-2.5 px-3">Luas Konversi (m²)</th>
                   <th className="py-2.5 px-3 text-right">Tingkat Kepatuhan Ruang</th>
                 </tr>
               </thead>
@@ -287,8 +287,8 @@ export const MonitoringPesisirAtasan: React.FC<MonitoringPesisirAtasanProps> = (
                     </td>
                     <td className="py-2.5 px-3 font-mono text-slate-700">{item.reklamasiHa.toFixed(1)} Ha</td>
                     <td className="py-2.5 px-3 font-mono text-slate-700">{item.pesisirHa.toFixed(1)} Ha</td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-emerald-700">
-                      Rp {item.investasiT} Triliun
+                    <td className="py-2.5 px-3 font-mono text-slate-700">
+                      {(item.luasTotalHa * 10000).toLocaleString('id-ID')} m²
                     </td>
                     <td className="py-2.5 px-3 text-right">
                       <span className="px-2 py-0.5 rounded font-bold font-mono text-[10.5px] bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -416,7 +416,7 @@ export const MonitoringPesisirAtasan: React.FC<MonitoringPesisirAtasanProps> = (
                       </span>
                     </td>
                     <td className="py-2.5 px-3 font-mono font-bold text-slate-900">
-                      {item.luasTerdampakHa} Ha
+                      {item.luasDiterbitkanHa || item.luasTerdampakHa} Ha
                     </td>
                     <td className="py-2.5 px-3 text-slate-700 text-[10.5px]">
                       {item.solusiTindakan}

@@ -12,6 +12,7 @@ interface InfrastrukturFormulaModalProps {
     | 'kpi-row-utilitas'
     | 'kpi-row-penghijauan'
     | 'kpi-ruas-jalan'
+    | 'kpi-pematangan'
     | null;
 }
 
@@ -20,10 +21,38 @@ export const InfrastrukturFormulaModal: React.FC<InfrastrukturFormulaModalProps>
   onClose,
   kpiType,
 }) => {
-  if (!isOpen || !kpiType) return null;
+  const [activeKpi, setActiveKpi] = React.useState<typeof kpiType>(kpiType);
+
+  React.useEffect(() => {
+    setActiveKpi(kpiType);
+  }, [kpiType]);
+
+  if (!isOpen || !activeKpi) return null;
 
   const getFormulaContent = () => {
-    switch (kpiType) {
+    switch (activeKpi) {
+      case 'kpi-pematangan':
+        return {
+          title: 'KPI Pematangan Lahan Kawasan Strategis BSW (280 Ha)',
+          dataset: 'Dataset No. 5: Pematangan Tanah Wilayah BSW (Hal. 50-51)',
+          definisi:
+            'Menghitung volume pekerjaan cut and fill serta pematangan tanah (land clearing & grading) pada 5 Wilayah Pengembangan Strategis Batam (BSW) untuk kesiapan investasi industri, logistik, dan fasilitas publik.',
+          formula: 'Total Luas Pematangan = SUM([VOL_PEK]) dengan satuan Hektar (Ha) | Rata-rata Progres = AVG([PRGRS_PEK])',
+          tableauField: `// Formula Tableau Calculated Field:
+// [Total Luas Pematangan Lahan BSW]
+SUM([VOL_PEK])
+
+// [Rata-rata Progres Pematangan Fisik %]
+AVG([PRGRS_PEK])`,
+          atributUtama: [
+            'NAMOBJ (Nama Objek Kawasan / Lokasi BSW: Batam Centre, Nongsa, Batu Ampar, Sekupang, Tembesi)',
+            'VOL_PEK (Volume Pekerjaan Pematangan Lahan dalam Satuan Hektar/Ha)',
+            'PRGRS_PEK (Persentase Realisasi Progres Fisik Pematangan Lapangan)',
+            'KONTRAKTOR (Pelaksana Pekerjaan Pengurukan & Pematangan)',
+            'STATUS_LAHAN (Siap Alokasi Investasi / Tahap Pematangan)',
+          ],
+          dasarHukum: 'Masterplan Tata Ruang Wilayah Kawasan Perdagangan Bebas dan Pelabuhan Bebas Batam & Dokumen Pengadaan Lahan BP Batam.',
+        };
       case 'kpi-pembangunan':
         return {
           title: 'KPI Jumlah Paket Pembangunan Infrastruktur Strategis',
@@ -153,22 +182,33 @@ COUNTD([NOMOR_IZIN_ROW_PENGHIJAUAN])`,
 
       case 'kpi-ruas-jalan':
         return {
-          title: 'KPI Ruas Jaringan Jalan BP Batam',
-          dataset: 'Dataset No. 3: Ruas Jaringan Jalan',
+          title: 'Total Jaringan Jalan & Formula Kemantapan Jalan (88,2%)',
+          dataset: 'Dataset No. 3: Jaringan Jalan (Eksisting) (Hal. 48-49)',
           definisi:
-            'Menghitung total ruas jalan kewenangan BP Batam, total panjang jaringan jalan (km), serta persentase tingkat kemantapan jalan berdasarkan International Roughness Index (IRI).',
-          formula: `Persentase Kemantapan (%) = (Panjang Jalan Kondisi Baik + Sedang) / Total Panjang Jalan * 100%`,
-          tableauField: `// Formula Tableau Calculated Field Tingkat Kemantapan:
-SUM([PANJANG_KONDISI_BAIK_KM] + [PANJANG_KONDISI_SEDANG_KM]) / SUM([TOTAL_PANJANG_KM]) * 100`,
+            'Mengukur persentase panjang jalan dalam kondisi mantap (kondisi baik dan sedang) terhadap total keseluruhan panjang jaringan jalan yang menjadi kewenangan BP Batam.',
+          formula:
+            'Persentase Kemantapan Jalan (88,2%) = (Panjang Jalan Kondisi Mantap [LKONOF = "Baik/Sedang"] ÷ Total Panjang Seluruh Ruas Jalan [SHAPE_LENG]) × 100% = (478,80 Km ÷ 542,80 Km) × 100% = 88,2%',
+          tableauField: `// Formula Tableau Calculated Field [% Kemantapan Jalan]:
+// Pembilang: Total panjang jalan berkondisi baik/sedang
+// Penyebut: Total seluruh panjang jalan (SHAPE_LENG)
+SUM(
+    IF [LKONOF] = 'Baik' OR [LKONOF] = 'Sedang' 
+    THEN [SHAPE_LENG] 
+    ELSE 0 
+    END
+) 
+/ 
+SUM([SHAPE_LENG]) * 100`,
           atributUtama: [
-            'KODE_RUAS (Identitas Ruas Jalan)',
-            'NAMA_RUAS_JALAN (Koridor Jalan)',
-            'FUNGSI_JALAN (Arteri Primer, Kolektor, Sekunder)',
-            'PANJANG_KM & LEBAR_METER (Dimensi Ruas)',
-            'KONDISI_MANTAP_KM vs KONDISI_TIDAK_MANTAP_KM',
-            'INDEKS_IRI (Tingkat kerataan permukaan jalan m/km)',
+            'SHAPE_LENG (Panjang Ruas Jalan dalam Km/Meter) -> Digunakan sebagai bobot pembilang & penyebut',
+            'LKONOF / KONRJL (Kondisi Fisik Jalan: Baik, Sedang, Rusak Ringan, Rusak Berat) -> Filter kondisi mantap',
+            'NAMOBJ (Nama Objek / Nama Ruas Jalan)',
+            'WLYRJL (Wilayah Administrasi Ruas Jalan: Batam Centre, Batu Ampar, Sekupang, Mukakuning, Nongsa, Barelang)',
+            'KLSRJL (Kelas Jalan: Arteri Primer, Kolektor Primer, Sekunder)',
+            'LBRJLN (Lebar Jalan dalam Meter)',
           ],
-          dasarHukum: 'SK Kepala BP Batam tentang Penetapan Status dan Klasifikasi Ruas Jaringan Jalan di Wilayah Kerja BP Batam & Standar Pelayanan Minimal (SPM) Jalan.',
+          dasarHukum:
+            'SK Kepala BP Batam tentang Penetapan Status Ruas Jaringan Jalan Kota Batam & Standar Pelayanan Minimal (SPM) Kemantapan Jalan Kementerian PUPR (Target IKU ≥ 85%).',
         };
 
       default:
@@ -185,13 +225,16 @@ SUM([PANJANG_KONDISI_BAIK_KM] + [PANJANG_KONDISI_SEDANG_KM]) / SUM([TOTAL_PANJAN
         {/* Modal Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50/70">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
               <Calculator className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                {content.dataset}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200 font-mono">
+                  {content.dataset}
+                </span>
+                <span className="text-[10px] text-slate-500 font-medium">Buku Satu Data Hal. 48-51</span>
+              </div>
               <h3 className="font-bold text-slate-800 text-base mt-0.5">
                 {content.title}
               </h3>
@@ -204,6 +247,31 @@ SUM([PANJANG_KONDISI_BAIK_KM] + [PANJANG_KONDISI_SEDANG_KM]) / SUM([TOTAL_PANJAN
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Quick Tab Switcher 6 Dataset */}
+        <div className="flex items-center gap-1.5 px-5 py-2.5 bg-slate-100/70 border-b border-slate-200 overflow-x-auto text-[11px]">
+          <span className="text-slate-500 font-semibold shrink-0 mr-1 text-[10.5px]">Pilih Dataset:</span>
+          {[
+            { key: 'kpi-ruas-jalan', label: 'DS 3: Total Jaringan Jalan (542,8 Km)' },
+            { key: 'kpi-progres-fisik', label: 'DS 4: Progres Fisik' },
+            { key: 'kpi-row-utilitas', label: 'DS 1: ROW Utilitas' },
+            { key: 'kpi-row-penghijauan', label: 'DS 2: Penghijauan' },
+            { key: 'kpi-pematangan', label: 'DS 5: Pematangan Lahan' },
+            { key: 'kpi-pembangunan', label: 'DS 6: Pembangunan Total' },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveKpi(tab.key as any)}
+              className={`px-2.5 py-1 rounded-md font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                activeKpi === tab.key
+                  ? 'bg-sky-600 text-white shadow-2xs font-bold'
+                  : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Modal Body */}

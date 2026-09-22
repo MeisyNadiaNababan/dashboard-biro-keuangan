@@ -15,6 +15,7 @@ import {
 import { PesisirReklamasiFilters } from './PesisirReklamasiFilters';
 import { PesisirReklamasiKpis } from './PesisirReklamasiKpis';
 import { SheetSwapPesisir } from './SheetSwapPesisir';
+import { PesisirKawasanVisualizer } from './PesisirKawasanVisualizer';
 import { PesisirFormulaModal } from './PesisirFormulaModal';
 import { PesisirWordDocView } from './PesisirWordDocView';
 import { PesisirReklamasiFilterState } from './types';
@@ -109,8 +110,14 @@ export const PesisirReklamasiDashboard: React.FC = () => {
       {/* 3 Main Executive KPIs Cards */}
       <PesisirReklamasiKpis onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)} />
 
-      {/* Main Content: Sheet Swap Toggleable View (Grafik vs Tabel Detail) */}
+      {/* Main Content: Sheet Swap Toggleable View (Grafik vs Tabel Detail Dataset #4) */}
       <SheetSwapPesisir
+        filters={filters}
+        onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
+      />
+
+      {/* Visualisasi Terpadu Kinerja Direktorat Sesuai Dataset Resmi PDF (Dataset #2 Spasial, #3 SLA Perizinan, #1 Penyelesaian Masalah) */}
+      <PesisirKawasanVisualizer
         filters={filters}
         onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
       />

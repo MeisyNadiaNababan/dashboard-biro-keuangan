@@ -183,6 +183,87 @@ export interface WebsiteVisitItem {
   halamanTerpopuler: string;
 }
 
+export interface WebsiteVisitYearlyItem {
+  tahun: number;
+  totalKunjungan: number;
+  pengunjungUnik: number;
+  tampilanHalaman: number;
+  pertumbuhanYoYPersen: number; // e.g. 58.9
+  status: 'Realisasi' | 'Estimasi / Target';
+  asalNegaraDominan: string;
+  halamanPalingDiminati: string;
+  sumberTrafficUtama: string;
+}
+
+export const WEBSITE_VISIT_YEARLY_DATA: WebsiteVisitYearlyItem[] = [
+  {
+    tahun: 2021,
+    totalKunjungan: 78400,
+    pengunjungUnik: 51200,
+    tampilanHalaman: 235200,
+    pertumbuhanYoYPersen: 0,
+    status: 'Realisasi',
+    asalNegaraDominan: 'Singapura (42%)',
+    halamanPalingDiminati: '/batam-free-trade-zone-overview',
+    sumberTrafficUtama: 'Direct & Organic Search',
+  },
+  {
+    tahun: 2022,
+    totalKunjungan: 124600,
+    pengunjungUnik: 82500,
+    tampilanHalaman: 386260,
+    pertumbuhanYoYPersen: 58.9,
+    status: 'Realisasi',
+    asalNegaraDominan: 'Singapura (39%), Indonesia (25%)',
+    halamanPalingDiminati: '/industrial-estates-directory',
+    sumberTrafficUtama: 'Google Search & Pameran Bisnis',
+  },
+  {
+    tahun: 2023,
+    totalKunjungan: 168300,
+    pengunjungUnik: 114200,
+    tampilanHalaman: 521730,
+    pertumbuhanYoYPersen: 35.1,
+    status: 'Realisasi',
+    asalNegaraDominan: 'Singapura (36%), Tiongkok (20%)',
+    halamanPalingDiminati: '/incentives-and-tax-holiday',
+    sumberTrafficUtama: 'Event Roadshow & Partner Portals',
+  },
+  {
+    tahun: 2024,
+    totalKunjungan: 205800,
+    pengunjungUnik: 141600,
+    tampilanHalaman: 637980,
+    pertumbuhanYoYPersen: 22.3,
+    status: 'Realisasi',
+    asalNegaraDominan: 'Singapura (35%), Tiongkok (24%)',
+    halamanPalingDiminati: '/kek-nongsa-digital-park',
+    sumberTrafficUtama: 'Global Investment Forums & SEO',
+  },
+  {
+    tahun: 2025,
+    totalKunjungan: 239250,
+    pengunjungUnik: 164200,
+    tampilanHalaman: 706700,
+    pertumbuhanYoYPersen: 16.3,
+    status: 'Realisasi',
+    asalNegaraDominan: 'Singapura (34%), AS (21%), Tiongkok (20%)',
+    halamanPalingDiminati: '/how-to-invest-oss-guide',
+    sumberTrafficUtama: 'Portal Terpadu OSS & Campaign Internasional',
+  },
+  {
+    tahun: 2026,
+    totalKunjungan: 285000,
+    pengunjungUnik: 195000,
+    tampilanHalaman: 855000,
+    pertumbuhanYoYPersen: 19.1,
+    status: 'Estimasi / Target',
+    asalNegaraDominan: 'Singapura, AS, Jepang, Korsel',
+    halamanPalingDiminati: '/renewable-energy-investment',
+    sumberTrafficUtama: 'Digital FDI Campaigns & Diplomatic Outreach',
+  },
+];
+
 export const WEBSITE_VISIT_DATA: WebsiteVisitItem[] = [
   { id: 1, bulan: 'Januari', tahun: 2025, kunjunganTotal: 14250, pengunjungUnik: 9800, tampilanHalaman: 42100, asalNegaraTerbanyak: 'Singapura (38%)', halamanTerpopuler: '/incentives-and-tax-holiday' },
   { id: 2, bulan: 'Februari', tahun: 2025, kunjunganTotal: 15600, pengunjungUnik: 10400, tampilanHalaman: 46800, asalNegaraTerbanyak: 'Indonesia (28%)', halamanTerpopuler: '/industrial-estates-directory' },

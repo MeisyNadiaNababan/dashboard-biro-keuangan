@@ -21,6 +21,7 @@ import {
 import { InvestasiKpiRow } from './InvestasiKpiRow';
 import { InvestasiSektorMinatCard } from './InvestasiSektorMinatCard';
 import { InvestasiInfrastrukturCard } from './InvestasiInfrastrukturCard';
+import { InvestasiWebsiteTrafficCard } from './InvestasiWebsiteTrafficCard';
 import { InvestasiPromosiCard } from './InvestasiPromosiCard';
 import { InvestasiFilters, InvestasiFilterState } from './InvestasiFilters';
 import { InvestasiKamusRumusView } from './InvestasiKamusRumusView';
@@ -196,7 +197,19 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
             }`}
           >
             <Building2 className="w-3.5 h-3.5" />
-            <span>Infrastruktur Multi-Tahun</span>
+            <span>Infrastruktur Batam</span>
+          </button>
+
+          <button
+            onClick={() => onSubMenuChange && onSubMenuChange('website_traffic')}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeSubMenu === 'website_traffic'
+                ? 'bg-teal-600 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Globe2 className="w-3.5 h-3.5" />
+            <span>Traffic Website In-Batam</span>
           </button>
 
           <button
@@ -274,6 +287,21 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
             filterYear={filters.tahun}
           />
         </div>
+      ) : activeSubMenu === 'website_traffic' ? (
+        <div className="space-y-4">
+          <InvestasiKpiRow
+            totalRealisasiInvestasi={totalRealisasi}
+            totalTargetInvestasi={totalTarget}
+            capaianInvestasiPersen={capaianInvestasiPersen}
+            totalKunjunganWebsite={totalKunjunganWebsite}
+            totalMinatInvestasi={totalMinatInvestasi}
+            totalNilaiMinatInvestasi={totalNilaiMinatInvestasi}
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+          <InvestasiWebsiteTrafficCard
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+        </div>
       ) : activeSubMenu === 'promosi' ? (
         <div className="space-y-4">
           <InvestasiKpiRow
@@ -305,15 +333,7 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
             />
           </section>
 
-          {/* B. DATA MINAT INVESTASI BERDASARKAN SEKTOR (Dataset 14) */}
-          <section id="investasi-sektor-minat-section" aria-label="Minat Investasi Berdasarkan Sektor">
-            <InvestasiSektorMinatCard
-              minatList={filteredMinatList}
-              onOpenFormulaModal={onOpenFormulaModal}
-            />
-          </section>
-
-          {/* C. INFRASTRUKTUR YANG AKAN DIBANGUN (Dataset 6: Nilai Investasi, Luas, dan Tahun) */}
+          {/* B. INFRASTRUKTUR YANG AKAN DIBANGUN DI BATAM (Dataset 6: Nama Project, Lokasi, Nilai Investasi) */}
           <section id="investasi-infrastruktur-section" aria-label="Infrastruktur yang Akan Dibangun">
             <InvestasiInfrastrukturCard
               onOpenFormulaModal={onOpenFormulaModal}
@@ -321,7 +341,22 @@ export const InvestasiDashboard: React.FC<InvestasiDashboardProps> = ({
             />
           </section>
 
-          {/* D. TENTATIF KEGIATAN PROMOSI (Kategori Kegiatan, Jumlah Tamu, Pelaksanaan) */}
+          {/* C. TRAFFIC WEBSITE INVEST IN-BATAM DARI TAHUN KE TAHUN (Dataset 10) */}
+          <section id="investasi-website-traffic-section" aria-label="Traffic Website Invest In-Batam dari Tahun ke Tahun">
+            <InvestasiWebsiteTrafficCard
+              onOpenFormulaModal={onOpenFormulaModal}
+            />
+          </section>
+
+          {/* D. DATA MINAT INVESTASI BERDASARKAN SEKTOR & TABEL MATRIKS PERUSAHAAN (Dataset 14) */}
+          <section id="investasi-sektor-minat-section" aria-label="Minat Investasi Berdasarkan Sektor">
+            <InvestasiSektorMinatCard
+              minatList={filteredMinatList}
+              onOpenFormulaModal={onOpenFormulaModal}
+            />
+          </section>
+
+          {/* E. TENTATIF KEGIATAN PROMOSI (Kategori Kegiatan, Jumlah Tamu, Pelaksanaan) */}
           <section id="investasi-promosi-section" aria-label="Tentatif Kegiatan Promosi">
             <InvestasiPromosiCard
               onOpenFormulaModal={onOpenFormulaModal}

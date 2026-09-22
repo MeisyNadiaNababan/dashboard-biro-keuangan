@@ -34,13 +34,14 @@ import { DetailModal, ModalType } from './components/Modals/DetailModal';
 import { ExportModal } from './components/Modals/ExportModal';
 import { TableauGuideModal } from './components/Modals/TableauGuideModal';
 import { KpiFormulaExplanationModal } from './components/Modals/KpiFormulaExplanationModal';
+import { KatalogVisualisasiDashboardModal } from './components/Modals/KatalogVisualisasiDashboardModal';
 import { KPI_METRICS_DATA, REVENUE_DATA, EXPENSE_DATA } from './data/mockData';
 import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State - Set default to biro-organisasi as requested
-  const [activeUnitId, setActiveUnitId] = useState<string>('biro-organisasi');
+  // Navigation & Multi-Unit State - Set default to dit-pembangunan-infrastruktur as requested
+  const [activeUnitId, setActiveUnitId] = useState<string>('dit-pembangunan-infrastruktur');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
@@ -63,6 +64,7 @@ export default function App() {
   const [isTableauGuideOpen, setIsTableauGuideOpen] = useState(false);
   const [selectedKpiFormulaId, setSelectedKpiFormulaId] = useState<string | null>(null);
   const [isKpiFormulaModalOpen, setIsKpiFormulaModalOpen] = useState(false);
+  const [isVisualCatalogModalOpen, setIsVisualCatalogModalOpen] = useState(false);
 
   // Active Unit Object
   const currentUnit = useMemo(() => {
@@ -229,6 +231,7 @@ export default function App() {
           onOpenExportModal={() => setIsExportModalOpen(true)}
           onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
           onOpenUnitsDrawer={() => setIsUnitsDrawerOpen(true)}
+          onOpenVisualCatalog={() => setIsVisualCatalogModalOpen(true)}
           onRefresh={handleRefresh}
           isRefreshing={isRefreshing}
           activeSheet={activeSheet}
@@ -527,6 +530,13 @@ export default function App() {
           setSelectedKpiFormulaId(null);
         }}
         onSelectAnotherKpi={(id) => setSelectedKpiFormulaId(id)}
+      />
+
+      {/* Katalog Nama Visualisasi di Setiap Informasi Seluruh Dashboard Modal */}
+      <KatalogVisualisasiDashboardModal
+        isOpen={isVisualCatalogModalOpen}
+        onClose={() => setIsVisualCatalogModalOpen(false)}
+        initialFilterUnit={activeUnitId}
       />
 
       {/* Toast Notification */}

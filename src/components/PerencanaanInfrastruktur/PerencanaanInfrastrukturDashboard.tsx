@@ -26,7 +26,6 @@ import {
 import { PerencanaanFilters } from './PerencanaanFilters';
 import { PerencanaanKpis } from './PerencanaanKpis';
 import { PerencanaanVisualisasiData } from './PerencanaanVisualisasiData';
-import { DaftarPaketPerencanaanCard } from './DaftarPaketPerencanaanCard';
 import { PerencanaanFormulaModal } from './PerencanaanFormulaModal';
 import { PerencanaanWordDocView } from './PerencanaanWordDocView';
 
@@ -211,15 +210,7 @@ export const PerencanaanInfrastrukturDashboard: React.FC = () => {
 
           {/* Visualisasi Data Direktorat Perencanaan Infrastruktur (User Request 2: Mudah Dipahami) */}
           <PerencanaanVisualisasiData
-            selectedSektor={filters.sektor}
-            onSelectSektor={(sektor) => handleFilterChange({ sektor })}
-            onOpenFormula={handleOpenFormulaModal}
-          />
-
-          {/* Detailed Interactive Project Cards - Menampilkan semua 6 sektor, bukan hanya Darat */}
-          <DaftarPaketPerencanaanCard
             pakets={filteredPakets}
-            allPakets={SEMUA_PAKET_PERENCANAAN}
             selectedSektor={filters.sektor}
             onSelectSektor={(sektor) => handleFilterChange({ sektor })}
             onOpenFormula={handleOpenFormulaModal}

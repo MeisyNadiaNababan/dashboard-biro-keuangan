@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PdsiKpiRow } from './PdsiKpiRow';
-import { PdsiDataCenterConsolidatedSwap } from './PdsiDataCenterConsolidatedSwap';
-import { PdsiItServicesConsolidatedSwap } from './PdsiItServicesConsolidatedSwap';
+import { PdsiSatuDataVisualSuite } from './PdsiSatuDataVisualSuite';
 import { PdsiKamusRumusView } from './PdsiKamusRumusView';
 import { KpiWordDocumentView } from '../KpiWordDocumentView';
 import { PdsiFilters } from './PdsiFilters';
@@ -71,23 +70,15 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
         onOpenExportModal={onOpenExportModal}
       />
 
-      {/* 2. Main Content Area: Strictly adhering to Points 1 - 10, all other views removed (Point 11) */}
+      {/* 2. Main Content Area */}
       {activeSubMenu === 'kpi_word_doc' ? (
         <KpiWordDocumentView activeUnitId="pdsi" onBackToDashboard={() => onSelectSubMenu('ikhtisar')} />
       ) : activeSubMenu === 'kamus_rumus' ? (
         <PdsiKamusRumusView />
-      ) : activeSubMenu === 'datacenter' || selectedDomain === 'datacenter' ? (
-        <div className="space-y-4">
-          <PdsiDataCenterConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
-        </div>
-      ) : activeSubMenu === 'layanan_ti' || activeSubMenu === 'helpdesk' || selectedDomain === 'layanan_ti' ? (
-        <div className="space-y-4">
-          <PdsiItServicesConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
-        </div>
       ) : (
-        /* Default Overview: Strictly 10 Points Requested by User */
+        /* Sesuai Permintaan User: Hanya Menampilkan KPI Row (Point 10) & 8 Visualisasi (Points 1 - 9) */
         <div className="space-y-5">
-          {/* Poin 1 s/d 8: 8 KPI BANS */}
+          {/* Point 10: KPI Row Tetap Dipertahankan (JANGAN DIRUBAH) */}
           <section id="pdsi-kpi-bans">
             <PdsiKpiRow
               onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
@@ -95,17 +86,13 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
             />
           </section>
 
-          {/* Poin 9: Sheet Swap Rekap Data Center, Data Tenant dan Server & Storage */}
-          <section id="pdsi-sheet-swap-datacenter">
-            <PdsiDataCenterConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
-          </section>
-
-          {/* Poin 10: Sheet Swap Data Layanan TI & Permintaan Layanan TI */}
-          <section id="pdsi-sheet-swap-layanan-ti">
-            <PdsiItServicesConsolidatedSwap onOpenFormulaModal={handleKpiCardClick} />
+          {/* Points 1 s/d 9: 8 Visualisasi Resmi Satu Data PDSI */}
+          <section id="pdsi-satu-data-visualisasi-suite">
+            <PdsiSatuDataVisualSuite />
           </section>
         </div>
       )}
     </div>
   );
 };
+

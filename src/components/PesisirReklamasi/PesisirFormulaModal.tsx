@@ -77,7 +77,33 @@ export const PesisirFormulaModal: React.FC<PesisirFormulaModalProps> = ({
               </div>
 
               <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-600">
-                📌 <strong>Atribut Dataset #4:</strong> Nama Perusahaan, Luas (Ha / m²), Tahun, Tahun Penerbitan, Sub Wilayah (SWP), Nilai Investasi (Miliar Rp), dan Status Fisik.
+                📌 <strong>Atribut Resmi Dataset #4 (Hal. 14):</strong> Nama Perusahaan, Nomor Izin PKKPRL, Koordinat, Wilayah, Luas (Ha / m²), dan Tahun Penerbitan. (Tidak ada atribut nilai investasi, murni berfokus pada luas alokasi ruang laut).
+              </div>
+            </div>
+          )}
+
+          {activeKpiId === 'kpi_spasial_rencana' && (
+            <div className="space-y-3">
+              <div className="p-3 bg-indigo-50/60 border border-indigo-200 rounded-lg">
+                <span className="font-bold text-indigo-900 block text-xs mb-1">
+                  4. Dataset #2: Rencana Pemanfaatan Wilayah Pesisir dan Reklamasi (Data Spasial)
+                </span>
+                <p className="text-slate-700 text-[11.5px] leading-relaxed">
+                  Memetakan titik-titik alokasi ruang laut masa depan untuk permohonan reklamasi, dermaga/jetty, pelabuhan, dan industri maritim lepas pantai. Sumber: <strong>Dataset No. 2 (Data Spasial Hal. 14)</strong>.
+                </p>
+              </div>
+
+              <div>
+                <span className="font-bold text-slate-800 block mb-1 text-xs">Atribut Resmi Sesuai PDF Satu Data:</span>
+                <ul className="list-disc pl-4 space-y-1 text-slate-700 text-[11px]">
+                  <li>Nama Perusahaan</li>
+                  <li>Nomor Izin PKKPRL</li>
+                  <li>Koordinat (Lintang &amp; Bujur)</li>
+                  <li>Wilayah (Sub Wilayah Pengembangan)</li>
+                  <li>Status Kegiatan (Rencana Reklamasi, Dermaga/Jetty, Wisata Bahari, dll.)</li>
+                  <li>Luas (Ha / m²)</li>
+                  <li>Tahun Penerbitan</li>
+                </ul>
               </div>
             </div>
           )}

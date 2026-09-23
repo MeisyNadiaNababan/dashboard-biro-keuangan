@@ -534,3 +534,343 @@ export const TOTAL_BONGKAR_MUAT_TAHUN = {
   curahCairTonYtd: 1607000,
   dwellTimeHari: 2.8, // Standar internasional < 3 hari
 };
+
+// =====================================================================
+// 8. DATASET #3 (RINCIAN COA, TERMINAL/SATKER, JUMLAH) - HAL. 15
+// =====================================================================
+export interface PnbpCoaItem {
+  coa: string;
+  jenisLayanan: string;
+  terminalSatker: string;
+  jumlahRp: number;
+  targetRp: number;
+  persen: number;
+  keterangan: string;
+}
+
+export const PNBP_COA_DETAILED_DATA: PnbpCoaItem[] = [
+  {
+    coa: '425111',
+    jenisLayanan: 'Jasa Labuh & Tambat Kapal',
+    terminalSatker: 'Pelabuhan Batu Ampar',
+    jumlahRp: 118400000000,
+    targetRp: 130000000000,
+    persen: 91.1,
+    keterangan: 'Pelayanan labuh kapal niaga, kontainer & ocean-going vessels',
+  },
+  {
+    coa: '425112',
+    jenisLayanan: 'Jasa Dermaga & Penumpukan Peti Kemas',
+    terminalSatker: 'Pelabuhan Batu Ampar',
+    jumlahRp: 100100000000,
+    targetRp: 110000000000,
+    persen: 91.0,
+    keterangan: 'Lift-on/lift-off STS crane, container yard, reefer plug & storage',
+  },
+  {
+    coa: '425113',
+    jenisLayanan: 'Jasa Pemanduan & Penundaan Kapal',
+    terminalSatker: 'Pelabuhan Kabil & Selat Riau',
+    jumlahRp: 86200000000,
+    targetRp: 98000000000,
+    persen: 88.0,
+    keterangan: 'Pandu wajib & kapal tunda asistensi manuver tanker curah cair',
+  },
+  {
+    coa: '425114',
+    jenisLayanan: 'Pass Pelabuhan & Terminal Penumpang Feri',
+    terminalSatker: 'Terminal Batam Centre',
+    jumlahRp: 52400000000,
+    targetRp: 58000000000,
+    persen: 90.3,
+    keterangan: 'Boarding pass feri internasional Batam - Singapura (HarbourFront)',
+  },
+  {
+    coa: '425115',
+    jenisLayanan: 'Jasa Dermaga Penumpang & Feri Cepat',
+    terminalSatker: 'Pelabuhan Sekupang',
+    jumlahRp: 39800000000,
+    targetRp: 45000000000,
+    persen: 88.4,
+    keterangan: 'Pelayanan tambat feri domestik & internasional Sekupang',
+  },
+  {
+    coa: '425116',
+    jenisLayanan: 'Pass Pelabuhan & Dermaga Ro-Ro',
+    terminalSatker: 'Pelabuhan Telaga Punggur',
+    jumlahRp: 21600000000,
+    targetRp: 25000000000,
+    persen: 86.4,
+    keterangan: 'Retribusi lintasan feri cepat & dermaga ro-ro antarpulau Kepri',
+  },
+  {
+    coa: '425117',
+    jenisLayanan: 'Sewa Lahan, Perairan & Reklame Pelabuhan',
+    terminalSatker: 'Terminal Harbour Bay & Nongsa',
+    jumlahRp: 10000000000,
+    targetRp: 14000000000,
+    persen: 71.4,
+    keterangan: 'Pemanfaatan ruang komersial, perairan marina & tenant pelabuhan',
+  },
+];
+
+// Ringkasan PNBP per COA Akun
+export const PNBP_PER_COA_SUMMARY = [
+  { coa: '425111', nama: 'Jasa Labuh & Tambat Kapal', jumlahMiliar: 118.4, targetMiliar: 130.0, persen: 91.1, satker: 'Batu Ampar' },
+  { coa: '425112', nama: 'Jasa Dermaga & Penumpukan Container', jumlahMiliar: 100.1, targetMiliar: 110.0, persen: 91.0, satker: 'Batu Ampar' },
+  { coa: '425113', nama: 'Jasa Pemanduan & Penundaan Kapal', jumlahMiliar: 86.2, targetMiliar: 98.0, persen: 88.0, satker: 'Kabil' },
+  { coa: '425114', nama: 'Pass Terminal Penumpang Feri', jumlahMiliar: 52.4, targetMiliar: 58.0, persen: 90.3, satker: 'Batam Centre' },
+  { coa: '425115', nama: 'Jasa Dermaga Penumpang Sekupang', jumlahMiliar: 39.8, targetMiliar: 45.0, persen: 88.4, satker: 'Sekupang' },
+  { coa: '425116', nama: 'Pass & Dermaga Ro-Ro Telaga Punggur', jumlahMiliar: 21.6, targetMiliar: 25.0, persen: 86.4, satker: 'Telaga Punggur' },
+  { coa: '425117', nama: 'Sewa Lahan & Perairan Komersial', jumlahMiliar: 10.0, targetMiliar: 14.0, persen: 71.4, satker: 'Harbour Bay & Nongsa' },
+];
+
+// =====================================================================
+// 9. DATASET #2 (RINCIAN COA BELANJA, MATA ANGGARAN, JUMLAH) - HAL. 14
+// =====================================================================
+export interface BelanjaCoaItem {
+  coa: string;
+  mataAnggaran: string;
+  keterangan: string;
+  paguRp: number;
+  realisasiRp: number;
+  sisaRp: number;
+  persen: number;
+  bulan: string;
+}
+
+export const BELANJA_COA_DETAILED_DATA: BelanjaCoaItem[] = [
+  {
+    coa: '521811',
+    mataAnggaran: 'Belanja Pemeliharaan Dermaga, Alur & Kolam Pelabuhan',
+    keterangan: 'Pengerukan sedimentasi draf kolam dermaga utara & perbaikan fender dermaga',
+    paguRp: 92000000000,
+    realisasiRp: 80500000000,
+    sisaRp: 11500000000,
+    persen: 87.5,
+    bulan: 'Januari - April',
+  },
+  {
+    coa: '523111',
+    mataAnggaran: 'Belanja Modal Peralatan Container Handling (STS Crane)',
+    keterangan: 'Modernisasi Ship-to-Shore Crane elektrik kapasitas 45 Ton di Batu Ampar',
+    paguRp: 58000000000,
+    realisasiRp: 51200000000,
+    sisaRp: 6800000000,
+    persen: 88.3,
+    bulan: 'Januari - April',
+  },
+  {
+    coa: '522111',
+    mataAnggaran: 'Belanja Operasional Pelayanan & Kepanduan Kapal',
+    keterangan: 'Bahan bakar kapal tunda (tugboat), operasional kru kepanduan maritim 24/7',
+    paguRp: 38000000000,
+    realisasiRp: 32800000000,
+    sisaRp: 5200000000,
+    persen: 86.3,
+    bulan: 'Januari - April',
+  },
+  {
+    coa: '523121',
+    mataAnggaran: 'Belanja Sistem Digitalisasi Pelabuhan (TOS & BMS)',
+    keterangan: 'Integrasi Batam Port Maritime System (BMS) dengan INAPORTNET Kemenhub',
+    paguRp: 15000000000,
+    realisasiRp: 11950000000,
+    sisaRp: 3050000000,
+    persen: 79.7,
+    bulan: 'Januari - April',
+  },
+  {
+    coa: '521111',
+    mataAnggaran: 'Belanja Sarana Keselamatan Pelayaran & Keamanan ISPS Code',
+    keterangan: 'CCTV surveillance termal, sertifikasi fasilitas pelabuhan ISPS Code',
+    paguRp: 12000000000,
+    realisasiRp: 7800000000,
+    sisaRp: 4200000000,
+    persen: 65.0,
+    bulan: 'Januari - April',
+  },
+];
+
+// =====================================================================
+// 10. DATASET #12: VOLUME / TONASE BARANG PER NEGARA ASAL & TUJUAN - HAL. 16
+// =====================================================================
+export interface VolumeTonaseNegaraItem {
+  id: string;
+  negaraAsal: string;
+  pelabuhanAsal: string;
+  negaraTujuan: string;
+  pelabuhanTujuan: string;
+  volumeBongkarTon: number;
+  volumeMuatTon: number;
+  totalVolumeTon: number;
+  namaTerminal: string;
+  benderaKapal: string;
+}
+
+export const VOLUME_TONASE_NEGARA_DATA: VolumeTonaseNegaraItem[] = [
+  {
+    id: 'TON-01',
+    negaraAsal: 'Singapura',
+    pelabuhanAsal: 'Port of Singapore (PSA / Jurong)',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Batu Ampar',
+    volumeBongkarTon: 4250000,
+    volumeMuatTon: 3820000,
+    totalVolumeTon: 8070000,
+    namaTerminal: 'Terminal Peti Kemas Batu Ampar',
+    benderaKapal: 'Singapura / Indonesia',
+  },
+  {
+    id: 'TON-02',
+    negaraAsal: 'Indonesia (Domestik)',
+    pelabuhanAsal: 'Tanjung Priok, Belawan & Tanjung Perak',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Batu Ampar & Kabil',
+    volumeBongkarTon: 3450000,
+    volumeMuatTon: 2890000,
+    totalVolumeTon: 6340000,
+    namaTerminal: 'Dermaga Selatan & Kabil',
+    benderaKapal: 'Indonesia (Cabotage)',
+  },
+  {
+    id: 'TON-03',
+    negaraAsal: 'Tiongkok',
+    pelabuhanAsal: 'Shanghai, Ningbo & Shenzhen',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Batu Ampar',
+    volumeBongkarTon: 3120000,
+    volumeMuatTon: 1450000,
+    totalVolumeTon: 4570000,
+    namaTerminal: 'Terminal Peti Kemas Batu Ampar',
+    benderaKapal: 'Panama / Liberia',
+  },
+  {
+    id: 'TON-04',
+    negaraAsal: 'Malaysia',
+    pelabuhanAsal: 'Port Klang & Tanjung Pelepas',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Batu Ampar & Sekupang',
+    volumeBongkarTon: 2180000,
+    volumeMuatTon: 1940000,
+    totalVolumeTon: 4120000,
+    namaTerminal: 'Terminal Multipurpose Batu Ampar',
+    benderaKapal: 'Malaysia / Indonesia',
+  },
+  {
+    id: 'TON-05',
+    negaraAsal: 'Australia',
+    pelabuhanAsal: 'Fremantle & Port Hedland',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Kabil',
+    volumeBongkarTon: 1250000,
+    volumeMuatTon: 380000,
+    totalVolumeTon: 1630000,
+    namaTerminal: 'Dermaga Curah Kabil',
+    benderaKapal: 'Marshall Islands',
+  },
+  {
+    id: 'TON-06',
+    negaraAsal: 'Jepang',
+    pelabuhanAsal: 'Yokohama & Kobe',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Batu Ampar',
+    volumeBongkarTon: 980000,
+    volumeMuatTon: 620000,
+    totalVolumeTon: 1600000,
+    namaTerminal: 'Terminal Peti Kemas Batu Ampar',
+    benderaKapal: 'Panama',
+  },
+  {
+    id: 'TON-07',
+    negaraAsal: 'Korea Selatan',
+    pelabuhanAsal: 'Busan & Gwangyang',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Batu Ampar',
+    volumeBongkarTon: 840000,
+    volumeMuatTon: 510000,
+    totalVolumeTon: 1350000,
+    namaTerminal: 'Terminal Peti Kemas Batu Ampar',
+    benderaKapal: 'Korea / Panama',
+  },
+  {
+    id: 'TON-08',
+    negaraAsal: 'Thailand',
+    pelabuhanAsal: 'Laem Chabang & Bangkok',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Kabil',
+    volumeBongkarTon: 620000,
+    volumeMuatTon: 490000,
+    totalVolumeTon: 1110000,
+    namaTerminal: 'Dermaga Curah Cair Kabil',
+    benderaKapal: 'Thailand / Singapura',
+  },
+  {
+    id: 'TON-09',
+    negaraAsal: 'Vietnam',
+    pelabuhanAsal: 'Ho Chi Minh & Hai Phong',
+    negaraTujuan: 'Indonesia (Batam)',
+    pelabuhanTujuan: 'Pelabuhan Batu Ampar',
+    volumeBongkarTon: 540000,
+    volumeMuatTon: 410000,
+    totalVolumeTon: 950000,
+    namaTerminal: 'Dermaga Selatan Batu Ampar',
+    benderaKapal: 'Vietnam / Indonesia',
+  },
+];
+
+// Ringkasan Ranking Berdasarkan Negara Asal
+export const VOLUME_PER_NEGARA_ASAL_SUMMARY = [
+  { negara: 'Singapura', totalTon: 8070000, bongkarTon: 4250000, muatTon: 3820000, porsiPersen: 27.1 },
+  { negara: 'Domestik Indonesia', totalTon: 6340000, bongkarTon: 3450000, muatTon: 2890000, porsiPersen: 21.3 },
+  { negara: 'Tiongkok', totalTon: 4570000, bongkarTon: 3120000, muatTon: 1450000, porsiPersen: 15.4 },
+  { negara: 'Malaysia', totalTon: 4120000, bongkarTon: 2180000, muatTon: 1940000, porsiPersen: 13.9 },
+  { negara: 'Australia', totalTon: 1630000, bongkarTon: 1250000, muatTon: 380000, porsiPersen: 5.5 },
+  { negara: 'Jepang', totalTon: 1600000, bongkarTon: 980000, muatTon: 620000, porsiPersen: 5.4 },
+  { negara: 'Korea Selatan', totalTon: 1350000, bongkarTon: 840000, muatTon: 510000, porsiPersen: 4.5 },
+  { negara: 'Thailand', totalTon: 1110000, bongkarTon: 620000, muatTon: 490000, porsiPersen: 3.7 },
+  { negara: 'Vietnam', totalTon: 950000, bongkarTon: 540000, muatTon: 410000, porsiPersen: 3.2 },
+];
+
+export const TOTAL_VOLUME_ARUS_BARANG = {
+  totalBongkarTon: 17230000,
+  totalMuatTon: 12510000,
+  totalArusTon: 29740000, // 29,74 Juta Ton
+};
+
+// =====================================================================
+// 11. DATASET #22, #23, #24: PIE CHART PELAYANAN BONGKAR MUAT TERMINAL
+// =====================================================================
+export const PELAYANAN_BONGKAR_MUAT_PIE_DATA = {
+  // Dataset #23: Terminal Peti Kemas Batu Ampar (TEUs)
+  petiKemas: {
+    namaTerminal: 'Terminal Peti Kemas (TPK) Batu Ampar',
+    satuan: 'TEUs',
+    totalTeus: 210000,
+    pieData: [
+      { name: 'Volume Bongkar Peti Kemas', value: 108200, persen: 51.5, color: '#002B49' },
+      { name: 'Volume Muat Peti Kemas', value: 101800, persen: 48.5, color: '#0284C7' },
+    ],
+  },
+  // Dataset #24: Terminal Curah (Ton)
+  curahCair: {
+    namaTerminal: 'Terminal Curah Cair (Kabil & Sekupang)',
+    satuan: 'Ton',
+    totalTon: 1607000,
+    pieData: [
+      { name: 'Volume Bongkar Curah Cair', value: 980000, persen: 61.0, color: '#D97706' },
+      { name: 'Volume Muat Curah Cair', value: 627000, persen: 39.0, color: '#F59E0B' },
+    ],
+  },
+  // Dataset #22: Terminal General Cargo (Ton)
+  generalCargo: {
+    namaTerminal: 'Terminal Kargo Umum Batu Ampar',
+    satuan: 'Ton',
+    totalTon: 1003000,
+    pieData: [
+      { name: 'Volume Bongkar General Cargo', value: 580000, persen: 57.8, color: '#059669' },
+      { name: 'Volume Muat General Cargo', value: 423000, persen: 42.2, color: '#10B981' },
+    ],
+  },
+};
+

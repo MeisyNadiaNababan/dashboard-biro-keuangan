@@ -39,8 +39,8 @@ export const RumahSakitMorbiditasObatCard: React.FC<RumahSakitMorbiditasObatCard
       {/* 1. Header with Tab Switcher */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 border border-teal-200 flex items-center justify-center shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 border border-teal-200 flex items-center justify-center shrink-0 mt-0.5">
               <Pill className="w-4 h-4" />
             </div>
             <div>
@@ -48,13 +48,18 @@ export const RumahSakitMorbiditasObatCard: React.FC<RumahSakitMorbiditasObatCard
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-teal-50 text-teal-700 border border-teal-200">
                   Dataset #4, #17, #7, #1
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
-                  Analisis Klinis & SDM
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Pareto Horizontal Bar Chart Morbiditas &amp; Status Buffer Stock Obat
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
-                Morbiditas Penyakit, Farmasi Fornas & SDM Medis RSBP
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-1">
+                Morbiditas Penyakit, Farmasi Fornas &amp; SDM Medis RSBP
               </h3>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>KODE ICD-10</strong>, <strong>NAMA PENYAKIT</strong>, <strong>JUMLAH KASUS</strong>, &amp; <strong>KELAS TERAPI OBAT</strong> (Hal. 76)
+                </span>
+              </div>
             </div>
           </div>
 

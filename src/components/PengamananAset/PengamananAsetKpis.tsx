@@ -23,7 +23,30 @@ interface PengamananAsetKpisProps {
 
 export const PengamananAsetKpis: React.FC<PengamananAsetKpisProps> = ({ onOpenFormulaModal }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+    <div className="space-y-2 font-sans">
+      {/* Standard Header Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono">
+              POIN #1 SAMPAI #4
+            </span>
+            <h2 className="text-xs sm:text-sm font-bold tracking-wider uppercase text-slate-800">
+              INDIKATOR KINERJA UTAMA KOMANDO OPERASIONAL DITPAM BP BATAM
+            </h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Executive Command Scorecards &amp; Penertiban KPI Gauges
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>TOTAL BANGUNAN LIAR DITERTIBKAN</strong>, <strong>KEKUATAN PERSONIL DITPAM</strong>, <strong>GIAT PENGAMANAN OBVITNAS</strong>, &amp; <strong>LUAS PENINDAKAN HUTAN (HA)</strong> (Hal. 17)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
       {/* KPI 1: JUMLAH PENERBITAN BANGUNAN LIAR (Dataset No. 1) */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between relative group">
         <div>
@@ -200,5 +223,6 @@ export const PengamananAsetKpis: React.FC<PengamananAsetKpisProps> = ({ onOpenFo
         </div>
       </div>
     </div>
+  </div>
   );
 };

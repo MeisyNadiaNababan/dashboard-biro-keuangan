@@ -56,29 +56,42 @@ export const PtspPerizinanSheetSwapSection: React.FC<PtspPerizinanSheetSwapSecti
       {/* Header Container with Sheet Swap Switcher */}
       <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-800 border border-purple-200 flex items-center gap-1">
               <ArrowRightLeft className="w-3 h-3" />
               POIN #10 • SHEET SWAP VIEW
             </span>
-            <span className="text-xs font-semibold text-slate-500">
-              {activeSheet === 'perizinan' ? 'Poin #8 • Dataset 7' : 'Poin #9 • Dataset 16'}
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Sheet Swap Stacked Bar Chart &amp; Tabel Monitoring Status Berkas
             </span>
           </div>
-          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 mt-0.5">
             {activeSheet === 'perizinan' ? (
               <>
                 <FileCheck2 className="w-4 h-4 text-[#002B49]" />
-                Daftar Perizinan BP Batam (Dataset 7)
+                Daftar Perizinan BP Batam (Poin #8 • Dataset 7)
               </>
             ) : (
               <>
                 <FileSpreadsheet className="w-4 h-4 text-[#002B49]" />
-                Daftar Non Perizinan BP Batam (Dataset 16)
+                Daftar Non Perizinan BP Batam (Poin #9 • Dataset 16)
               </>
             )}
           </h2>
-          <p className="text-xs text-slate-500">
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              {activeSheet === 'perizinan' ? (
+                <>
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>JENIS PERIZINAN</strong>, <strong>MASUK</strong>, <strong>DITOLAK</strong>, <strong>PROSES</strong>, <strong>SELESAI</strong>, &amp; <strong>TINGKAT TERBIT (%)</strong> (Hal. 27)
+                </>
+              ) : (
+                <>
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>JENIS NON PERIZINAN</strong>, <strong>MASUK</strong>, <strong>DITOLAK</strong>, <strong>PROSES</strong>, &amp; <strong>SELESAI</strong> (Hal. 30)
+                </>
+              )}
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
             {activeSheet === 'perizinan'
               ? 'Monitoring status berkas izin: Masuk, Ditolak, Proses, dan Selesai (Dataset 7)'
               : 'Monitoring status layanan administrasi non-perizinan: Masuk, Ditolak, Proses, dan Selesai (Dataset 16)'}

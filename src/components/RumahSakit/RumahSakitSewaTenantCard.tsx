@@ -42,8 +42,8 @@ export const RumahSakitSewaTenantCard: React.FC<RumahSakitSewaTenantCardProps> =
       {/* 1. Header with Title & Formula Button */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shrink-0 mt-0.5">
               <Building2 className="w-4 h-4" />
             </div>
             <div>
@@ -51,13 +51,18 @@ export const RumahSakitSewaTenantCard: React.FC<RumahSakitSewaTenantCardProps> =
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-200">
                   Dataset #14
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
-                  Tertutup • Per Tahun
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Status Grid Okupansi Tenant Komersial &amp; Tabel Rincian Sewa
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
-                Rekap Sewa Ruangan &amp; Fasilitas Komersial RSBP Batam
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-1">
+                Rekap Sewa Ruangan &amp; Fasilitas Komersial RSBP Batam (Dataset 14)
               </h3>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>NAMA TENANT</strong>, <strong>LOKASI GEDUNG/LANTAI</strong>, <strong>LUAS AREA (M²)</strong>, <strong>TARIF SEWA</strong>, &amp; <strong>STATUS OKUPANSI</strong> (Hal. 74)
+                </span>
+              </div>
             </div>
           </div>
 

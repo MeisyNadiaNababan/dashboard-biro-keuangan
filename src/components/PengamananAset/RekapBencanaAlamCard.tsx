@@ -44,18 +44,24 @@ export const RekapBencanaAlamCard: React.FC<RekapBencanaAlamCardProps> = ({ filt
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-rose-50 text-rose-800 border border-rose-200 font-mono">
-              DATASET NO. 6 • SATU DATA
+              POIN #6 • DATASET NO. 6 • SATU DATA
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs text-slate-500 font-medium">Hal. 18 Ditpam BP Batam</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Donut Chart Komposisi Bencana Alam &amp; Tabel Respon Tanggap Darurat Rescue
+            </span>
           </div>
           <h3 className="text-sm sm:text-base font-bold text-slate-900 mt-1 flex items-center gap-2">
-            <span>Rekap Kejadian Bencana Alam &amp; Penanggulangan Tim Rescue Ditpam</span>
+            <span>Rekap Kejadian Bencana Alam &amp; Penanggulangan Tim Rescue Ditpam (Dataset 6)</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Menampilkan rekapitulasi resmi <strong>Jenis Kegiatan</strong> dan <strong>Jumlah</strong> kejadian bencana alam yang ditangani cepat oleh Tim Damkar &amp; Rescue Ditpam BP Batam.
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>JENIS KEGIATAN BENCANA</strong>, <strong>JUMLAH KEJADIAN</strong>, <strong>PERSONIL RESCUE DIKERAHKAN</strong>, &amp; <strong>STATUS PENANGANAN</strong> (Hal. 18)
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Menampilkan rekapitulasi kejadian bencana alam dan mitigasi rescue oleh Tim Damkar &amp; Rescue Ditpam BP Batam.
           </p>
         </div>
 

@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
 import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  CartesianGrid,
+  ReferenceLine,
+  Cell,
+  Treemap,
+} from 'recharts';
+import {
   DATA_JALUR_FIBER_OPTIC,
   DC_RACKS_DATA,
   DATA_KEPUASAN_PELANGGAN_DC,
@@ -23,7 +35,6 @@ import {
   Layers,
   MapPin,
   Activity,
-  Radio,
   ExternalLink,
   Table,
   BarChart3,
@@ -32,130 +43,11 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-// Coordinates and details for the 8 Fiber Optic Nodes on Pulau Batam schematic map
-interface FoMapNode {
-  id: string;
-  name: string;
-  shortName: string;
-  wilayah: string;
-  x: number; // SVG viewBox coordinates (0-800, 0-480)
-  y: number;
-  corridorId: string;
-  role: string;
-  core: number;
-}
-
-const FO_NODES: FoMapNode[] = [
-  {
-    id: 'node-bc',
-    name: 'Gedung BIDA Batam Centre (Core NOC)',
-    shortName: 'Batam Centre (NOC)',
-    wilayah: 'Batam Kota',
-    x: 430,
-    y: 190,
-    corridorId: 'fo-jlr-01',
-    role: 'Pusat Pemerintahan & Main DC',
-    core: 96,
-  },
-  {
-    id: 'node-bta',
-    name: 'Pelabuhan Peti Kemas Batu Ampar',
-    shortName: 'Batu Ampar',
-    wilayah: 'Batu Ampar',
-    x: 290,
-    y: 85,
-    corridorId: 'fo-jlr-02',
-    role: 'Logistik Maritim & Bea Cukai',
-    core: 72,
-  },
-  {
-    id: 'node-skp',
-    name: 'DRC Sekupang & RSBP Batam',
-    shortName: 'Sekupang (DRC)',
-    wilayah: 'Sekupang',
-    x: 130,
-    y: 210,
-    corridorId: 'fo-jlr-03',
-    role: 'Disaster Recovery & Medis',
-    core: 96,
-  },
-  {
-    id: 'node-ngs',
-    name: 'KEK Nongsa Digital Park & DC Hub',
-    shortName: 'Nongsa KEK',
-    wilayah: 'Nongsa',
-    x: 670,
-    y: 100,
-    corridorId: 'fo-jlr-04',
-    role: 'Hub Digital & Kabel Laut',
-    core: 96,
-  },
-  {
-    id: 'node-kbl',
-    name: 'Kawasan Industri Kabil & Pelabuhan CPO',
-    shortName: 'Kabil Industri',
-    wilayah: 'Kabil / Nongsa Selatan',
-    x: 640,
-    y: 310,
-    corridorId: 'fo-jlr-05',
-    role: 'Industri Manufaktur & B3',
-    core: 48,
-  },
-  {
-    id: 'node-bnd',
-    name: 'Bandara Hang Nadim & KEK BAT',
-    shortName: 'Hang Nadim',
-    wilayah: 'Batam Kota / Hang Nadim',
-    x: 570,
-    y: 180,
-    corridorId: 'fo-jlr-06',
-    role: 'Kedirgantaraan & Logistik Udara',
-    core: 48,
-  },
-  {
-    id: 'node-ngy',
-    name: 'Nagoya Sentra Finansial / Komersial',
-    shortName: 'Nagoya / Lubuk Baja',
-    wilayah: 'Lubuk Baja / Nagoya',
-    x: 280,
-    y: 160,
-    corridorId: 'fo-jlr-07',
-    role: 'Perbankan & Pelayanan Mitra',
-    core: 72,
-  },
-  {
-    id: 'node-btj',
-    name: 'Kawasan Pelayanan Batu Aji & Mukakuning',
-    shortName: 'Batu Aji / Mukakuning',
-    wilayah: 'Batu Aji / Sagulung',
-    x: 310,
-    y: 350,
-    corridorId: 'fo-jlr-08',
-    role: 'Industri Elektronik & Layanan Publik',
-    core: 48,
-  },
-];
-
-// Corridors / Links connecting the nodes
-interface FoLink {
-  from: string;
-  to: string;
-  corridorId: string;
-  core: number;
-  label: string;
-  tipe: string;
-}
-
-const FO_LINKS: FoLink[] = [
-  { from: 'node-bc', to: 'node-bta', corridorId: 'fo-jlr-02', core: 72, label: 'Batam Centre - Batu Ampar (18.5 Km)', tipe: 'Interkoneksi Maritim' },
-  { from: 'node-bc', to: 'node-ngy', corridorId: 'fo-jlr-07', core: 72, label: 'Batam Centre - Nagoya (12.4 Km)', tipe: 'Distribusi Komersial' },
-  { from: 'node-ngy', to: 'node-bta', corridorId: 'fo-jlr-02', core: 72, label: 'Nagoya - Batu Ampar Link', tipe: 'Loop Pengaman' },
-  { from: 'node-bc', to: 'node-skp', corridorId: 'fo-jlr-03', core: 96, label: 'Batam Centre - Sekupang DRC (26.4 Km)', tipe: 'Backbone Replikasi DRC' },
-  { from: 'node-bc', to: 'node-bnd', corridorId: 'fo-jlr-06', core: 48, label: 'Batam Centre - Hang Nadim (16.7 Km)', tipe: 'Spur Link Bandara' },
-  { from: 'node-bnd', to: 'node-ngs', corridorId: 'fo-jlr-04', core: 96, label: 'Hang Nadim - Nongsa KEK (22.1 Km)', tipe: 'Konektivitas KEK Digital' },
-  { from: 'node-bc', to: 'node-kbl', corridorId: 'fo-jlr-05', core: 48, label: 'Batam Centre - Kabil (19.3 Km)', tipe: 'Distribusi Industri' },
-  { from: 'node-bc', to: 'node-btj', corridorId: 'fo-jlr-08', core: 48, label: 'Batam Centre - Batu Aji / Mukakuning (21.0 Km)', tipe: 'Distribusi Pelayanan' },
-  { from: 'node-btj', to: 'node-skp', corridorId: 'fo-jlr-03', core: 48, label: 'Batu Aji - Sekupang Ring Selatan', tipe: 'Redundansi Link' },
+// 3-Tier FO Cable Core Capacity Breakdown for PDSI
+const FO_CORE_TIERS = [
+  { name: '96 Core SM (Backbone Ring & KEK Digital)', count: 3, km: 73.3, pct: '48.5%', color: '#059669', badgeBg: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+  { name: '72 Core SM (Hub Maritim & Finansial)', count: 2, km: 30.9, pct: '20.4%', color: '#0284c7', badgeBg: 'bg-sky-50 text-sky-800 border-sky-200' },
+  { name: '48 Core SM (Distribusi Kawasan & Spur)', count: 3, km: 47.0, pct: '31.1%', color: '#d97706', badgeBg: 'bg-amber-50 text-amber-800 border-amber-200' },
 ];
 
 export const PdsiSatuDataVisualSuite: React.FC = () => {
@@ -165,7 +57,8 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
   // Visualization 1: Fiber Optic Filter & Active Node/Corridor
   const [selectedFoWilayah, setSelectedFoWilayah] = useState<string>('ALL');
   const [activeFoCorridorId, setActiveFoCorridorId] = useState<string>('fo-jlr-01');
-  const [foViewMode, setFoViewMode] = useState<'topology' | 'table'>('topology');
+  const [hoveredFoId, setHoveredFoId] = useState<string | null>(null);
+  const [foViewMode, setFoViewMode] = useState<'chart' | 'table'>('chart');
 
   // Visualization 6: Server & Storage Filter
   const [serverTypeFilter, setServerTypeFilter] = useState<string>('ALL');
@@ -180,6 +73,339 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
   const filteredFo = selectedFoWilayah === 'ALL'
     ? DATA_JALUR_FIBER_OPTIC
     : DATA_JALUR_FIBER_OPTIC.filter((item) => item.bagianWilayah.toLowerCase().includes(selectedFoWilayah.toLowerCase()));
+
+  const totalBentangKm = filteredFo.reduce((acc, item) => acc + (item.panjangKm || 0), 0) || 151.2;
+
+  // Chart Data for Horizontal Bar Chart: Sorted by Length (Km) descending
+  const foChartData = [...filteredFo]
+    .sort((a, b) => (b.panjangKm || 0) - (a.panjangKm || 0))
+    .map((item) => ({
+      id: item.id,
+      name: item.bagianWilayah,
+      panjangKm: item.panjangKm || 0,
+      kapasitasCore: item.kapasitasCore || 0,
+      tipeJalur: item.tipeJalur,
+      lokasi: item.lokasi,
+      tahun: item.tahun,
+      statusKoneksi: item.statusKoneksi || 'Aktif Normal',
+      fillColor: item.kapasitasCore === 96 ? '#059669' : item.kapasitasCore === 72 ? '#0284c7' : '#d97706',
+    }));
+
+  // Treemap Data: hierarchical structure with children sized by panjang bentang FO (Km)
+  const foTreemapData = [
+    {
+      name: 'Koridor FO',
+      children: filteredFo.map((item) => ({
+        id: item.id,
+        name: item.bagianWilayah,
+        size: item.panjangKm || 10,
+        panjangKm: item.panjangKm || 0,
+        kapasitasCore: item.kapasitasCore || 0,
+        tipeJalur: item.tipeJalur,
+        lokasi: item.lokasi,
+        tahun: item.tahun,
+        statusKoneksi: item.statusKoneksi || 'Aktif Normal',
+      })),
+    },
+  ];
+
+  const CustomFoTreemapNode = (props: any) => {
+    const { x, y, width, height, name, panjangKm, kapasitasCore, id, depth, tipeJalur, statusKoneksi } = props;
+
+    // Filter out root node or tiny slivers
+    if (depth === 0 || !name || width < 25 || height < 25) return null;
+
+    const isSelected = id === activeFoCorridorId;
+    const isHovered = id === hoveredFoId;
+
+    // Distinct, vibrant color coding by Core capacity
+    let bgColor = '#0284c7';
+    let strokeColor = '#7dd3fc';
+    let badgeTextColor = '#0369a1';
+
+    if (isSelected) {
+      bgColor = '#0c2847'; // High-contrast BP Batam Deep Navy
+      strokeColor = '#38bdf8'; // Glowing Cyan border
+      badgeTextColor = '#0369a1';
+    } else if (kapasitasCore === 96) {
+      bgColor = '#047857'; // Vibrant Emerald
+      strokeColor = '#34d399';
+      badgeTextColor = '#065f46';
+    } else if (kapasitasCore === 72) {
+      bgColor = '#0284c7'; // Sky / Ocean Blue
+      strokeColor = '#7dd3fc';
+      badgeTextColor = '#0369a1';
+    } else if (kapasitasCore === 48) {
+      bgColor = '#6366f1'; // Royal Violet / Indigo
+      strokeColor = '#c4b5fd';
+      badgeTextColor = '#3730a3';
+    }
+
+    // Share of total bentang percentage
+    const pct = totalBentangKm > 0 ? `${((panjangKm / totalBentangKm) * 100).toFixed(1)}%` : '0%';
+
+    // Multi-line Title Splitting to avoid truncation (e.g., 'Kabil / Nongsa Selatan')
+    const titleLines: string[] = [];
+    if (name.includes(' / ')) {
+      const parts = name.split(' / ');
+      titleLines.push(parts[0]);
+      titleLines.push(`/ ${parts.slice(1).join(' / ')}`);
+    } else {
+      titleLines.push(name);
+    }
+
+    const isTwoLines = titleLines.length > 1;
+    const showDetails = width > 100 && height > 70;
+    const showCompact = width > 55 && height > 38;
+
+    // Y position calculations
+    const line1Y = isTwoLines ? y + 17 : y + 21;
+    const line2Y = y + 33;
+    const metricY = isTwoLines ? y + 53 : y + 43;
+    const badgeY = metricY + 9;
+
+    return (
+      <g
+        onClick={() => id && setActiveFoCorridorId(id)}
+        onMouseEnter={() => id && setHoveredFoId(id)}
+        onMouseLeave={() => setHoveredFoId(null)}
+        className="cursor-pointer select-none transition-all duration-150"
+      >
+        {/* Rectangle Tile */}
+        <rect
+          x={x + 2}
+          y={y + 2}
+          width={Math.max(width - 4, 0)}
+          height={Math.max(height - 4, 0)}
+          rx={7}
+          ry={7}
+          fill={bgColor}
+          stroke={isSelected ? '#38bdf8' : isHovered ? '#ffffff' : strokeColor}
+          strokeWidth={isSelected ? 3 : isHovered ? 2 : 1.2}
+          style={{
+            filter: isSelected
+              ? 'drop-shadow(0 4px 12px rgba(12, 40, 71, 0.6))'
+              : isHovered
+              ? 'brightness(1.15) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25))'
+              : 'none',
+            transition: 'all 0.2s ease',
+          }}
+        />
+
+        {/* Selected Inner Accent Ring */}
+        {isSelected && (
+          <rect
+            x={x + 5}
+            y={y + 5}
+            width={Math.max(width - 10, 0)}
+            height={Math.max(height - 10, 0)}
+            rx={5}
+            ry={5}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.7)"
+            strokeWidth={1}
+            strokeDasharray="4 3"
+          />
+        )}
+
+        {/* Selected Badge Indicator in Top-Right Corner */}
+        {isSelected && width > 115 && height > 55 && (
+          <g transform={`translate(${x + width - 74}, ${y + 6})`}>
+            <rect width={68} height={18} rx={4} fill="#38bdf8" />
+            <text
+              x={34}
+              y={13}
+              textAnchor="middle"
+              fill="#0c2847"
+              fontSize={9}
+              fontWeight="bold"
+              letterSpacing="0.05em"
+              style={{ pointerEvents: 'none' }}
+            >
+              ✓ TERPILIH
+            </text>
+          </g>
+        )}
+
+        {/* Content Layout */}
+        {showDetails ? (
+          <>
+            {/* Bagian Wilayah - Multi-line without truncation */}
+            <text
+              x={x + 10}
+              y={line1Y}
+              fill="#ffffff"
+              fontSize={isTwoLines ? 12 : 13.5}
+              fontWeight="bold"
+              style={{ pointerEvents: 'none' }}
+            >
+              {titleLines[0]}
+            </text>
+            {isTwoLines && (
+              <text
+                x={x + 10}
+                y={line2Y}
+                fill="#e0f2fe"
+                fontSize={11}
+                fontWeight="600"
+                style={{ pointerEvents: 'none' }}
+              >
+                {titleLines[1]}
+              </text>
+            )}
+
+            {/* Panjang Km & Percentage of Total */}
+            <text x={x + 10} y={metricY} style={{ pointerEvents: 'none' }}>
+              <tspan fill="#ffffff" fontSize={18} fontWeight="bold" fontFamily="monospace">
+                {panjangKm}
+              </tspan>
+              <tspan fill="#e0f2fe" fontSize={12} fontWeight="bold">
+                {' '}Km{' '}
+              </tspan>
+              {width > 125 && (
+                <tspan fill="#bae6fd" fontSize={10.5} fontWeight="normal">
+                  ({pct})
+                </tspan>
+              )}
+            </text>
+
+            {/* Solid High-Contrast Core Capacity Badge */}
+            {height > 105 && (
+              <g transform={`translate(${x + 10}, ${badgeY})`} style={{ pointerEvents: 'none' }}>
+                <rect
+                  width={Math.min(width - 24, 94)}
+                  height={19}
+                  rx={4}
+                  fill="#ffffff"
+                  stroke="rgba(0,0,0,0.15)"
+                  strokeWidth={0.8}
+                />
+                <text
+                  x={7}
+                  y={13.5}
+                  fill={badgeTextColor}
+                  fontSize={10}
+                  fontWeight="bold"
+                  fontFamily="monospace"
+                >
+                  {kapasitasCore} CORE SM
+                </text>
+              </g>
+            )}
+
+            {/* Large Tile Bonus: Tipe Jalur & Status (e.g., Sekupang, Nongsa) */}
+            {height > 155 && width > 130 && (
+              <>
+                <text
+                  x={x + 10}
+                  y={badgeY + 34}
+                  fill="#f1f5f9"
+                  fontSize={10.5}
+                  fontStyle="italic"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  {tipeJalur && tipeJalur.length > 22 ? `${tipeJalur.substring(0, 20)}…` : tipeJalur}
+                </text>
+                <text
+                  x={x + 10}
+                  y={badgeY + 50}
+                  fill="#a7f3d0"
+                  fontSize={10}
+                  fontWeight="600"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  ● {statusKoneksi}
+                </text>
+              </>
+            )}
+          </>
+        ) : showCompact ? (
+          <>
+            <text
+              x={x + 8}
+              y={y + 16}
+              fill="#ffffff"
+              fontSize={10.5}
+              fontWeight="bold"
+              style={{ pointerEvents: 'none' }}
+            >
+              {titleLines[0]}
+            </text>
+            <text
+              x={x + 8}
+              y={y + 32}
+              fill="#ffffff"
+              fontSize={12}
+              fontWeight="bold"
+              fontFamily="monospace"
+              style={{ pointerEvents: 'none' }}
+            >
+              {panjangKm} Km
+            </text>
+            {height > 52 && (
+              <text
+                x={x + 8}
+                y={y + 45}
+                fill="#bae6fd"
+                fontSize={9}
+                fontWeight="bold"
+                fontFamily="monospace"
+                style={{ pointerEvents: 'none' }}
+              >
+                {kapasitasCore}C ({pct})
+              </text>
+            )}
+          </>
+        ) : (
+          <text
+            x={x + width / 2}
+            y={y + height / 2 + 4}
+            textAnchor="middle"
+            fill="#ffffff"
+            fontSize={10}
+            fontWeight="bold"
+            style={{ pointerEvents: 'none' }}
+          >
+            {panjangKm}K
+          </text>
+        )}
+      </g>
+    );
+  };
+
+  const FoCustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-xl border border-slate-700 text-xs space-y-1.5 max-w-xs">
+          <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
+            <span className="font-bold text-sky-300">{data.name}</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+              Tahun {data.tahun}
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-300 leading-snug">
+            <span className="text-slate-400 font-semibold block text-[10px]">LOKASI:</span>
+            {data.lokasi}
+          </div>
+          <div className="pt-1.5 border-t border-slate-800 grid grid-cols-2 gap-2 text-[11px]">
+            <div>
+              <span className="text-slate-400 block text-[10px]">Panjang Kabel:</span>
+              <span className="font-mono font-bold text-emerald-400">{data.panjangKm} Km</span>
+            </div>
+            <div>
+              <span className="text-slate-400 block text-[10px]">Kapasitas Core:</span>
+              <span className="font-mono font-bold text-amber-300">{data.kapasitasCore} Core SM</span>
+            </div>
+          </div>
+          <div className="text-[10px] text-slate-400">
+            Tipe: <span className="text-white font-medium">{data.tipeJalur}</span>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   // Data Center Rack Room Aggregates (Denah Okupansi Slot Rak telah dihapus sesuai permintaan)
   const totalRacksAll = DC_RACKS_DATA.reduce((acc, r) => acc + r.totalRak, 0);
@@ -279,11 +505,10 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
 
       {/* ========================================================================= */}
       {/* 1. VISUALISASI DATA JALUR FIBER OPTIC (FO) - DATASET NO. 5 */}
-      {/* VISUALISASI BARU: Diagram Topologi Jaringan Interaktif & Peta Koridor Pulau Batam */}
       {/* ========================================================================= */}
       {(activeVisualTab === 'all' || activeVisualTab === 'vis-1') && (
         <div id="vis-1" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-          {/* Header Standardisasi Point 9 */}
+          {/* Header Standardisasi Visualisasi & Atribut */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -293,37 +518,41 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
                 <h2 className="text-sm font-bold text-slate-900">
                   Data Jalur Fiber Optic (FO)
                 </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200 font-mono">
-                  🏷️ Visualisasi: Topologi Skematik Interaktif Backbone Fiber Optik Pulau Batam
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Treemap Hirarki Proporsi Panjang Bentang &amp; Kapasitas Core FO
                 </span>
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
-                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>BAGIAN WILAYAH</strong>, &amp; <strong>LOKASI</strong>
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>BAGIAN WILAYAH</strong>, &amp; <strong>LOKASI</strong> (Hal. 41)
                 </span>
               </div>
             </div>
 
-            {/* View Mode & Filter */}
+            {/* Sheet Swap Toggle & Filter */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center bg-slate-100 p-0.5 rounded border border-slate-200">
+              <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
                 <button
-                  onClick={() => setFoViewMode('topology')}
-                  className={`px-2.5 py-1 text-xs font-semibold rounded transition-all cursor-pointer flex items-center gap-1 ${
-                    foViewMode === 'topology' ? 'bg-white text-sky-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  onClick={() => setFoViewMode('chart')}
+                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                    foViewMode === 'chart'
+                      ? 'bg-white text-sky-900 shadow-2xs font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  <Network className="w-3.5 h-3.5" />
-                  Topologi Map
+                  <BarChart3 className="w-3.5 h-3.5" />
+                  <span>Grafis</span>
                 </button>
                 <button
                   onClick={() => setFoViewMode('table')}
-                  className={`px-2.5 py-1 text-xs font-semibold rounded transition-all cursor-pointer flex items-center gap-1 ${
-                    foViewMode === 'table' ? 'bg-white text-sky-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                    foViewMode === 'table'
+                      ? 'bg-white text-sky-900 shadow-2xs font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   <Table className="w-3.5 h-3.5" />
-                  Tabel Koridor
+                  <span>Tabel</span>
                 </button>
               </div>
 
@@ -336,13 +565,13 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
                   );
                   if (matched) setActiveFoCorridorId(matched.id);
                 }}
-                className="text-xs border border-slate-300 rounded px-2.5 py-1 bg-white text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-sky-500"
+                className="text-xs border border-slate-300 rounded-lg px-2.5 py-1 bg-white text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-sky-500 font-medium"
               >
                 <option value="ALL">Semua Bagian Wilayah (8 Koridor)</option>
                 <option value="Batam Kota">Batam Kota</option>
                 <option value="Batu Ampar">Batu Ampar</option>
                 <option value="Sekupang">Sekupang</option>
-                <option value="Nongsa">Nongsa &amp; KEK</option>
+                <option value="Nongsa">Nongsa</option>
                 <option value="Kabil">Kabil</option>
                 <option value="Lubuk Baja">Lubuk Baja / Nagoya</option>
                 <option value="Batu Aji">Batu Aji / Sagulung</option>
@@ -352,330 +581,263 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
 
           {/* Quick Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            <div className="bg-sky-50/70 border border-sky-200 rounded p-2 text-center">
+            <div className="bg-sky-50/70 border border-sky-200 rounded-lg p-2.5 text-center">
               <span className="text-[10px] text-sky-800 font-semibold block">Total Koridor Jaringan</span>
               <span className="text-base font-bold text-sky-950 font-mono">{DATA_JALUR_FIBER_OPTIC.length} Koridor</span>
             </div>
-            <div className="bg-slate-50 border border-slate-200 rounded p-2 text-center">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-center">
               <span className="text-[10px] text-slate-600 font-semibold block">Total Panjang Bentang</span>
               <span className="text-base font-bold text-slate-900 font-mono">151,2 Km FO</span>
             </div>
-            <div className="bg-emerald-50/70 border border-emerald-200 rounded p-2 text-center">
+            <div className="bg-emerald-50/70 border border-emerald-200 rounded-lg p-2.5 text-center">
               <span className="text-[10px] text-emerald-800 font-semibold block">Kapasitas Core Maks</span>
               <span className="text-base font-bold text-emerald-950 font-mono">96 Core SM</span>
             </div>
-            <div className="bg-indigo-50/70 border border-indigo-200 rounded p-2 text-center">
+            <div className="bg-indigo-50/70 border border-indigo-200 rounded-lg p-2.5 text-center">
               <span className="text-[10px] text-indigo-800 font-semibold block">Tahun Rekapitulasi</span>
               <span className="text-base font-bold text-indigo-950 font-mono">Tahun 2026</span>
             </div>
           </div>
 
-          {foViewMode === 'topology' ? (
-            /* ========================================================================= */
-            /* VISUAL TOPOLOGI MAP: Interactive Geospatial FO Backbone of Pulau Batam */
-            /* ========================================================================= */
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-              {/* Left Column: Interactive Topology Canvas (8 Cols) */}
-              <div className="lg:col-span-8 bg-linear-to-b from-slate-900 to-slate-950 rounded-xl p-3 border border-slate-800 shadow-md relative overflow-hidden">
-                {/* Visual Header of the Topology Console */}
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          {/* SHEET SWAP: Mode Grafis (Horizontal Bar Chart & Summary) vs Mode Tabel */}
+          {foViewMode === 'chart' ? (
+            <div className="space-y-4">
+              {/* Main Visualization Grid: 8 Cols Chart + 4 Cols Detail Inspector */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                {/* Left Column (8 Cols): Treemap Visualization */}
+                <div className="lg:col-span-8 bg-slate-50/60 border border-slate-200 rounded-xl p-4">
+                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-4 h-4 text-[#1F4E79]" />
+                      <span className="text-xs font-bold text-slate-900 font-mono">
+                        TREEMAP HIRARKI: Proporsi Panjang Bentang Kabel FO per Bagian Wilayah
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      Klik kotak wilayah untuk inspeksi koridor
                     </span>
-                    <span className="font-mono text-emerald-400 font-bold">NOC TOPOLOGY MAP:</span>
-                    <span className="text-slate-300">Ring Backbone Serat Optik BP Batam</span>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-mono text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-0.5 bg-emerald-400 inline-block"></span> 96 Core
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-0.5 bg-sky-400 inline-block"></span> 72 Core
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2.5 h-0.5 bg-amber-400 inline-block"></span> 48 Core
+
+                  {/* 3-Tier Capacity Statistical Breakdown */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
+                    <div className="bg-emerald-50/80 border border-emerald-200 rounded-lg p-2.5 flex items-center justify-between">
+                      <div>
+                        <span className="text-[11px] font-bold text-emerald-950 flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#047857] inline-block shadow-2xs"></span>
+                          96 Core SM
+                        </span>
+                        <span className="text-[10px] text-emerald-700 block mt-0.5">Backbone Utama &amp; KEK</span>
+                      </div>
+                      <div className="text-right font-mono">
+                        <span className="text-xs font-bold text-emerald-950 block">73,3 Km</span>
+                        <span className="text-[10px] text-emerald-700 font-semibold">48,5% (3 Wilayah)</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-sky-50/80 border border-sky-200 rounded-lg p-2.5 flex items-center justify-between">
+                      <div>
+                        <span className="text-[11px] font-bold text-sky-950 flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#0284c7] inline-block shadow-2xs"></span>
+                          72 Core SM
+                        </span>
+                        <span className="text-[10px] text-sky-700 block mt-0.5">Hub Maritim &amp; Finansial</span>
+                      </div>
+                      <div className="text-right font-mono">
+                        <span className="text-xs font-bold text-sky-950 block">30,9 Km</span>
+                        <span className="text-[10px] text-sky-700 font-semibold">20,4% (2 Wilayah)</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-indigo-50/80 border border-indigo-200 rounded-lg p-2.5 flex items-center justify-between">
+                      <div>
+                        <span className="text-[11px] font-bold text-indigo-950 flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-xs bg-[#6366f1] inline-block shadow-2xs"></span>
+                          48 Core SM
+                        </span>
+                        <span className="text-[10px] text-indigo-700 block mt-0.5">Distribusi Spur &amp; Industri</span>
+                      </div>
+                      <div className="text-right font-mono">
+                        <span className="text-xs font-bold text-indigo-950 block">47,0 Km</span>
+                        <span className="text-[10px] text-indigo-700 font-semibold">31,1% (3 Wilayah)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Treemap Canvas Container */}
+                  <div className="h-[430px] w-full bg-slate-100/60 rounded-lg p-1.5 border border-slate-200">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <Treemap
+                        data={foTreemapData}
+                        dataKey="size"
+                        aspectRatio={4 / 3}
+                        stroke="#ffffff"
+                        content={<CustomFoTreemapNode />}
+                        isAnimationActive={false}
+                      >
+                        <RechartsTooltip content={<FoCustomTooltip />} />
+                      </Treemap>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Treemap Legend & Color Scheme */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 pt-2.5 border-t border-slate-200 mt-2.5 font-mono">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3.5 h-3.5 rounded-xs bg-[#0c2847] border-2 border-sky-400 inline-block shadow-2xs"></span>
+                        <span className="font-bold text-slate-900">Koridor Terpilih (Aktif)</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded-xs bg-[#047857] inline-block"></span>
+                        <span className="text-slate-800">96 Core SM</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded-xs bg-[#0284c7] inline-block"></span>
+                        <span className="text-slate-800">72 Core SM</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded-xs bg-[#6366f1] inline-block"></span>
+                        <span className="text-slate-800">48 Core SM</span>
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 italic">
+                      *Ukuran kotak proporsional terhadap panjang bentang FO (Km)
                     </span>
                   </div>
                 </div>
 
-                {/* SVG Canvas depicting schematic Pulau Batam */}
-                <div className="relative w-full aspect-16/10 bg-slate-950/80 rounded-lg overflow-hidden border border-slate-800/80 flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 800 450"
-                    className="w-full h-full select-none"
-                    style={{ filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.5))' }}
-                  >
-                    <defs>
-                      {/* Grid Pattern */}
-                      <pattern id="fo-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" strokeWidth="1" />
-                      </pattern>
+                {/* Right Column (4 Cols): Active Corridor Detail Inspector */}
+                <div className="lg:col-span-4 bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-sky-900 bg-sky-100 px-2 py-0.5 rounded font-mono">
+                        Detail Koridor Terpilih
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                        {activeFoCorridor.statusKoneksi || 'Aktif Normal'}
+                      </span>
+                    </div>
 
-                      {/* Gradients */}
-                      <linearGradient id="link-grad-96" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#10b981" />
-                        <stop offset="100%" stopColor="#06b6d4" />
-                      </linearGradient>
-                      <linearGradient id="link-grad-72" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#38bdf8" />
-                        <stop offset="100%" stopColor="#6366f1" />
-                      </linearGradient>
-                      <linearGradient id="link-grad-48" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#fbbf24" />
-                        <stop offset="100%" stopColor="#f97316" />
-                      </linearGradient>
-                    </defs>
+                    {/* Highlighted Attributes: TAHUN, BAGIAN WILAYAH, LOKASI */}
+                    <div className="space-y-3">
+                      {/* BAGIAN WILAYAH */}
+                      <div>
+                        <span className="text-[10px] text-slate-500 font-semibold uppercase block">
+                          Bagian Wilayah:
+                        </span>
+                        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
+                          <MapPin className="w-4 h-4 text-[#1F4E79] shrink-0" />
+                          <span>{activeFoCorridor.bagianWilayah}</span>
+                        </h3>
+                      </div>
 
-                    {/* Background Grid */}
-                    <rect width="800" height="450" fill="url(#fo-grid)" />
+                      {/* TAHUN */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-600 font-medium">Tahun Rekap:</span>
+                        <span className="text-xs font-bold font-mono text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                          {activeFoCorridor.tahun}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-500">
+                          ({activeFoCorridor.tipeJalur})
+                        </span>
+                      </div>
 
-                    {/* Schematic Outline of Pulau Batam Coastline */}
-                    <path
-                      d="M 120 220 C 130 150, 200 90, 270 70 C 330 50, 420 55, 520 80 C 600 100, 720 80, 740 140 C 750 200, 720 280, 680 340 C 640 400, 560 410, 480 390 C 400 370, 320 420, 240 380 C 170 340, 110 300, 120 220 Z"
-                      fill="#0f172a"
-                      stroke="#1e293b"
-                      strokeWidth="2"
-                      strokeDasharray="4 4"
-                      className="opacity-60"
-                    />
+                      {/* LOKASI JALUR */}
+                      <div className="bg-white border border-slate-200 rounded-lg p-3">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                          <Network className="w-3 h-3 text-sky-600" />
+                          Lokasi Jalur Fiber Optik:
+                        </span>
+                        <p className="text-xs font-medium text-slate-800 leading-relaxed">
+                          {activeFoCorridor.lokasi}
+                        </p>
+                      </div>
 
-                    {/* Ambient Water Label */}
-                    <text x="70" y="70" fill="#334155" fontSize="11" fontFamily="monospace" fontWeight="bold">
-                      SELAT MALAKA / SINGAPORE STRAIT
-                    </text>
-                    <text x="610" y="420" fill="#334155" fontSize="11" fontFamily="monospace" fontWeight="bold">
-                      PERAIRAN KABIL / SELAT RIAU
-                    </text>
+                      {/* Technical Specs */}
+                      <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
+                        <div className="bg-white border border-slate-200 rounded p-2 text-center">
+                          <span className="text-[10px] text-slate-500 block">Panjang Kabel</span>
+                          <span className="font-bold text-slate-900 font-mono text-sm">
+                            {activeFoCorridor.panjangKm} Km
+                          </span>
+                        </div>
+                        <div className="bg-white border border-slate-200 rounded p-2 text-center">
+                          <span className="text-[10px] text-slate-500 block">Kapasitas Core</span>
+                          <span className="font-bold text-emerald-700 font-mono text-sm">
+                            {activeFoCorridor.kapasitasCore} Core SM
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                    {/* FO Links / Cables */}
-                    {FO_LINKS.map((link, idx) => {
-                      const fromNode = FO_NODES.find((n) => n.id === link.from);
-                      const toNode = FO_NODES.find((n) => n.id === link.to);
-                      if (!fromNode || !toNode) return null;
-
-                      const isSelected = activeFoCorridorId === link.corridorId;
-                      const strokeColor = link.core === 96 ? 'url(#link-grad-96)' : link.core === 72 ? 'url(#link-grad-72)' : 'url(#link-grad-48)';
-                      const strokeWidth = isSelected ? 4.5 : link.core === 96 ? 3 : 2;
-
-                      return (
-                        <g
-                          key={idx}
-                          className="cursor-pointer group"
-                          onClick={() => setActiveFoCorridorId(link.corridorId)}
+                  {/* Quick Corridor Selector Chips */}
+                  <div className="mt-4 pt-3 border-t border-slate-200">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">
+                      Pilih Koridor Cepat:
+                    </span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {DATA_JALUR_FIBER_OPTIC.slice(0, 8).map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setActiveFoCorridorId(item.id)}
+                          className={`text-left text-[11px] p-1.5 rounded transition-all truncate cursor-pointer ${
+                            activeFoCorridorId === item.id
+                              ? 'bg-[#1F4E79] text-white font-bold shadow-2xs'
+                              : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+                          }`}
+                          title={item.bagianWilayah}
                         >
-                          {/* Glow background line when selected */}
-                          {isSelected && (
-                            <line
-                              x1={fromNode.x}
-                              y1={fromNode.y}
-                              x2={toNode.x}
-                              y2={toNode.y}
-                              stroke="#38bdf8"
-                              strokeWidth="9"
-                              strokeOpacity="0.4"
-                              strokeLinecap="round"
-                            />
-                          )}
-
-                          {/* Base Cable Line */}
-                          <line
-                            x1={fromNode.x}
-                            y1={fromNode.y}
-                            x2={toNode.x}
-                            y2={toNode.y}
-                            stroke={strokeColor}
-                            strokeWidth={strokeWidth}
-                            strokeLinecap="round"
-                            className="transition-all duration-300"
-                          />
-
-                          {/* Midpoint Core Badge */}
-                          <circle
-                            cx={(fromNode.x + toNode.x) / 2}
-                            cy={(fromNode.y + toNode.y) / 2}
-                            r={isSelected ? 7 : 5}
-                            fill="#090d16"
-                            stroke={link.core === 96 ? '#10b981' : link.core === 72 ? '#38bdf8' : '#fbbf24'}
-                            strokeWidth="1.5"
-                          />
-                        </g>
-                      );
-                    })}
-
-                    {/* FO Hub Nodes */}
-                    {FO_NODES.map((node) => {
-                      const isNodeActive = activeFoCorridorId === node.corridorId;
-                      const isMainCenter = node.id === 'node-bc';
-
-                      return (
-                        <g
-                          key={node.id}
-                          className="cursor-pointer group"
-                          onClick={() => setActiveFoCorridorId(node.corridorId)}
-                        >
-                          {/* Outer Pulsing Ring */}
-                          {isNodeActive && (
-                            <circle
-                              cx={node.x}
-                              cy={node.y}
-                              r="20"
-                              fill="none"
-                              stroke="#38bdf8"
-                              strokeWidth="1.5"
-                              strokeDasharray="4 2"
-                              className="animate-spin-slow opacity-80"
-                            />
-                          )}
-
-                          {/* Glow backdrop */}
-                          <circle
-                            cx={node.x}
-                            cy={node.y}
-                            r={isMainCenter ? 14 : isNodeActive ? 12 : 9}
-                            fill={isMainCenter ? '#0284c7' : isNodeActive ? '#0ea5e9' : '#1e293b'}
-                            stroke={isNodeActive ? '#ffffff' : '#64748b'}
-                            strokeWidth="2"
-                            className="transition-all"
-                          />
-
-                          {/* Inner Core indicator */}
-                          <circle
-                            cx={node.x}
-                            cy={node.y}
-                            r={isMainCenter ? 6 : 4}
-                            fill={node.core === 96 ? '#10b981' : node.core === 72 ? '#38bdf8' : '#fbbf24'}
-                          />
-
-                          {/* Node Label */}
-                          <rect
-                            x={node.x - 48}
-                            y={node.y + 12}
-                            width="96"
-                            height="18"
-                            rx="3"
-                            fill="#090d16"
-                            fillOpacity="0.85"
-                            stroke={isNodeActive ? '#38bdf8' : '#334155'}
-                            strokeWidth="1"
-                          />
-                          <text
-                            x={node.x}
-                            y={node.y + 24}
-                            textAnchor="middle"
-                            fill={isNodeActive ? '#38bdf8' : '#cbd5e1'}
-                            fontSize="9"
-                            fontFamily="sans-serif"
-                            fontWeight="bold"
-                          >
-                            {node.shortName}
-                          </text>
-                        </g>
-                      );
-                    })}
-                  </svg>
-
-                  {/* Instruction overlay */}
-                  <div className="absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-xs border border-slate-800 px-2.5 py-1 rounded text-[10px] text-slate-400 flex items-center gap-1.5 font-mono">
-                    <Radio className="w-3 h-3 text-sky-400 shrink-0 animate-pulse" />
-                    <span>Klik node / segmen kabel untuk melihat detail lokasi jalur</span>
+                          {item.bagianWilayah}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Active Corridor Inspector (4 Cols) */}
-              <div className="lg:col-span-4 bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-full">
-                <div>
-                  <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-sky-900 bg-sky-100 px-2 py-0.5 rounded font-mono">
-                      Detail Koridor Terpilih
-                    </span>
-                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
-                      {activeFoCorridor.statusKoneksi || 'Aktif Normal'}
-                    </span>
-                  </div>
-
-                  {/* Highlighted Attributes: TAHUN, BAGIAN WILAYAH, LOKASI */}
-                  <div className="space-y-3">
-                    {/* BAGIAN WILAYAH */}
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-semibold uppercase block">
-                        Bagian Wilayah:
-                      </span>
-                      <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
-                        <MapPin className="w-4 h-4 text-[#1F4E79] shrink-0" />
-                        <span>{activeFoCorridor.bagianWilayah}</span>
-                      </h3>
-                    </div>
-
-                    {/* TAHUN */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-600 font-medium">Tahun Rekap:</span>
-                      <span className="text-xs font-bold font-mono text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
-                        {activeFoCorridor.tahun}
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-500">
-                        ({activeFoCorridor.tipeJalur})
-                      </span>
-                    </div>
-
-                    {/* LOKASI JALUR */}
-                    <div className="bg-white border border-slate-200 rounded-lg p-3">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1 flex items-center gap-1">
-                        <Network className="w-3 h-3 text-sky-600" />
-                        Lokasi Jalur Fiber Optik:
-                      </span>
-                      <p className="text-xs font-medium text-slate-800 leading-relaxed">
-                        {activeFoCorridor.lokasi}
-                      </p>
-                    </div>
-
-                    {/* Technical Specs */}
-                    <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
-                      <div className="bg-white border border-slate-200 rounded p-2 text-center">
-                        <span className="text-[10px] text-slate-500 block">Panjang Kabel</span>
-                        <span className="font-bold text-slate-900 font-mono text-sm">
-                          {activeFoCorridor.panjangKm} Km
-                        </span>
-                      </div>
-                      <div className="bg-white border border-slate-200 rounded p-2 text-center">
-                        <span className="text-[10px] text-slate-500 block">Kapasitas Core</span>
-                        <span className="font-bold text-emerald-700 font-mono text-sm">
-                          {activeFoCorridor.kapasitasCore} Core SM
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Corridor Switcher */}
-                <div className="mt-4 pt-3 border-t border-slate-200">
-                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">
-                    Pilih Koridor Lainnya:
-                  </span>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {DATA_JALUR_FIBER_OPTIC.slice(0, 6).map((item) => (
-                      <button
+              {/* Comparative Sebaran Cards */}
+              <div className="pt-2">
+                <span className="text-xs font-bold text-slate-800 block mb-2 flex items-center gap-1.5">
+                  <BarChart3 className="w-4 h-4 text-[#1F4E79]" />
+                  Sebaran Panjang Bentang Kabel (Km) &amp; Kapasitas Core Berdasarkan Bagian Wilayah:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                  {DATA_JALUR_FIBER_OPTIC.map((item) => {
+                    const maxKm = 30;
+                    const pct = Math.round(((item.panjangKm || 10) / maxKm) * 100);
+                    const isSelected = activeFoCorridorId === item.id;
+                    return (
+                      <div
                         key={item.id}
                         onClick={() => setActiveFoCorridorId(item.id)}
-                        className={`text-left text-[11px] p-1.5 rounded transition-all truncate cursor-pointer ${
-                          activeFoCorridorId === item.id
-                            ? 'bg-[#1F4E79] text-white font-bold'
-                            : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+                        className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-[#1F4E79] bg-sky-50/60 shadow-xs ring-1 ring-[#1F4E79]/20'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
                         }`}
-                        title={item.bagianWilayah}
                       >
-                        {item.bagianWilayah}
-                      </button>
-                    ))}
-                  </div>
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="font-bold text-slate-800 truncate">{item.bagianWilayah}</span>
+                          <span className="font-mono font-bold text-[#1F4E79]">{item.panjangKm} Km</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div
+                            style={{ width: `${pct}%` }}
+                            className="h-full bg-linear-to-r from-[#1F4E79] to-sky-500 rounded-full"
+                          />
+                        </div>
+                        <span className="text-[10px] text-slate-500 font-mono mt-1 block">
+                          {item.kapasitasCore} Core • {item.tipeJalur}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           ) : (
             /* ========================================================================= */
-            /* VIEW TABEL MATRIKS: High-Density Table of FO Corridors */
+            /* VIEW TABEL MATRIKS: High-Density Sheet Swap Table of FO Corridors */
             /* ========================================================================= */
             <div className="overflow-x-auto border border-slate-200 rounded-lg">
               <table className="w-full text-left text-xs">
@@ -721,46 +883,6 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
               </table>
             </div>
           )}
-
-          {/* Comparative Horizontal Bar: Panjang Bentang Kabel per Bagian Wilayah */}
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <span className="text-xs font-bold text-slate-800 block mb-2 flex items-center gap-1.5">
-              <BarChart3 className="w-4 h-4 text-[#1F4E79]" />
-              Sebaran Panjang Bentang Kabel (Km) Berdasarkan Bagian Wilayah:
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-              {DATA_JALUR_FIBER_OPTIC.map((item) => {
-                const maxKm = 30;
-                const pct = Math.round(((item.panjangKm || 10) / maxKm) * 100);
-                const isSelected = activeFoCorridorId === item.id;
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => setActiveFoCorridorId(item.id)}
-                    className={`p-2 rounded border transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-[#1F4E79] bg-sky-50/60 shadow-xs ring-1 ring-[#1F4E79]/20'
-                        : 'border-slate-200 bg-white hover:border-slate-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-bold text-slate-800 truncate">{item.bagianWilayah}</span>
-                      <span className="font-mono font-bold text-[#1F4E79]">{item.panjangKm} Km</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        style={{ width: `${pct}%` }}
-                        className="h-full bg-linear-to-r from-[#1F4E79] to-sky-500 rounded-full"
-                      />
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-mono mt-1 block">
-                      {item.kapasitasCore} Core • {item.tipeJalur}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       )}
 

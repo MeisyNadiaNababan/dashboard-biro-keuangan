@@ -41,7 +41,30 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
   const sisaPaguMiliar = paguBelanjaMiliar - realisasiBelanjaMiliar;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-sans">
+    <div className="space-y-2 font-sans">
+      {/* Standard Header Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono">
+              IKHTISAR UTAMA • 4 KPI EKSEKUTIF
+            </span>
+            <h2 className="text-xs sm:text-sm font-bold tracking-wider uppercase text-slate-800">
+              INDIKATOR KINERJA UTAMA BLU RSBP BATAM
+            </h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Executive Scorecard Banner &amp; Radial Progress Metric
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>REALISASI PNBP</strong>, <strong>REALISASI BELANJA</strong>, <strong>INDEKS KEPUASAN MASYARAKAT (IKM)</strong>, &amp; <strong>TOTAL KUNJUNGAN PASIEN</strong> (Katalog Satu Data RSBP)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {/* CARD 1: KPI REALISASI PNBP RUMAH SAKIT (DATASET NO. 2) */}
       <div
         id="card-kpi-rsbp-pnbp"
@@ -268,5 +291,6 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
         </div>
       </div>
     </div>
+  </div>
   );
 };

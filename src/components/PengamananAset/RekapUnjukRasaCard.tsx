@@ -97,18 +97,24 @@ export const RekapUnjukRasaCard: React.FC<RekapUnjukRasaCardProps> = ({ filters 
       {/* Header Card */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-amber-50 text-amber-800 border border-amber-200 font-mono">
-              DATASET NO. 7 • SATU DATA
+              POIN #5 • DATASET NO. 7 • SATU DATA
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs text-slate-500 font-medium">Hal. 18 (35 Entri Lengkap)</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Top-N Bar Chart Pengerahan Personil &amp; Tabel Rekapitulasi Aksi Aspirasi
+            </span>
           </div>
           <h3 className="text-sm sm:text-base font-bold text-slate-900 mt-1 flex items-center gap-2">
-            <span>Rekap Pengamanan Unjuk Rasa Ditpam BP Batam</span>
+            <span>Rekap Pengamanan Unjuk Rasa Ditpam BP Batam (Dataset 7)</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Menampilkan data resmi <strong>Tanggal</strong>, <strong>Permasalahan</strong>, dan <strong>Jumlah Personil</strong> yang ditugaskan dalam pengamanan aksi penyampaian aspirasi masyarakat.
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>TANGGAL AKSI</strong>, <strong>LOKASI SEKTOR</strong>, <strong>ALIANSI/MASYARAKAT</strong>, <strong>PERMASALAHAN/TUNTUTAN</strong>, &amp; <strong>JUMLAH PERSONIL DITUGASKAN</strong> (Hal. 18)
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Menampilkan data resmi pengerahan kekuatan personil dalam pengamanan penyampaian aspirasi masyarakat.
           </p>
         </div>
 

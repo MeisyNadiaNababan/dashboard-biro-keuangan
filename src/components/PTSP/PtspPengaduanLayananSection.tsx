@@ -49,19 +49,24 @@ export const PtspPengaduanLayananSection: React.FC<PtspPengaduanLayananSectionPr
       {/* Header Container */}
       <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
               POIN #12 • DATASET 6
             </span>
-            <span className="text-xs font-semibold text-slate-500">
-              Pengelolaan Aduan SP4N-LAPOR! &amp; Helpdesk MPP
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Bar Chart Status Penanganan Aduan (SP4N-LAPOR! &amp; Helpdesk) &amp; Tabel Rincian
             </span>
           </div>
-          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 mt-0.5">
             <MessageSquare className="w-4 h-4 text-[#002B49]" />
-            Pengaduan Pelayanan PTSP
+            Pengaduan Pelayanan PTSP (Dataset 6)
           </h2>
-          <p className="text-xs text-slate-500">
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>JENIS PENGADUAN</strong>, <strong>TOTAL ADUAN</strong>, <strong>SELESAI</strong>, <strong>BELUM DITANGANI</strong>, &amp; <strong>TINGKAT SELESAI (%)</strong> (Hal. 35)
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
             Monitoring penyelesaian keluhan layanan publik, permohonan informasi teknis, dan konsultasi
           </p>
         </div>

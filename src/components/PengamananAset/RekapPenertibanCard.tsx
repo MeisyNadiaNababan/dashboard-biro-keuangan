@@ -64,18 +64,24 @@ export const RekapPenertibanCard: React.FC<RekapPenertibanCardProps> = ({ filter
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-sky-50 text-sky-800 border border-sky-200 font-mono">
-              DATASET NO. 9 • SATU DATA
+              POIN #7 • DATASET NO. 9 • SATU DATA
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs text-slate-500 font-medium">Hal. 18 (604 Entri Lengkap)</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Bar Chart Distribusi Kegiatan &amp; Tabel Rekapitulasi Jenis Penertiban
+            </span>
           </div>
           <h3 className="text-sm sm:text-base font-bold text-slate-900 mt-1 flex items-center gap-2">
-            <span>Rekap Data Kegiatan Penertiban Rutin Tim Terpadu Ditpam</span>
+            <span>Rekap Data Kegiatan Penertiban Rutin Tim Terpadu Ditpam (Dataset 9)</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Menampilkan rekapitulasi resmi <strong>Jenis Kegiatan</strong> dan <strong>Jumlah</strong> objek penertiban rutin yang ditindaklanjuti oleh Tim Terpadu BP Batam.
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>JENIS KEGIATAN PENERTIBAN</strong>, <strong>JUMLAH KEGIATAN</strong>, <strong>OBJEK DITERTIBKAN</strong>, &amp; <strong>STATUS TIM TERPADU</strong> (Hal. 18)
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Menampilkan rekapitulasi resmi penertiban rutin yang ditindaklanjuti oleh Tim Terpadu BP Batam.
           </p>
         </div>
 

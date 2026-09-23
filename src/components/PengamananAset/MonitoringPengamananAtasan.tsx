@@ -88,11 +88,24 @@ export const MonitoringPengamananAtasan: React.FC<MonitoringPengamananAtasanProp
       <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
           <div>
-            <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono">
+                DATASET OPERASIONAL DITPAM
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                🏷️ Visualisasi: Dual Axis Area &amp; Line Chart Tren Insiden vs Personil
+              </span>
+            </div>
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2 mt-0.5">
               <TrendingUp className="w-4 h-4 text-sky-700" />
               <span>Dinamika Insiden Bulanan vs Beban Pengerahan Personil Ditpam</span>
             </h4>
-            <p className="text-[11px] text-slate-500">
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                Atribut yang Ditampilkan: <strong>BULAN</strong>, <strong>TOTAL PERSONIL DITERJUNKAN</strong>, <strong>KEGIATAN PENERTIBAN</strong>, &amp; <strong>AKSI UNJUK RASA</strong> (Hal. 17-19)
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-1">
               Analisis korelasi eskalasi pengamanan aksi massa, penertiban, dan mitigasi bencana alam dengan personil lapangan.
             </p>
           </div>
@@ -169,14 +182,24 @@ export const MonitoringPengamananAtasan: React.FC<MonitoringPengamananAtasanProp
       <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-5 bg-emerald-600 rounded-full inline-block" />
-              <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Trees className="w-4 h-4 text-emerald-700" />
-                <span>Data Penindakan Kawasan Lingkungan dan Hutan (DTA &amp; Hutan Lindung)</span>
-              </h4>
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono">
+                DATASET KAWASAN &amp; HUTAN LINDUNG
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                🏷️ Visualisasi: Horizontal Ranked Bar Chart &amp; Matriks Status Penindakan Lokasi
+              </span>
             </div>
-            <p className="text-[11px] text-slate-500 mt-0.5">
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2 mt-0.5">
+              <Trees className="w-4 h-4 text-emerald-700" />
+              <span>Data Penindakan Kawasan Lingkungan dan Hutan (DTA &amp; Hutan Lindung)</span>
+            </h4>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                Atribut yang Ditampilkan: <strong>LOKASI ASET/HUTAN LINDUNG</strong>, <strong>SUB WILAYAH (SWP)</strong>, <strong>LUAS PENINDAKAN (HA)</strong>, &amp; <strong>STATUS PENINDAKAN</strong> (Hal. 17)
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-1">
               Visualisasi penindakan penguasaan lahan ilegal, perambahan kawasan tangkapan air waduk (DTA), dan hutan lindung BP Batam.
             </p>
           </div>

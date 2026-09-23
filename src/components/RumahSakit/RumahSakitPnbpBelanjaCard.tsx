@@ -47,22 +47,27 @@ export const RumahSakitPnbpBelanjaCard: React.FC<RumahSakitPnbpBelanjaCardProps>
       {/* 1. Header with Title, Switcher & Formula Button */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
               <DollarSign className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Dataset #2 & #12
+                  Dataset #2 &amp; #12
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
-                  Tertutup
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Progress Bar Capaian Pagu &amp; Donut Chart Komposisi Pos Anggaran
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
-                Kinerja Keuangan BLU RSBP: Realisasi PNBP & Belanja
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-1">
+                Kinerja Keuangan BLU RSBP: Realisasi PNBP &amp; Belanja
               </h3>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>KODE AKUN</strong>, <strong>URAIAN POS ANGGARAN</strong>, <strong>TARGET/PAGU</strong>, <strong>REALISASI</strong>, &amp; <strong>PERSENTASE CAPAIAN (%)</strong> (Hal. 62–64)
+                </span>
+              </div>
             </div>
           </div>
 

@@ -57,8 +57,8 @@ export const RumahSakitEfisiensiCard: React.FC<RumahSakitEfisiensiCardProps> = (
       {/* 1. Header with Title & Tab Switcher (Matching Kunjungan Pasien Card Style) */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
               <Activity className="w-4 h-4" />
             </div>
             <div>
@@ -66,13 +66,18 @@ export const RumahSakitEfisiensiCard: React.FC<RumahSakitEfisiensiCardProps> = (
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200">
                   Dataset #9
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
-                  Terbuka • Per Bulan
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Barber-Johnson Diagram Graphic &amp; Efficiency Gauge Cards
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-1">
                 Nilai Indikator Efisiensi Rumah Sakit (Grafik Barber Johnson)
               </h3>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>BOR (%)</strong>, <strong>ALOS (HARI)</strong>, <strong>TOI (HARI)</strong>, <strong>BTO (KALI)</strong>, <strong>NDR (‰)</strong>, &amp; <strong>GDR (‰)</strong> (Hal. 70–72)
+                </span>
+              </div>
             </div>
           </div>
 

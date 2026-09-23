@@ -40,22 +40,27 @@ export const RumahSakitKunjunganLayananCard: React.FC<RumahSakitKunjunganLayanan
       {/* 1. Header with Title & Tab Switcher */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 flex items-center justify-center shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 flex items-center justify-center shrink-0 mt-0.5">
               <Users className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-purple-50 text-purple-700 border border-purple-200">
-                  Dataset #5 & #6
+                  Dataset #5 &amp; #6
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
-                  Terbuka • Per Bulan
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+                  🏷️ Visualisasi: Grouped Bar Chart Tren Kunjungan Rawat &amp; Donut Distribusi Cara Bayar
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
-                Kunjungan Pasien Berdasarkan Bagian Layanan & Unggulan
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mt-1">
+                Kunjungan Pasien Berdasarkan Bagian Layanan &amp; Unggulan
               </h3>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+                  Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>BAGIAN/POLIKLINIK</strong>, <strong>JUMLAH KUNJUNGAN</strong>, <strong>CARA BAYAR (BPJS/UMUM/ASURANSI)</strong>, &amp; <strong>STATUS TINDAKAN</strong> (Hal. 66–68)
+                </span>
+              </div>
             </div>
           </div>
 

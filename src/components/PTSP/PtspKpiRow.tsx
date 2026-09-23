@@ -115,17 +115,29 @@ export const PtspKpiRow: React.FC<PtspKpiRowProps> = ({
   return (
     <div className="space-y-3">
       {/* Header Row */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <h2 className="text-xs font-bold tracking-wider uppercase text-slate-700">
-            INDIKATOR KINERJA UTAMA PTSP BP BATAM (3 KPI EKSEKUTIF)
-          </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1 pb-1">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono">
+              POIN #1 SAMPAI #6
+            </span>
+            <h2 className="text-xs sm:text-sm font-bold tracking-wider uppercase text-slate-800">
+              INDIKATOR KINERJA UTAMA PTSP BP BATAM (3 KPI EKSEKUTIF)
+            </h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-mono">
+              🏷️ Visualisasi: Executive Scorecard Banner &amp; Micro-Sparkline Trend
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
+              Atribut yang Ditampilkan: <strong>TAHUN</strong>, <strong>TOTAL PERMOHONAN MASUK</strong>, <strong>BERKAS SELESAI</strong>, &amp; <strong>INDEKS KEPUASAN MASYARAKAT (IKM)</strong> (Katalog Satu Data PTSP)
+            </span>
+          </div>
         </div>
         {onOpenKamusRumus && (
           <button
             onClick={onOpenKamusRumus}
-            className="flex items-center gap-1.5 text-xs text-[#002B49] hover:text-blue-700 font-bold hover:underline cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#002B49] hover:text-blue-700 font-bold hover:underline cursor-pointer transition-colors shrink-0"
           >
             <FileCode2 className="w-3.5 h-3.5 text-sky-600" />
             <span>Kamus Rumus &amp; Calculated Fields PTSP</span>

@@ -22,6 +22,7 @@ import {
   AIRPORT_TOP_ROUTES,
 } from './bandaraData';
 import { BandaraFilterState } from './types';
+import { BandaraVisualHeader } from './BandaraVisualHeader';
 
 interface StrategicAirportMetricsProps {
   filters: BandaraFilterState;
@@ -66,48 +67,55 @@ export const StrategicAirportMetrics: React.FC<StrategicAirportMetricsProps> = (
   });
 
   return (
-    <div id="strategic-airport-metrics" className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs mb-6 font-sans">
-      {/* HEADER WITH SIMPLE DIRECT TOGGLE */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-3 border-b border-slate-100">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-5 bg-sky-600 rounded-full inline-block" />
-            <h3 className="text-sm font-bold text-slate-900">
-              Konektivitas Jaringan Rute &amp; Realisasi PNBP
-            </h3>
+    <div id="strategic-airport-metrics" className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs mb-6 font-sans">
+      {/* Visual Header sesuai Standar Dashboard Pembangunan Infrastruktur */}
+      <BandaraVisualHeader
+        datasetNumber={9}
+        pdfPages="Hal. 12"
+        title="KONEKTIVITAS JARINGAN RUTE PENERBANGAN & SIKLUS REALISASI PNBP"
+        visualName={
+          activeView === 'routes'
+            ? 'Sheet 1: Analisis Frekuensi Mingguan Rute Penerbangan Langsung Batam'
+            : 'Sheet 2: Tren Siklus Bulanan Realisasi PNBP Per Pos Penerimaan'
+        }
+        classification="TERBUKA"
+        periode="PERBULAN"
+        attributes={[
+          'KODE RUTE',
+          'KOTA ASAL / TUJUAN',
+          'FREKUENSI MINGGUAN',
+          'TOTAL PENUMPANG',
+          'MASKAPAI MELAYANI',
+          'SEAT LOAD FACTOR',
+        ]}
+        rightControls={
+          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+            <button
+              onClick={() => setActiveView('routes')}
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
+                activeView === 'routes'
+                  ? 'bg-sky-700 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <CompassIcon className="w-3.5 h-3.5" />
+              <span>Top Rute Langsung (DS #9)</span>
+            </button>
+            <button
+              onClick={() => setActiveView('pnbp_trend')}
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
+                activeView === 'pnbp_trend'
+                  ? 'bg-sky-700 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <DollarIcon className="w-3.5 h-3.5" />
+              <span>Tren Realisasi PNBP (DS #1)</span>
+            </button>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Monitoring frekuensi penerbangan rute langsung (Dataset #9) dan tren penerimaan kas PNBP bulanan (Dataset #1)
-          </p>
-        </div>
-
-        {/* VIEW SELECTOR */}
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
-          <button
-            onClick={() => setActiveView('routes')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-              activeView === 'routes'
-                ? 'bg-white text-sky-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <CompassIcon className="w-3.5 h-3.5" />
-            <span>Top Rute Langsung (DS #9)</span>
-          </button>
-
-          <button
-            onClick={() => setActiveView('pnbp_trend')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-              activeView === 'pnbp_trend'
-                ? 'bg-white text-sky-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <DollarIcon className="w-3.5 h-3.5" />
-            <span>Tren Realisasi PNBP (DS #1)</span>
-          </button>
-        </div>
-      </div>
+        }
+        onOpenFormula={() => onOpenFormulaModal(9)}
+      />
 
       {/* 1. VISUALISASI RUTE PENERBANGAN LANGSUNG (TABLEAU HORIZONTAL RANKING BAR CHART) */}
       {activeView === 'routes' && (

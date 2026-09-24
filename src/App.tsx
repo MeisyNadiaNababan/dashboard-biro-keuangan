@@ -6,6 +6,7 @@ import { ExecutiveFilters } from './components/ExecutiveFilters';
 import { KpiMetricsRow } from './components/KpiMetricsRow';
 import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
 import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
+import { BiroKeuanganDashboard } from './components/BiroKeuangan/BiroKeuanganDashboard';
 import { BiroKeuanganFinancialCard } from './components/BiroKeuanganFinancialCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
 import { FiscalIndependenceDonutCards } from './components/FiscalIndependenceDonutCards';
@@ -27,6 +28,7 @@ import { PerencanaanInfrastrukturDashboard } from './components/PerencanaanInfra
 import { PengendalianPengusahaanDashboard } from './components/PengendalianPengusahaan/PengendalianPengusahaanDashboard';
 import { PengelolaanBandaraDashboard } from './components/PengelolaanBandara/PengelolaanBandaraDashboard';
 import { BiroOrganisasiDashboard } from './components/BiroOrganisasi/BiroOrganisasiDashboard';
+import { BiroSDMDashboard } from './components/BiroSDM/BiroSDMDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
 import { KpiWordDocumentView } from './components/KpiWordDocumentView';
@@ -40,8 +42,8 @@ import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State - Set default to dit-pembangunan-infrastruktur as requested
-  const [activeUnitId, setActiveUnitId] = useState<string>('dit-pembangunan-infrastruktur');
+  // Navigation & Multi-Unit State - Set default to biro-keuangan as requested
+  const [activeUnitId, setActiveUnitId] = useState<string>('biro-keuangan');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
@@ -279,55 +281,14 @@ export default function App() {
                     onChangePeriod={setSelectedPeriod}
                   />
 
-                  {/* Biro Keuangan Worksheets */}
-                  <div className="space-y-4">
-                    {/* 1. Top 6 KPI Metric Cards (BANs) */}
-                    <section id="overview" aria-label="KPI Ringkasan Eksekutif">
-                      <KpiMetricsRow
-                        metrics={KPI_METRICS_DATA}
-                        onSelectMetric={handleSelectMetric}
-                      />
-                    </section>
-
-                    {/* 2. Realisasi Pendapatan dan Belanja */}
-                    <section
-                      id="pendapatan-belanja"
-                      aria-label="Realisasi Pendapatan dan Belanja"
-                    >
-                      <BiroKeuanganFinancialCard
-                        revenueItems={filteredRevenue.length > 0 ? filteredRevenue : REVENUE_DATA}
-                        expenseItems={filteredExpense.length > 0 ? filteredExpense : EXPENSE_DATA}
-                        selectedYear={selectedYear}
-                        selectedUnit={selectedUnit}
-                        selectedMonth={selectedMonth}
-                        onExplainKpi={handleSelectMetric}
-                      />
-                    </section>
-
-                    {/* 3. Sumber Pendanaan (Treemap) */}
-                    <section id="sumber-pendanaan" aria-label="Sumber Pendanaan">
-                      <FiscalIndependenceDonutCards onExplainKpi={handleSelectMetric} />
-                    </section>
-
-                    {/* 3. Piutang & Arus Kas Section */}
-                    <section aria-label="Piutang dan Arus Kas">
-                      <ReceivablesSection
-                        onViewPiutangDetail={() => setDetailModalType('piutang')}
-                        onViewKasBankDetail={() => setDetailModalType('kas_bank')}
-                        onExplainKpi={handleSelectMetric}
-                      />
-                    </section>
-
-                    {/* 4. Fiscal Insights, Surplus/Deficit */}
-                    <section id="fiskal-section" aria-label="Kemandirian Fiskal dan Rekomendasi">
-                      <FiscalInsightsRow
-                        onOpenExportModal={() => setIsExportModalOpen(true)}
-                        onOpenTableauGuide={() => setIsTableauGuideOpen(true)}
-                        onExplainKpi={handleSelectMetric}
-                        lastUpdated="24 Apr 2026 10:24 WIB"
-                      />
-                    </section>
-                  </div>
+                  {/* Biro Keuangan Worksheets - Official Satu Data BP Batam */}
+                  <BiroKeuanganDashboard
+                    onOpenFormulaModal={(kpiId) => {
+                      setSelectedKpiFormulaId(kpiId);
+                      setIsKpiFormulaModalOpen(true);
+                    }}
+                    onOpenExportModal={() => setIsExportModalOpen(true)}
+                  />
                 </>
               )
             ) : activeUnitId === 'pdsi' ? (
@@ -425,21 +386,30 @@ export default function App() {
               <PesisirReklamasiDashboard />
             ) : activeUnitId === 'dit-pengendalian-lahan' ? (
               /* --- DIREKTORAT PENGENDALIAN PENGELOLAAN LAHAN, PESISIR DAN REKLAMASI DASHBOARD --- */
-              <PengendalianLahanDashboard />
+              <PengendalianLahanDashboard activeSubTab={activeSheet} />
             ) : activeUnitId === 'dit-lahan' ? (
               /* --- DIREKTORAT PENGELOLAAN LAHAN DASHBOARD --- */
               <PengelolaanLahanDashboard />
             ) : activeUnitId === 'dit-pengendalian-usaha' ? (
               /* --- DIREKTORAT PENGENDALIAN PENGUSAHAAN DASHBOARD --- */
-              <PengendalianPengusahaanDashboard />
+              <PengendalianPengusahaanDashboard activeSubTab={activeSheet} />
             ) : activeUnitId === 'dit-bandara' ? (
               /* --- DIREKTORAT PENGELOLAAN KAWASAN BANDARA DASHBOARD --- */
               <PengelolaanBandaraDashboard />
             ) : activeUnitId === 'biro-organisasi' ? (
               /* --- BIRO ORGANISASI, KEPATUHAN DAN MANAJEMEN RISIKO (BOKMR) DASHBOARD --- */
               <BiroOrganisasiDashboard />
+            ) : activeUnitId === 'biro-sdm' ? (
+              /* --- BIRO SUMBER DAYA MANUSIA (SDM) DASHBOARD --- */
+              <BiroSDMDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
             ) : (
-              /* --- OTHER 20 UNITS DASHBOARD & DESIGNER --- */
+              /* --- OTHER UNITS DASHBOARD & DESIGNER --- */
               <OtherUnitPlaceholder
                 unit={currentUnit}
                 onOpen24UnitsDrawer={() => setIsUnitsDrawerOpen(true)}

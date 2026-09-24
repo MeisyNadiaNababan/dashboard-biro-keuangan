@@ -93,8 +93,8 @@ export const PengendalianFormulaModal: React.FC<PengendalianFormulaModalProps> =
             <div className="text-right">
               <span className="text-[10px] text-slate-400 block font-mono">Capaian Realtime</span>
               <span className="text-2xl font-black text-sky-900 font-mono">
-                {currentDataset.capaian.toFixed(1)}
-                <span className="text-sm font-bold text-slate-600 ml-0.5">
+                {currentDataset.satuan === '%' ? currentDataset.capaian.toFixed(1) : currentDataset.capaian}
+                <span className="text-sm font-bold text-slate-600 ml-1">
                   {currentDataset.satuan}
                 </span>
               </span>
@@ -124,7 +124,7 @@ export const PengendalianFormulaModal: React.FC<PengendalianFormulaModalProps> =
                 Target &amp; Ambang Batas Evaluasi
               </span>
               <p className="font-semibold text-slate-800">
-                Minimal {currentDataset.target}% (Evaluasi Triwulanan)
+                {currentDataset.satuan === '%' ? `Minimal ${currentDataset.target}%` : `Target ${currentDataset.target} ${currentDataset.satuan}`} (Evaluasi Triwulanan)
               </p>
             </div>
           </div>

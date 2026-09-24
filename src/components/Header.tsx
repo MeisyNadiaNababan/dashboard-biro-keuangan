@@ -45,6 +45,10 @@ import {
   Map,
   Compass,
   BarChart3,
+  BookOpen,
+  GraduationCap,
+  AlertTriangle,
+  PieChart,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -87,6 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const currentUnit = BP_BATAM_24_UNITS.find((u) => u.id === activeUnitId) || BP_BATAM_24_UNITS[0];
   const activeUnitsCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length;
+  const onProgressUnitsCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'on_progress').length;
 
   // Dynamic Sub-Menu tabs based on active unit
   const getSubMenus = () => {
@@ -121,10 +126,11 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (activeUnitId === 'dit-pengembangan-kek') {
       return [
         { id: 'ikhtisar', label: 'Ikhtisar Eksekutif KEK', icon: LayoutDashboard },
-        { id: 'perencanaan_kek', label: 'Daftar Perencanaan & Usulan KEK', icon: Compass },
-        { id: 'investasi', label: 'Investasi PMA vs PMDN (Dataset 1)', icon: TrendingUp },
+        { id: 'investasi', label: 'Realisasi Investasi PMA/PMDN (DS 1)', icon: TrendingUp },
+        { id: 'profil_kek', label: 'Profil KEK & Lokasi (DS 2)', icon: MapPin },
+        { id: 'kajian_kek', label: 'Laporan Kajian & Daya Saing (DS 12 & 9)', icon: BookOpen },
         { id: 'sheet_swap', label: 'Sheet Swap Perizinan (DS 3, 4, 7)', icon: ArrowRightLeft },
-        { id: 'profil_kek', label: 'Profil 3 KEK (Dataset 2)', icon: MapPin },
+        { id: 'perencanaan_kek', label: 'Usulan KEK Baru (DS 5)', icon: Compass },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus & 12 Dataset (PDF)', icon: FileCode2 },
       ];
@@ -139,9 +145,11 @@ export const Header: React.FC<HeaderProps> = ({
       ];
     } else if (activeUnitId === 'dit-lalu-lintas-barang') {
       return [
-        { id: 'ikhtisar', label: 'Ikhtisar & Komposisi Izin', icon: LayoutDashboard },
+        { id: 'ikhtisar', label: 'Ikhtisar Eksekutif LLB', icon: LayoutDashboard },
+        { id: 'perizinan', label: 'Rekap Perizinan LLB (DS 3)', icon: FileCheck2 },
+        { id: 'bulanan_swap', label: 'Sheet Swap Bulanan (DS 4, 6, 7)', icon: ArrowRightLeft },
+        { id: 'sla', label: 'Kinerja SLA Selesai Tepat Waktu (DS 8 & 9)', icon: CheckCircle2 },
         { id: 'kuota', label: 'Realisasi Kuota Konsumsi (DS 2)', icon: Package },
-        { id: 'sla', label: 'Kinerja SLA Waktu Jam (DS 8 & 9)', icon: CheckCircle2 },
         { id: 'kbli', label: 'KBLI Kawasan & Alur Izin (DS 1 & 5)', icon: Building2 },
         { id: 'kpi_word_doc', label: 'Tabel Kamus KPI & Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Data & Rumus (9 Dataset)', icon: FileCode2 },
@@ -180,9 +188,10 @@ export const Header: React.FC<HeaderProps> = ({
       ];
     } else if (activeUnitId === 'dit-pengendalian-usaha') {
       return [
-        { id: 'ikhtisar', label: 'Ikhtisar Pengendalian Kemitraan', icon: LayoutDashboard },
-        { id: 'kpi_ds3_ds4', label: 'KPI % Pengawasan & Tindak Lanjut', icon: ShieldCheck },
-        { id: 'skema_kemitraan', label: 'Skema KSO, BTO & Konsesi', icon: Briefcase },
+        { id: 'ikhtisar', label: 'Ikhtisar & 2 KPI', icon: LayoutDashboard },
+        { id: 'rekomendasi', label: 'Visual Rekomendasi (DS #1)', icon: PieChart },
+        { id: 'kpi_ds3_ds4', label: 'KPI % Evaluasi & Perbaikan (DS #3 & #4)', icon: ShieldCheck },
+        { id: 'skema_kemitraan', label: 'Daftar Kontrak PKS', icon: Briefcase },
         { id: 'kpi_word_doc', label: 'Kamus KPI Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus 4 Dataset (PDF)', icon: FileCode2 },
       ];
@@ -193,6 +202,24 @@ export const Header: React.FC<HeaderProps> = ({
         { id: 'operator_maskapai', label: 'Operator & Tren Penumpang', icon: Users },
         { id: 'kpi_word_doc', label: 'Kamus KPI Word (.docx)', icon: FileText, isSpecial: true },
         { id: 'kamus_rumus', label: 'Kamus Rumus 12 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'biro-sdm') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar SDM & 3 KPI', icon: LayoutDashboard },
+        { id: 'sistem_merit', label: 'Sistem Merit (8 Aspek KASN)', icon: Award },
+        { id: 'status_kepegawaian', label: 'Status Kepegawaian (DS #8)', icon: Users },
+        { id: 'pendidikan', label: 'Tingkat Pendidikan (DS #9)', icon: GraduationCap },
+        { id: 'kpi_word_doc', label: 'Laporan Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus & 13 Dataset (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'dit-pengendalian-lahan') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar & 4 KPI', icon: LayoutDashboard },
+        { id: 'penertiban', label: 'Pipeline Penertiban (DS #2)', icon: AlertTriangle },
+        { id: 'spasial', label: 'Pengawasan 5 SWP & Pesisir (DS #1)', icon: Compass },
+        { id: 'rekomendasi', label: 'Rekomendasi & Dokumen (DS #3 & #4)', icon: FileCheck2 },
+        { id: 'kpi_word_doc', label: 'Dokumen Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus 4 Dataset (PDF)', icon: FileCode2 },
       ];
     } else if (activeUnitId === 'biro-organisasi') {
       return [
@@ -249,9 +276,20 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-1.5 px-2.5 py-1 bg-[#1A3358] hover:bg-[#234575] text-white rounded-lg border border-blue-400/40 text-xs font-bold cursor-pointer transition-all shadow-xs"
               title="Ganti Unit Kerja (24 Unit)"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className={`w-2 h-2 rounded-full ${
+                currentUnit.status === 'active'
+                  ? 'bg-emerald-400 animate-pulse'
+                  : currentUnit.status === 'on_progress'
+                  ? 'bg-amber-400 animate-pulse'
+                  : 'bg-slate-400'
+              }`} />
               <span className="font-mono text-sky-200">[{currentUnit.code}]</span>
               <span className="truncate max-w-[130px] sm:max-w-[220px]">{currentUnit.name}</span>
+              {currentUnit.status === 'on_progress' && (
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/30 text-amber-200 border border-amber-400/40 uppercase">
+                  On Progress
+                </span>
+              )}
               <ChevronDown className="w-3.5 h-3.5 text-sky-300" />
             </button>
           </div>
@@ -263,13 +301,18 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenUnitsDrawer}
             className="flex items-center gap-1.5 text-xs bg-[#162D4D] hover:bg-[#203D68] text-sky-200 px-3 py-1.5 rounded-lg border border-sky-500/30 font-semibold cursor-pointer transition-all shadow-xs"
-            title={`Buka Direktori 24 Unit Kerja BP Batam (${activeUnitsCount} Unit Aktif)`}
+            title={`Buka Direktori 24 Unit Kerja BP Batam (${activeUnitsCount} Aktif${onProgressUnitsCount > 0 ? `, ${onProgressUnitsCount} On Progress` : ''})`}
           >
             <Layers className="w-3.5 h-3.5 text-sky-400" />
             <span>24 Unit Kerja</span>
             <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-emerald-500/30 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-400/40">
               {activeUnitsCount} Aktif
             </span>
+            {onProgressUnitsCount > 0 && (
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-amber-500/30 text-amber-300 font-mono text-[10px] font-bold border border-amber-400/40">
+                {onProgressUnitsCount} On Progress
+              </span>
+            )}
           </button>
 
           {/* Fullscreen */}

@@ -8,7 +8,7 @@ export interface BpBatamUnit {
   pdfPages: string;
   itemCount: number;
   description: string;
-  status: 'active' | 'ready_to_build';
+  status: 'active' | 'on_progress' | 'ready_to_build';
   headOfUnit?: string;
   keyKpis: string[];
   datasets?: string[];
@@ -52,10 +52,17 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     iconName: 'Users',
     pdfPages: 'Halaman 1 - 2',
     itemCount: 13,
-    description: 'Pengelolaan kepegawaian, kenaikan gaji berkala, diklat kompetensi, asuransi pegawai, dan indeks sistem merit.',
-    status: 'ready_to_build',
-    headOfUnit: 'Kepala Biro SDM',
-    keyKpis: ['Indeks Sistem Merit', 'Persentase Pegawai Mengikuti Diklat', 'Kenaikan Gaji Berkala Tepat Waktu'],
+    description: 'Pengelolaan kepegawaian, Indeks Sistem Merit 8 Aspek KASN, demografi gender, sebaran status kepegawaian (PNS, P2K, PPPK, PTT), dan kualifikasi pendidikan pegawai.',
+    status: 'active',
+    headOfUnit: 'Kepala Biro Sumber Daya Manusia',
+    keyKpis: [
+      'Indeks Sistem Merit (Skor 342.5 / 400 - Kategori IV)',
+      'Jumlah Pegawai Perempuan (1.182 Orang - 39.7%)',
+      'Jumlah Pegawai Laki-Laki (1.796 Orang - 60.3%)',
+      'Status Kepegawaian (PNS 35.0%, Non-PNS 65.0%)',
+      'Kualifikasi Pendidikan (S1-S3 64.5%)',
+      'Pengembangan Karir & 20 JP Diklat Tahunan',
+    ],
   },
   {
     id: 'biro-hukum',
@@ -67,7 +74,7 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     pdfPages: 'Halaman 2',
     itemCount: 10,
     description: 'Penanganan perkara litigasi (DS 4 & 9), pelayanan hukum non-litigasi (DS 10), formula agregasi perkara, penilaian kinerja JDIHN (Skor 100), pipeline regulasi Perka/Kepka (DS 5, 6, 7, 8), dan kajian/pendampingan hukum JPN (DS 1 & 2).',
-    status: 'active',
+    status: 'on_progress',
     headOfUnit: 'Kepala Biro Hukum BP Batam',
     keyKpis: [
       'Jumlah Penanganan Perkara (Dataset 4)',
@@ -207,7 +214,7 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     pdfPages: 'Halaman 11',
     itemCount: 4,
     description: 'Pengawasan kepatuhan pemanfaatan alokasi tanah, evaluasi pembatalan alokasi terlantar (SP 1-3 & Pembatalan SK), pengawasan sempadan pesisir & reklamasi, pelaksanaan dokumen BAPL, serta rekomendasi perpanjangan pembaruan alokasi lahan dan izin peralihan hak.',
-    status: 'active',
+    status: 'on_progress',
     headOfUnit: 'Direktur Pengendalian Pengelolaan Lahan, Pesisir dan Reklamasi',
     keyKpis: [
       '% Keberhasilan Pengawasan dan Pengendalian Lahan, Pesisir dan Reklamasi (Dataset #1: 93,8%)',
@@ -227,10 +234,19 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     iconName: 'Truck',
     pdfPages: 'Halaman 8 - 9',
     itemCount: 9,
-    description: 'Kuota induk barang konsumsi, izin pemasukan & pengeluaran barang industri, izin usaha kawasan KPBPBB, dan waktu penyelesaian dokumen per jam.',
+    description: 'Pusat integrasi pengawasan lalu lintas barang BP Batam: Penerbitan perizinan industri & perdagangan (DS #3), Izin Usaha Kawasan bulanan (DS #4), Pemasukan & Pengeluaran barang (DS #6 & #7), Kinerja SLA ketepatan waktu jam (DS #8 & #9), Kuota pangan sembako (DS #2), dan KBLI kawasan (DS #5).',
     status: 'active',
     headOfUnit: 'Direktur Lalu Lintas Barang',
-    keyKpis: ['Rata-rata Waktu Dokumen (Jam)', 'Realisasi Kuota Barang Konsumsi', 'Kepatuhan Izin Usaha Kawasan'],
+    keyKpis: [
+      'Total Penerbitan Izin LLB (Dataset #3: 1.842 SK - Industri 1.365 & Perdagangan 477)',
+      'Izin Usaha Kawasan / IUK Bulanan (Dataset #4: 265 SK Terbit)',
+      'Izin Pemasukan Barang / Inbound Bulanan (Dataset #6: 1.522 SK Terbit)',
+      'Izin Pengeluaran Barang / Outbound Bulanan (Dataset #7: 835 SK Terbit)',
+      'SLA Pelayanan Perdagangan Tepat Waktu (Dataset #8: 96,0% - Rata-rata 3,9 Jam)',
+      'SLA Pelayanan Industri Tepat Waktu (Dataset #9: 96,7% - Rata-rata 3,3 Jam)',
+      'Realisasi Kuota Induk Barang Konsumsi (Dataset #2: 300.000 Ton Sembako Bebas BM)',
+      'KBLI Perusahaan Berizin Usaha Kawasan (Dataset #5: 34 Perusahaan Terdaftar)',
+    ],
   },
   {
     id: 'dit-pengembangan-kek',
@@ -301,11 +317,11 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
     status: 'active',
     headOfUnit: 'Direktur Pengendalian Pengusahaan',
     keyKpis: [
-      '% Pelaksanaan dan Pengendalian Pengusahaan dan Kerja Sama Badan Usaha (Dataset #3: 94,6%)',
-      '% Hasil Perbaikan dan Perubahan Kerjasama Usaha yang Ditindaklanjuti (Dataset #4: 91,8%)',
-      'Indeks Kepatuhan Tata Kelola Mitra Usaha (Dataset #1: 89,4%)',
-      'Realisasi Kontribusi Finansial & Bagi Hasil Kemitraan (Dataset #2: 106,3% / Rp 418,7 M)',
-      'Pipeline Tahapan Tindak Lanjut Rekomendasi PKS (91,8%)',
+      '% Hasil Evaluasi Pengendalian dan Pembinaan Badan Usaha yang Ditindaklanjuti (Dataset #3: 94,6%)',
+      '% Hasil Perbaikan, dan Perubahan Kerjasama Usaha yang Ditindaklanjuti (Dataset #4: 91,8%)',
+      'Rekomendasi Evaluasi & Pengendalian Kerjasama Pengusahaan BU (Dataset #1: 48 Rekomendasi)',
+      'Laporan Pengawasan Pengendalian Pengusahaan (Dataset #2: 12 Laporan Bulanan)',
+      'Efektivitas Penyelesaian Rekomendasi Kerjasama Usaha (91,7%)',
     ],
   },
   {

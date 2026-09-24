@@ -108,15 +108,26 @@ export const PesisirFormulaModal: React.FC<PesisirFormulaModalProps> = ({
             </div>
           )}
 
-          {activeKpiId === 'kpi_tepat_waktu' && (
+          {(activeKpiId === 'kpi_tepat_waktu' || activeKpiId === 'kpi_sla_perizinan') && (
             <div className="space-y-3">
               <div className="p-3 bg-emerald-50/60 border border-emerald-200 rounded-lg">
                 <span className="font-bold text-emerald-900 block text-xs mb-1">
-                  2. Persentase Perizinan Pesisir dan Reklamasi yang Selesai Tepat Waktu
+                  Dataset No. 3: PERSENTASE PERIZINAN PESISIR DAN REKLAMASI YANG SELESAI TEPAT WAKTU
                 </span>
                 <p className="text-slate-700 text-[11.5px] leading-relaxed">
-                  Mengukur efektivitas dan kepatuhan terhadap Service Level Agreement (SLA SOP 14 Hari Kerja) dalam proses verifikasi dan penerbitan izin pemanfaatan ruang laut dan reklamasi. Sumber: <strong>Dataset No. 3 (Perizinan Pesisir dan Reklamasi)</strong>.
+                  Mengukur efektivitas dan kepatuhan terhadap Service Level Agreement (SLA SOP &le; 14 Hari Kerja) dalam proses verifikasi dan penerbitan izin pemanfaatan ruang laut dan reklamasi. Sifat data: <strong>DATA STATISTIK | PERTAHUN | TERBUKA</strong>.
                 </p>
+              </div>
+
+              <div>
+                <span className="font-bold text-slate-800 block mb-1 text-xs">Atribut Resmi Sesuai Dokumen Satu Data (Hal. 14):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {['JUMLAH PERMOHONAN', 'TOTAL LUASAN', 'TAHUN'].map((attr, idx) => (
+                    <span key={idx} className="px-2 py-1 rounded bg-emerald-100 text-emerald-900 font-mono font-bold text-[11px] border border-emerald-200">
+                      {idx + 1}. {attr}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <div>
@@ -136,15 +147,34 @@ export const PesisirFormulaModal: React.FC<PesisirFormulaModalProps> = ({
             </div>
           )}
 
-          {activeKpiId === 'kpi_masalah' && (
+          {(activeKpiId === 'kpi_masalah' || activeKpiId === 'kpi_penyelesaian_masalah') && (
             <div className="space-y-3">
               <div className="p-3 bg-amber-50/60 border border-amber-200 rounded-lg">
                 <span className="font-bold text-amber-900 block text-xs mb-1">
-                  3. Persentase Penyelesaian Permasalahan Pesisir dan Reklamasi
+                  Dataset No. 1: PERSENTASE PENYELESAIAN PERMASALAHAN PESISIR DAN REKLAMASI
                 </span>
                 <p className="text-slate-700 text-[11.5px] leading-relaxed">
-                  Rasio keberhasilan penanganan konflik ruang laut, deviasi amdal/sedimentasi, dan pelanggaran garis sempadan pantai yang dilaporkan masyarakat maupun tim patroli pengawasan. Sumber: <strong>Dataset No. 1 (Permasalahan Pesisir dan Reklamasi)</strong>.
+                  Rasio keberhasilan penanganan konflik ruang laut, deviasi amdal/sedimentasi, dan penertiban garis sempadan pantai yang dilaporkan masyarakat maupun tim patroli pengawasan. Sifat data: <strong>DATA STATISTIK | PERTRIWULAN | TERBUKA</strong>.
                 </p>
+              </div>
+
+              <div>
+                <span className="font-bold text-slate-800 block mb-1 text-xs">Atribut Resmi Sesuai Dokumen Satu Data (Hal. 13-14):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    'NAMA PERUSAHAAN',
+                    'DOKUMEN PERIZINAN',
+                    'DOKUMEN PENDUKUNG',
+                    'WILAYAH',
+                    'LUAS YANG DITERBITKAN',
+                    'TRIWULAN',
+                    'TAHUN'
+                  ].map((attr, idx) => (
+                    <span key={idx} className="px-2 py-1 rounded bg-amber-100 text-amber-950 font-mono font-bold text-[11px] border border-amber-200">
+                      {idx + 1}. {attr}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <div>

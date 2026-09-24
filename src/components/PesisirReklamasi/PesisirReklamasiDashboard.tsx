@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { PesisirReklamasiFilters } from './PesisirReklamasiFilters';
 import { PesisirReklamasiKpis } from './PesisirReklamasiKpis';
+import { PesisirRencanaSheetSwap } from './PesisirRencanaSheetSwap';
 import { SheetSwapPesisir } from './SheetSwapPesisir';
 import { PesisirKawasanVisualizer } from './PesisirKawasanVisualizer';
 import { PesisirFormulaModal } from './PesisirFormulaModal';
@@ -110,7 +111,13 @@ export const PesisirReklamasiDashboard: React.FC = () => {
       {/* 3 Main Executive KPIs Cards */}
       <PesisirReklamasiKpis onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)} />
 
-      {/* Main Content: Sheet Swap Toggleable View (Grafik vs Tabel Detail Dataset #4) */}
+      {/* REQ 1: Rencana Pemanfaatan Wilayah Pesisir dan Reklamasi (Sheet Swap: Wilayah & Luas vs Tabel 4 Atribut) */}
+      <PesisirRencanaSheetSwap
+        filters={filters}
+        onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
+      />
+
+      {/* REQ 2: Luas Izin Pemanfaatan Kawasan Pesisir & Izin Reklamasi untuk Investasi (Sheet Swap: Wilayah & Luas vs Tabel 4 Atribut) */}
       <SheetSwapPesisir
         filters={filters}
         onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}

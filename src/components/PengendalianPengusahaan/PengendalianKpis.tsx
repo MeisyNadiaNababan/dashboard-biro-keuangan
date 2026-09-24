@@ -189,12 +189,12 @@ export const PengendalianKpis: React.FC<PengendalianKpisProps> = ({
 
       {/* Secondary Supporting Metrics (Dataset #1 & Dataset #2) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Dataset #1 */}
+        {/* Dataset #1: Rekomendasi Evaluasi dan Pengendalian Kerjasama Pengusahaan BU */}
         {dataset1 && (
           <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
-                DATASET RESMI #1
+                DATASET NO. 1 (HALAMAN 14)
               </span>
               <button
                 onClick={() => onOpenFormulaModal(1)}
@@ -208,27 +208,31 @@ export const PengendalianKpis: React.FC<PengendalianKpisProps> = ({
                 <h4 className="text-xs font-bold text-slate-700">{dataset1.namaDataset}</h4>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="text-2xl font-black text-slate-900 font-mono">
-                    {dataset1.capaian.toFixed(1)}%
+                    {dataset1.capaian}
+                  </span>
+                  <span className="text-xs font-bold text-slate-500">
+                    {dataset1.satuan}
                   </span>
                   <span className="text-xs text-emerald-600 font-semibold">
-                    Target {dataset1.target}%
+                    (44 Selesai / 91,8%)
                   </span>
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-full border-4 border-emerald-400 flex items-center justify-center font-bold text-xs text-emerald-700 bg-emerald-50 font-mono">
-                {dataset1.capaian.toFixed(0)}%
+              <div className="w-12 h-12 rounded-xl border border-emerald-300 flex flex-col items-center justify-center font-bold text-xs text-emerald-700 bg-emerald-50 font-mono">
+                <span className="text-xs">44/48</span>
+                <span className="text-[8px] uppercase font-bold text-emerald-600">Selesai</span>
               </div>
             </div>
             <p className="text-[11px] text-slate-500 mt-2 line-clamp-1">{dataset1.deskripsi}</p>
           </div>
         )}
 
-        {/* Dataset #2 */}
+        {/* Dataset #2: Laporan Pengawasan Pengendalian Pengusahaan */}
         {dataset2 && (
           <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold">
-                DATASET RESMI #2
+                DATASET NO. 2 (HALAMAN 14)
               </span>
               <button
                 onClick={() => onOpenFormulaModal(2)}
@@ -242,18 +246,22 @@ export const PengendalianKpis: React.FC<PengendalianKpisProps> = ({
                 <h4 className="text-xs font-bold text-slate-700">{dataset2.namaDataset}</h4>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="text-2xl font-black text-slate-900 font-mono">
-                    {dataset2.capaian.toFixed(1)}%
+                    {dataset2.capaian}
+                  </span>
+                  <span className="text-xs font-bold text-slate-500">
+                    {dataset2.satuan}
                   </span>
                   <span className="text-xs text-emerald-600 font-semibold">
-                    Surplus Bagi Hasil
+                    100% Disahkan
                   </span>
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-full border-4 border-indigo-400 flex items-center justify-center font-bold text-xs text-indigo-700 bg-indigo-50 font-mono">
-                {dataset2.capaian.toFixed(0)}%
+              <div className="w-12 h-12 rounded-xl border border-indigo-300 flex flex-col items-center justify-center font-bold text-xs text-indigo-700 bg-indigo-50 font-mono">
+                <span className="text-xs">12/12</span>
+                <span className="text-[8px] uppercase font-bold text-indigo-600">Bulan</span>
               </div>
             </div>
-            <p className="text-[11px] text-slate-500 mt-2 line-clamp-1">{dataset2.trend}</p>
+            <p className="text-[11px] text-slate-500 mt-2 line-clamp-1">{dataset2.deskripsi}</p>
           </div>
         )}
       </div>

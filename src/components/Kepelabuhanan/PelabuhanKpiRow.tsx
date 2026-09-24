@@ -49,7 +49,28 @@ export const PelabuhanKpiRow: React.FC<PelabuhanKpiRowProps> = ({
   const persenBelanja = Math.round((realisasiBelanjaMiliar / paguBelanjaMiliar) * 1000) / 10;
 
   return (
-    <div id="pelabuhan-kpi-row" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    <div id="pelabuhan-kpi-row" className="space-y-2">
+      {/* Banner Visualisasi BANs (Req 9) */}
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider font-mono">
+            Ringkasan Indikator Kinerja Utama (IKU / KPI) Kepelabuhanan
+          </span>
+          <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-mono">
+            Buku Satu Data Hal. 14 - 17
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10.5px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-900 border border-purple-200 font-mono">
+            🏷️ Visualisasi: Kartu Metrik KPI (BANs - Big Numbers)
+          </span>
+          <span className="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded font-mono hidden sm:inline-block">
+            Atribut: <strong>REALISASI</strong>, <strong>TARGET</strong>, <strong>PERSEN CAPAIAN</strong>
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       {/* KPI 1: REALISASI PNBP KEPELABUHANAN (Dataset #3) */}
       <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs hover:shadow-sm transition-all relative flex flex-col justify-between group">
         <div>
@@ -344,5 +365,6 @@ export const PelabuhanKpiRow: React.FC<PelabuhanKpiRowProps> = ({
         </div>
       </div>
     </div>
+  </div>
   );
 };

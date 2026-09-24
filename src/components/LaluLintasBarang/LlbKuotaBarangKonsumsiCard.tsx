@@ -20,6 +20,7 @@ import {
   KUOTA_BARANG_KONSUMSI_DATA,
   KuotaBarangKonsumsiItem,
 } from '../../data/laluLintasBarangData';
+import { LlbVisualHeader } from './LlbVisualHeader';
 import { LlbDatasetSourceBadge } from './LlbDatasetSourceBadge';
 import { TableauShelvesBadge } from '../TableauShelvesBadge';
 
@@ -57,62 +58,67 @@ export const LlbKuotaBarangKonsumsiCard: React.FC<LlbKuotaBarangKonsumsiCardProp
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-xl p-4 mb-4 shadow-2xs">
-      {/* 1. Header Bar with View Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wide">
-              Realisasi Kuota Induk Barang Konsumsi BP Batam
-            </h3>
-          </div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Monitoring Alokasi Kuota, Realisasi Impor Pangan Pokok Bebas BM, dan Estimasi Nilai Devisa (SK Kepala BP Batam)
-          </p>
-        </div>
+      {/* 1. Standardized Visual Header */}
+      <LlbVisualHeader
+        datasetNumber={2}
+        pdfPages="Hal. 8"
+        classification="TERTUTUP"
+        periode="JIKA UPDATE"
+        title="DATA REALISASI KUOTA INDUK BARANG KONSUMSI"
+        visualName="Bullet Bar Chart & Matriks Realisasi Kuota Induk Bahan Pangan"
+        attributes={[
+          'ID',
+          'KODE HS',
+          'KUOTA',
+          'SATUAN',
+          'NILAI',
+          'NO SK',
+          'TANGGAL SK',
+        ]}
+        onOpenFormula={() => onOpenFormulaModal?.('llb-kuota')}
+        rightControls={
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
+              <button
+                onClick={() => setDisplayMode('chart')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'chart'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <BarChart3 className="w-3 h-3" />
+                <span>Grafis (Bullet)</span>
+              </button>
+              <button
+                onClick={() => setDisplayMode('table')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'table'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <TableIcon className="w-3 h-3" />
+                <span>Tabel SK</span>
+              </button>
+            </div>
 
-        {/* View Switcher: Grafis vs Tabel */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
             <button
-              onClick={() => setDisplayMode('chart')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'chart'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
+              onClick={() => setShowFormulaDetails(!showFormulaDetails)}
+              className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
+                showFormulaDetails
+                  ? 'bg-amber-50 text-amber-800 border-amber-300'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
+              title="Tampilkan Rumus & Calculated Field Kuota"
             >
-              <BarChart3 className="w-3 h-3" />
-              <span>Grafis (Bullet)</span>
-            </button>
-            <button
-              onClick={() => setDisplayMode('table')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'table'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3 h-3" />
-              <span>Tabel SK</span>
+              <HelpCircle className="w-3 h-3 text-amber-600" />
+              <span>Formula</span>
+              {showFormulaDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             </button>
           </div>
-
-          <button
-            onClick={() => setShowFormulaDetails(!showFormulaDetails)}
-            className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-              showFormulaDetails
-                ? 'bg-amber-50 text-amber-800 border-amber-300'
-                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-            title="Tampilkan Rumus & Calculated Field Kuota"
-          >
-            <HelpCircle className="w-3 h-3 text-amber-600" />
-            <span>Formula</span>
-            {showFormulaDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. Tableau Shelves Badge (Compact) */}
       <div className="my-1.5">

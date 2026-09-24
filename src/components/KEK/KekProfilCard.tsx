@@ -6,8 +6,17 @@ import {
   Layers,
   LayoutGrid,
   Table as TableIcon,
+  BarChart3,
+  DollarSign,
+  Users,
+  Building2,
+  FileText,
+  Download,
+  ExternalLink,
+  Coins,
 } from 'lucide-react';
-import { KEK_PROFIL_DATA } from '../../data/kekData';
+import { KEK_PROFIL_DATA, KekProfil } from '../../data/kekData';
+import { KekVisualHeader } from './KekVisualHeader';
 
 interface KekProfilCardProps {
   selectedKek: string;
@@ -15,70 +24,380 @@ interface KekProfilCardProps {
   onOpenFormulaModal: (formulaId: string) => void;
 }
 
+type SheetProfilMode = 'komparasi_lokasi_investasi' | 'kartu_profil' | 'matriks_tabel';
+
 export const KekProfilCard: React.FC<KekProfilCardProps> = ({
   selectedKek,
   onSelectKek,
+  onOpenFormulaModal,
 }) => {
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
+  const [activeSheet, setActiveSheet] = useState<SheetProfilMode>('komparasi_lokasi_investasi');
+
+  // Kalkulasi agregasi profil KEK
+  const totalKomitmenInvestasi = KEK_PROFIL_DATA.reduce((sum, k) => sum + k.nilaiInvestasiKomitmen, 0);
+  const totalLuasArea = KEK_PROFIL_DATA.reduce((sum, k) => sum + k.luasArea, 0);
+  const totalTargetNaker = KEK_PROFIL_DATA.reduce((sum, k) => sum + k.targetPenyerapanTenagaKerja, 0);
+
+  const maxInvestasi = Math.max(...KEK_PROFIL_DATA.map((k) => k.nilaiInvestasiKomitmen));
+
+  const formatRupiahTriliun = (val: number): string => {
+    return `Rp ${(val / 1e12).toLocaleString('id-ID', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })} Triliun`;
+  };
+
+  const handleExportCsv = () => {
+    const headers = [
+      'KAWASAN',
+      'LOKASI',
+      'NAMA_PERUSAHAAN_BUPP',
+      'LUAS_AREA_HA',
+      'STATUS_OPERASIONAL',
+      'KEGIATAN',
+      'NILAI_INVESTASI_KOMITMEN_RUPIAH',
+      'DASAR_HUKUM',
+      'TARGET_PENYERAPAN_TENAGA_KERJA',
+    ];
+
+    const rows = KEK_PROFIL_DATA.map((k) => [
+      `"${k.kawasan}"`,
+      `"${k.lokasi}"`,
+      `"${k.bupp}"`,
+      k.luasArea,
+      `"${k.statusOperasional}"`,
+      `"${k.kegiatan}"`,
+      k.nilaiInvestasiKomitmen,
+      `"${k.dasarHukum}"`,
+      k.targetPenyerapanTenagaKerja,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Profil_Kawasan_Ekonomi_Khusus_BP_Batam_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const getVisualMeta = () => {
+    switch (activeSheet) {
+      case 'komparasi_lokasi_investasi':
+        return {
+          name: 'Visual Komparasi Nilai Investasi Komitmen & Luas Wilayah per Lokasi Geografis KEK',
+          attrs: [
+            'KAWASAN',
+            'LOKASI',
+            'NILAI INVESTASI KOMITMEN',
+            'LUAS AREA',
+            'STATUS OPERASIONAL',
+            'TARGET PENYERAPAN TENAGA KERJA',
+          ],
+        };
+      case 'kartu_profil':
+        return {
+          name: 'Kartu Eksekutif Profil KEK Berfokus Lokasi, Nilai Investasi, dan Badan Usaha Pembangun',
+          attrs: [
+            'KAWASAN',
+            'LOKASI',
+            'NAMA PERUSAHAAN',
+            'NILAI INVESTASI KOMITMEN',
+            'LUAS AREA',
+            'STATUS OPERASIONAL',
+            'KEGIATAN',
+            'DASAR HUKUM',
+          ],
+        };
+      case 'matriks_tabel':
+        return {
+          name: 'Matriks Tabel Profil KEK Lengkap (9 Atribut Data Resmi Hal. 10)',
+          attrs: [
+            'KAWASAN',
+            'LOKASI',
+            'NAMA PERUSAHAAN',
+            'LUAS AREA',
+            'STATUS OPERASIONAL',
+            'KEGIATAN',
+            'NILAI INVESTASI KOMITMEN',
+            'DASAR HUKUM',
+            'TARGET PENYERAPAN TENAGA KERJA',
+          ],
+        };
+    }
+  };
+
+  const visualMeta = getVisualMeta();
 
   return (
     <div
       id="kek-profil-kawasan-section"
-      className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5"
     >
-      {/* Header Profil */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-200/80 bg-slate-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-100/70 border border-emerald-300/60 flex items-center justify-center text-emerald-800 shrink-0">
-            <Layers className="w-4 h-4" />
+      {/* Official Visual Header (Memenuhi Poin 5) */}
+      <KekVisualHeader
+        datasetNumber={2}
+        pdfPages="Hal. 10"
+        title="PROFIL KAWASAN EKONOMI KHUSUS (KEK) BATAM"
+        visualName={visualMeta.name}
+        visualIcon={<Layers className="w-3.5 h-3.5 text-emerald-600" />}
+        attributes={visualMeta.attrs}
+        classification="TERBUKA"
+        periode="JIKA UPDATE"
+        rightControls={
+          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+            <button
+              onClick={() => setActiveSheet('komparasi_lokasi_investasi')}
+              className={`px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeSheet === 'komparasi_lokasi_investasi'
+                  ? 'bg-white text-emerald-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Sheet 1: Komparasi Lokasi & Nilai Investasi"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Komparasi Lokasi & Investasi</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSheet('kartu_profil')}
+              className={`px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeSheet === 'kartu_profil'
+                  ? 'bg-white text-emerald-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Sheet 2: Kartu Profil Eksekutif"
+            >
+              <LayoutGrid className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Kartu Profil</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSheet('matriks_tabel')}
+              className={`px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeSheet === 'matriks_tabel'
+                  ? 'bg-white text-emerald-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Sheet 3: Tabel 9 Atribut"
+            >
+              <TableIcon className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Tabel 9 Atribut</span>
+            </button>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                PROFIL KAWASAN EKONOMI KHUSUS
-              </h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono">
-                Dataset No. 2 • profil-kek.pdf
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              Informasi Kawasan, Lokasi Geografis, Luas Area (Ha), dan Status Operasional
-            </p>
+        }
+        onOpenFormula={() => onOpenFormulaModal('kpi_kek_investasi')}
+      />
+
+      {/* SUMMARY BANNER: TOTAL NILAI INVESTASI KOMITMEN & LOKASI STRATEGIS */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+        <div className="p-3 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/30 rounded-xl border border-emerald-200">
+          <div className="flex items-center justify-between text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">
+            <span className="flex items-center gap-1.5">
+              <Coins className="w-3.5 h-3.5 text-emerald-600" />
+              Total Nilai Investasi Komitmen
+            </span>
+            <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-mono text-[10px]">
+              3 KEK
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">
+            {formatRupiahTriliun(totalKomitmenInvestasi)}
+          </div>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Komitmen kumulatif pengembang dan pelaku usaha KEK Batam
           </div>
         </div>
 
-        {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 bg-slate-200/80 p-0.5 rounded-lg text-xs self-end sm:self-auto">
-          <button
-            onClick={() => setViewMode('cards')}
-            className={`px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              viewMode === 'cards'
-                ? 'bg-white text-slate-800 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-            title="Tampilan Kartu"
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            <span>Kartu</span>
-          </button>
-          <button
-            onClick={() => setViewMode('table')}
-            className={`px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              viewMode === 'table'
-                ? 'bg-white text-slate-800 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-            title="Tampilan Tabel"
-          >
-            <TableIcon className="w-3.5 h-3.5" />
-            <span>Tabel</span>
-          </button>
+        <div className="p-3 bg-gradient-to-br from-sky-50 via-white to-sky-50/30 rounded-xl border border-sky-200">
+          <div className="flex items-center justify-between text-[11px] font-bold text-sky-800 uppercase tracking-wider mb-1">
+            <span className="flex items-center gap-1.5">
+              <Maximize2 className="w-3.5 h-3.5 text-sky-600" />
+              Total Luas Delineasi Kawasan
+            </span>
+            <span className="px-1.5 py-0.2 rounded bg-sky-100 text-sky-800 font-mono text-[10px]">
+              Delineasi Resmi
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">
+            {totalLuasArea.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-sm font-semibold font-sans text-slate-600">Ha</span>
+          </div>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Rata-rata densitas investasi: <strong>Rp {(totalKomitmenInvestasi / totalLuasArea / 1e9).toFixed(1)} Miliar / Ha</strong>
+          </div>
+        </div>
+
+        <div className="p-3 bg-gradient-to-br from-indigo-50 via-white to-indigo-50/30 rounded-xl border border-indigo-200">
+          <div className="flex items-center justify-between text-[11px] font-bold text-indigo-800 uppercase tracking-wider mb-1">
+            <span className="flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-indigo-600" />
+              Target Penyerapan Tenaga Kerja
+            </span>
+            <span className="px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 font-mono text-[10px]">
+              Naker Target
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">
+            {totalTargetNaker.toLocaleString('id-ID')} <span className="text-sm font-semibold font-sans text-slate-600">Orang</span>
+          </div>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Tenaga kerja terampil bidang digital, aviasi, dan kesehatan
+          </div>
         </div>
       </div>
 
-      {/* TAMPILAN 1: KARTU (HANYA MENAMPILKAN KAWASAN, LOKASI, LUAS AREA, DAN STATUS OPERASIONAL) */}
-      {viewMode === 'cards' ? (
-        <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* SHEET 1: VISUAL KOMPARASI NILAI INVESTASI & LOKASI KEK */}
+      {activeSheet === 'komparasi_lokasi_investasi' && (
+        <div className="space-y-4">
+          <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Distribusi Nilai Investasi Komitmen Berdasarkan Lokasi KEK
+                </h3>
+                <p className="text-[11px] text-slate-500">
+                  Menampilkan perbandingan nilai komitmen investasi, luas wilayah, dan lokasi strategis setiap kawasan
+                </p>
+              </div>
+              <span className="text-xs text-slate-600 font-medium">
+                Klik kartu untuk memfilter dashboard
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {KEK_PROFIL_DATA.map((item, idx) => {
+                const isSelected =
+                  selectedKek === item.kawasan ||
+                  selectedKek === item.shortName ||
+                  (selectedKek.includes('Pariwisata') && item.kawasan.includes('Pariwisata'));
+                const investPct = (item.nilaiInvestasiKomitmen / totalKomitmenInvestasi) * 100;
+                const barWidth = (item.nilaiInvestasiKomitmen / maxInvestasi) * 100;
+
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() =>
+                      onSelectKek(
+                        item.shortName === 'KEK Pariwisata & Kesehatan'
+                          ? 'KEK Pariwisata dan Kesehatan Internasional Batam'
+                          : item.shortName
+                      )
+                    }
+                    className={`rounded-xl border p-4 transition-all cursor-pointer flex flex-col justify-between relative overflow-hidden bg-white shadow-2xs hover:shadow-md ${
+                      isSelected
+                        ? 'border-emerald-600 ring-2 ring-emerald-500/30'
+                        : 'border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    {/* Top Accent Strip */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-1.5"
+                      style={{ backgroundColor: item.themeColor }}
+                    />
+
+                    <div className="space-y-3">
+                      {/* Kawasan Header */}
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <span className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                            KEK #{idx + 1}
+                          </span>
+                          <h4 className="font-extrabold text-slate-900 text-sm mt-1 leading-snug">
+                            {item.kawasan}
+                          </h4>
+                        </div>
+                        {isSelected && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0">
+                            Aktif
+                          </span>
+                        )}
+                      </div>
+
+                      {/* LOKASI (Prominently Highlighted as requested) */}
+                      <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/90 flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                            Lokasi Kawasan
+                          </span>
+                          <span className="text-xs font-semibold text-slate-800 leading-snug block">
+                            {item.lokasi}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* NILAI INVESTASI KOMITMEN (Prominently Highlighted as requested) */}
+                      <div className="p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-200 flex items-start gap-2">
+                        <Coins className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">
+                            Nilai Investasi Komitmen
+                          </span>
+                          <span className="text-base font-black font-mono text-emerald-950 block leading-tight">
+                            {formatRupiahTriliun(item.nilaiInvestasiKomitmen)}
+                          </span>
+                          <span className="text-[10.5px] text-emerald-700 font-medium">
+                            Porsi: <strong>{investPct.toFixed(1)}%</strong> dari total KEK
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Comparison Bar */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px] text-slate-500">
+                          <span>Skala Investasi</span>
+                          <span className="font-mono font-bold">{investPct.toFixed(1)}%</span>
+                        </div>
+                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${barWidth}%`,
+                              backgroundColor: item.themeColor,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Additional Profil Metrics: Luas & Naker */}
+                      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div>
+                          <span className="text-[10px] text-slate-400 font-medium block">Luas Area:</span>
+                          <span className="font-bold text-slate-800 font-mono">
+                            {item.luasArea.toFixed(2)} Ha
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-slate-400 font-medium block">Target Naker:</span>
+                          <span className="font-bold text-slate-800 font-mono">
+                            {item.targetPenyerapanTenagaKerja.toLocaleString('id-ID')} Org
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10.5px] text-slate-500">
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {item.statusOperasional}
+                      </span>
+                      <span className="text-blue-600 font-semibold text-[10.5px]">
+                        {isSelected ? '✓ Terpilih' : 'Filter KEK →'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SHEET 2: KARTU PROFIL EKSEKUTIF LENGKAP */}
+      {activeSheet === 'kartu_profil' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {KEK_PROFIL_DATA.map((item, idx) => {
             const isSelected =
               selectedKek === item.kawasan ||
@@ -95,85 +414,95 @@ export const KekProfilCard: React.FC<KekProfilCardProps> = ({
                       : item.shortName
                   )
                 }
-                className={`rounded-xl border p-4 sm:p-4.5 transition-all cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
+                className={`rounded-xl border p-4.5 transition-all cursor-pointer flex flex-col justify-between relative overflow-hidden group bg-white shadow-2xs hover:shadow-md ${
                   isSelected
-                    ? 'border-sky-500 bg-sky-50/25 ring-2 ring-sky-400/40 shadow-md'
-                    : 'border-slate-200/90 bg-white hover:border-slate-300 hover:shadow-md hover:-translate-y-0.5'
+                    ? 'border-emerald-600 ring-2 ring-emerald-400/40'
+                    : 'border-slate-200 hover:border-slate-300'
                 }`}
-                title="Klik untuk memfilter data dashboard ke kawasan ini"
               >
-                {/* Top Accent Strip */}
                 <div
-                  className="absolute top-0 left-0 right-0 h-1.5 transition-opacity"
+                  className="absolute top-0 left-0 right-0 h-1.5"
                   style={{ backgroundColor: item.themeColor }}
                 />
 
                 <div className="space-y-3.5">
-                  {/* 1. KAWASAN */}
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600">
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
                         KEK #{idx + 1}
                       </span>
-                      {isSelected && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-sky-100 text-sky-800 border border-sky-200">
-                          Terpilih
-                        </span>
-                      )}
+                      <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {item.statusOperasional}
+                      </span>
                     </div>
-                    <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
-                      Kawasan
-                    </span>
-                    <h3 className="font-extrabold text-slate-900 text-sm leading-snug group-hover:text-blue-700 transition-colors">
+                    <h3 className="font-extrabold text-slate-900 text-sm leading-snug">
                       {item.kawasan}
                     </h3>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      BUPP: <strong>{item.bupp}</strong>
+                    </p>
                   </div>
 
-                  {/* 2. LOKASI */}
+                  {/* LOKASI */}
                   <div className="flex items-start gap-2 pt-2 border-t border-slate-100">
-                    <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <MapPin className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                     <div>
                       <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
                         Lokasi
                       </span>
-                      <span className="text-xs text-slate-800 font-medium leading-snug block">
+                      <span className="text-xs text-slate-800 font-semibold leading-snug block">
                         {item.lokasi}
                       </span>
                     </div>
                   </div>
 
-                  {/* 3. LUAS AREA */}
+                  {/* NILAI INVESTASI KOMITMEN */}
                   <div className="flex items-start gap-2 pt-2 border-t border-slate-100">
-                    <Maximize2 className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
+                        Nilai Investasi Komitmen
+                      </span>
+                      <span className="text-base font-black font-mono text-emerald-900 block">
+                        {formatRupiahTriliun(item.nilaiInvestasiKomitmen)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* LUAS & TARGET NAKER */}
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
                     <div>
                       <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
                         Luas Area
                       </span>
-                      <span className="text-base font-black font-mono text-slate-900">
-                        {item.luasArea.toLocaleString('id-ID', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{' '}
-                        <span className="text-xs font-semibold text-slate-500 font-sans">Ha</span>
+                      <span className="text-sm font-black font-mono text-slate-900">
+                        {item.luasArea.toFixed(2)} <span className="text-xs font-normal text-slate-500">Ha</span>
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
+                        Target Naker
+                      </span>
+                      <span className="text-sm font-black font-mono text-slate-900">
+                        {item.targetPenyerapanTenagaKerja.toLocaleString('id-ID')}{' '}
+                        <span className="text-xs font-normal text-slate-500">Org</span>
                       </span>
                     </div>
                   </div>
 
-                  {/* 4. STATUS OPERASIONAL */}
-                  <div className="flex items-start gap-2 pt-2 border-t border-slate-100">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  {/* KEGIATAN & DASAR HUKUM */}
+                  <div className="pt-2 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
                     <div>
-                      <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 block">
-                        Status Operasional
-                      </span>
-                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        {item.statusOperasional}
-                      </span>
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Kegiatan Utama:</span>
+                      <p className="text-[11px] text-slate-700 leading-snug line-clamp-2">{item.kegiatan}</p>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Dasar Hukum:</span>
+                      <p className="text-[10.5px] text-slate-600 font-mono">{item.dasarHukum}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Card Click Hint */}
                 <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-mono">
                   <span>{isSelected ? '✓ Sedang Aktif' : 'Klik untuk filter'}</span>
                   <span style={{ color: item.themeColor }}>{item.shortName}</span>
@@ -182,72 +511,94 @@ export const KekProfilCard: React.FC<KekProfilCardProps> = ({
             );
           })}
         </div>
-      ) : (
-        /* TAMPILAN 2: TABEL (HANYA MENAMPILKAN KAWASAN, LOKASI, LUAS AREA, DAN STATUS OPERASIONAL) */
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs font-sans text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-semibold">
-                <th className="py-3 px-4 w-12 text-center">No</th>
-                <th className="py-3 px-4">Kawasan</th>
-                <th className="py-3 px-4">Lokasi</th>
-                <th className="py-3 px-4 w-40 whitespace-nowrap">Luas Area</th>
-                <th className="py-3 px-4">Status Operasional</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {KEK_PROFIL_DATA.map((item, idx) => (
-                <tr
-                  key={item.id}
-                  onClick={() =>
-                    onSelectKek(
-                      item.shortName === 'KEK Pariwisata & Kesehatan'
-                        ? 'KEK Pariwisata dan Kesehatan Internasional Batam'
-                        : item.shortName
-                    )
-                  }
-                  className="hover:bg-slate-50 cursor-pointer transition-colors"
-                >
-                  <td className="py-3 px-4 text-center font-mono font-bold text-slate-400">
-                    {idx + 1}
-                  </td>
-                  <td className="py-3 px-4 font-bold text-slate-900">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0"
-                        style={{ backgroundColor: item.themeColor }}
-                      />
-                      <span>{item.kawasan}</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-slate-700 font-medium">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>{item.lokasi}</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap font-mono font-black text-slate-900">
-                    <div className="flex items-center gap-1.5">
-                      <Maximize2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>
-                        {item.luasArea.toLocaleString('id-ID', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{' '}
-                        Ha
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      {item.statusOperasional}
-                    </span>
-                  </td>
+      )}
+
+      {/* SHEET 3: MATRIKS TABEL PROFIL KEK 9 ATRIBUT RESMI */}
+      {activeSheet === 'matriks_tabel' && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+            <span className="text-slate-600 font-semibold">
+              Menampilkan 9 atribut lengkap data profil resmi KEK BP Batam
+            </span>
+            <button
+              onClick={handleExportCsv}
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded border border-slate-300 cursor-pointer shadow-2xs text-xs"
+              title="Unduh Data Profil KEK (.CSV)"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-600" />
+              <span>Export CSV</span>
+            </button>
+          </div>
+
+          <div className="overflow-x-auto border border-slate-200 rounded-lg">
+            <table className="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr className="bg-[#0F1E36] text-white text-[11px] uppercase tracking-wider font-semibold">
+                  <th className="py-2.5 px-3 w-10 text-center">No</th>
+                  <th className="py-2.5 px-3">Kawasan</th>
+                  <th className="py-2.5 px-3">Lokasi</th>
+                  <th className="py-2.5 px-3">Nama Perusahaan (BUPP)</th>
+                  <th className="py-2.5 px-3 text-right">Luas Area</th>
+                  <th className="py-2.5 px-3 text-right">Nilai Investasi Komitmen</th>
+                  <th className="py-2.5 px-3">Status Operasional</th>
+                  <th className="py-2.5 px-3">Kegiatan</th>
+                  <th className="py-2.5 px-3">Dasar Hukum</th>
+                  <th className="py-2.5 px-3 text-right">Target Naker</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-200 font-sans">
+                {KEK_PROFIL_DATA.map((row, idx) => (
+                  <tr
+                    key={row.id}
+                    onClick={() =>
+                      onSelectKek(
+                        row.shortName === 'KEK Pariwisata & Kesehatan'
+                          ? 'KEK Pariwisata dan Kesehatan Internasional Batam'
+                          : row.shortName
+                      )
+                    }
+                    className="hover:bg-slate-50 cursor-pointer transition-colors"
+                  >
+                    <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-400">
+                      {idx + 1}
+                    </td>
+                    <td className="py-2.5 px-3 font-bold text-slate-900 whitespace-nowrap">
+                      {row.kawasan}
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-700 whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                        <span>{row.lokasi}</span>
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-700 whitespace-nowrap font-medium">
+                      {row.bupp}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                      {row.luasArea.toFixed(2)} Ha
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800 whitespace-nowrap">
+                      {formatRupiahTriliun(row.nilaiInvestasiKomitmen)}
+                    </td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded font-semibold text-[10.5px] bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {row.statusOperasional}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-600 max-w-xs truncate" title={row.kegiatan}>
+                      {row.kegiatan}
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-500 font-mono text-[10.5px] whitespace-nowrap">
+                      {row.dasarHukum}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-800 whitespace-nowrap">
+                      {row.targetPenyerapanTenagaKerja.toLocaleString('id-ID')} Org
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

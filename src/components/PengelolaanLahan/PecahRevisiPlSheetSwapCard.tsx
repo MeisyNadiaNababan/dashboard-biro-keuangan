@@ -23,6 +23,7 @@ import {
   Legend,
 } from 'recharts';
 import { REKAP_PECAH_PL_DATA, REKAP_REVISI_PL_DATA } from './lahanData';
+import { LahanVisualHeader } from './LahanVisualHeader';
 import { LahanFilterState, RekapPermohonanItem } from './types';
 
 interface PecahRevisiPlSheetSwapCardProps {
@@ -127,91 +128,91 @@ export const PecahRevisiPlSheetSwapCard: React.FC<PecahRevisiPlSheetSwapCardProp
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden flex flex-col font-sans">
-      {/* Header with Sheet Swap Tabs */}
-      <div className="p-3.5 bg-white border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
-            <Scissors className="w-4 h-4" />
-          </div>
-          <div>
+      {/* Standardized Header with LahanVisualHeader & Sheet Swap Tabs */}
+      <div className="p-4 pb-0">
+        <LahanVisualHeader
+          datasetNumber={sheetMode === 'pecah' ? 3 : sheetMode === 'revisi' ? 4 : '3 & 4'}
+          pdfPages="Hal. 6-7"
+          classification="TERBUKA"
+          periode="JIKA UPDATE"
+          title={
+            sheetMode === 'pecah'
+              ? 'REKAPITULASI PECAH PENETAPAN LOKASI (PL)'
+              : sheetMode === 'revisi'
+              ? 'REKAPITULASI REVISI PENETAPAN LOKASI (PL)'
+              : 'KOMPARASI REKAPITULASI PECAH PL VS REVISI PL'
+          }
+          visualName={
+            sheetMode === 'pecah'
+              ? 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Pecah PL) & Tabel Detail'
+              : sheetMode === 'revisi'
+              ? 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Revisi PL) & Tabel Detail'
+              : 'Grouped Bar Chart Komparasi Pecah PL vs Revisi PL per Jenis Pemohon'
+          }
+          attributes={
+            sheetMode === 'komparasi'
+              ? ['JENIS PEMOHON', 'PECAH DISETUJUI', 'PECAH DITOLAK', 'REVISI DISETUJUI', 'REVISI DITOLAK', 'TOTAL']
+              : ['JENIS PEMOHON', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'DISETUJUI', 'DITOLAK', 'JUMLAH']
+          }
+          onOpenFormula={() => onOpenFormulaModal && onOpenFormulaModal('lahan_pecah_revisi_pl')}
+          rightControls={
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
-                Rekapitulasi Pecah PL &amp; Revisi PL
-              </h3>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                Sheet Swap
-              </span>
+              <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+                <button
+                  onClick={() => setSheetMode('pecah')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'pecah'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #3: Pecah PL
+                </button>
+                <button
+                  onClick={() => setSheetMode('revisi')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'revisi'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #4: Revisi PL
+                </button>
+                <button
+                  onClick={() => setSheetMode('komparasi')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'komparasi'
+                      ? 'bg-slate-900 text-white font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Komparasi
+                </button>
+              </div>
+
+              <div className="flex items-center rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+                <button
+                  onClick={() => setViewMode('chart')}
+                  className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+                    viewMode === 'chart' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                  title="Tampilan Grafik"
+                >
+                  <BarChart3 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('table')}
+                  className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+                    viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                  title="Tampilan Tabel Detail"
+                >
+                  <TableIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <p className="text-[11px] text-slate-500">
-              Penetapan Lokasi (PL) Pecahan Kavling &amp; Revisi Batas/Peruntukan Alokasi Tanah
-            </p>
-          </div>
-        </div>
-
-        {/* Sheet Swap Buttons */}
-        <div className="flex items-center gap-2">
-          <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-            <button
-              onClick={() => setSheetMode('pecah')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'pecah'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Dataset #3: Pecah PL
-            </button>
-            <button
-              onClick={() => setSheetMode('revisi')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'revisi'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Dataset #4: Revisi PL
-            </button>
-            <button
-              onClick={() => setSheetMode('komparasi')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'komparasi'
-                  ? 'bg-slate-900 text-white font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Komparasi
-            </button>
-          </div>
-
-          <div className="flex items-center rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-            <button
-              onClick={() => setViewMode('chart')}
-              className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-                viewMode === 'chart' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Tampilan Grafik"
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-                viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Tampilan Tabel Detail"
-            >
-              <TableIcon className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <button
-            onClick={() => onOpenFormulaModal && onOpenFormulaModal('lahan_pecah_revisi_pl')}
-            className="p-1.5 text-slate-400 hover:text-slate-700 transition-colors"
-            title="Penjelasan Formula & Tableau Guide"
-          >
-            <Info className="w-4 h-4" />
-          </button>
-        </div>
+          }
+        />
       </div>
 
       {/* Mini KPI Bar */}

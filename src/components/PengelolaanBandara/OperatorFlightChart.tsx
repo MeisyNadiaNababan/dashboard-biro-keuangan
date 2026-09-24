@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { OperatorFlightData, BandaraFilterState } from './types';
 import { OPERATOR_FLIGHT_DATA } from './bandaraData';
+import { BandaraVisualHeader } from './BandaraVisualHeader';
 
 interface OperatorFlightChartProps {
   filters: BandaraFilterState;
@@ -146,67 +147,68 @@ export const OperatorFlightChart: React.FC<OperatorFlightChartProps> = ({
   };
 
   return (
-    <div id="operator-flight-section" className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs font-sans">
-      {/* HEADER SECTION */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-5 bg-sky-600 rounded-full inline-block" />
-            <h3 className="text-sm font-bold text-slate-900">
-              Jumlah Penerbangan Berdasarkan Operator (Maskapai)
-            </h3>
-          </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Dataset Satu Data No. 10 (PDF Hal. 12): Pergerakan Pesawat Udara &amp; Pangsa Pasar Maskapai di Hang Nadim
-          </p>
-        </div>
-
-        {/* View mode toggle (Sheet Swap) */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-          <button
-            onClick={() => setViewMode('bar')}
-            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-              viewMode === 'bar'
-                ? 'bg-white text-sky-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <BarChart3 className="w-3.5 h-3.5" />
-            <span>Ranking Bar</span>
-          </button>
-          <button
-            onClick={() => setViewMode('donut')}
-            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-              viewMode === 'donut'
-                ? 'bg-white text-sky-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <PieIcon className="w-3.5 h-3.5" />
-            <span>Pangsa Pasar (%)</span>
-          </button>
-          <button
-            onClick={() => setViewMode('cards')}
-            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-              viewMode === 'cards'
-                ? 'bg-white text-sky-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Award className="w-3.5 h-3.5" />
-            <span>Matrix Armada</span>
-          </button>
-          {onOpenFormulaModal && (
+    <div id="operator-flight-section" className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs font-sans">
+      {/* Visual Header sesuai Standar Dashboard Pembangunan Infrastruktur */}
+      <BandaraVisualHeader
+        datasetNumber={10}
+        pdfPages="Hal. 12"
+        title="JUMLAH PENERBANGAN BERDASARKAN OPERATOR (MASKAPAI)"
+        visualName={
+          viewMode === 'bar'
+            ? 'Sheet 1: Ranking Frekuensi Penerbangan & Load Factor per Maskapai'
+            : viewMode === 'donut'
+            ? 'Sheet 2: Donut Chart Distribusi Pangsa Pasar (%) Operator Penerbangan'
+            : 'Sheet 3: Matriks Profil Armada & Rute Utama Operator Penerbangan'
+        }
+        classification="TERBUKA"
+        periode="PERTAHUN"
+        attributes={[
+          'OPERATOR (MASKAPAI)',
+          'KODE IATA / ICAO',
+          'JUMLAH PENERBANGAN',
+          'PANGSA PASAR (%)',
+          'PENUMPANG',
+          'SEAT LOAD FACTOR',
+        ]}
+        rightControls={
+          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
             <button
-              onClick={() => onOpenFormulaModal('operator_share')}
-              className="p-1 text-slate-400 hover:text-sky-700 hover:bg-white rounded-lg transition-colors cursor-pointer"
-              title="Lihat Formula Operator & Pangsa Pasar di Tableau"
+              onClick={() => setViewMode('bar')}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
+                viewMode === 'bar'
+                  ? 'bg-sky-700 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <Info className="w-4 h-4" />
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Ranking Bar</span>
             </button>
-          )}
-        </div>
-      </div>
+            <button
+              onClick={() => setViewMode('donut')}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
+                viewMode === 'donut'
+                  ? 'bg-sky-700 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <PieIcon className="w-3.5 h-3.5" />
+              <span>Pangsa Pasar (%)</span>
+            </button>
+            <button
+              onClick={() => setViewMode('cards')}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
+                viewMode === 'cards'
+                  ? 'bg-sky-700 text-white shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>Matrix Armada</span>
+            </button>
+          </div>
+        }
+        onOpenFormula={onOpenFormulaModal ? () => onOpenFormulaModal('operator_share') : undefined}
+      />
 
       {/* METRIC SUMMARY STRIP (RINGKAS & MUDAH DIPAHAMI) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 text-xs">

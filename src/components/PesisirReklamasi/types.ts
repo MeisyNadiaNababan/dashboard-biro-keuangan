@@ -7,25 +7,31 @@ export interface PesisirReklamasiFilterState {
 }
 
 // DATASET NO. 1: Persentase Penyelesaian Permasalahan Pesisir dan Reklamasi
-// Atribut PDF (Hal 13-14): DOKUMEN PENDUKUNG, WILAYAH, LUAS YANG DITERBITKAN, TRIWULAN, TAHUN
+// Atribut PDF (Hal 13-14 & Form Satu Data):
+// NAMA PERUSAHAAN, DOKUMEN PERIZINAN, DOKUMEN PENDUKUNG, WILAYAH, LUAS YANG DITERBITKAN, TRIWULAN, TAHUN
 export interface PermasalahanPesisirItem {
   id: string;
-  noPengaduan: string;
-  judulKasus: string;
-  lokasi: string;
-  wilayah: string;
-  swp: string;
-  kategori: 'Pemanfaatan Tanpa Izin' | 'Pelanggaran Sempadan Pantai' | 'Pencemaran / Sedimentasi' | 'Sengketa Batas Laut' | 'Deviasi Amdal Reklamasi';
-  namaPihakTerkait: string;
-  luasDiterbitkanHa: number; // Luas yang Diterbitkan / Terdampak (Ha)
-  luasTerdampakHa?: number; // Alias untuk visualisasi monitoring
-  dokumenPendukung: string; // Atribut PDF: BAP Verifikasi Lapangan, SK Penghentian, Rekomendasi Teknis, dll.
-  triwulan: 'Triwulan I' | 'Triwulan II' | 'Triwulan III' | 'Triwulan IV';
-  tahun: number;
-  tanggalLapor: string;
+  namaPerusahaan: string; // Atribut PDF Satu Data
+  dokumenPerizinan: string; // Atribut PDF Satu Data: Nomor Izin/PKKPRL/Rekomendasi
+  dokumenPendukung: string; // Atribut PDF Satu Data: BAP Verifikasi Lapangan, SK Penghentian, dll.
+  wilayah: string; // Atribut PDF Satu Data
+  luasYangDiterbitkan: number; // Atribut PDF Satu Data: Luas (Ha)
+  triwulan: 'Triwulan I' | 'Triwulan II' | 'Triwulan III' | 'Triwulan IV'; // Atribut PDF Satu Data
+  tahun: number; // Atribut PDF Satu Data
+  
+  // Atribut Tambahan Operasional / Kompatibilitas
+  noPengaduan?: string;
+  judulKasus?: string;
+  lokasi?: string;
+  swp?: string;
+  kategori?: 'Pemanfaatan Tanpa Izin' | 'Pelanggaran Sempadan Pantai' | 'Pencemaran / Sedimentasi' | 'Sengketa Batas Laut' | 'Deviasi Amdal Reklamasi';
+  namaPihakTerkait?: string;
+  luasDiterbitkanHa: number; // Alias untuk luasYangDiterbitkan
+  luasTerdampakHa?: number;
+  tanggalLapor?: string;
   status: 'Selesai' | 'Dalam Proses' | 'Investigasi Lapangan';
-  solusiTindakan: string;
-  lamaPenyelesaianHari: number;
+  solusiTindakan?: string;
+  lamaPenyelesaianHari?: number;
 }
 
 // DATASET NO. 2: Rencana Pemanfaatan Wilayah Pesisir dan Reklamasi (Data Spasial)

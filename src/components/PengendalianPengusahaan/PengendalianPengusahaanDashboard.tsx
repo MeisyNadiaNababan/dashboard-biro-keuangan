@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Briefcase,
   ShieldCheck,
@@ -11,6 +11,8 @@ import {
   Building2,
   RefreshCw,
   Sparkles,
+  PieChart as PieIcon,
+  TrendingUp,
 } from 'lucide-react';
 import { PengendalianFilterState } from './types';
 import {
@@ -19,14 +21,22 @@ import {
 } from './pengendalianData';
 import { PengendalianFilters } from './PengendalianFilters';
 import { PengendalianKpis } from './PengendalianKpis';
+import { RekomendasiPengendalianVisualizer } from './RekomendasiPengendalianVisualizer';
 import { PengendalianVisualCharts } from './PengendalianVisualCharts';
 import { DaftarKerjasamaCards } from './DaftarKerjasamaCards';
 import { PengendalianFormulaModal } from './PengendalianFormulaModal';
 import { PengendalianWordDocView } from './PengendalianWordDocView';
 
-export const PengendalianPengusahaanDashboard: React.FC = () => {
+interface PengendalianPengusahaanDashboardProps {
+  activeSubTab?: string;
+}
+
+export const PengendalianPengusahaanDashboard: React.FC<PengendalianPengusahaanDashboardProps> = ({
+  activeSubTab,
+}) => {
   // Navigation Sub-tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'word-doc' | 'formula'>('dashboard');
+  const [dashboardSection, setDashboardSection] = useState<'all' | 'rekomendasi' | 'kpi' | 'kontrak'>('all');
 
   // Filter State
   const [filters, setFilters] = useState<PengendalianFilterState>({
@@ -41,6 +51,30 @@ export const PengendalianPengusahaanDashboard: React.FC = () => {
   // Modal State
   const [isFormulaModalOpen, setIsFormulaModalOpen] = useState(false);
   const [selectedDatasetForFormula, setSelectedDatasetForFormula] = useState(3);
+
+  // Sync with Header sub-tabs
+  useEffect(() => {
+    if (!activeSubTab) return;
+    if (activeSubTab === 'kpi_word_doc') {
+      setActiveTab('word-doc');
+    } else if (activeSubTab === 'kamus_rumus') {
+      setSelectedDatasetForFormula(3);
+      setIsFormulaModalOpen(true);
+      setActiveTab('dashboard');
+    } else if (activeSubTab === 'rekomendasi') {
+      setDashboardSection('rekomendasi');
+      setActiveTab('dashboard');
+    } else if (activeSubTab === 'kpi_ds3_ds4') {
+      setDashboardSection('kpi');
+      setActiveTab('dashboard');
+    } else if (activeSubTab === 'skema_kemitraan') {
+      setDashboardSection('kontrak');
+      setActiveTab('dashboard');
+    } else if (activeSubTab === 'ikhtisar') {
+      setDashboardSection('all');
+      setActiveTab('dashboard');
+    }
+  }, [activeSubTab]);
 
   // Filter handlers
   const handleFilterChange = (newFilters: Partial<PengendalianFilterState>) => {
@@ -61,7 +95,7 @@ export const PengendalianPengusahaanDashboard: React.FC = () => {
   // Filtered List
   const filteredMitra = useMemo(() => {
     return DAFTAR_MITRA_PENGUSAHAAN.filter((item) => {
-      // Filter Tahun (cek apakah dalam rentang tahun mulai - tahun berakhir)
+      // Filter Tahun
       if (filters.tahun !== 'Semua') {
         const targetYear = parseInt(filters.tahun, 10);
         const startYear = parseInt(item.tahunMulai, 10);
@@ -137,22 +171,40 @@ export const PengendalianPengusahaanDashboard: React.FC = () => {
               Direktorat Pengendalian Pengusahaan
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Dashboard Eksekutif Pengawasan Tata Kelola Badan Usaha, Evaluasi Kemitraan Strategis (KSO/BTO/BOT), dan Tindak Lanjut Perbaikan Kontrak Kerjasama Usaha BP Batam.
+              Dashboard Eksekutif Pengawasan Tata Kelola Badan Usaha, Evaluasi Rekomendasi Kemitraan Strategis, dan Tindak Lanjut Perbaikan Kontrak Kerjasama Usaha BP Batam.
             </p>
           </div>
 
           {/* Action Navigation Tabs */}
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => setActiveTab('dashboard')}
+              onClick={() => {
+                setActiveTab('dashboard');
+                setDashboardSection('all');
+              }}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
-                activeTab === 'dashboard'
+                activeTab === 'dashboard' && dashboardSection === 'all'
                   ? 'bg-white text-slate-900 shadow-md font-extrabold'
                   : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-sky-500" />
-              <span>Dashboard Utama</span>
+              <span>Ikhtisar Lengkap</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('dashboard');
+                setDashboardSection('rekomendasi');
+              }}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
+                activeTab === 'dashboard' && dashboardSection === 'rekomendasi'
+                  ? 'bg-emerald-400 text-slate-950 shadow-md font-extrabold'
+                  : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
+              }`}
+            >
+              <PieIcon className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Visual Rekomendasi (DS #1)</span>
             </button>
 
             <button
@@ -183,26 +235,90 @@ export const PengendalianPengusahaanDashboard: React.FC = () => {
         <PengendalianWordDocView onBackToDashboard={() => setActiveTab('dashboard')} />
       ) : (
         <>
+          {/* Quick Segment Switcher for Dashboard */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div className="flex items-center gap-1.5 text-xs">
+              <span className="text-slate-400 font-medium ml-1">Fokus Tampilan:</span>
+              <button
+                onClick={() => setDashboardSection('all')}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                  dashboardSection === 'all'
+                    ? 'bg-slate-900 text-white shadow-2xs font-bold'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Semua Bagian
+              </button>
+              <button
+                onClick={() => setDashboardSection('rekomendasi')}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                  dashboardSection === 'rekomendasi'
+                    ? 'bg-emerald-600 text-white shadow-2xs font-bold'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Visual Rekomendasi (DS #1)
+              </button>
+              <button
+                onClick={() => setDashboardSection('kpi')}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                  dashboardSection === 'kpi'
+                    ? 'bg-blue-600 text-white shadow-2xs font-bold'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                2 KPI Utama (DS #3 &amp; #4)
+              </button>
+              <button
+                onClick={() => setDashboardSection('kontrak')}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                  dashboardSection === 'kontrak'
+                    ? 'bg-sky-600 text-white shadow-2xs font-bold'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Daftar Kontrak PKS ({filteredMitra.length})
+              </button>
+            </div>
+
+            <div className="text-[11px] text-slate-500 pr-2">
+              Status: <span className="text-emerald-700 font-bold">Terintegrasi Satu Data Hal. 14</span>
+            </div>
+          </div>
+
           {/* Filters Control (Req #4) */}
-          <PengendalianFilters
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onResetFilters={handleResetFilters}
-            totalFiltered={filteredMitra.length}
-            totalAll={DAFTAR_MITRA_PENGUSAHAAN.length}
-          />
+          {(dashboardSection === 'all' || dashboardSection === 'kontrak') && (
+            <PengendalianFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onResetFilters={handleResetFilters}
+              totalFiltered={filteredMitra.length}
+              totalAll={DAFTAR_MITRA_PENGUSAHAAN.length}
+            />
+          )}
 
           {/* Primary & Secondary KPI Cards (Req #1 & #2) */}
-          <PengendalianKpis
-            datasets={KPI_DATASETS_PENGENDALIAN}
-            onOpenFormulaModal={handleOpenFormula}
-          />
+          {(dashboardSection === 'all' || dashboardSection === 'kpi') && (
+            <PengendalianKpis
+              datasets={KPI_DATASETS_PENGENDALIAN}
+              onOpenFormulaModal={handleOpenFormula}
+            />
+          )}
 
-          {/* Executive Visualizations (Req #3) */}
-          <PengendalianVisualCharts />
+          {/* Rekomendasi Evaluasi dan Pengendalian Visualizer (Req #3, #4, #5) */}
+          {(dashboardSection === 'all' || dashboardSection === 'rekomendasi') && (
+            <RekomendasiPengendalianVisualizer />
+          )}
+
+          {/* Secondary Charts: Tren Triwulan & Struktur Skema Kemitraan */}
+          {(dashboardSection === 'all' || dashboardSection === 'kpi') && (
+            <PengendalianVisualCharts />
+          )}
 
           {/* Interactive Dossier Cards of Partner Agreements */}
-          <DaftarKerjasamaCards mitraList={filteredMitra} />
+          {(dashboardSection === 'all' || dashboardSection === 'kontrak') && (
+            <DaftarKerjasamaCards mitraList={filteredMitra} />
+          )}
         </>
       )}
 

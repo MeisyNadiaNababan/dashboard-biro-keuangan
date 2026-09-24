@@ -20,8 +20,11 @@ import { BandaraFilterState } from './types';
 import { OPERATOR_FLIGHT_DATA } from './bandaraData';
 import { BandaraFilters } from './BandaraFilters';
 import { BandaraKpis } from './BandaraKpis';
+import { Dataset1PnbpBandaraCard } from './Dataset1PnbpBandaraCard';
+import { Dataset2ArusLaluLintasUdaraCard } from './Dataset2ArusLaluLintasUdaraCard';
+import { Dataset5EmpuKargoCard } from './Dataset5EmpuKargoCard';
+import { Dataset9RuteLangsungCard } from './Dataset9RuteLangsungCard';
 import { OperatorFlightChart } from './OperatorFlightChart';
-import { PassengerTrendChart } from './PassengerTrendChart';
 import { StrategicAirportMetrics } from './StrategicAirportMetrics';
 import { BandaraFormulaModal } from './BandaraFormulaModal';
 import { BandaraWordDocView } from './BandaraWordDocView';
@@ -153,24 +156,38 @@ export const PengelolaanBandaraDashboard: React.FC = () => {
             totalFilteredCount={filteredOperatorCount}
           />
 
-          {/* 5 HERO KPIS (PNBP, FLIGHTS, PASSENGERS, SLF, KARGO EMPU) */}
+          {/* 5 HERO KPIS (PNBP, FLIGHTS, PASSENGERS, SLF, KARGO EMPU) - JANGAN DIRUBAH */}
           <BandaraKpis onOpenFormulaModal={handleOpenFormulaModal} />
 
-          {/* DUA VISUALISASI INOVATIF UTAMA SESUAI PERMINTAAN USER (ITEMS 4 & 5) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* ITEM 4: JUMLAH PENERBANGAN BERDASARKAN OPERATOR */}
-            <OperatorFlightChart
-              filters={filters}
-              onOpenFormulaModal={handleOpenFormulaModal}
-            />
+          {/* PERMINTAAN 1: DATA REALISASI PENERIMAAN NEGARA BUKAN PAJAK (PNBP) (DATASET NO 1 - HAL 11) */}
+          <Dataset1PnbpBandaraCard
+            onOpenFormula={() => handleOpenFormulaModal(1)}
+          />
 
-            {/* ITEM 5: TREN JUMLAH PENUMPANG BERDASARKAN BULAN */}
-            <PassengerTrendChart
-              onOpenFormulaModal={handleOpenFormulaModal}
-            />
-          </div>
+          {/* PERMINTAAN 2: DAFTAR ARUS LALU LINTAS UDARA DENGAN SHEET SWAP (DATASET NO 2 - HAL 11) */}
+          <Dataset2ArusLaluLintasUdaraCard
+            filters={filters}
+            onOpenFormula={() => handleOpenFormulaModal(2)}
+          />
 
-          {/* ITEM 6: RANCANGAN KHUSUS STRATEGIS ATASAN (RUTE LANGSUNG & TREN REALISASI PNBP) */}
+          {/* PERMINTAAN 3: EKSPEDISI MUATAN PESAWAT UDARA (EMPU) DI BATAM (DATASET NO 5 - HAL 12) */}
+          <Dataset5EmpuKargoCard
+            onOpenFormula={() => handleOpenFormulaModal(5)}
+          />
+
+          {/* PERMINTAAN 4: RUTE PENERBANGAN LANGSUNG DARI BATAM (DATASET NO 9 - HAL 12) */}
+          <Dataset9RuteLangsungCard
+            filters={filters}
+            onOpenFormula={() => handleOpenFormulaModal(9)}
+          />
+
+          {/* VISUALISASI TAMBAHAN: JUMLAH PENERBANGAN BERDASARKAN OPERATOR (DATASET NO 10 - HAL 12) */}
+          <OperatorFlightChart
+            filters={filters}
+            onOpenFormulaModal={handleOpenFormulaModal}
+          />
+
+          {/* RANCANGAN KHUSUS STRATEGIS ATASAN: RUTE LANGSUNG & SIKLUS PNBP (DATASET NO 9 & 1) */}
           <StrategicAirportMetrics
             filters={filters}
             onOpenFormulaModal={handleOpenFormulaModal}

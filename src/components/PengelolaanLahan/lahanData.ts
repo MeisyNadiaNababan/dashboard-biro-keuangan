@@ -305,26 +305,76 @@ export const ALOKASI_LAHAN_INVESTASI_DATA = {
 };
 
 // =====================================================================
-// REQUIREMENT 8: ENAM LAYANAN LAHAN (PIE CHART / DONUT VISUALIZATION)
-// 1. Laporan Pengalokasian (#14)
-// 2. Pelayanan Penerbitan Faktur Perubahan Peruntukan (#6)
-// 3. Hak Tanggungan (#7)
-// 4. Dokumen Pengganti (#8)
-// 5. Persetujuan Lelang (#10)
-// 6. Layanan Rekomendasi (#11)
+// REQUIREMENT 3: ENAM LAYANAN LAHAN (SHEET SWAP: PIE CHART & RINCIAN TIAP LAYANAN)
+// 1. Rekapitulasi Pembaharuan Hak Atas Tanah (#5)
+// 2. Rekapitulasi Pelayanan Penerbitan Faktur Perubahan Peruntukan (#6)
+// 3. Rekapitulasi Hak Tanggungan (#7)
+// 4. Rekapitulasi Dokumen Pengganti (#8)
+// 5. Rekapitulasi Persetujuan Lelang (#10)
+// 6. Rekapitulasi Layanan Rekomendasi (#11)
 // =====================================================================
+export const REKAP_FAKTUR_PERUNTUKAN_DATA: RekapPermohonanItem[] = [
+  { id: 2601, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 112, ditolak: 10, jumlah: 122, tahun: 2024, bulan: 'Februari' },
+  { id: 2602, jenisPemohon: 'Individual Person', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 45, ditolak: 8, jumlah: 53, tahun: 2024, bulan: 'Februari' },
+  { id: 2603, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 120, ditolak: 12, jumlah: 132, tahun: 2024, bulan: 'Januari' },
+  { id: 2604, jenisPemohon: 'Individual Person', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 48, ditolak: 7, jumlah: 55, tahun: 2024, bulan: 'Januari' },
+  { id: 2605, jenisPemohon: 'Koperasi', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 6, ditolak: 1, jumlah: 7, tahun: 2024, bulan: 'Januari' },
+  { id: 2606, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 110, ditolak: 10, jumlah: 120, tahun: 2023, bulan: 'Desember' },
+  { id: 2607, jenisPemohon: 'Individual Person', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 45, ditolak: 8, jumlah: 53, tahun: 2023, bulan: 'Desember' },
+];
+
+export const REKAP_HAK_TANGGUNGAN_DATA: RekapPermohonanItem[] = [
+  { id: 2701, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 298, ditolak: 14, jumlah: 312, tahun: 2024, bulan: 'Februari' },
+  { id: 2702, jenisPemohon: 'Individual Person', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 154, ditolak: 9, jumlah: 163, tahun: 2024, bulan: 'Februari' },
+  { id: 2703, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 310, ditolak: 12, jumlah: 322, tahun: 2024, bulan: 'Januari' },
+  { id: 2704, jenisPemohon: 'Individual Person', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 160, ditolak: 10, jumlah: 170, tahun: 2024, bulan: 'Januari' },
+  { id: 2705, jenisPemohon: 'Pemerintahan', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 8, ditolak: 1, jumlah: 9, tahun: 2024, bulan: 'Januari' },
+  { id: 2706, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 284, ditolak: 12, jumlah: 296, tahun: 2023, bulan: 'Desember' },
+  { id: 2707, jenisPemohon: 'Individual Person', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 148, ditolak: 8, jumlah: 156, tahun: 2023, bulan: 'Desember' },
+];
+
+export const REKAP_DOKUMEN_PENGGANTI_DATA: RekapPermohonanItem[] = [
+  { id: 2801, jenisPemohon: 'Individual Person', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 74, ditolak: 12, jumlah: 86, tahun: 2024, bulan: 'Februari' },
+  { id: 2802, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 34, ditolak: 4, jumlah: 38, tahun: 2024, bulan: 'Februari' },
+  { id: 2803, jenisPemohon: 'Individual Person', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 76, ditolak: 11, jumlah: 87, tahun: 2024, bulan: 'Januari' },
+  { id: 2804, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 32, ditolak: 4, jumlah: 36, tahun: 2024, bulan: 'Januari' },
+  { id: 2805, jenisPemohon: 'Yayasan', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 2, ditolak: 1, jumlah: 3, tahun: 2024, bulan: 'Januari' },
+  { id: 2806, jenisPemohon: 'Individual Person', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 68, ditolak: 11, jumlah: 79, tahun: 2023, bulan: 'Desember' },
+  { id: 2807, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 32, ditolak: 4, jumlah: 36, tahun: 2023, bulan: 'Desember' },
+];
+
+export const REKAP_PERSETUJUAN_LELANG_DATA: RekapPermohonanItem[] = [
+  { id: 3001, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 42, ditolak: 6, jumlah: 48, tahun: 2024, bulan: 'Februari' },
+  { id: 3002, jenisPemohon: 'Individual Person', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 22, ditolak: 4, jumlah: 26, tahun: 2024, bulan: 'Februari' },
+  { id: 3003, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 44, ditolak: 5, jumlah: 49, tahun: 2024, bulan: 'Januari' },
+  { id: 3004, jenisPemohon: 'Individual Person', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 20, ditolak: 3, jumlah: 23, tahun: 2024, bulan: 'Januari' },
+  { id: 3005, jenisPemohon: 'Pemerintahan', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 2, ditolak: 0, jumlah: 2, tahun: 2024, bulan: 'Januari' },
+  { id: 3006, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 38, ditolak: 5, jumlah: 43, tahun: 2023, bulan: 'Desember' },
+  { id: 3007, jenisPemohon: 'Individual Person', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 20, ditolak: 4, jumlah: 24, tahun: 2023, bulan: 'Desember' },
+];
+
+export const REKAP_LAYANAN_REKOMENDASI_DATA: RekapPermohonanItem[] = [
+  { id: 3101, jenisPemohon: 'Individual Person', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 175, ditolak: 16, jumlah: 191, tahun: 2024, bulan: 'Februari' },
+  { id: 3102, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-02-01', tglAkhir: '2024-02-29', disetujui: 98, ditolak: 9, jumlah: 107, tahun: 2024, bulan: 'Februari' },
+  { id: 3103, jenisPemohon: 'Individual Person', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 180, ditolak: 17, jumlah: 197, tahun: 2024, bulan: 'Januari' },
+  { id: 3104, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 100, ditolak: 9, jumlah: 109, tahun: 2024, bulan: 'Januari' },
+  { id: 3105, jenisPemohon: 'Yayasan', tglAwal: '2024-01-01', tglAkhir: '2024-01-31', disetujui: 8, ditolak: 2, jumlah: 10, tahun: 2024, bulan: 'Januari' },
+  { id: 3106, jenisPemohon: 'Individual Person', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 157, ditolak: 15, jumlah: 172, tahun: 2023, bulan: 'Desember' },
+  { id: 3107, jenisPemohon: 'Perseroan Terbatas (PT)', tglAwal: '2023-12-01', tglAkhir: '2023-12-31', disetujui: 96, ditolak: 8, jumlah: 104, tahun: 2023, bulan: 'Desember' },
+];
+
 export const ENAM_LAYANAN_LAHAN_DATA: LayananPertanahanSummary[] = [
   {
-    noDataset: 14,
-    namaLayanan: 'Laporan Pengalokasian',
-    kodeTag: 'DPL-14',
-    jumlahPermohonan: 384,
-    disetujui: 312,
-    ditolak: 72,
-    rasioDisetujui: 81.25,
+    noDataset: 5,
+    namaLayanan: 'Pembaharuan Hak Atas Tanah',
+    kodeTag: 'DPL-05',
+    jumlahPermohonan: 629,
+    disetujui: 541,
+    ditolak: 88,
+    rasioDisetujui: 86.01,
     color: '#0284C7', // Sky blue
-    iconName: 'MapPin',
-    deskripsi: 'Alokasi penetapan lahan baru untuk investasi PMA/PMDN strategis.',
+    iconName: 'RefreshCw',
+    deskripsi: 'Pemberian pembaruan jangka waktu alokasi tanah HPL yang telah habis masa berlakunya.',
   },
   {
     noDataset: 6,

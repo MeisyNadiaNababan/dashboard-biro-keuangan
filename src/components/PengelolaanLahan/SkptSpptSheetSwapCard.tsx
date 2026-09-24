@@ -22,6 +22,7 @@ import {
   Legend,
 } from 'recharts';
 import { REKAP_PENERBITAN_BARU_DATA, REKAP_PENERBITAN_PERUBAHAN_DATA } from './lahanData';
+import { LahanVisualHeader } from './LahanVisualHeader';
 import { LahanFilterState, RekapPermohonanItem } from './types';
 
 interface SkptSpptSheetSwapCardProps {
@@ -126,91 +127,91 @@ export const SkptSpptSheetSwapCard: React.FC<SkptSpptSheetSwapCardProps> = ({
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden flex flex-col font-sans">
-      {/* Header with Sheet Swap Tabs */}
-      <div className="p-3.5 bg-white border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700">
-            <FileText className="w-4 h-4" />
-          </div>
-          <div>
+      {/* Standardized Header with LahanVisualHeader & Sheet Swap Tabs */}
+      <div className="p-4 pb-0">
+        <LahanVisualHeader
+          datasetNumber={sheetMode === 'baru' ? 1 : sheetMode === 'perubahan' ? 2 : '1 & 2'}
+          pdfPages="Hal. 6"
+          classification="TERBUKA"
+          periode="JIKA UPDATE"
+          title={
+            sheetMode === 'baru'
+              ? 'REKAPITULASI PENERBITAN SURAT PERJANJIAN PENGELOLAAN TANAH (SKPT) DAN SURAT KEPUTUSAN PENGELOLAAN TANAH BARU'
+              : sheetMode === 'perubahan'
+              ? 'REKAPITULASI PENERBITAN SURAT PERJANJIAN PENGELOLAAN TANAH (SKPT) DAN SURAT KEPUTUSAN PENGELOLAAN TANAH PERUBAHAN'
+              : 'KOMPARASI REKAPITULASI PENERBITAN SKPT & SPPT: BARU VS PERUBAHAN'
+          }
+          visualName={
+            sheetMode === 'baru'
+              ? 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Penerbitan Baru) & Tabel Detail'
+              : sheetMode === 'perubahan'
+              ? 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Penerbitan Perubahan) & Tabel Detail'
+              : 'Grouped Bar Chart Komparasi Disetujui vs Ditolak per Jenis Pemohon & Matriks'
+          }
+          attributes={
+            sheetMode === 'komparasi'
+              ? ['JENIS PEMOHON', 'BARU DISETUJUI', 'BARU DITOLAK', 'PERUBAHAN DISETUJUI', 'PERUBAHAN DITOLAK', 'TOTAL']
+              : ['JENIS PEMOHON', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR', 'DISETUJUI', 'DITOLAK', 'JUMLAH']
+          }
+          onOpenFormula={() => onOpenFormulaModal && onOpenFormulaModal('lahan_skpt_sppt')}
+          rightControls={
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
-                Rekapitulasi Penerbitan SKPT &amp; SPPT
-              </h3>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                Sheet Swap
-              </span>
+              <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+                <button
+                  onClick={() => setSheetMode('baru')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'baru'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #1: Baru
+                </button>
+                <button
+                  onClick={() => setSheetMode('perubahan')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'perubahan'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #2: Perubahan
+                </button>
+                <button
+                  onClick={() => setSheetMode('komparasi')}
+                  className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    sheetMode === 'komparasi'
+                      ? 'bg-slate-900 text-white font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Komparasi
+                </button>
+              </div>
+
+              <div className="flex items-center rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+                <button
+                  onClick={() => setViewMode('chart')}
+                  className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+                    viewMode === 'chart' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                  title="Tampilan Grafik"
+                >
+                  <BarChart3 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('table')}
+                  className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+                    viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                  title="Tampilan Tabel Detail"
+                >
+                  <TableIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <p className="text-[11px] text-slate-500">
-              Surat Perjanjian Pengelolaan Tanah (SKPT) &amp; Surat Keputusan Pengelolaan Tanah (SPPT)
-            </p>
-          </div>
-        </div>
-
-        {/* Sheet Swap Controls */}
-        <div className="flex items-center gap-2">
-          <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-            <button
-              onClick={() => setSheetMode('baru')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'baru'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Dataset #1: Baru
-            </button>
-            <button
-              onClick={() => setSheetMode('perubahan')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'perubahan'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Dataset #2: Perubahan
-            </button>
-            <button
-              onClick={() => setSheetMode('komparasi')}
-              className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
-                sheetMode === 'komparasi'
-                  ? 'bg-slate-900 text-white font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Komparasi
-            </button>
-          </div>
-
-          <div className="flex items-center rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-            <button
-              onClick={() => setViewMode('chart')}
-              className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-                viewMode === 'chart' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Tampilan Grafik"
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-                viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Tampilan Tabel Detail"
-            >
-              <TableIcon className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <button
-            onClick={() => onOpenFormulaModal && onOpenFormulaModal('lahan_skpt_sppt')}
-            className="p-1.5 text-slate-400 hover:text-slate-700 transition-colors"
-            title="Penjelasan Formula & Tableau Guide"
-          >
-            <Info className="w-4 h-4" />
-          </button>
-        </div>
+          }
+        />
       </div>
 
       {/* Mini KPI Bar */}

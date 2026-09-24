@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldCheck,
   FileText,
@@ -20,7 +20,13 @@ import { PengendalianFormulaModal } from './PengendalianFormulaModal';
 import { PengendalianWordDocView } from './PengendalianWordDocView';
 import { PengendalianFilterState } from './types';
 
-export const PengendalianLahanDashboard: React.FC = () => {
+interface PengendalianLahanDashboardProps {
+  activeSubTab?: string;
+}
+
+export const PengendalianLahanDashboard: React.FC<PengendalianLahanDashboardProps> = ({
+  activeSubTab,
+}) => {
   const [filters, setFilters] = useState<PengendalianFilterState>({
     tahun: 'ALL',
     swp: 'ALL',
@@ -32,6 +38,28 @@ export const PengendalianLahanDashboard: React.FC = () => {
   const [activeFormulaKpi, setActiveFormulaKpi] = useState<string | null>(null);
   const [showWordDocView, setShowWordDocView] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'all' | 'penertiban' | 'spasial' | 'rekomendasi'>('all');
+
+  useEffect(() => {
+    if (!activeSubTab) return;
+    if (activeSubTab === 'kpi_word_doc') {
+      setShowWordDocView(true);
+    } else if (activeSubTab === 'kamus_rumus') {
+      setActiveFormulaKpi('kpi_pengawasan');
+      setShowWordDocView(false);
+    } else if (activeSubTab === 'penertiban') {
+      setActiveTab('penertiban');
+      setShowWordDocView(false);
+    } else if (activeSubTab === 'spasial') {
+      setActiveTab('spasial');
+      setShowWordDocView(false);
+    } else if (activeSubTab === 'rekomendasi') {
+      setActiveTab('rekomendasi');
+      setShowWordDocView(false);
+    } else if (activeSubTab === 'ikhtisar') {
+      setActiveTab('all');
+      setShowWordDocView(false);
+    }
+  }, [activeSubTab]);
 
   const handleFilterChange = (newFilters: Partial<PengendalianFilterState>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -67,6 +95,10 @@ export const PengendalianLahanDashboard: React.FC = () => {
                 </h2>
                 <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-slate-100 text-slate-700 border border-slate-200 font-mono">
                   KODE: DP2LPR
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  STATUS: ON PROGRESS
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                   SATU DATA HAL. 11 (4 DATASET)
@@ -144,6 +176,19 @@ export const PengendalianLahanDashboard: React.FC = () => {
             Rekomendasi &amp; Dokumen (Dataset #3 &amp; #4)
           </button>
         </div>
+      </div>
+
+      {/* On Progress Status Ribbon */}
+      <div className="bg-amber-50/90 border border-amber-200/90 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3 text-xs shadow-2xs">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0 ring-2 ring-amber-300" />
+          <p className="text-amber-900 font-medium">
+            <strong className="font-bold text-amber-950">Status Unit: On Progress</strong> — Modul Direktorat Pengendalian Pengelolaan Lahan, Pesisir dan Reklamasi (DP2LPR) dalam status pengembangan berkelanjutan dan penyelarasan data berkala.
+          </p>
+        </div>
+        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-200/70 text-amber-900 border border-amber-300 shrink-0 hidden sm:inline-block">
+          ON PROGRESS
+        </span>
       </div>
 
       {/* Interactive Filters (Poin 6) */}

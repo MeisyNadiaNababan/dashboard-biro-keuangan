@@ -22,7 +22,28 @@ export const PesisirReklamasiKpis: React.FC<PesisirReklamasiKpisProps> = ({
   const persenTargetLuas = ((data.kpi1_luasIzinInvestasiHa / data.kpi1_targetLuasHa) * 100).toFixed(1);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 font-sans">
+    <div id="pesisir-kpi-row" className="space-y-2 font-sans">
+      {/* Banner Visualisasi BANs (Req 3 & 4) */}
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider font-mono">
+            Ringkasan Indikator Kinerja Utama (IKU / KPI) Kawasan Pesisir &amp; Reklamasi
+          </span>
+          <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-mono">
+            Buku Satu Data Hal. 13 - 14
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10.5px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-900 border border-purple-200 font-mono">
+            🏷️ Visualisasi: Kartu Metrik KPI (BANs - Big Numbers)
+          </span>
+          <span className="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded font-mono hidden sm:inline-block">
+            Atribut: <strong>LUAS IZIN INVESTASI</strong>, <strong>PERSEN TEPAT WAKTU</strong>, <strong>PENYELESAIAN MASALAH</strong>, <strong>RENCANA SPASIAL</strong>
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
       {/* KPI 1: Luas Izin Pemanfaatan Kawasan Pesisir dan Izin Reklamasi untuk Investasi (Dataset No. 4) */}
       {/* MURNI HANYA LUAS (HA / M²), TANPA NILAI INVESTASI */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
@@ -228,5 +249,6 @@ export const PesisirReklamasiKpis: React.FC<PesisirReklamasiKpisProps> = ({
         </div>
       </div>
     </div>
+  </div>
   );
 };

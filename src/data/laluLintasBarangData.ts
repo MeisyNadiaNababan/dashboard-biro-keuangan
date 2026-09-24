@@ -784,3 +784,598 @@ export const PERUSAHAAN_KBLI_DATA: PerusahaanKbliItem[] = [
     sifatData: 'TERBATAS',
   },
 ];
+
+// =============================================================
+// DATASET NO. 3 (Hal. 9): REKAPITULASI PENERBITAN LAYANAN PERIZINAN
+// LALU LINTAS BARANG (INDUSTRI DAN PERDAGANGAN)
+// Sifat: TERBUKA | Periode: JIKA UPDATE
+// Atribut: BAGIAN, TAHUN, BULAN, TANGGAL REKAP AWAL, TANGGAL REKAP AKHIR,
+// JUMLAH TOTAL, NAMA LAYANAN, NPWP, NIB, URAIAN LAYANAN, JENIS API, JENIS USAHA,
+// NAMA PERUSAHAAN, ALAMAT PERUSAHAAN, TGL DAFTAR, NO PENDAFTARAN, NO IJIN, STATUS
+// =============================================================
+
+export interface LayananLlbItem {
+  id: string;
+  bagian: 'Industri' | 'Perdagangan';
+  namaLayanan: string;
+  jumlah: number;
+  persentaseBagian: number;
+  satuan: string;
+  rataRataWaktuJam: number;
+  keterangan: string;
+}
+
+export const REKAP_LAYANAN_INDUSTRI_PERDAGANGAN: LayananLlbItem[] = [
+  // SEKSI INDUSTRI (Total: 1.365 Layanan)
+  {
+    id: 'SRV-IND-01',
+    bagian: 'Industri',
+    namaLayanan: 'Pemasukan Bahan Baku & Bahan Penolong Industri Manufaktur',
+    jumlah: 535,
+    persentaseBagian: 39.2,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 2.8,
+    keterangan: 'Komponen elektronik, logam presisi, plastik cetakan untuk perakitan pabrik berikat',
+  },
+  {
+    id: 'SRV-IND-02',
+    bagian: 'Industri',
+    namaLayanan: 'Pengeluaran Produk Jadi Hasil Olahan Industri ke Luar Negeri (Ekspor)',
+    jumlah: 328,
+    persentaseBagian: 24.0,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 3.1,
+    keterangan: 'Pengapalan produk jadi semikonduktor, modul komputer, alat berat & kapal laut',
+  },
+  {
+    id: 'SRV-IND-03',
+    bagian: 'Industri',
+    namaLayanan: 'Pemasukan Mesin, Suku Cadang & Peralatan Modal Pabrik',
+    jumlah: 210,
+    persentaseBagian: 15.4,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 3.5,
+    keterangan: 'Mesin SMT, CNC robotics, generator daya & peralatan otomasi industri modern',
+  },
+  {
+    id: 'SRV-IND-04',
+    bagian: 'Industri',
+    namaLayanan: 'Pengeluaran Produk Industri ke Tempat Lain Dalam Daerah Pabean (TLDDP)',
+    jumlah: 152,
+    persentaseBagian: 11.1,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 3.8,
+    keterangan: 'Distribusi barang industri berfasilitas ke pasar domestik Indonesia dengan pelunasan bea',
+  },
+  {
+    id: 'SRV-IND-05',
+    bagian: 'Industri',
+    namaLayanan: 'Pelayanan Pengerjaan Subkontrak Antar Industri KPBPBB',
+    jumlah: 82,
+    persentaseBagian: 6.0,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 4.2,
+    keterangan: 'Kerja sama antar-tenant kawasan industri untuk proses electroplating, coating, stamping',
+  },
+  {
+    id: 'SRV-IND-06',
+    bagian: 'Industri',
+    namaLayanan: 'Pengeluaran Limbah Sisa Bahan Baku / Scrap Logam Industri',
+    jumlah: 58,
+    persentaseBagian: 4.3,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 4.0,
+    keterangan: 'Penjualan / pemusnahan scrap tembaga, aluminium, dan sisa bahan manufaktur terkontrol',
+  },
+
+  // SEKSI PERDAGANGAN (Total: 477 Layanan)
+  {
+    id: 'SRV-DAG-01',
+    bagian: 'Perdagangan',
+    namaLayanan: 'Persetujuan Pemasukan Beras Khusus & Premium Alokasi Kuota',
+    jumlah: 145,
+    persentaseBagian: 30.4,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 4.0,
+    keterangan: 'Izin alokasi beras Jasmine, Basmati, dan beras khusus kebutuhan konsumsi masyarakat Batam',
+  },
+  {
+    id: 'SRV-DAG-02',
+    bagian: 'Perdagangan',
+    namaLayanan: 'Persetujuan Pemasukan Gula Pasir Kristal Putih Konsumsi',
+    jumlah: 118,
+    persentaseBagian: 24.7,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 4.2,
+    keterangan: 'Alokasi gula kristal konsumsi rumah tangga dan industri kecil menengah (IKM) Batam',
+  },
+  {
+    id: 'SRV-DAG-03',
+    bagian: 'Perdagangan',
+    namaLayanan: 'Persetujuan Pemasukan Daging Lembu & Daging Beku Impor',
+    jumlah: 92,
+    persentaseBagian: 19.3,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 4.8,
+    keterangan: 'Daging sapi beku tanpa tulang untuk perhotelan, restoran, dan pasar tradisional',
+  },
+  {
+    id: 'SRV-DAG-04',
+    bagian: 'Perdagangan',
+    namaLayanan: 'Persetujuan Pemasukan Tepung Terigu Mutu Pangan',
+    jumlah: 64,
+    persentaseBagian: 13.4,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 3.6,
+    keterangan: 'Tepung terigu protein tinggi untuk industri roti, mie, dan kebutuhan pangan harian',
+  },
+  {
+    id: 'SRV-DAG-05',
+    bagian: 'Perdagangan',
+    namaLayanan: 'Persetujuan Pemasukan Susu, Mentega & Hasil Olahan Ternak',
+    jumlah: 58,
+    persentaseBagian: 12.2,
+    satuan: 'Dokumen SK',
+    rataRataWaktuJam: 3.9,
+    keterangan: 'Susu formula, mentega, keju, dan olahan dairy berizin edar BPOM dan sertifikasi halal',
+  },
+];
+
+// =============================================================
+// DATASET NO. 4 (Hal. 9): REKAPITULASI PENERBITAN LAYANAN IZIN USAHA KAWASAN
+// Sifat: TERBUKA | Periode: PERBULAN
+// Atribut: URAIAN IZIN USAHA KAWASAN, JUMLAH PENERBITAN PER BULAN
+// =============================================================
+
+export interface RekapBulananItem {
+  id: string;
+  uraian: string;
+  kategori: string;
+  satuan: string;
+  bulanan: { [bulan: string]: number };
+  totalTahunan: number;
+}
+
+export const REKAP_IZIN_USAHA_KAWASAN_BULANAN: RekapBulananItem[] = [
+  {
+    id: 'IUK-01',
+    uraian: 'Penerbitan Izin Usaha Kawasan (IUK) Baru Industri',
+    kategori: 'Izin Baru',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 6,
+      Februari: 8,
+      Maret: 7,
+      April: 8,
+      Mei: 9,
+      Juni: 10,
+      Juli: 8,
+      Agustus: 9,
+      September: 8,
+      Oktober: 7,
+      November: 8,
+      Desember: 6,
+    },
+    totalTahunan: 94,
+  },
+  {
+    id: 'IUK-02',
+    uraian: 'Perpanjangan Masa Berlaku Izin Usaha Kawasan (IUK)',
+    kategori: 'Perpanjangan',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 8,
+      Februari: 9,
+      Maret: 9,
+      April: 10,
+      Mei: 10,
+      Juni: 11,
+      Juli: 10,
+      Agustus: 11,
+      September: 9,
+      Oktober: 8,
+      November: 9,
+      Desember: 8,
+    },
+    totalTahunan: 112,
+  },
+  {
+    id: 'IUK-03',
+    uraian: 'Persetujuan Perluasan / Ekspansi Wilayah Kawasan Industri',
+    kategori: 'Perluasan Lahan',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 2,
+      Februari: 3,
+      Maret: 2,
+      April: 3,
+      Mei: 4,
+      Juni: 3,
+      Juli: 3,
+      Agustus: 3,
+      September: 2,
+      Oktober: 2,
+      November: 3,
+      Desember: 2,
+    },
+    totalTahunan: 32,
+  },
+  {
+    id: 'IUK-04',
+    uraian: 'Perubahan Data Administrasi / Pengurus & Masterplan IUK',
+    kategori: 'Administrasi',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 2,
+      Februari: 2,
+      Maret: 3,
+      April: 2,
+      Mei: 3,
+      Juni: 3,
+      Juli: 2,
+      Agustus: 2,
+      September: 3,
+      Oktober: 2,
+      November: 2,
+      Desember: 1,
+    },
+    totalTahunan: 27,
+  },
+];
+
+// =============================================================
+// DATASET NO. 6 (Hal. 9): REKAPITULASI PENERBITAN LAYANAN PERIZINAN PEMASUKAN BARANG
+// Sifat: TERBUKA | Periode: PERBULAN
+// Atribut: URAIAN IZIN PEMASUKAN BARANG, JUMLAH PENERBITAN PER BULAN
+// =============================================================
+
+export const REKAP_IZIN_PEMASUKAN_BULANAN: RekapBulananItem[] = [
+  {
+    id: 'IPB-01',
+    uraian: 'Izin Pemasukan Bahan Baku & Bahan Penolong Industri Manufaktur',
+    kategori: 'Bahan Baku',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 42,
+      Februari: 45,
+      Maret: 47,
+      April: 48,
+      Mei: 50,
+      Juni: 52,
+      Juli: 49,
+      Agustus: 51,
+      September: 47,
+      Oktober: 46,
+      November: 48,
+      Desember: 44,
+    },
+    totalTahunan: 569,
+  },
+  {
+    id: 'IPB-02',
+    uraian: 'Izin Pemasukan Mesin & Peralatan Pabrik / Barang Modal',
+    kategori: 'Barang Modal',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 18,
+      Februari: 20,
+      Maret: 21,
+      April: 22,
+      Mei: 23,
+      Juni: 24,
+      Juli: 22,
+      Agustus: 23,
+      September: 21,
+      Oktober: 19,
+      November: 21,
+      Desember: 19,
+    },
+    totalTahunan: 253,
+  },
+  {
+    id: 'IPB-03',
+    uraian: 'Izin Pemasukan Komponen Elektronika, Chip & Semikonduktor',
+    kategori: 'Elektronika',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 28,
+      Februari: 30,
+      Maret: 31,
+      April: 32,
+      Mei: 34,
+      Juni: 36,
+      Juli: 33,
+      Agustus: 35,
+      September: 32,
+      Oktober: 30,
+      November: 33,
+      Desember: 29,
+    },
+    totalTahunan: 383,
+  },
+  {
+    id: 'IPB-04',
+    uraian: 'Izin Pemasukan Suku Cadang & Peralatan Pemeliharaan Fasilitas',
+    kategori: 'Suku Cadang',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 12,
+      Februari: 14,
+      Maret: 15,
+      April: 15,
+      Mei: 16,
+      Juni: 17,
+      Juli: 15,
+      Agustus: 16,
+      September: 14,
+      Oktober: 13,
+      November: 15,
+      Desember: 13,
+    },
+    totalTahunan: 175,
+  },
+  {
+    id: 'IPB-05',
+    uraian: 'Izin Pemasukan Bahan Kemasan & Pembungkus Standar Ekspor',
+    kategori: 'Kemasan',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 10,
+      Februari: 11,
+      Maret: 12,
+      April: 12,
+      Mei: 13,
+      Juni: 14,
+      Juli: 12,
+      Agustus: 13,
+      September: 12,
+      Oktober: 11,
+      November: 12,
+      Desember: 10,
+    },
+    totalTahunan: 142,
+  },
+];
+
+// =============================================================
+// DATASET NO. 7 (Hal. 9): REKAPITULASI PENERBITAN LAYANAN PERIZINAN PENGELUARAN BARANG
+// Sifat: TERBUKA | Periode: PERBULAN
+// Atribut: URAIAN IZIN PENGELUARAN BARANG, JUMLAH PENERBITAN PER BULAN
+// =============================================================
+
+export const REKAP_IZIN_PENGELUARAN_BULANAN: RekapBulananItem[] = [
+  {
+    id: 'OPB-01',
+    uraian: 'Izin Pengeluaran Produk Jadi Olahan Industri ke Luar Daerah Pabean (Ekspor)',
+    kategori: 'Ekspor',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 26,
+      Februari: 28,
+      Maret: 29,
+      April: 30,
+      Mei: 32,
+      Juni: 34,
+      Juli: 31,
+      Agustus: 33,
+      September: 30,
+      Oktober: 28,
+      November: 31,
+      Desember: 27,
+    },
+    totalTahunan: 359,
+  },
+  {
+    id: 'OPB-02',
+    uraian: 'Izin Pengeluaran Produk Industri ke Tempat Lain Dalam Daerah Pabean (TLDDP)',
+    kategori: 'Domestik TLDDP',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 16,
+      Februari: 17,
+      Maret: 18,
+      April: 19,
+      Mei: 20,
+      Juni: 21,
+      Juli: 19,
+      Agustus: 20,
+      September: 18,
+      Oktober: 17,
+      November: 19,
+      Desember: 16,
+    },
+    totalTahunan: 220,
+  },
+  {
+    id: 'OPB-03',
+    uraian: 'Izin Pengeluaran Barang untuk Pengerjaan Subkontrak Antar Pabrik',
+    kategori: 'Subkontrak',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 8,
+      Februari: 9,
+      Maret: 10,
+      April: 10,
+      Mei: 11,
+      Juni: 12,
+      Juli: 10,
+      Agustus: 11,
+      September: 10,
+      Oktober: 9,
+      November: 10,
+      Desember: 8,
+    },
+    totalTahunan: 118,
+  },
+  {
+    id: 'OPB-04',
+    uraian: 'Izin Pengeluaran Sisa Bahan Baku, Rusak, atau Afval / Scrap Logam Industri',
+    kategori: 'Scrap & Waste',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 6,
+      Februari: 6,
+      Maret: 7,
+      April: 7,
+      Mei: 8,
+      Juni: 8,
+      Juli: 7,
+      Agustus: 8,
+      September: 7,
+      Oktober: 6,
+      November: 7,
+      Desember: 5,
+    },
+    totalTahunan: 82,
+  },
+  {
+    id: 'OPB-05',
+    uraian: 'Izin Pengeluaran Mesin & Peralatan Pabrik untuk Perbaikan (Re-Ekspor)',
+    kategori: 'Perbaikan / Repair',
+    satuan: 'SK',
+    bulanan: {
+      Januari: 4,
+      Februari: 4,
+      Maret: 5,
+      April: 5,
+      Mei: 5,
+      Juni: 6,
+      Juli: 5,
+      Agustus: 5,
+      September: 4,
+      Oktober: 4,
+      November: 5,
+      Desember: 4,
+    },
+    totalTahunan: 56,
+  },
+];
+
+// =============================================================
+// DATASET NO. 8 (Hal. 9): PERSENTASE PELAYANAN LALU LINTAS BARANG
+// PERDAGANGAN YANG SELESAI TEPAT WAKTU
+// Sifat: TERBUKA | Periode: PERBULAN
+// Atribut: NO, URAIAN IZIN, PERSENTASE LAYANAN TEPAT WAKTU,
+// RATA-RATA WAKTU PENYELESAIAN DOKUMEN (DALAM JAM)
+// =============================================================
+
+export interface SlaPerdaganganItem {
+  no: number;
+  uraianIzin: string;
+  persentaseLayananTepatWaktu: number; // e.g. 96.2%
+  rataRataWaktuPenyelesaianDokumenJam: number; // e.g. 3.8 jam
+  targetSlaJam: number;
+  jumlahDokumen: number;
+}
+
+export const DATA_SLA_PERDAGANGAN: SlaPerdaganganItem[] = [
+  {
+    no: 1,
+    uraianIzin: 'Persetujuan Pemasukan Beras Khusus Kuota Tahunan',
+    persentaseLayananTepatWaktu: 96.8,
+    rataRataWaktuPenyelesaianDokumenJam: 3.8,
+    targetSlaJam: 8.0,
+    jumlahDokumen: 145,
+  },
+  {
+    no: 2,
+    uraianIzin: 'Persetujuan Pemasukan Gula Pasir Kristal Putih',
+    persentaseLayananTepatWaktu: 95.4,
+    rataRataWaktuPenyelesaianDokumenJam: 4.1,
+    targetSlaJam: 8.0,
+    jumlahDokumen: 118,
+  },
+  {
+    no: 3,
+    uraianIzin: 'Persetujuan Pemasukan Daging Lembu & Produk Daging Beku',
+    persentaseLayananTepatWaktu: 94.8,
+    rataRataWaktuPenyelesaianDokumenJam: 4.6,
+    targetSlaJam: 8.0,
+    jumlahDokumen: 92,
+  },
+  {
+    no: 4,
+    uraianIzin: 'Persetujuan Pemasukan Tepung Terigu Mutu Pangan',
+    persentaseLayananTepatWaktu: 97.2,
+    rataRataWaktuPenyelesaianDokumenJam: 3.4,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 64,
+  },
+  {
+    no: 5,
+    uraianIzin: 'Persetujuan Pemasukan Susu Bubuk & Produk Olahan Dairy',
+    persentaseLayananTepatWaktu: 96.0,
+    rataRataWaktuPenyelesaianDokumenJam: 3.7,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 58,
+  },
+];
+
+// =============================================================
+// DATASET NO. 9 (Hal. 9): PERSENTASE PELAYANAN LALU LINTAS BARANG
+// INDUSTRI YANG SELESAI TEPAT WAKTU
+// Sifat: TERBUKA | Periode: PERBULAN
+// Atribut: NO, URAIAN IZIN, PERSENTASE LAYANAN TEPAT WAKTU,
+// RATA-RATA WAKTU PENYELESAIAN DOKUMEN (DALAM JAM)
+// =============================================================
+
+export interface SlaIndustriItem {
+  no: number;
+  uraianIzin: string;
+  persentaseLayananTepatWaktu: number; // e.g. 98.4%
+  rataRataWaktuPenyelesaianDokumenJam: number; // e.g. 2.7 jam
+  targetSlaJam: number;
+  jumlahDokumen: number;
+}
+
+export const DATA_SLA_INDUSTRI: SlaIndustriItem[] = [
+  {
+    no: 1,
+    uraianIzin: 'Penerbitan Izin Pemasukan Bahan Baku & Bahan Penolong Industri',
+    persentaseLayananTepatWaktu: 98.4,
+    rataRataWaktuPenyelesaianDokumenJam: 2.7,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 535,
+  },
+  {
+    no: 2,
+    uraianIzin: 'Penerbitan Izin Pemasukan Mesin & Peralatan Modal Pabrik',
+    persentaseLayananTepatWaktu: 96.9,
+    rataRataWaktuPenyelesaianDokumenJam: 3.3,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 210,
+  },
+  {
+    no: 3,
+    uraianIzin: 'Penerbitan Izin Pengeluaran Produk Jadi Hasil Industri (Ekspor)',
+    persentaseLayananTepatWaktu: 97.8,
+    rataRataWaktuPenyelesaianDokumenJam: 2.9,
+    targetSlaJam: 4.0,
+    jumlahDokumen: 328,
+  },
+  {
+    no: 4,
+    uraianIzin: 'Penerbitan Izin Pengeluaran Produk Industri ke TLDDP',
+    persentaseLayananTepatWaktu: 96.2,
+    rataRataWaktuPenyelesaianDokumenJam: 3.6,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 152,
+  },
+  {
+    no: 5,
+    uraianIzin: 'Penerbitan Izin Pengerjaan Subkontrak Antar Industri',
+    persentaseLayananTepatWaktu: 95.8,
+    rataRataWaktuPenyelesaianDokumenJam: 3.9,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 82,
+  },
+  {
+    no: 6,
+    uraianIzin: 'Penerbitan Izin Pengeluaran Limbah Sisa / Scrap Logam Pabrik',
+    persentaseLayananTepatWaktu: 95.2,
+    rataRataWaktuPenyelesaianDokumenJam: 4.1,
+    targetSlaJam: 6.0,
+    jumlahDokumen: 58,
+  },
+];
+

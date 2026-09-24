@@ -274,6 +274,10 @@ export const BiroHukumDashboard: React.FC<BiroHukumDashboardProps> = ({
                 <h1 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
                   BIRO HUKUM BP BATAM
                 </h1>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-amber-500/20 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Status: On Progress
+                </span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-amber-400/20 text-amber-300 border border-amber-400/40">
                   Satu Data Hal. 2
                 </span>

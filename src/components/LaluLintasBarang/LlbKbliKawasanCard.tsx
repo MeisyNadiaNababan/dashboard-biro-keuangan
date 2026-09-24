@@ -19,6 +19,7 @@ import {
   PERUSAHAAN_KBLI_DATA,
   PERSYARATAN_LAYANAN_DATA,
 } from '../../data/laluLintasBarangData';
+import { LlbVisualHeader } from './LlbVisualHeader';
 import { LlbDatasetSourceBadge } from './LlbDatasetSourceBadge';
 import { TableauShelvesBadge } from '../TableauShelvesBadge';
 
@@ -37,62 +38,71 @@ export const LlbKbliKawasanCard: React.FC<LlbKbliKawasanCardProps> = ({
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-xl p-4 mb-4 shadow-2xs">
-      {/* 1. Header Bar with Sub-Tab and View Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wide">
-              KBLI Perusahaan Kawasan &amp; Standar Operasional Perizinan
-            </h3>
-          </div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Daftar Perusahaan IUK, KBLI Kawasan Industri, serta Alur &amp; Persyaratan Dokumen
-          </p>
-        </div>
+      {/* 1. Standardized Visual Header */}
+      <LlbVisualHeader
+        datasetNumber={subTab === 'kbli' ? 5 : 1}
+        pdfPages={subTab === 'kbli' ? 'Hal. 9' : 'Hal. 8'}
+        classification={subTab === 'kbli' ? 'TERBATAS' : 'TERBUKA'}
+        periode={subTab === 'kbli' ? 'PERBULAN' : 'JIKA UPDATE'}
+        title={
+          subTab === 'kbli'
+            ? 'DATA KBLI PERUSAHAAN YANG MEMILIKI IZIN USAHA KAWASAN'
+            : 'NAMA IZIN DOKUMEN PERSYARATAN DAN ALUR PROSES PERMOHONAN LAYANAN/PERIZINAN'
+        }
+        visualName={
+          subTab === 'kbli'
+            ? 'Tabel & Matriks Klasifikasi KBLI Pengembang Kawasan Industri'
+            : 'Diagram Alur Proses & Portofolio Dokumen Persyaratan Layanan'
+        }
+        attributes={
+          subTab === 'kbli'
+            ? ['NO', 'NAMA PERUSAHAAN', 'NO IZIN USAHA KAWASAN', 'ALAMAT', 'KBLI']
+            : ['ID', 'URAIAN IZIN', 'PERSYARATAN']
+        }
+        onOpenFormula={() => onOpenFormulaModal?.(`llb-${subTab}`)}
+        rightControls={
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
+              <button
+                onClick={() => setDisplayMode('chart')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'chart'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <BarChart3 className="w-3 h-3" />
+                <span>Grafis</span>
+              </button>
+              <button
+                onClick={() => setDisplayMode('table')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  displayMode === 'table'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <TableIcon className="w-3 h-3" />
+                <span>Tabel</span>
+              </button>
+            </div>
 
-        {/* View Switcher & Formula Toggle */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
             <button
-              onClick={() => setDisplayMode('chart')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'chart'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
+              onClick={() => setShowFormulaDetails(!showFormulaDetails)}
+              className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
+                showFormulaDetails
+                  ? 'bg-amber-50 text-amber-800 border-amber-300'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
+              title="Tampilkan Rumus & Calculated Field Kawasan"
             >
-              <BarChart3 className="w-3 h-3" />
-              <span>Grafis</span>
-            </button>
-            <button
-              onClick={() => setDisplayMode('table')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'table'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3 h-3" />
-              <span>Tabel</span>
+              <HelpCircle className="w-3 h-3 text-amber-600" />
+              <span>Formula</span>
+              {showFormulaDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             </button>
           </div>
-
-          <button
-            onClick={() => setShowFormulaDetails(!showFormulaDetails)}
-            className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-              showFormulaDetails
-                ? 'bg-amber-50 text-amber-800 border-amber-300'
-                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-            title="Tampilkan Rumus & Calculated Field Kawasan"
-          >
-            <HelpCircle className="w-3 h-3 text-amber-600" />
-            <span>Formula</span>
-            {showFormulaDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. Sub-Tab Switcher: KBLI vs Persyaratan */}
       <div className="flex items-center gap-2 mt-2.5 pt-0.5 overflow-x-auto no-scrollbar">

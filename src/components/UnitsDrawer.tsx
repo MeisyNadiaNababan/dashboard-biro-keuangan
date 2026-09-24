@@ -44,15 +44,17 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'active' | 'ready_to_build'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'active' | 'on_progress' | 'ready_to_build'>('ALL');
 
   const categories = ['ALL', 'Biro', 'Direktorat', 'Pusat', 'Badan Usaha', 'Satuan'];
 
   // Realtime dynamic metrics computed from actual unit definitions
   const totalUnits = BP_BATAM_24_UNITS.length;
   const activeUnits = useMemo(() => BP_BATAM_24_UNITS.filter((u) => u.status === 'active'), []);
+  const onProgressUnits = useMemo(() => BP_BATAM_24_UNITS.filter((u) => u.status === 'on_progress'), []);
   const readyUnits = useMemo(() => BP_BATAM_24_UNITS.filter((u) => u.status === 'ready_to_build'), []);
   const activeCount = activeUnits.length;
+  const onProgressCount = onProgressUnits.length;
   const readyCount = readyUnits.length;
 
   const filteredUnits = useMemo(() => {
@@ -91,12 +93,18 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   {activeCount} Dashboard Aktif (Realtime)
                 </span>
+                {onProgressCount > 0 && (
+                  <span className="text-[10.5px] font-bold px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/50 rounded-full flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                    {onProgressCount} On Progress
+                  </span>
+                )}
                 <span className="text-[10px] font-mono px-2 py-0.5 bg-blue-900/60 border border-blue-400/40 text-blue-200 rounded hidden md:inline">
                   BP_Batam_KPI_Dictionary_Updated.pdf
                 </span>
               </div>
               <p className="text-xs text-slate-300 mt-0.5">
-                Monitoring status operasional: <span className="text-emerald-300 font-semibold">{activeCount} Unit Dashboard Siap Pakai</span> &amp; <span className="text-slate-300">{readyCount} Unit Tahap Pengembangan</span>
+                Monitoring status operasional: <span className="text-emerald-300 font-semibold">{activeCount} Unit Dashboard Aktif</span>, <span className="text-amber-300 font-semibold">{onProgressCount} Unit On Progress</span> &amp; <span className="text-slate-300">{readyCount} Unit Tahap Pengembangan</span>
               </p>
             </div>
           </div>
@@ -138,7 +146,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
                   statusFilter === 'ALL'
                     ? 'bg-[#1F3864] text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    : 'bg-white text-slate-600 border border-slate-300 hover:bg-slate-100'
                 }`}
               >
                 Semua ({totalUnits})
@@ -149,11 +157,23 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-all flex items-center gap-1.5 ${
                   statusFilter === 'active'
                     ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100'
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>Aktif Siap Pakai ({activeCount})</span>
+                <span>Aktif ({activeCount})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('on_progress')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-all flex items-center gap-1.5 ${
+                  statusFilter === 'on_progress'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-amber-50 text-amber-700 border border-amber-300 hover:bg-amber-100'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <span>On Progress ({onProgressCount})</span>
               </button>
 
               <button
@@ -161,7 +181,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap cursor-pointer transition-all ${
                   statusFilter === 'ready_to_build'
                     ? 'bg-slate-700 text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    : 'bg-white text-slate-600 border border-slate-300 hover:bg-slate-100'
                 }`}
               >
                 Siap Rancang ({readyCount})
@@ -199,6 +219,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
             const IconComponent = ICON_MAP[unit.iconName] || Building2;
             const isActive = activeUnitId === unit.id;
             const isImplemented = unit.status === 'active';
+            const isOnProgress = unit.status === 'on_progress';
 
             return (
               <div
@@ -223,6 +244,8 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                             ? 'bg-blue-600 text-white shadow-xs'
                             : isImplemented
                             ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : isOnProgress
+                            ? 'bg-amber-50 text-amber-700 border border-amber-300'
                             : 'bg-slate-100 text-slate-600 border border-slate-200 group-hover:bg-blue-50 group-hover:text-blue-600'
                         }`}
                       >
@@ -248,6 +271,11 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 flex items-center gap-1 shrink-0 shadow-2xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         Aktif
+                      </span>
+                    ) : isOnProgress ? (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1 shrink-0 shadow-2xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        On Progress
                       </span>
                     ) : (
                       <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
@@ -275,7 +303,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
                   </div>
 
                   <div className="flex items-center gap-1 text-xs font-semibold text-blue-600 group-hover:translate-x-0.5 transition-transform">
-                    <span>{isImplemented ? 'Buka Dashboard' : 'Lihat Katalog'}</span>
+                    <span>{isImplemented || isOnProgress ? 'Buka Dashboard' : 'Lihat Katalog'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -293,11 +321,14 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
             <span className="text-slate-300 hidden sm:inline">|</span>
             <span className="text-emerald-700 font-bold flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-300 shadow-2xs">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>{activeCount} Unit Dashboard Aktif Siap Pakai</span>
-              <span className="text-[10px] bg-emerald-600 text-white font-mono px-1.5 py-0.2 rounded-full font-extrabold">
-                {Math.round((activeCount / totalUnits) * 100)}%
-              </span>
+              <span>{activeCount} Unit Aktif</span>
             </span>
+            {onProgressCount > 0 && (
+              <span className="text-amber-800 font-bold flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span>{onProgressCount} Unit On Progress</span>
+              </span>
+            )}
             <span className="text-slate-300 hidden sm:inline">|</span>
             <span className="text-slate-500 font-medium text-[11px]">
               {readyCount} Unit Siap Rancang

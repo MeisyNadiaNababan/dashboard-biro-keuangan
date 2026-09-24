@@ -42,6 +42,35 @@ export interface MitraKerjasama {
   catatanStrategis: string;
 }
 
+export interface RekomendasiEvaluasiItem {
+  id: string;
+  tanggal: string;
+  bulan: string;
+  tahun: string;
+  judul: string;
+  badanUsaha: string;
+  rekomendasi: string;
+  status: 'Selesai' | 'Dalam Proses';
+  kategori: 'Finansial / Bagi Hasil' | 'Operasional & Teknis' | 'Legal & Amandemen PKS' | 'Kualitas Layanan / Standar Mutu';
+}
+
+export interface LaporanPengawasanItem {
+  id: string;
+  bulan: string;
+  tahun: string;
+  judulLaporan: string;
+  badanUsaha: string;
+  status: 'Terverifikasi' | 'Dalam Review';
+  tanggalTerbit: string;
+}
+
+export interface KpiTahunanItem {
+  tahun: string;
+  persentaseEvaluasiPembinaan: number; // Dataset #3
+  persentasePerbaikanPerubahan: number; // Dataset #4
+  target: number;
+}
+
 export interface KpiPengendalianDataset {
   nomorDataset: number;
   namaDataset: string;

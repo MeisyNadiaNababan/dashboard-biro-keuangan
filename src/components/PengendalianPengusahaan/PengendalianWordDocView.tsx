@@ -88,9 +88,11 @@ export const PengendalianWordDocView: React.FC<PengendalianWordDocViewProps> = (
                       )}
                     </td>
                     <td className="p-2.5 font-mono">{ds.satuan}</td>
-                    <td className="p-2.5 font-mono">{ds.target}%</td>
+                    <td className="p-2.5 font-mono">
+                      {ds.target} {ds.satuan === '%' ? '%' : ''}
+                    </td>
                     <td className="p-2.5 font-mono font-bold text-emerald-700">
-                      {ds.capaian.toFixed(1)}%
+                      {ds.capaian} {ds.satuan === '%' ? '%' : ''}
                     </td>
                   </tr>
                 ))}

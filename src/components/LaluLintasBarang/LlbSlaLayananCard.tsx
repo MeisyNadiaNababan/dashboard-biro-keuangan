@@ -7,18 +7,20 @@ import {
   BarChart3,
   Table as TableIcon,
   HelpCircle,
-  Lightbulb,
-  ChevronDown,
-  ChevronUp,
-  ArrowUpRight,
+  TrendingUp,
   ArrowRightLeft,
+  Factory,
+  ShoppingBag,
+  Download,
+  ShieldCheck,
 } from 'lucide-react';
 import {
-  SLA_LAYANAN_DATA,
-  SlaLayananItem,
+  DATA_SLA_INDUSTRI,
+  DATA_SLA_PERDAGANGAN,
+  SlaIndustriItem,
+  SlaPerdaganganItem,
 } from '../../data/laluLintasBarangData';
-import { LlbDatasetSourceBadge } from './LlbDatasetSourceBadge';
-import { TableauShelvesBadge } from '../TableauShelvesBadge';
+import { LlbVisualHeader } from './LlbVisualHeader';
 
 interface LlbSlaLayananCardProps {
   onOpenFormulaModal?: (metricId: string) => void;
@@ -27,470 +29,505 @@ interface LlbSlaLayananCardProps {
 export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  const [activeSheet, setActiveSheet] = useState<'all' | 'industri' | 'perdagangan'>('all');
-  const [displayMode, setDisplayMode] = useState<'chart' | 'table'>('chart');
-  const [showFormulaDetails, setShowFormulaDetails] = useState<boolean>(false);
+  // Sheet: 'komparasi' | 'industri' | 'perdagangan' | 'tabel'
+  const [activeSheet, setActiveSheet] = useState<'komparasi' | 'industri' | 'perdagangan' | 'tabel'>('komparasi');
 
-  // Filtered SLA items
-  const filteredData = useMemo(() => {
-    if (activeSheet === 'industri') {
-      return SLA_LAYANAN_DATA.filter((item) => item.sektor === 'Industri');
-    }
-    if (activeSheet === 'perdagangan') {
-      return SLA_LAYANAN_DATA.filter((item) => item.sektor === 'Perdagangan');
-    }
-    return SLA_LAYANAN_DATA;
-  }, [activeSheet]);
+  // Aggregations Industri (Dataset 9)
+  const totalDokumenIndustri = useMemo(
+    () => DATA_SLA_INDUSTRI.reduce((acc, curr) => acc + curr.jumlahDokumen, 0),
+    []
+  );
+  const avgSlaIndustri = useMemo(
+    () =>
+      Math.round(
+        (DATA_SLA_INDUSTRI.reduce((acc, curr) => acc + curr.persentaseLayananTepatWaktu, 0) /
+          DATA_SLA_INDUSTRI.length) *
+          10
+      ) / 10,
+    []
+  );
+  const avgJamIndustri = useMemo(
+    () =>
+      Math.round(
+        (DATA_SLA_INDUSTRI.reduce(
+          (acc, curr) => acc + curr.rataRataWaktuPenyelesaianDokumenJam,
+          0
+        ) /
+          DATA_SLA_INDUSTRI.length) *
+          10
+      ) / 10,
+    []
+  );
 
-  // Calculations
-  const totalDokumen = useMemo(
-    () => filteredData.reduce((acc, curr) => acc + curr.totalDokumen, 0),
-    [filteredData]
+  // Aggregations Perdagangan (Dataset 8)
+  const totalDokumenPerdagangan = useMemo(
+    () => DATA_SLA_PERDAGANGAN.reduce((acc, curr) => acc + curr.jumlahDokumen, 0),
+    []
   );
-  const totalTepatWaktu = useMemo(
-    () => filteredData.reduce((acc, curr) => acc + curr.dokumenTepatWaktu, 0),
-    [filteredData]
+  const avgSlaPerdagangan = useMemo(
+    () =>
+      Math.round(
+        (DATA_SLA_PERDAGANGAN.reduce(
+          (acc, curr) => acc + curr.persentaseLayananTepatWaktu,
+          0
+        ) /
+          DATA_SLA_PERDAGANGAN.length) *
+          10
+      ) / 10,
+    []
   );
-  const rataRataSla =
-    Math.round(
-      (filteredData.reduce((acc, curr) => acc + curr.persentaseTepatWaktu, 0) /
-        filteredData.length) *
-        10
-    ) / 10;
-  const rataRataJam =
-    Math.round(
-      (filteredData.reduce((acc, curr) => acc + curr.rataRataWaktuJam, 0) /
-        filteredData.length) *
-        10
-    ) / 10;
+  const avgJamPerdagangan = useMemo(
+    () =>
+      Math.round(
+        (DATA_SLA_PERDAGANGAN.reduce(
+          (acc, curr) => acc + curr.rataRataWaktuPenyelesaianDokumenJam,
+          0
+        ) /
+          DATA_SLA_PERDAGANGAN.length) *
+          10
+      ) / 10,
+    []
+  );
+
+  const currentDatasetNumber =
+    activeSheet === 'perdagangan' ? 8 : activeSheet === 'industri' ? 9 : 8;
+
+  const currentTitle =
+    activeSheet === 'perdagangan'
+      ? 'PERSENTASE PELAYANAN LALU LINTAS BARANG PERDAGANGAN YANG SELESAI TEPAT WAKTU'
+      : activeSheet === 'industri'
+      ? 'PERSENTASE PELAYANAN LALU LINTAS BARANG INDUSTRI YANG SELESAI TEPAT WAKTU'
+      : 'KINERJA KETEPATAN WAKTU & SLA LAYANAN LALU LINTAS BARANG (INDUSTRI & PERDAGANGAN)';
+
+  const exportCsv = () => {
+    let csv = 'No,Sektor,Uraian Izin,Persentase Layanan Tepat Waktu (%),Rata-rata Waktu Penyelesaian (Jam),Target SLA (Jam),Jumlah Dokumen\n';
+    DATA_SLA_INDUSTRI.forEach((r) => {
+      csv += `${r.no},"Industri","${r.uraianIzin}",${r.persentaseLayananTepatWaktu}%,${r.rataRataWaktuPenyelesaianDokumenJam},${r.targetSlaJam},${r.jumlahDokumen}\n`;
+    });
+    DATA_SLA_PERDAGANGAN.forEach((r) => {
+      csv += `${r.no},"Perdagangan","${r.uraianIzin}",${r.persentaseLayananTepatWaktu}%,${r.rataRataWaktuPenyelesaianDokumenJam},${r.targetSlaJam},${r.jumlahDokumen}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'kinerja_sla_llb_industri_perdagangan.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-xl p-4 mb-4 shadow-2xs">
-      {/* 1. Header Bar with Sheet Swap & View Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wide">
-              Kinerja Pelayanan &amp; SLA Waktu Selesai (Tepat Waktu)
-            </h3>
-          </div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Monitoring Standar Waktu Layanan &amp; Ketepatan Waktu Penerbitan Dokumen (Jam) Berdasarkan Dataset No. 8 &amp; 9
-          </p>
-        </div>
-
-        {/* View Switcher & Formula Toggle */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
-            <button
-              onClick={() => setDisplayMode('chart')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'chart'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <BarChart3 className="w-3 h-3" />
-              <span>Grafis SLA</span>
-            </button>
-            <button
-              onClick={() => setDisplayMode('table')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                displayMode === 'table'
-                  ? 'bg-[#1F4E79] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3 h-3" />
-              <span>Tabel Matriks</span>
-            </button>
-          </div>
-
-          <button
-            onClick={() => setShowFormulaDetails(!showFormulaDetails)}
-            className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-              showFormulaDetails
-                ? 'bg-amber-50 text-amber-800 border-amber-300'
-                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-            title="Tampilkan Rumus & Calculated Field SLA"
-          >
-            <HelpCircle className="w-3 h-3 text-amber-600" />
-            <span>Formula</span>
-            {showFormulaDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-        </div>
-      </div>
-
-      {/* 2. Sheet Swap Tabs (Konsolidasi vs Industri vs Perdagangan) */}
-      <div className="flex items-center gap-1.5 mt-2.5 pt-0.5 overflow-x-auto no-scrollbar">
-        <span className="text-[10.5px] font-semibold text-slate-500 mr-1 shrink-0 flex items-center gap-1">
-          <ArrowRightLeft className="w-3 h-3 text-[#1F4E79]" />
-          Sheet Swap Sektor:
-        </span>
-        <button
-          onClick={() => setActiveSheet('all')}
-          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSheet === 'all'
-              ? 'bg-[#1F4E79] text-white shadow-2xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          Semua Layanan ({SLA_LAYANAN_DATA.length} Izin)
-        </button>
-        <button
-          onClick={() => setActiveSheet('industri')}
-          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSheet === 'industri'
-              ? 'bg-[#1F4E79] text-white shadow-2xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          Sektor Industri (Item #9)
-        </button>
-        <button
-          onClick={() => setActiveSheet('perdagangan')}
-          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSheet === 'perdagangan'
-              ? 'bg-[#1F4E79] text-white shadow-2xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          Sektor Perdagangan (Item #8)
-        </button>
-      </div>
-
-      {/* 3. Tableau Shelves Badge (Compact) */}
-      <div className="my-1.5">
-        <TableauShelvesBadge
-          showMe="Show Me #2 (Horizontal Dual Bar / Bullet) + Reference Line Waktu Selesai (Jam)"
-          columns="AVG([Persentase Tepat Waktu]), AVG([Rata-rata Waktu Jam]), AVG([Standar SLA])"
-          rows="[Sektor], [Uraian Izin]"
-          filters="[Tahun]=2026, [Sifat Data]='TERBUKA'"
-          detail="Visualisasi Standar Kepatuhan Service Level Agreement (SLA) Dit. Lalu Lintas Barang BP Batam"
-        />
-      </div>
-
-      {/* 4. Collapsible Formula Box */}
-      {showFormulaDetails && (
-        <div className="p-3 bg-amber-50/70 border border-amber-200/90 rounded-lg my-2 text-xs text-slate-800 animate-fadeIn">
-          <div className="flex items-center justify-between font-bold text-amber-900 mb-1.5">
-            <span className="flex items-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5 text-amber-700" />
-              Kalkulasi Kepatuhan SLA &amp; Rata-Rata Waktu Pelayanan
-            </span>
-            {onOpenFormulaModal && (
+      {/* 1. Standardized Visual Header */}
+      <LlbVisualHeader
+        datasetNumber={currentDatasetNumber}
+        pdfPages="Hal. 9 (DS 8 & 9)"
+        classification="TERBUKA"
+        periode="PERBULAN"
+        title={currentTitle}
+        visualName="Visual Gauge & Dual-Metric: Persentase Tepat Waktu (%) vs Waktu Penyelesaian (Jam)"
+        attributes={[
+          'NO',
+          'URAIAN IZIN',
+          'PERSENTASE LAYANAN TEPAT WAKTU',
+          'RATA-RATA WAKTU PENYELESAIAN DOKUMEN (DALAM JAM)',
+        ]}
+        onOpenFormula={() => onOpenFormulaModal?.('llb-sla')}
+        rightControls={
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Sheet Swap Controller */}
+            <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
               <button
-                onClick={() => onOpenFormulaModal('llb_sla')}
-                className="text-[#1F4E79] hover:underline text-[11px] flex items-center gap-1 cursor-pointer"
+                onClick={() => setActiveSheet('komparasi')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  activeSheet === 'komparasi'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
               >
-                <span>Buka Detail DLLB-06</span>
-                <ArrowUpRight className="w-3 h-3" />
+                <BarChart3 className="w-3 h-3" />
+                <span>Komparasi Sektor</span>
               </button>
-            )}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 font-mono text-[10.5px]">
-            <div className="bg-white p-2 rounded border border-amber-200">
-              <span className="text-slate-500 block mb-0.5">// Persentase Tepat Waktu (%)</span>
-              <code className="text-teal-700 font-bold">
-                (SUM([Dokumen Tepat Waktu]) / SUM([Total Dokumen])) * 100
-              </code>
+              <button
+                onClick={() => setActiveSheet('industri')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  activeSheet === 'industri'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Factory className="w-3 h-3" />
+                <span>Industri (DS 9)</span>
+              </button>
+              <button
+                onClick={() => setActiveSheet('perdagangan')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  activeSheet === 'perdagangan'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <ShoppingBag className="w-3 h-3" />
+                <span>Perdagangan (DS 8)</span>
+              </button>
+              <button
+                onClick={() => setActiveSheet('tabel')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                  activeSheet === 'tabel'
+                    ? 'bg-[#1F4E79] text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <TableIcon className="w-3 h-3" />
+                <span>Tabel Lengkap</span>
+              </button>
             </div>
-            <div className="bg-white p-2 rounded border border-amber-200">
-              <span className="text-slate-500 block mb-0.5">// Rata-Rata Durasi Layanan (Jam)</span>
-              <code className="text-[#1F4E79] font-bold">
-                AVG(DATEDIFF(&apos;hour&apos;, [Waktu Masuk Berkas], [Waktu Terbit SK]))
-              </code>
+
+            {/* Export CSV */}
+            <button
+              onClick={exportCsv}
+              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              title="Unduh Data SLA (CSV)"
+            >
+              <Download className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        }
+      />
+
+      {/* 2. DUAL EXECUTIVE KPI BADGES (Industri vs Perdagangan Selesai Tepat Waktu) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        {/* Industri SLA Highlight (Dataset 9) */}
+        <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/40 relative overflow-hidden">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-blue-900 uppercase tracking-wide flex items-center gap-1.5">
+              <Factory className="w-3.5 h-3.5 text-blue-700" />
+              Sektor Industri Selesai Tepat Waktu (Dataset No. 9)
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-mono">
+              Target: 6 Jam
+            </span>
+          </div>
+
+          <div className="mt-2 flex items-baseline gap-3">
+            <span className="text-2xl font-black font-mono text-blue-950">
+              {avgSlaIndustri}%
+            </span>
+            <span className="text-xs font-bold text-blue-800 font-mono">
+              Rata-rata {avgJamIndustri} Jam
+            </span>
+            <span className="text-[11px] text-slate-500 font-mono ml-auto">
+              {totalDokumenIndustri} Dokumen
+            </span>
+          </div>
+
+          <div className="w-full bg-blue-200/80 h-2 rounded-full mt-2 overflow-hidden">
+            <div
+              className="h-full bg-blue-700 rounded-full"
+              style={{ width: `${avgSlaIndustri}%` }}
+            />
+          </div>
+
+          <div className="mt-2 text-[10.5px] text-blue-800 font-medium flex items-center justify-between">
+            <span>✅ Memenuhi standar SLA Kemenpan-RB &amp; ISO 9001</span>
+            <span className="font-mono text-slate-500">6 Jenis Layanan</span>
+          </div>
+        </div>
+
+        {/* Perdagangan SLA Highlight (Dataset 8) */}
+        <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40 relative overflow-hidden">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-amber-900 uppercase tracking-wide flex items-center gap-1.5">
+              <ShoppingBag className="w-3.5 h-3.5 text-amber-700" />
+              Sektor Perdagangan Selesai Tepat Waktu (Dataset No. 8)
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-mono">
+              Target: 8 Jam
+            </span>
+          </div>
+
+          <div className="mt-2 flex items-baseline gap-3">
+            <span className="text-2xl font-black font-mono text-amber-950">
+              {avgSlaPerdagangan}%
+            </span>
+            <span className="text-xs font-bold text-amber-800 font-mono">
+              Rata-rata {avgJamPerdagangan} Jam
+            </span>
+            <span className="text-[11px] text-slate-500 font-mono ml-auto">
+              {totalDokumenPerdagangan} Dokumen
+            </span>
+          </div>
+
+          <div className="w-full bg-amber-200/80 h-2 rounded-full mt-2 overflow-hidden">
+            <div
+              className="h-full bg-amber-600 rounded-full"
+              style={{ width: `${avgSlaPerdagangan}%` }}
+            />
+          </div>
+
+          <div className="mt-2 text-[10.5px] text-amber-800 font-medium flex items-center justify-between">
+            <span>✅ Verifikasi alokasi kuota &amp; port clearance</span>
+            <span className="font-mono text-slate-500">5 Jenis Layanan</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. SHEET 1: KOMPARASI KINERJA INDUSTRI VS PERDAGANGAN */}
+      {activeSheet === 'komparasi' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Sektor Industri Summary List */}
+          <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/30">
+            <div className="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
+              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Factory className="w-3.5 h-3.5 text-blue-700" />
+                Layanan Industri (Dataset No. 9)
+              </span>
+              <span className="text-[10.5px] font-bold text-blue-800 font-mono">
+                Rata-rata: {avgSlaIndustri}%
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {DATA_SLA_INDUSTRI.map((item) => (
+                <div key={item.no} className="p-2 rounded-lg bg-white border border-slate-100">
+                  <div className="flex items-center justify-between text-[11px] mb-1">
+                    <span className="font-medium text-slate-800 truncate max-w-[70%]">
+                      {item.uraianIzin}
+                    </span>
+                    <div className="flex items-center gap-2 font-mono shrink-0">
+                      <span className="text-slate-500 text-[10px]">{item.rataRataWaktuPenyelesaianDokumenJam} Jam</span>
+                      <span className="font-bold text-blue-900">{item.persentaseLayananTepatWaktu}%</span>
+                    </div>
+                  </div>
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-700 rounded-full"
+                      style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sektor Perdagangan Summary List */}
+          <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/30">
+            <div className="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
+              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <ShoppingBag className="w-3.5 h-3.5 text-amber-700" />
+                Layanan Perdagangan (Dataset No. 8)
+              </span>
+              <span className="text-[10.5px] font-bold text-amber-800 font-mono">
+                Rata-rata: {avgSlaPerdagangan}%
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {DATA_SLA_PERDAGANGAN.map((item) => (
+                <div key={item.no} className="p-2 rounded-lg bg-white border border-slate-100">
+                  <div className="flex items-center justify-between text-[11px] mb-1">
+                    <span className="font-medium text-slate-800 truncate max-w-[70%]">
+                      {item.uraianIzin}
+                    </span>
+                    <div className="flex items-center gap-2 font-mono shrink-0">
+                      <span className="text-slate-500 text-[10px]">{item.rataRataWaktuPenyelesaianDokumenJam} Jam</span>
+                      <span className="font-bold text-amber-900">{item.persentaseLayananTepatWaktu}%</span>
+                    </div>
+                  </div>
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-amber-600 rounded-full"
+                      style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* 5. Dataset Source Explanation Badge */}
-      <div className="space-y-1.5 my-2">
-        {activeSheet !== 'industri' && (
-          <LlbDatasetSourceBadge
-            itemNumber="8"
-            datasetName="Data Waktu Selesai Perizinan Berusaha Sektor Perdagangan"
-            sifatData="TERBUKA"
-            periodeData="PER BULAN"
-            pdfRef="Halaman 9 (No. 8)"
-            atributList={[
-              'NO',
-              'URAIAN IZIN',
-              'PERSENTASE TEPAT WAKTU',
-              'RATA-RATA WAKTU',
-              'STANDAR SLA (JAM)',
-            ]}
-          />
-        )}
-        {activeSheet !== 'perdagangan' && (
-          <LlbDatasetSourceBadge
-            itemNumber="9"
-            datasetName="Data Waktu Selesai Perizinan Berusaha Sektor Industri"
-            sifatData="TERBUKA"
-            periodeData="PER BULAN"
-            pdfRef="Halaman 9 (No. 9)"
-            atributList={[
-              'NO',
-              'URAIAN IZIN',
-              'PERSENTASE TEPAT WAKTU',
-              'RATA-RATA WAKTU',
-              'STANDAR SLA (JAM)',
-            ]}
-          />
-        )}
-      </div>
-
-      {/* 6. Summary Highlights (Compact) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 my-2.5">
-        <div className="bg-teal-50/70 border border-teal-200/80 rounded-lg p-2.5">
-          <span className="text-[10.5px] font-semibold text-teal-900 block">
-            Rata-rata Kepatuhan Tepat Waktu
-          </span>
-          <div className="flex items-baseline gap-1 mt-0.5">
-            <span className="text-lg font-black font-mono text-teal-950">
-              {rataRataSla}%
+      {/* 4. SHEET 2: RINCIAN INDUSTRI (Dataset 9) */}
+      {activeSheet === 'industri' && (
+        <div className="space-y-2.5">
+          <div className="text-[11px] text-slate-500 pb-1 border-b border-slate-100 flex items-center justify-between">
+            <span>
+              6 Uraian Izin Industri • Target SLA: <strong>Maks 4.0 - 6.0 Jam</strong>
             </span>
-            <span className="text-[11px] text-teal-800">Tepat Waktu</span>
-          </div>
-          <div className="w-full bg-teal-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
-            <div
-              className="h-full bg-teal-600 rounded-full"
-              style={{ width: `${rataRataSla}%` }}
-            />
-          </div>
-          <span className="text-[10px] text-teal-700 font-mono mt-1 block">
-            {totalTepatWaktu} dari {totalDokumen} Dokumen Selesai Sesuai Standar
-          </span>
-        </div>
-
-        <div className="bg-blue-50/70 border border-blue-200/80 rounded-lg p-2.5">
-          <span className="text-[10.5px] font-semibold text-blue-900 block">
-            Rata-rata Waktu Penyelesaian
-          </span>
-          <div className="flex items-baseline gap-1 mt-0.5">
-            <span className="text-lg font-black font-mono text-blue-950">
-              {rataRataJam}
+            <span className="font-mono text-emerald-700 font-bold">
+              ✅ Rata-rata Kinerja: {avgSlaIndustri}% ({avgJamIndustri} Jam)
             </span>
-            <span className="text-[11px] text-blue-800">Jam per Dokumen</span>
-          </div>
-          <span className="text-[10px] text-blue-700 mt-1 block">
-            Standar SLA Maksimal: 4.0 - 8.0 Jam
-          </span>
-        </div>
-
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-          <span className="text-[10.5px] font-semibold text-slate-800 block">
-            Total Dokumen Terlayani
-          </span>
-          <div className="flex items-baseline gap-1 mt-0.5">
-            <span className="text-lg font-black font-mono text-slate-900">
-              {totalDokumen}
-            </span>
-            <span className="text-[11px] text-slate-600">Berkas Permohonan</span>
-          </div>
-          <span className="text-[10px] text-slate-500 mt-1 block font-mono">
-            Sistem Digital IBOSS &amp; Portal INSW BP Batam
-          </span>
-        </div>
-      </div>
-
-      {/* 7. CONTENT: GRAFIS MODE (Compact) */}
-      {displayMode === 'chart' && (
-        <div className="space-y-2.5 mt-2.5">
-          <div className="flex items-center justify-between">
-            <h4 className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-              <Timer className="w-3 h-3 text-[#1F4E79]" />
-              Visual Kepatuhan Waktu &amp; Durasi Layanan per Jenis Izin
-            </h4>
-            <div className="flex items-center gap-3 text-[10px] font-mono text-slate-500">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-teal-600" />
-                <span>% Tepat Waktu</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[#1F4E79]" />
-                <span>Waktu Selesai (Jam)</span>
-              </span>
-            </div>
           </div>
 
           <div className="space-y-2">
-            {filteredData.map((item) => {
-              const isExcellent = item.persentaseTepatWaktu >= 96;
-              const maxHour = 8;
-              const hourWidth = (item.rataRataWaktuJam / maxHour) * 100;
-              const standardWidth = (item.standarSlaJam / maxHour) * 100;
-
-              return (
-                <div
-                  key={item.no}
-                  className="bg-white border border-slate-200 rounded-lg p-2.5 shadow-2xs hover:border-[#1F4E79] transition-all"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
-                    <div>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 font-mono font-bold text-[9.5px] border border-slate-200">
-                          #{item.no}
-                        </span>
-                        <h5 className="text-xs font-bold text-slate-900">{item.uraianIzin}</h5>
-                        <span
-                          className={`px-1.5 py-0.2 rounded text-[9px] font-semibold ${
-                            item.sektor === 'Industri'
-                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                              : 'bg-amber-50 text-amber-700 border border-amber-200'
-                          }`}
-                        >
-                          Sektor {item.sektor}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
-                      <div className="text-right">
-                        <span className="text-xs font-mono font-black text-teal-700 block">
-                          {item.persentaseTepatWaktu}% Tepat Waktu
-                        </span>
-                        <span className="text-[9.5px] text-slate-500 font-mono">
-                          {item.dokumenTepatWaktu}/{item.totalDokumen} Dokumen
-                        </span>
-                      </div>
-                      <div className="text-right pl-2 border-l border-slate-200">
-                        <span className="text-xs font-mono font-bold text-[#1F4E79] block">
-                          {item.rataRataWaktuJam} Jam
-                        </span>
-                        <span className="text-[9.5px] text-slate-400 font-mono">
-                          Std: {item.standarSlaJam} Jam
-                        </span>
-                      </div>
-                    </div>
+            {DATA_SLA_INDUSTRI.map((item) => (
+              <div
+                key={item.no}
+                className="p-3 rounded-lg border border-slate-200/90 bg-white hover:border-blue-300 transition-all"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold font-mono flex items-center justify-center">
+                      {item.no}
+                    </span>
+                    <span className="text-xs font-bold text-slate-900">
+                      {item.uraianIzin}
+                    </span>
                   </div>
-
-                  {/* Dual Performance Bars */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1.5 pt-1.5 border-t border-slate-100">
-                    <div>
-                      <div className="flex justify-between text-[9.5px] font-mono text-slate-500 mb-0.5">
-                        <span>Ketepatan Waktu</span>
-                        <span className="font-bold text-teal-700">{item.persentaseTepatWaktu}%</span>
-                      </div>
-                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${
-                            isExcellent ? 'bg-teal-600' : 'bg-emerald-500'
-                          }`}
-                          style={{ width: `${item.persentaseTepatWaktu}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-[9.5px] font-mono text-slate-500 mb-0.5">
-                        <span>Durasi Penyelesaian</span>
-                        <span className="font-bold text-[#1F4E79]">
-                          {item.rataRataWaktuJam} Jam / Std {item.standarSlaJam} Jam
-                        </span>
-                      </div>
-                      <div className="relative w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div
-                          className="absolute top-0 bottom-0 left-0 bg-slate-200 border-r border-slate-400"
-                          style={{ width: `${standardWidth}%` }}
-                        />
-                        <div
-                          className="absolute top-0 bottom-0 left-0 bg-[#1F4E79] rounded-full"
-                          style={{ width: `${hourWidth}%` }}
-                        />
-                      </div>
-                    </div>
+                  <div className="flex items-center gap-3 font-mono shrink-0 text-xs">
+                    <span className="text-slate-500">
+                      ⏱️ Rata-rata: <strong>{item.rataRataWaktuPenyelesaianDokumenJam} Jam</strong> (Target: {item.targetSlaJam} Jam)
+                    </span>
+                    <span className="text-sm font-black text-blue-900">
+                      {item.persentaseLayananTepatWaktu}%
+                    </span>
                   </div>
                 </div>
-              );
-            })}
+
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-blue-700 rounded-full"
+                    style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1 pt-1 font-mono">
+                  <span>Volume Penerbitan: {item.jumlahDokumen} Dokumen SK</span>
+                  <span className="text-emerald-700 font-semibold">Tingkat Kepatuhan: Sangat Tinggi</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* TABEL DETAIL MODE */}
-      {displayMode === 'table' && (
-        <div className="mt-2.5 border border-slate-200 rounded-lg overflow-hidden shadow-2xs">
-          <div className="overflow-x-auto max-h-[260px]">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead className="bg-[#0B1728] text-white text-[10.5px] font-semibold sticky top-0 z-10">
-                <tr>
-                  <th className="py-2 px-2.5">No</th>
-                  <th className="py-2 px-2.5">Uraian Perizinan</th>
-                  <th className="py-2 px-2.5">Sektor</th>
-                  <th className="py-2 px-2.5 text-right">% Tepat Waktu</th>
-                  <th className="py-2 px-2.5 text-right">Dokumen Selesai</th>
-                  <th className="py-2 px-2.5 text-right">Rata Waktu</th>
-                  <th className="py-2 px-2.5 text-right">Standar SLA</th>
-                  <th className="py-2 px-2.5 text-center">Status</th>
+      {/* 5. SHEET 3: RINCIAN PERDAGANGAN (Dataset 8) */}
+      {activeSheet === 'perdagangan' && (
+        <div className="space-y-2.5">
+          <div className="text-[11px] text-slate-500 pb-1 border-b border-slate-100 flex items-center justify-between">
+            <span>
+              5 Uraian Izin Perdagangan • Target SLA: <strong>Maks 6.0 - 8.0 Jam</strong>
+            </span>
+            <span className="font-mono text-amber-800 font-bold">
+              ✅ Rata-rata Kinerja: {avgSlaPerdagangan}% ({avgJamPerdagangan} Jam)
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            {DATA_SLA_PERDAGANGAN.map((item) => (
+              <div
+                key={item.no}
+                className="p-3 rounded-lg border border-slate-200/90 bg-white hover:border-amber-300 transition-all"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold font-mono flex items-center justify-center">
+                      {item.no}
+                    </span>
+                    <span className="text-xs font-bold text-slate-900">
+                      {item.uraianIzin}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 font-mono shrink-0 text-xs">
+                    <span className="text-slate-500">
+                      ⏱️ Rata-rata: <strong>{item.rataRataWaktuPenyelesaianDokumenJam} Jam</strong> (Target: {item.targetSlaJam} Jam)
+                    </span>
+                    <span className="text-sm font-black text-amber-900">
+                      {item.persentaseLayananTepatWaktu}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-amber-600 rounded-full"
+                    style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1 pt-1 font-mono">
+                  <span>Volume Permohonan Impor: {item.jumlahDokumen} Dokumen</span>
+                  <span className="text-emerald-700 font-semibold">Tingkat Kepatuhan: Sangat Tinggi</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 6. SHEET 4: TABEL MATRIKS KEPATUHAN LENGKAP */}
+      {activeSheet === 'tabel' && (
+        <div className="overflow-x-auto rounded-lg border border-slate-200">
+          <table className="w-full text-left text-[11px]">
+            <thead className="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[10px]">
+              <tr>
+                <th className="px-3 py-2">No</th>
+                <th className="px-3 py-2">Sektor</th>
+                <th className="px-3 py-2">Uraian Izin</th>
+                <th className="px-3 py-2 text-right font-mono">Target SLA</th>
+                <th className="px-3 py-2 text-right font-mono">Waktu Rata-rata (Jam)</th>
+                <th className="px-3 py-2 text-right font-mono">% Selesai Tepat Waktu</th>
+                <th className="px-3 py-2 text-right font-mono">Volume Dokumen</th>
+                <th className="px-3 py-2 text-center">Status SLA</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 bg-white">
+              {/* Industri Rows */}
+              {DATA_SLA_INDUSTRI.map((row) => (
+                <tr key={`ind-${row.no}`} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2 font-mono font-bold text-slate-400">{row.no}</td>
+                  <td className="px-3 py-2">
+                    <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono font-bold">
+                      Industri (DS 9)
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 font-semibold text-slate-900">{row.uraianIzin}</td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-600">{row.targetSlaJam} Jam</td>
+                  <td className="px-3 py-2 text-right font-mono font-bold text-slate-800">
+                    {row.rataRataWaktuPenyelesaianDokumenJam} Jam
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono font-black text-blue-900">
+                    {row.persentaseLayananTepatWaktu}%
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-600">{row.jumlahDokumen} SK</td>
+                  <td className="px-3 py-2 text-center">
+                    <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      Terpenuhi
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white text-[11px]">
-                {filteredData.map((row) => (
-                  <tr key={row.no} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-2 px-2.5 font-mono text-slate-500 font-bold">#{row.no}</td>
-                    <td className="py-2 px-2.5">
-                      <span className="font-bold text-slate-900 block">{row.uraianIzin}</span>
-                    </td>
-                    <td className="py-2 px-2.5">
-                      <span
-                        className={`px-1.5 py-0.2 rounded text-[9.5px] font-semibold ${
-                          row.sektor === 'Industri'
-                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                            : 'bg-amber-50 text-amber-700 border border-amber-200'
-                        }`}
-                      >
-                        {row.sektor}
-                      </span>
-                    </td>
-                    <td className="py-2 px-2.5 text-right font-mono font-bold text-teal-700">
-                      {row.persentaseTepatWaktu}%
-                    </td>
-                    <td className="py-2 px-2.5 text-right font-mono text-slate-700">
-                      {row.dokumenTepatWaktu} / {row.totalDokumen}
-                    </td>
-                    <td className="py-2 px-2.5 text-right font-mono font-black text-[#1F4E79]">
-                      {row.rataRataWaktuJam} Jam
-                    </td>
-                    <td className="py-2 px-2.5 text-right font-mono text-slate-500">
-                      {row.standarSlaJam} Jam
-                    </td>
-                    <td className="py-2 px-2.5 text-center whitespace-nowrap">
-                      <span className="px-1.5 py-0.2 rounded-full text-[9.5px] font-bold bg-teal-50 text-teal-700 border border-teal-200">
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+
+              {/* Perdagangan Rows */}
+              {DATA_SLA_PERDAGANGAN.map((row) => (
+                <tr key={`dag-${row.no}`} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2 font-mono font-bold text-slate-400">{row.no}</td>
+                  <td className="px-3 py-2">
+                    <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-mono font-bold">
+                      Perdagangan (DS 8)
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 font-semibold text-slate-900">{row.uraianIzin}</td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-600">{row.targetSlaJam} Jam</td>
+                  <td className="px-3 py-2 text-right font-mono font-bold text-slate-800">
+                    {row.rataRataWaktuPenyelesaianDokumenJam} Jam
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono font-black text-amber-900">
+                    {row.persentaseLayananTepatWaktu}%
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-600">{row.jumlahDokumen} SK</td>
+                  <td className="px-3 py-2 text-center">
+                    <span className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      Terpenuhi
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      {/* 8. STRATEGIC EXECUTIVE INSIGHT & REKOMENDASI BOX */}
-      <div className="mt-3 p-2.5 bg-teal-50/60 border-l-4 border-teal-600 rounded-r-lg text-xs text-slate-800 flex items-start gap-2">
-        <Lightbulb className="w-3.5 h-3.5 text-teal-700 shrink-0 mt-0.5" />
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-teal-900 uppercase tracking-wider text-[10.5px]">
-              Wawasan Kecepatan Layanan &amp; Evaluasi SLA
-            </span>
-            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-teal-100 text-teal-800 font-mono">
-              96,8% Kepatuhan (Sangat Baik)
-            </span>
-          </div>
-          <p className="text-slate-700 text-[11px] leading-relaxed">
-            Tingkat kepatuhan rata-rata 96,8% melampaui target SPM BP Batam (95,0%). Rata-rata durasi penyelesaian izin industri hanya butuh 2,9 jam (jauh di bawah batas toleransi 6,0 jam), menunjukkan otomatisasi verifikasi data kepabeanan INSW bekerja optimal.
-          </p>
-          <div className="text-[10px] font-mono text-slate-600 pt-0.5">
-            <strong>Rekomendasi Kebijakan:</strong> Terapkan integrasi tanda tangan elektronik (TTE) massal pada izin perdagangan sembako untuk mereduksi waktu dari 4,7 jam menjadi di bawah 3,0 jam.
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

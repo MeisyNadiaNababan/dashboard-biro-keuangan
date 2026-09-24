@@ -69,6 +69,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
   onOpenUnitsDrawer,
 }) => {
   const activeCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'active').length;
+  const onProgressCount = BP_BATAM_24_UNITS.filter((u) => u.status === 'on_progress').length;
 
   return (
     <nav
@@ -113,6 +114,9 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
             <span>Direktori 24 Unit Kerja BP Batam</span>
           </div>
           <span className="text-[10px] text-emerald-400 font-bold block">{activeCount} Unit Dashboard Aktif</span>
+          {onProgressCount > 0 && (
+            <span className="text-[10px] text-amber-400 font-bold block">{onProgressCount} Unit On Progress</span>
+          )}
         </div>
       </button>
 
@@ -133,7 +137,10 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
         {/* Tooltip */}
         <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#0F1E36] text-white text-xs font-semibold whitespace-nowrap rounded-md border border-slate-700 shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
           <div className="font-bold text-sky-300">Direktori 24 Unit BP Batam</div>
-          <div className="text-[10px] text-emerald-400 font-bold">{activeCount} Unit Dashboard Aktif (Realtime)</div>
+          <div className="text-[10px] text-emerald-400 font-bold">{activeCount} Unit Dashboard Aktif</div>
+          {onProgressCount > 0 && (
+            <div className="text-[10px] text-amber-400 font-bold">{onProgressCount} Unit On Progress</div>
+          )}
           <div className="text-[9.5px] text-slate-300">Biro, Direktorat, Pusat, &amp; Badan Usaha</div>
         </div>
       </button>
@@ -149,6 +156,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
           const IconComponent = ICON_MAP[unit.iconName] || Building2;
           const isActive = activeUnitId === unit.id;
           const isReady = unit.status === 'active';
+          const isOnProgress = unit.status === 'on_progress';
 
           return (
             <div key={unit.id} className="relative group flex items-center shrink-0">
@@ -171,9 +179,12 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
                   {unit.code}
                 </span>
 
-                {/* Status Dot for Active Dashboard */}
+                {/* Status Dot for Active / On Progress Dashboard */}
                 {isReady && !isActive && (
                   <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 ring-1 ring-[#0B1728]" />
+                )}
+                {isOnProgress && !isActive && (
+                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400 ring-1 ring-[#0B1728] animate-pulse" />
                 )}
               </button>
 
@@ -187,6 +198,11 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
                     <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       Aktif
+                    </span>
+                  ) : isOnProgress ? (
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      On Progress
                     </span>
                   ) : (
                     <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">

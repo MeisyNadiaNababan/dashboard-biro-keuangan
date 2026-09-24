@@ -10,12 +10,15 @@ import {
 } from 'lucide-react';
 import { KEK_PERENCANAAN_DATA, KekPerencanaanItem } from '../../data/kekData';
 import { TableauShelvesBadge } from '../TableauShelvesBadge';
+import { KekVisualHeader } from './KekVisualHeader';
 
 interface KekPerencanaanPipelineCardProps {
   onOpenFormulaModal?: (formulaId: string) => void;
 }
 
-export const KekPerencanaanPipelineCard: React.FC<KekPerencanaanPipelineCardProps> = () => {
+export const KekPerencanaanPipelineCard: React.FC<KekPerencanaanPipelineCardProps> = ({
+  onOpenFormulaModal,
+}) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showTableauGuide, setShowTableauGuide] = useState<boolean>(false);
 
@@ -72,54 +75,45 @@ export const KekPerencanaanPipelineCard: React.FC<KekPerencanaanPipelineCardProp
   return (
     <div
       id="kek-perencanaan-section"
-      className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden font-sans"
+      className="bg-white rounded-xl border border-slate-200/90 shadow-2xs font-sans p-4 sm:p-5"
     >
-      {/* 1. Header Card Sederhana & Jelas */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-200/80 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100/80 border border-indigo-300/80 flex items-center justify-center text-indigo-800 shrink-0 shadow-2xs">
-            <FileText className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                DAFTAR PERENCANAAN / PENGUSULAN KAWASAN EKONOMI KHUSUS (KEK)
-              </h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono">
-                Dataset No. 5 • Data Statistik
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              Daftar perencanaan dan usulan pembentukan KEK baru di Batam beserta lokasi, luas rencana area, kegiatan, dan badan usaha pengusul
-            </p>
-          </div>
-        </div>
+      {/* 1. Official Visual Header */}
+      <KekVisualHeader
+        datasetNumber={5}
+        pdfPages="Hal. 10"
+        title="DAFTAR PERENCANAAN / PENGUSULAN KAWASAN EKONOMI KHUSUS (KEK)"
+        visualName="Pipeline Matriks Usulan Perencanaan KEK Baru (Lokasi, Luas Area, Kegiatan, & Pengusul)"
+        visualIcon={<FileText className="w-3.5 h-3.5 text-indigo-600" />}
+        attributes={['NAMA KEK', 'LOKASI', 'LUAS', 'KEGIATAN', 'PENGUSUL']}
+        classification="TERTUTUP"
+        periode="JIKA UPDATE"
+        rightControls={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowTableauGuide(!showTableauGuide)}
+              className={`px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${
+                showTableauGuide
+                  ? 'bg-indigo-600 text-white border-indigo-700'
+                  : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
+              }`}
+              title="Panduan Implementasi Tableau"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Panduan Tableau</span>
+            </button>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          <button
-            onClick={() => setShowTableauGuide(!showTableauGuide)}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${
-              showTableauGuide
-                ? 'bg-indigo-600 text-white border-indigo-700'
-                : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
-            }`}
-            title="Panduan Implementasi Tableau"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Panduan Tableau</span>
-          </button>
-
-          <button
-            onClick={handleExportCsv}
-            className="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-            title="Ekspor CSV untuk Tableau"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>Ekspor CSV</span>
-          </button>
-        </div>
-      </div>
+            <button
+              onClick={handleExportCsv}
+              className="px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-2xs"
+              title="Ekspor CSV untuk Tableau"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <span>Ekspor CSV</span>
+            </button>
+          </div>
+        }
+        onOpenFormula={() => onOpenFormulaModal && onOpenFormulaModal('kpi_kek_investasi')}
+      />
 
       {/* 2. Executive Quick Summary Strip */}
       <div className="px-4 py-2.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 text-xs">

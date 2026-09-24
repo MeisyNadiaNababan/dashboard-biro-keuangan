@@ -12,6 +12,7 @@ import {
   KEK_NON_PERIZINAN,
   KEK_PERIZINAN_LAINNYA,
 } from '../../data/kekData';
+import { KekVisualHeader } from './KekVisualHeader';
 
 type SheetType = 'berusaha' | 'non_perizinan' | 'lainnya';
 
@@ -22,6 +23,7 @@ interface KekPerizinanSheetSwapProps {
 
 export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
   selectedKekFilter = 'ALL',
+  onOpenFormulaModal,
 }) => {
   const [activeSheet, setActiveSheet] = useState<SheetType>('berusaha');
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,44 +93,67 @@ export const KekPerizinanSheetSwap: React.FC<KekPerizinanSheetSwapProps> = ({
     document.body.removeChild(link);
   };
 
+  const getSheetMeta = () => {
+    switch (activeSheet) {
+      case 'berusaha':
+        return {
+          num: 3,
+          page: 'Hal. 10',
+          title: 'DAFTAR PERIZINAN BERUSAHA ADMINISTRATOR KAWASAN EKONOMI KHUSUS (KEK)',
+          visualName: 'Tabel Informasi Perizinan Berusaha Administrator KEK Terintegrasi OSS RBA',
+          attrs: ['NAMA PERIZINAN BERUSAHA', 'TANGGAL PERIZINAN BERUSAHA'],
+          formula: 'kpi_kek_izin_berusaha',
+        };
+      case 'non_perizinan':
+        return {
+          num: 4,
+          page: 'Hal. 10',
+          title: 'DAFTAR NON PERIZINAN ADMINISTRATOR KAWASAN EKONOMI KHUSUS (KEK)',
+          visualName: 'Tabel Pelayanan Fasilitas Non-Perizinan Administrator KEK (Masterlist & Fiskal)',
+          attrs: ['NAMA NON PERIZINAN', 'TANGGAL'],
+          formula: 'kpi_kek_non_perizinan',
+        };
+      case 'lainnya':
+        return {
+          num: 7,
+          page: 'Hal. 10',
+          title: 'DAFTAR PERIZINAN LAINNYA ADMINISTRATOR KAWASAN EKONOMI KHUSUS (KEK)',
+          visualName: 'Tabel Layanan Perizinan Khusus Operasional & Lingkungan Administrator KEK',
+          attrs: ['NAMA PERIZINAN', 'TANGGAL PERIZINAN'],
+          formula: 'kpi_kek_perizinan_lainnya',
+        };
+    }
+  };
+
+  const meta = getSheetMeta();
+
   return (
     <div
       id="kek-perizinan-sheet-swap-section"
-      className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/80 shadow-xs p-4 sm:p-5"
     >
-      {/* 1. Header dengan Judul yang Diminta User */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-200/80 bg-slate-50/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-100/70 border border-blue-300/60 flex items-center justify-center text-blue-800 shrink-0">
-            <Layers className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                TABEL INFORMASI PERIZINAN KAWASAN EKONOMI KHUSUS
-              </h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 font-mono">
-                Tableau Sheet Swap
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              Pilihan tab: Perizinan Berusaha (Dataset 3), Non Perizinan (Dataset 4), dan Perizinan Lainnya (Dataset 7)
-            </p>
-          </div>
-        </div>
-
-        {/* Action button */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
+      {/* 1. Official Visual Header */}
+      <KekVisualHeader
+        datasetNumber={meta.num}
+        pdfPages={meta.page}
+        title={meta.title}
+        visualName={meta.visualName}
+        visualIcon={<Layers className="w-3.5 h-3.5 text-blue-600" />}
+        attributes={meta.attrs}
+        classification="TERBUKA"
+        periode="JIKA UPDATE"
+        rightControls={
           <button
             onClick={handleExportCsv}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-md text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
             title="Ekspor data aktif ke format CSV"
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>Ekspor CSV</span>
           </button>
-        </div>
-      </div>
+        }
+        onOpenFormula={() => onOpenFormulaModal(meta.formula)}
+      />
 
       {/* 2. Sheet Swap Navigation Switcher (Tableau Style Tabs) */}
       <div className="px-4 pt-3 border-b border-slate-200 flex flex-wrap gap-2 items-center justify-between bg-white">

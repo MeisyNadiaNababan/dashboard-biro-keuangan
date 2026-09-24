@@ -26,7 +26,8 @@ import {
   Droplets,
   Layers,
   Search,
-  CheckCircle2
+  CheckCircle2,
+  Award
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS, BpBatamUnit } from '../data/bpBatamUnits';
 
@@ -37,6 +38,7 @@ interface NavigationRailProps {
 }
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
+  Award,
   Building2,
   Server,
   Users,

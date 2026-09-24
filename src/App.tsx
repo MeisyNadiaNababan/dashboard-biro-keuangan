@@ -6,6 +6,7 @@ import { ExecutiveFilters } from './components/ExecutiveFilters';
 import { KpiMetricsRow } from './components/KpiMetricsRow';
 import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
 import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
+import { KepalaBpDashboard } from './components/KepalaBP/KepalaBpDashboard';
 import { BiroKeuanganDashboard } from './components/BiroKeuangan/BiroKeuanganDashboard';
 import { BiroKeuanganFinancialCard } from './components/BiroKeuanganFinancialCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
@@ -42,8 +43,8 @@ import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State - Set default to biro-keuangan as requested
-  const [activeUnitId, setActiveUnitId] = useState<string>('biro-keuangan');
+  // Navigation & Multi-Unit State - Set default to kepala-bp as requested
+  const [activeUnitId, setActiveUnitId] = useState<string>('kepala-bp');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
@@ -247,7 +248,16 @@ export default function App() {
           <div className="max-w-[1920px] mx-auto space-y-4">
 
             {/* VIEW ROUTING ACCORDING TO ACTIVE UNIT */}
-            {activeSheet === 'kpi_word_doc' ? (
+            {activeUnitId === 'kepala-bp' ? (
+              /* --- DASHBOARD KEPALA BP BATAM (4 IKS & PERKIN 2026) --- */
+              <KepalaBpDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+              />
+            ) : activeSheet === 'kpi_word_doc' ? (
               <KpiWordDocumentView
                 activeUnitId={activeUnitId}
                 onBackToDashboard={() => setActiveSheet(activeUnitId === 'biro-keuangan' ? 'overview' : 'ikhtisar')}

@@ -335,10 +335,10 @@ export const LraBluCard: React.FC<LraBluCardProps> = ({ onOpenFormulaModal }) =>
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-slate-800">
-                Komparasi Anggaran vs Realisasi Semester I {selectedYear} (Miliar Rupiah)
+                Komparasi Anggaran vs Realisasi Tahun {selectedYear} (Miliar Rupiah)
               </span>
               <span className="text-[10.5px] font-mono text-slate-500">
-                Data Realisasi Semester I Tahun {selectedYear}
+                Data Realisasi Tahun {selectedYear}
               </span>
             </div>
 
@@ -372,7 +372,7 @@ export const LraBluCard: React.FC<LraBluCardProps> = ({ onOpenFormulaModal }) =>
                       `Rp ${Number(value).toLocaleString('id-ID', { maximumFractionDigits: 1 })} Miliar`,
                       name === 'anggaran'
                         ? `Pagu Anggaran ${selectedYear}`
-                        : `Realisasi Smt I ${selectedYear}`,
+                        : `Realisasi Tahun ${selectedYear}`,
                     ]}
                   />
                   <Legend
@@ -382,7 +382,7 @@ export const LraBluCard: React.FC<LraBluCardProps> = ({ onOpenFormulaModal }) =>
                       <span className="text-xs font-semibold text-slate-700">
                         {val === 'anggaran'
                           ? `Pagu Anggaran ${selectedYear}`
-                          : `Realisasi Smt I ${selectedYear}`}
+                          : `Realisasi Tahun ${selectedYear}`}
                       </span>
                     )}
                   />

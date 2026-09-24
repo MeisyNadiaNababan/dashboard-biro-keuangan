@@ -3,7 +3,7 @@ export interface BpBatamUnit {
   code: string;
   name: string;
   shortName: string;
-  category: 'Biro' | 'Direktorat' | 'Pusat' | 'Badan Usaha' | 'Satuan';
+  category: 'Pimpinan' | 'Biro' | 'Direktorat' | 'Pusat' | 'Badan Usaha' | 'Satuan';
   iconName: string;
   pdfPages: string;
   itemCount: number;
@@ -15,6 +15,33 @@ export interface BpBatamUnit {
 }
 
 export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
+  {
+    id: 'kepala-bp',
+    code: 'KA-BP',
+    name: 'Kepala BP Batam (Perjanjian Kinerja)',
+    shortName: 'Kepala BP',
+    category: 'Pimpinan',
+    iconName: 'Award',
+    pdfPages: 'Perkin 2026 No. 1/SPJ/KA/1/2026',
+    itemCount: 4,
+    description: 'Dashboard Eksekutif Kepala Badan Pengusahaan Batam (Amsakar Achmad) berdasar Perjanjian Kinerja Tahun 2026: 4 Indikator Kinerja Strategis (Nilai Realisasi Investasi Rp 70 T, IKM 88, PNBP Rp 2,447 T, Indeks RB 80 BB) & 2 Program Pagu Rp 2,527 T.',
+    status: 'active',
+    headOfUnit: 'Amsakar Achmad (Kepala BP Batam)',
+    keyKpis: [
+      'IKS-1: Realisasi Investasi KPBPB (Target Rp 70 T)',
+      'IKS-2: Indeks Kepuasan Masyarakat (Target 88)',
+      'IKS-3: Nilai Realisasi PNBP BP Batam (Target Rp 2,447 T)',
+      'IKS-4: Indeks Reformasi Birokrasi (Target 80 / BB)',
+      'Program Pengembangan Kawasan Strategis (Pagu Rp 1,428 T)',
+      'Program Dukungan Manajemen (Pagu Rp 1,099 T)',
+    ],
+    datasets: [
+      'Manual IKS 1: Realisasi Investasi KPBPB Batam (Modal Tetap & Lancar KPU BC, BPS, KEK)',
+      'Manual IKS 2: Indeks Kepuasan Masyarakat 5 Lokus Survei (PTSP, BUP, Lahan, RS, SPAM)',
+      'Manual IKS 3: Target & Realisasi PNBP 10 Unit Kerja Penghasil (Biro Keuangan)',
+      'Manual IKS 4: Indeks Reformasi Birokrasi (SE MenPAN-RB No. 6/2025, BOKMR)',
+    ],
+  },
   {
     id: 'biro-keuangan',
     code: 'BK',

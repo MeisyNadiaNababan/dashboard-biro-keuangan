@@ -11,6 +11,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { INFRASTRUKTUR_DATA } from '../../data/investasiData';
+import { InvestasiVisualHeader } from './InvestasiVisualHeader';
 
 interface InvestasiInfrastrukturCardProps {
   onOpenFormulaModal: (formulaId: string) => void;
@@ -87,75 +88,68 @@ export const InvestasiInfrastrukturCard: React.FC<InvestasiInfrastrukturCardProp
   return (
     <div
       id="investasi-infrastruktur-card"
-      className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden p-3.5 sm:p-4 font-sans"
     >
-      {/* 1. Header Visualisasi */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-200/80 bg-slate-50/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-100/70 border border-emerald-300/60 flex items-center justify-center text-emerald-800 shrink-0">
-            <Building2 className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
-                INFRASTRUKTUR YANG AKAN DIBANGUN DI BATAM
-              </h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono">
-                Dataset No. 6 • Satu Data
-              </span>
+      {/* 1. Header Visualisasi Standar Pembangunan Infrastruktur */}
+      <InvestasiVisualHeader
+        datasetNumber={6}
+        pdfPages="Hal. 47"
+        classification="TERBUKA"
+        periode="PERTAHUN"
+        title="INFORMASI INFRASTRUKTUR YANG AKAN DI BANGUN DI BATAM"
+        visualName="Grafik Batang Horizontal Ranking Nilai Proyek (Horizontal Bar Chart & Matrix Grid)"
+        attributes={[
+          'TAHUN',
+          'NAMA PROJECT',
+          'LOKASI',
+          'LUAS',
+          'STATUS PROJECT',
+          'PEMILIK PROJECT',
+          'AKTIFITAS UTAMA',
+          'SKEMA BISNIS',
+          'NILAI INVESTASI',
+          'JADWAL PROJECT',
+          'KAPASITAS PROJECT',
+        ]}
+        onOpenFormula={() => onOpenFormulaModal('kpi_investasi_infrastruktur')}
+        rightControls={
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="bg-slate-100 p-0.5 rounded-lg border border-slate-200 flex items-center text-xs font-semibold">
+              <button
+                onClick={() => setViewMode('ranking-bar')}
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1 text-xs ${
+                  viewMode === 'ranking-bar'
+                    ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Grafik Proyek</span>
+              </button>
+              <button
+                onClick={() => setViewMode('table')}
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1 text-xs ${
+                  viewMode === 'table'
+                    ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <TableIcon className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Tabel Matriks</span>
+              </button>
             </div>
-            <p className="text-[11px] text-slate-500">
-              Visualisasi komprehensif Nama Project, Lokasi Wilayah, Tahun, dan Nilai Investasi Proyek Strategis Batam
-            </p>
-          </div>
-        </div>
 
-        {/* View Mode & Export */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          <div className="bg-slate-200/70 p-0.5 rounded-lg flex items-center text-xs font-semibold">
             <button
-              onClick={() => setViewMode('ranking-bar')}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1.5 text-xs ${
-                viewMode === 'ranking-bar'
-                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              onClick={handleExportCsv}
+              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              title="Unduh Data CSV"
             >
-              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Grafik Proyek</span>
-            </button>
-            <button
-              onClick={() => setViewMode('table')}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center gap-1.5 text-xs ${
-                viewMode === 'table'
-                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Tabel Matriks</span>
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden sm:inline">CSV</span>
             </button>
           </div>
-
-          <button
-            onClick={() => onOpenFormulaModal('kpi_investasi_infrastruktur')}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
-            title="Lihat Atribut & Metadata Dataset 6"
-          >
-            <ExternalLink className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Katalog</span>
-          </button>
-
-          <button
-            onClick={handleExportCsv}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-            title="Ekspor daftar proyek ke CSV"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>Ekspor</span>
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. Top Summary Bar */}
       <div className="px-4 py-3 bg-emerald-50/25 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">

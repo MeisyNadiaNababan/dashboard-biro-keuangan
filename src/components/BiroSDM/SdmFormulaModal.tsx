@@ -123,25 +123,31 @@ export const SdmFormulaModal: React.FC<SdmFormulaModalProps> = ({
               <span className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-mono">
                 04
               </span>
-              <span>Tabel Konversi Kategori &amp; Implikasi Kebijakan</span>
+              <span>Tabel Standar Kategori Penilaian Sistem Merit &amp; Mutu Pelayanan</span>
             </div>
             <div className="overflow-x-auto border border-slate-200 rounded-xl">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 border-b border-slate-200 text-slate-700">
                   <tr>
-                    <th className="py-2 px-3">Kategori</th>
-                    <th className="py-2 px-3">Predikat</th>
-                    <th className="py-2 px-3">Rentang Nilai</th>
-                    <th className="py-2 px-3">Implikasi Pengisian JPT</th>
+                    <th className="py-2.5 px-3 font-bold text-center w-20">Kategori</th>
+                    <th className="py-2.5 px-3 font-bold text-center">Nilai</th>
+                    <th className="py-2.5 px-3 font-bold text-center">Mutu Pelayanan</th>
+                    <th className="py-2.5 px-3 font-bold text-center">Predikat</th>
+                    <th className="py-2.5 px-3 font-bold text-left">Implikasi Pengisian JPT</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {STANDAR_KASN_KONVERSI.map((row) => (
-                    <tr key={row.kategori} className={row.kategori === 'Kategori IV' ? 'bg-emerald-50/50 font-semibold' : ''}>
-                      <td className="py-2 px-3 font-mono">{row.kategori}</td>
-                      <td className="py-2 px-3">{row.predikat}</td>
-                      <td className="py-2 px-3 font-mono">{row.rentangSkor}</td>
-                      <td className="py-2 px-3 text-slate-600">{row.konsekuensi}</td>
+                    <tr key={row.kategori} className={row.kategori === 'IV' ? 'bg-emerald-50/60 font-semibold' : ''}>
+                      <td className="py-2.5 px-3 font-mono font-bold text-center text-slate-900">{row.kategori}</td>
+                      <td className="py-2.5 px-3 font-mono text-center font-semibold text-slate-800">{row.nilai}</td>
+                      <td className="py-2.5 px-3 font-mono text-center font-semibold text-slate-800">{row.mutuPelayanan}</td>
+                      <td className="py-2.5 px-3 text-center">
+                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${row.badgeWarna}`}>
+                          {row.predikat}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-600 text-xs">{row.konsekuensi}</td>
                     </tr>
                   ))}
                 </tbody>

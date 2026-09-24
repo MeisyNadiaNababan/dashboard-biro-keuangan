@@ -1,3 +1,21 @@
+export interface StandarKasnKonversi {
+  kategori: 'IV' | 'III' | 'II' | 'I';
+  namaKategori: string;
+  nilai: string;
+  rentangSkor: string;
+  mutuPelayanan: string;
+  rentangIndeks: string;
+  predikat: 'Sangat Baik' | 'Baik' | 'Kurang' | 'Buruk';
+  minNilai: number;
+  maxNilai: number;
+  minMutu: number;
+  maxMutu: number;
+  warna: string;
+  bgWarna: string;
+  badgeWarna: string;
+  konsekuensi: string;
+}
+
 export interface SistemMeritAspect {
   id: string;
   kodeAspek: string;

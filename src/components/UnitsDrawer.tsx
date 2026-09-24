@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Search, CheckCircle2, ArrowRight, Building2, Server, Users, Scale, ShieldAlert, Building, ClipboardCheck, Compass, CheckSquare, Target, MapPin, ShieldCheck, Truck, PieChart, Plane, Anchor, Briefcase, Ship, Shield, TrendingUp, HardHat, DraftingCompass, Stethoscope, Droplets, BookOpen, Layers } from 'lucide-react';
+import { X, Search, CheckCircle2, ArrowRight, Building2, Server, Users, Scale, ShieldAlert, Building, ClipboardCheck, Compass, CheckSquare, Target, MapPin, ShieldCheck, Truck, PieChart, Plane, Anchor, Briefcase, Ship, Shield, TrendingUp, HardHat, DraftingCompass, Stethoscope, Droplets, BookOpen, Layers, Award } from 'lucide-react';
 import { BP_BATAM_24_UNITS, BpBatamUnit } from '../data/bpBatamUnits';
 
 interface UnitsDrawerProps {
@@ -34,6 +34,7 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   DraftingCompass,
   Stethoscope,
   Droplets,
+  Award,
 };
 
 export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
@@ -46,7 +47,7 @@ export const UnitsDrawer: React.FC<UnitsDrawerProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'active' | 'on_progress' | 'ready_to_build'>('ALL');
 
-  const categories = ['ALL', 'Biro', 'Direktorat', 'Pusat', 'Badan Usaha', 'Satuan'];
+  const categories = ['ALL', 'Pimpinan', 'Biro', 'Direktorat', 'Pusat', 'Badan Usaha', 'Satuan'];
 
   // Realtime dynamic metrics computed from actual unit definitions
   const totalUnits = BP_BATAM_24_UNITS.length;

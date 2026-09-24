@@ -1,6 +1,7 @@
 import React from 'react';
 import { Download, Printer, FileText, CheckCircle2, Shield } from 'lucide-react';
 import { SdmYearData } from './types';
+import { STANDAR_KASN_KONVERSI } from './sdmData';
 
 interface SdmWordDocViewProps {
   data: SdmYearData;
@@ -225,6 +226,35 @@ export const SdmWordDocView: React.FC<SdmWordDocViewProps> = ({ data }) => {
                 </tr>
               </tbody>
             </table>
+
+            {/* TABEL STANDAR KATEGORI SISTEM MERIT SESUAI KASN */}
+            <div className="mt-4 pt-2">
+              <p className="text-xs font-bold text-slate-800 mb-1.5">
+                Tabel Standar Kategori dan Mutu Pelayanan Sistem Merit (Pedoman KASN):
+              </p>
+              <table className="w-full text-xs border border-slate-300">
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th className="p-2 border border-slate-300 text-center w-24">Kategori</th>
+                    <th className="p-2 border border-slate-300 text-center">Nilai</th>
+                    <th className="p-2 border border-slate-300 text-center">Mutu Pelayanan</th>
+                    <th className="p-2 border border-slate-300 text-center">Predikat</th>
+                    <th className="p-2 border border-slate-300">Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {STANDAR_KASN_KONVERSI.map((std) => (
+                    <tr key={std.kategori} className={meritRow.TOTAL_NILAI_MERIT >= std.minNilai && meritRow.TOTAL_NILAI_MERIT <= std.maxNilai ? 'bg-emerald-50 font-semibold' : ''}>
+                      <td className="p-2 border border-slate-300 text-center font-mono font-bold">{std.kategori}</td>
+                      <td className="p-2 border border-slate-300 text-center font-mono">{std.nilai}</td>
+                      <td className="p-2 border border-slate-300 text-center font-mono">{std.mutuPelayanan}</td>
+                      <td className="p-2 border border-slate-300 text-center">{std.predikat}</td>
+                      <td className="p-2 border border-slate-300 text-slate-600 text-[11px]">{std.konsekuensi}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* SIGNATURE SECTION */}

@@ -1,4 +1,4 @@
-import { SdmYearData, SdmFilterState } from './types';
+import { SdmYearData, SdmFilterState, StandarKasnKonversi } from './types';
 
 export const DEFAULT_SDM_FILTERS: SdmFilterState = {
   tahun: 2026,
@@ -709,41 +709,73 @@ export const SDM_DATA_BY_YEAR: Record<number, SdmYearData> = {
   },
 };
 
-export const STANDAR_KASN_KONVERSI = [
+export const STANDAR_KASN_KONVERSI: StandarKasnKonversi[] = [
   {
-    kategori: 'Kategori IV',
+    kategori: 'IV',
+    namaKategori: 'Kategori IV',
+    nilai: '325 – 400',
+    rentangSkor: '325 – 400',
+    mutuPelayanan: '0.81 – 1',
+    rentangIndeks: '0.81 – 1',
     predikat: 'Sangat Baik',
-    rentangSkor: '325 - 400',
-    rentangIndeks: '0.8125 - 1.0000',
+    minNilai: 325,
+    maxNilai: 400,
+    minMutu: 0.81,
+    maxMutu: 1.0,
     warna: '#059669', // Emerald
     bgWarna: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    badgeWarna: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
     konsekuensi: 'Dapat dikecualikan dari seleksi terbuka pengisian Jabatan Pimpinan Tinggi (JPT) melalui sistem rotasi talent pool internal.',
   },
   {
-    kategori: 'Kategori III',
+    kategori: 'III',
+    namaKategori: 'Kategori III',
+    nilai: '250 – 324',
+    rentangSkor: '250 – 324',
+    mutuPelayanan: '0.61 – 0.8',
+    rentangIndeks: '0.61 – 0.8',
     predikat: 'Baik',
-    rentangSkor: '275 - 324',
-    rentangIndeks: '0.6875 - 0.8100',
+    minNilai: 250,
+    maxNilai: 324,
+    minMutu: 0.61,
+    maxMutu: 0.8,
     warna: '#2563EB', // Blue
     bgWarna: 'bg-blue-50 text-blue-800 border-blue-200',
+    badgeWarna: 'bg-blue-100 text-blue-800 border border-blue-300',
     konsekuensi: 'Penerapan sistem merit sudah berjalan efektif, dapat mengisi sebagian JPT melalui seleksi terbuka terawasi.',
   },
   {
-    kategori: 'Kategori II',
+    kategori: 'II',
+    namaKategori: 'Kategori II',
+    nilai: '175 – 249',
+    rentangSkor: '175 – 249',
+    mutuPelayanan: '0.41 – 0.6',
+    rentangIndeks: '0.41 – 0.6',
     predikat: 'Kurang',
-    rentangSkor: '250 - 274',
-    rentangIndeks: '0.6250 - 0.6850',
+    minNilai: 175,
+    maxNilai: 249,
+    minMutu: 0.41,
+    maxMutu: 0.6,
     warna: '#D97706', // Amber
     bgWarna: 'bg-amber-50 text-amber-800 border-amber-200',
+    badgeWarna: 'bg-amber-100 text-amber-800 border border-amber-300',
     konsekuensi: 'Perlu percepatan pembenahan manajemen talenta, manajemen kinerja, dan sistem informasi kepegawaian.',
   },
   {
-    kategori: 'Kategori I',
+    kategori: 'I',
+    namaKategori: 'Kategori I',
+    nilai: '100 – 174',
+    rentangSkor: '100 – 174',
+    mutuPelayanan: '0.2 – 0.4',
+    rentangIndeks: '0.2 – 0.4',
     predikat: 'Buruk',
-    rentangSkor: '< 250',
-    rentangIndeks: '< 0.6250',
+    minNilai: 100,
+    maxNilai: 174,
+    minMutu: 0.2,
+    maxMutu: 0.4,
     warna: '#DC2626', // Red
     bgWarna: 'bg-rose-50 text-rose-800 border-rose-200',
+    badgeWarna: 'bg-rose-100 text-rose-800 border border-rose-300',
     konsekuensi: 'Seluruh pengisian jabatan wajib melalui seleksi terbuka penuh dan pengawasan ketat Komisi Aparatur Sipil Negara (KASN).',
   },
 ];

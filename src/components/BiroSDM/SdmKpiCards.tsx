@@ -57,7 +57,7 @@ export const SdmKpiCards: React.FC<SdmKpiCardsProps> = ({ data, onOpenFormulaMod
           </div>
 
           <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-            <span className="truncate">Standar KASN Kategori IV (&ge;325)</span>
+            <span className="truncate">Standar KASN: Kategori IV (325 – 400 · Mutu 0.81 – 1)</span>
             <span className="font-mono text-emerald-600 font-bold">Tercapai</span>
           </div>
         </div>

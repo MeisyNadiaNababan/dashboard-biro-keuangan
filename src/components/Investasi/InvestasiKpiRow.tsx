@@ -123,6 +123,46 @@ export const InvestasiKpiRow: React.FC<InvestasiKpiRowProps> = ({
         detail="Klik kartu KPI untuk melihat pop-up rumus matematis, target perkin & metadata Satu Data"
       />
 
+      {/* Header Visualisasi Standar Pembangunan Infrastruktur */}
+      <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-900 font-mono border border-sky-200">
+              DATASET NO. 10, 13, 14 (Hal. 47-48)
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-emerald-800 font-mono">
+              TERBUKA
+            </span>
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+              Indikator Kinerja Strategis Investasi Batam
+            </h3>
+            <span className="text-[10.5px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-900 border border-teal-200 font-mono">
+              🏷️ Visualisasi: Kartu Ringkasan Eksekutif & Micro-Sparklines (Executive BANs Scorecard)
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5 mt-2 bg-slate-100/90 px-2.5 py-1 rounded-md border border-slate-200 text-xs">
+          <span className="text-[10.5px] font-semibold text-slate-600 mr-0.5">
+            Atribut yang Ditampilkan:
+          </span>
+          {[
+            'REALISASI INVESTASI',
+            'TARGET INVESTASI',
+            'PERSENTASE CAPAIAN (%)',
+            'TRAFFIC WEBSITE',
+            'MINAT INVESTASI (LoI)',
+            'POTENSI NILAI MINAT',
+          ].map((attr, i) => (
+            <span
+              key={i}
+              className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-white text-slate-800 border border-slate-300 shadow-2xs"
+            >
+              {attr}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Baris 3 Kartu KPI Sesuai Permintaan User */}
       <div
         id="investasi-kpi-row-grid"

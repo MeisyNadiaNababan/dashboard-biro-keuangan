@@ -27,7 +27,7 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
   tahun,
   onOpenFormulaModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<'radar' | 'cards' | 'dataset'>('radar');
+  const [activeTab, setActiveTab] = useState<'radar' | 'cards' | 'dataset' | 'kategori'>('radar');
   const [selectedAspek, setSelectedAspek] = useState<SistemMeritAspect | null>(aspekList[0]);
 
   // Radar Chart coordinates math (8 vertices)
@@ -152,6 +152,17 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
               <span>Tabel Master Dataset (Atribut Wajib)</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('kategori')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                activeTab === 'kategori'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <TableIcon className="w-3.5 h-3.5 text-amber-600" />
+              <span>Tabel Kategori Sistem Merit</span>
             </button>
           </div>
 
@@ -509,33 +520,191 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
         </div>
       )}
 
+      {/* TAB 4: EXACT KATEGORI SISTEM MERIT (SESUAI PEDOMAN KASN & MENPAN-RB) */}
+      {activeTab === 'kategori' && (
+        <div className="p-4 sm:p-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-gradient-to-r from-emerald-50 via-slate-50 to-indigo-50/50 rounded-xl border border-emerald-200/80">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-emerald-700 tracking-wider block">
+                Pedoman Penetapan Tingkat Kematangan Sistem Merit
+              </span>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                Klasifikasi Kategori, Rentang Nilai, Mutu Pelayanan &amp; Predikat
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-600 font-mono">
+                Capaian BP Batam TA {tahun}:{' '}
+                <strong className="text-emerald-700 font-bold">
+                  {datasetRow.TOTAL_NILAI_MERIT.toFixed(1)} Poin ({datasetRow.STATUS_PEMENUHAN})
+                </strong>
+              </span>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr className="bg-slate-100/90 text-slate-800 border-b border-slate-300">
+                  <th className="py-3 px-4 font-bold text-center border-r border-slate-200 w-28">
+                    Kategori
+                  </th>
+                  <th className="py-3 px-5 font-bold text-center border-r border-slate-200">
+                    Nilai
+                  </th>
+                  <th className="py-3 px-5 font-bold text-center border-r border-slate-200">
+                    Mutu Pelayanan
+                  </th>
+                  <th className="py-3 px-5 font-bold text-center border-r border-slate-200">
+                    Predikat
+                  </th>
+                  <th className="py-3 px-4 font-bold text-left hidden lg:table-cell border-r border-slate-200">
+                    Implikasi Manajemen Talenta &amp; Pengisian JPT
+                  </th>
+                  <th className="py-3 px-3 font-bold text-center w-36">
+                    Status Evaluasi
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {STANDAR_KASN_KONVERSI.map((row) => {
+                  const isCurrent =
+                    datasetRow.TOTAL_NILAI_MERIT >= row.minNilai &&
+                    datasetRow.TOTAL_NILAI_MERIT <= row.maxNilai;
+
+                  return (
+                    <tr
+                      key={row.kategori}
+                      className={`transition-colors ${
+                        isCurrent
+                          ? 'bg-emerald-50/90 font-medium'
+                          : 'hover:bg-slate-50/80'
+                      }`}
+                    >
+                      <td className="py-3.5 px-4 text-center font-black font-mono text-slate-900 text-base sm:text-lg border-r border-slate-200">
+                        {row.kategori}
+                      </td>
+                      <td className="py-3.5 px-5 text-center font-mono font-bold text-slate-900 text-xs sm:text-sm border-r border-slate-200">
+                        {row.nilai}
+                      </td>
+                      <td className="py-3.5 px-5 text-center font-mono font-bold text-slate-900 text-xs sm:text-sm border-r border-slate-200">
+                        {row.mutuPelayanan}
+                      </td>
+                      <td className="py-3.5 px-5 text-center border-r border-slate-200">
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${row.badgeWarna}`}
+                        >
+                          {row.predikat}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 text-xs text-slate-600 leading-relaxed hidden lg:table-cell border-r border-slate-200">
+                        {row.konsekuensi}
+                      </td>
+                      <td className="py-3.5 px-3 text-center">
+                        {isCurrent ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-600 text-white shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                            <span>Posisi BP Batam</span>
+                          </span>
+                        ) : (
+                          <span className="text-slate-300 font-mono text-xs">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* FOOTER: KASN CONVERSION TABLE REFERENCE & TABLEAU SHELVES */}
       <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-3">
-        <div className="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
-          <Info className="w-4 h-4 text-indigo-600 shrink-0" />
-          <span>Tabel Konversi Penilaian Sistem Merit Nasional (Komisi Aparatur Sipil Negara / MenPAN-RB):</span>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+            <Info className="w-4 h-4 text-indigo-600 shrink-0" />
+            <span>Tabel Standar Kategori Penilaian Sistem Merit Nasional:</span>
+          </div>
+          <span className="text-[11px] font-mono text-slate-500 hidden sm:inline">
+            Sesuai Standar Komisi Aparatur Sipil Negara (KASN) / KemenPAN-RB
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          {STANDAR_KASN_KONVERSI.map((std) => (
-            <div
-              key={std.kategori}
-              className={`p-2.5 rounded-lg border text-xs ${std.bgWarna} ${
-                std.kategori === 'Kategori IV' ? 'ring-2 ring-emerald-500/30' : ''
-              }`}
-            >
-              <div className="flex items-center justify-between font-bold mb-1">
-                <span>{std.kategori}</span>
-                <span>{std.predikat}</span>
-              </div>
-              <div className="font-mono text-[11px] mb-1">
-                Skor: {std.rentangSkor} (Indeks: {std.rentangIndeks})
-              </div>
-              <p className="text-[10.5px] opacity-90 leading-tight">
-                {std.konsekuensi}
-              </p>
-            </div>
-          ))}
+        {/* EXACT TABLE AS DISPLAYED IN USER SCREENSHOT */}
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-2xs">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-slate-100/90 text-slate-800 border-b border-slate-200">
+                <th className="py-2.5 px-4 font-bold text-center border-r border-slate-200 w-24">
+                  Kategori
+                </th>
+                <th className="py-2.5 px-4 font-bold text-center border-r border-slate-200">
+                  Nilai
+                </th>
+                <th className="py-2.5 px-4 font-bold text-center border-r border-slate-200">
+                  Mutu Pelayanan
+                </th>
+                <th className="py-2.5 px-4 font-bold text-center border-r border-slate-200">
+                  Predikat
+                </th>
+                <th className="py-2.5 px-4 font-bold text-left hidden sm:table-cell">
+                  Keterangan Implikasi
+                </th>
+                <th className="py-2.5 px-3 font-bold text-center w-32">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {STANDAR_KASN_KONVERSI.map((row) => {
+                const isCurrent =
+                  datasetRow.TOTAL_NILAI_MERIT >= row.minNilai &&
+                  datasetRow.TOTAL_NILAI_MERIT <= row.maxNilai;
+
+                return (
+                  <tr
+                    key={row.kategori}
+                    className={`transition-colors ${
+                      isCurrent
+                        ? 'bg-emerald-50/80 font-medium'
+                        : 'hover:bg-slate-50/60'
+                    }`}
+                  >
+                    <td className="py-2.5 px-4 text-center font-black font-mono text-slate-900 border-r border-slate-200 text-sm">
+                      {row.kategori}
+                    </td>
+                    <td className="py-2.5 px-4 text-center font-mono font-semibold text-slate-900 border-r border-slate-200">
+                      {row.nilai}
+                    </td>
+                    <td className="py-2.5 px-4 text-center font-mono font-semibold text-slate-900 border-r border-slate-200">
+                      {row.mutuPelayanan}
+                    </td>
+                    <td className="py-2.5 px-4 text-center border-r border-slate-200">
+                      <span
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${row.badgeWarna}`}
+                      >
+                        {row.predikat}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-4 text-xs text-slate-600 leading-snug hidden sm:table-cell">
+                      {row.konsekuensi}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      {isCurrent ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-600 text-white shadow-2xs">
+                          <CheckCircle2 className="w-3 h-3 shrink-0" />
+                          <span>Capaian Riil</span>
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-mono text-xs">—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
         {/* TABLEAU SHELVES SPECIFICATION */}

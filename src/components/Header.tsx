@@ -95,7 +95,17 @@ export const Header: React.FC<HeaderProps> = ({
 
   // Dynamic Sub-Menu tabs based on active unit
   const getSubMenus = () => {
-    if (activeUnitId === 'biro-keuangan') {
+    if (activeUnitId === 'kepala-bp') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 4 IKS & Program', icon: LayoutDashboard },
+        { id: 'investasi', label: 'IKS 1: Realisasi Investasi (Rp 70 T)', icon: TrendingUp },
+        { id: 'ikm', label: 'IKS 2: Kepuasan Masyarakat (IKM 88)', icon: Award },
+        { id: 'pnbp', label: 'IKS 3: Realisasi PNBP (Rp 2,447 T)', icon: CreditCard },
+        { id: 'rb', label: 'IKS 4: Reformasi Birokrasi (80 BB)', icon: ShieldCheck },
+        { id: 'naskah_perkin', label: 'Naskah Dinas Word (.doc)', icon: FileText, isSpecial: true },
+        { id: 'kamus_iks', label: 'Manual 4 IKS (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'biro-keuangan') {
       return [
         { id: 'overview', label: 'Ikhtisar Eksekutif', icon: LayoutDashboard },
         { id: 'pendapatan', label: 'Kinerja Pendapatan', icon: TrendingUp },

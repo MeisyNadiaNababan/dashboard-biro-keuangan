@@ -707,21 +707,251 @@ export const PENERIMAAN_SUMBER_DANA_DATA: PenerimaanSumberDanaItem[] = [
 ];
 
 // ==========================================
-// 9. DATASET NO. 20 (Hal. 5): REKAPITULASI PIUTANG TAK TERTAGIH
-// Aturan #12: NAMA DEBITUR, NOMOR FAKTUR, TANGGAL JATUH TEMPO, SALDO PIUTANG, STATUS KPKNL
+// 9. DATASET NO. 20 (Hal. 5): REKAPITULASI PIUTANG TAK TERTAGIH BERDASARKAN LAMANYA (AGING PIUTANG)
+// Visualisasi: Lamanya Piutang (30 hari, 60 hari, 90 hari, 180 hari, 365 hari, >1 tahun) & Total Hutang
 // ==========================================
+export interface PiutangAgingDurationBracket {
+  durasi: string;
+  singkat: string;
+  minHari: number;
+  maxHari: number;
+  totalHutang: number;
+  totalHutangMiliar: number;
+  jumlahFaktur: number;
+  persentase: number;
+  statusKolektibilitas: string;
+  badgeClass: string;
+  color: string;
+  tindakanPenagihan: string;
+}
+
+export const PIUTANG_AGING_DURATION_DATA: PiutangAgingDurationBracket[] = [
+  {
+    durasi: '≤ 30 Hari',
+    singkat: '30 Hari',
+    minHari: 1,
+    maxHari: 30,
+    totalHutang: 48650000000,
+    totalHutangMiliar: 48.65,
+    jumlahFaktur: 48,
+    persentase: 29.6,
+    statusKolektibilitas: 'Lancar',
+    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    color: '#10B981',
+    tindakanPenagihan: 'Monitoring e-Billing & Notifikasi Jatuh Tempo',
+  },
+  {
+    durasi: '31 – 60 Hari',
+    singkat: '60 Hari',
+    minHari: 31,
+    maxHari: 60,
+    totalHutang: 29400000000,
+    totalHutangMiliar: 29.40,
+    jumlahFaktur: 32,
+    persentase: 17.9,
+    statusKolektibilitas: 'Kurang Lancar',
+    badgeClass: 'bg-sky-100 text-sky-800 border-sky-200',
+    color: '#0284C7',
+    tindakanPenagihan: 'Penerbitan Surat Pemberitahuan / Peringatan I (SP-1)',
+  },
+  {
+    durasi: '61 – 90 Hari',
+    singkat: '90 Hari',
+    minHari: 61,
+    maxHari: 90,
+    totalHutang: 18750000000,
+    totalHutangMiliar: 18.75,
+    jumlahFaktur: 21,
+    persentase: 11.4,
+    statusKolektibilitas: 'Diragukan',
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-200',
+    color: '#F59E0B',
+    tindakanPenagihan: 'Surat Peringatan II (SP-2) & Penahanan Pelayanan',
+  },
+  {
+    durasi: '91 – 180 Hari',
+    singkat: '180 Hari',
+    minHari: 91,
+    maxHari: 180,
+    totalHutang: 14800000000,
+    totalHutangMiliar: 14.80,
+    jumlahFaktur: 16,
+    persentase: 9.0,
+    statusKolektibilitas: 'Perhatian Khusus',
+    badgeClass: 'bg-orange-100 text-orange-800 border-orange-200',
+    color: '#EA580C',
+    tindakanPenagihan: 'Peringatan Keras (SP-3) & Pembatasan Layanan',
+  },
+  {
+    durasi: '181 – 365 Hari',
+    singkat: '365 Hari',
+    minHari: 181,
+    maxHari: 365,
+    totalHutang: 7820000000,
+    totalHutangMiliar: 7.82,
+    jumlahFaktur: 9,
+    persentase: 4.8,
+    statusKolektibilitas: 'Kritis',
+    badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+    color: '#E11D48',
+    tindakanPenagihan: 'Gelar Perkara Verifikasi Piutang & Somasi Hukum',
+  },
+  {
+    durasi: '> 365 Hari',
+    singkat: '> 1 Tahun',
+    minHari: 366,
+    maxHari: 9999,
+    totalHutang: 44750000000,
+    totalHutangMiliar: 44.75,
+    jumlahFaktur: 8,
+    persentase: 27.3,
+    statusKolektibilitas: 'Macet (PUPN/KPKNL)',
+    badgeClass: 'bg-purple-100 text-purple-800 border-purple-200',
+    color: '#7C3AED',
+    tindakanPenagihan: 'Pelimpahan Penagihan ke Panitia Urusan Piutang Negara (PUPN) / KPKNL',
+  },
+];
+
 export interface PiutangTakTertagihItem {
   id: string;
   nomorFaktur: string;
   namaPelanggan: string;
   tanggalJatuhTempo: string;
   saldoPiutangTakTertagih: number;
-  statusKpknl: 'PROSES KPKNL / PUPN' | 'SURAT PAKSA TERBIT' | 'VERIFIKASI PENGHAPUSAN' | 'RESTRUKTURISASI';
+  statusKpknl: 'PROSES KPKNL / PUPN' | 'SURAT PAKSA TERBIT' | 'VERIFIKASI PENGHAPUSAN' | 'RESTRUKTURISASI' | 'PENAGIHAN AKTIF' | 'SURAT PERINGATAN (SP-1)' | 'SURAT PERINGATAN (SP-2)' | 'SURAT TEGURAN (SP-3)';
   umurPiutangHari: number;
+  bracketDurasi: string;
   unitLayanan: string;
 }
 
 export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
+  // Duration: ≤ 30 Hari (Contoh: 30 hari total hutangnya)
+  {
+    id: 'piut-30-1',
+    nomorFaktur: 'FAK/LHN/2026/0412',
+    namaPelanggan: 'PT Panbil Industrial Estate',
+    tanggalJatuhTempo: '10 Juni 2026',
+    saldoPiutangTakTertagih: 16400000000,
+    statusKpknl: 'PENAGIHAN AKTIF',
+    umurPiutangHari: 18,
+    bracketDurasi: '≤ 30 Hari',
+    unitLayanan: 'UWT Lahan Industri Muka Kuning',
+  },
+  {
+    id: 'piut-30-2',
+    nomorFaktur: 'FAK/PEL/2026/0589',
+    namaPelanggan: 'PT Pelayaran Samudera Jaya',
+    tanggalJatuhTempo: '04 Juni 2026',
+    saldoPiutangTakTertagih: 18250000000,
+    statusKpknl: 'PENAGIHAN AKTIF',
+    umurPiutangHari: 24,
+    bracketDurasi: '≤ 30 Hari',
+    unitLayanan: 'Jasa Tambat & Dermaga Batu Ampar',
+  },
+  {
+    id: 'piut-30-3',
+    nomorFaktur: 'FAK/AIR/2026/0671',
+    namaPelanggan: 'PT Batamindo Utility Energy',
+    tanggalJatuhTempo: '16 Juni 2026',
+    saldoPiutangTakTertagih: 14000000000,
+    statusKpknl: 'PENAGIHAN AKTIF',
+    umurPiutangHari: 12,
+    bracketDurasi: '≤ 30 Hari',
+    unitLayanan: 'Tagihan Air Curah Industri',
+  },
+  // Duration: 31 – 60 Hari
+  {
+    id: 'piut-60-1',
+    nomorFaktur: 'FAK/PEL/2026/0302',
+    namaPelanggan: 'PT Marina Nusantara Lines',
+    tanggalJatuhTempo: '18 Mei 2026',
+    saldoPiutangTakTertagih: 15600000000,
+    statusKpknl: 'SURAT PERINGATAN (SP-1)',
+    umurPiutangHari: 42,
+    bracketDurasi: '31 – 60 Hari',
+    unitLayanan: 'Jasa Labuh Kapal Pelabuhan',
+  },
+  {
+    id: 'piut-60-2',
+    nomorFaktur: 'FAK/LHN/2026/0211',
+    namaPelanggan: 'PT Kabil Citra Megah',
+    tanggalJatuhTempo: '05 Mei 2026',
+    saldoPiutangTakTertagih: 13800000000,
+    statusKpknl: 'SURAT PERINGATAN (SP-1)',
+    umurPiutangHari: 54,
+    bracketDurasi: '31 – 60 Hari',
+    unitLayanan: 'UWT Lahan Industri Kabil',
+  },
+  // Duration: 61 – 90 Hari
+  {
+    id: 'piut-90-1',
+    nomorFaktur: 'FAK/LHN/2026/0115',
+    namaPelanggan: 'PT Batam Maritime Shipyard',
+    tanggalJatuhTempo: '10 April 2026',
+    saldoPiutangTakTertagih: 11250000000,
+    statusKpknl: 'SURAT PERINGATAN (SP-2)',
+    umurPiutangHari: 78,
+    bracketDurasi: '61 – 90 Hari',
+    unitLayanan: 'Sewa Lahan Galangan Kapal Sekupang',
+  },
+  {
+    id: 'piut-90-2',
+    nomorFaktur: 'FAK/BND/2026/0144',
+    namaPelanggan: 'PT Hang Nadim Aero Kargo',
+    tanggalJatuhTempo: '02 April 2026',
+    saldoPiutangTakTertagih: 7500000000,
+    statusKpknl: 'SURAT PERINGATAN (SP-2)',
+    umurPiutangHari: 86,
+    bracketDurasi: '61 – 90 Hari',
+    unitLayanan: 'Sewa Gudang Kargo Bandara',
+  },
+  // Duration: 91 – 180 Hari
+  {
+    id: 'piut-180-1',
+    nomorFaktur: 'FAK/AIR/2025/1190',
+    namaPelanggan: 'PT Sumber Tirta Anugerah',
+    tanggalJatuhTempo: '03 Februari 2026',
+    saldoPiutangTakTertagih: 8600000000,
+    statusKpknl: 'SURAT TEGURAN (SP-3)',
+    umurPiutangHari: 145,
+    bracketDurasi: '91 – 180 Hari',
+    unitLayanan: 'Tagihan Air Curah Kawasan Industri',
+  },
+  {
+    id: 'piut-180-2',
+    nomorFaktur: 'FAK/RSB/2025/1042',
+    namaPelanggan: 'PT Prima Farma Batam',
+    tanggalJatuhTempo: '18 Januari 2026',
+    saldoPiutangTakTertagih: 6200000000,
+    statusKpknl: 'SURAT TEGURAN (SP-3)',
+    umurPiutangHari: 160,
+    bracketDurasi: '91 – 180 Hari',
+    unitLayanan: 'Pelayanan Pasien Rujukan RSBP',
+  },
+  // Duration: 181 – 365 Hari
+  {
+    id: 'piut-365-1',
+    nomorFaktur: 'FAK/LHN/2025/0821',
+    namaPelanggan: 'PT Tunas Galang Perkasa',
+    tanggalJatuhTempo: '26 September 2025',
+    saldoPiutangTakTertagih: 4520000000,
+    statusKpknl: 'RESTRUKTURISASI',
+    umurPiutangHari: 275,
+    bracketDurasi: '181 – 365 Hari',
+    unitLayanan: 'Perpanjangan Hak Lahan Galang',
+  },
+  {
+    id: 'piut-365-2',
+    nomorFaktur: 'FAK/PEL/2025/0719',
+    namaPelanggan: 'PT Selat Bintang Maritim',
+    tanggalJatuhTempo: '22 Agustus 2025',
+    saldoPiutangTakTertagih: 3300000000,
+    statusKpknl: 'RESTRUKTURISASI',
+    umurPiutangHari: 310,
+    bracketDurasi: '181 – 365 Hari',
+    unitLayanan: 'Jasa Dermaga Curah Cair',
+  },
+  // Duration: > 365 Hari (> 1 Tahun / Jatuh Tempo Lama / KPKNL)
   {
     id: 'piut-1',
     nomorFaktur: 'FAK/LHN/2021/0892',
@@ -730,16 +960,18 @@ export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
     saldoPiutangTakTertagih: 14250000000,
     statusKpknl: 'PROSES KPKNL / PUPN',
     umurPiutangHari: 1560,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'UWT Lahan Industri Muka Kuning',
   },
   {
     id: 'piut-2',
     nomorFaktur: 'FAK/PEL/2022/1043',
-    namaPelanggan: 'PT Marina Nusantara Lines',
+    namaPelanggan: 'PT Marina Nusantara Lines (Old)',
     tanggalJatuhTempo: '22 Agustus 2022',
     saldoPiutangTakTertagih: 9800000000,
     statusKpknl: 'SURAT PAKSA TERBIT',
     umurPiutangHari: 1400,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Jasa Tambat & Labuh Kapal Pelabuhan',
   },
   {
@@ -750,16 +982,18 @@ export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
     saldoPiutangTakTertagih: 7650000000,
     statusKpknl: 'PROSES KPKNL / PUPN',
     umurPiutangHari: 1320,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'UWT Lahan Industri Kabil',
   },
   {
     id: 'piut-4',
     nomorFaktur: 'FAK/AIR/2023/0411',
-    namaPelanggan: 'PT Sumber Tirta Anugerah',
+    namaPelanggan: 'PT Sumber Tirta Indah',
     tanggalJatuhTempo: '05 Mei 2023',
     saldoPiutangTakTertagih: 5200000000,
     statusKpknl: 'RESTRUKTURISASI',
     umurPiutangHari: 1145,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Tagihan Air Curah Kawasan Industri',
   },
   {
@@ -770,6 +1004,7 @@ export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
     saldoPiutangTakTertagih: 3450000000,
     statusKpknl: 'VERIFIKASI PENGHAPUSAN',
     umurPiutangHari: 1075,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Pelayanan Pasien Rujukan RSBP',
   },
   {
@@ -780,16 +1015,18 @@ export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
     saldoPiutangTakTertagih: 2850000000,
     statusKpknl: 'SURAT PAKSA TERBIT',
     umurPiutangHari: 967,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Sewa Area Kargo Bandara Hang Nadim',
   },
   {
     id: 'piut-7',
     nomorFaktur: 'FAK/LHN/2023/1205',
-    namaPelanggan: 'PT Tunas Galang Perkasa',
+    namaPelanggan: 'PT Tunas Galang Perkasa (Old)',
     tanggalJatuhTempo: '18 Desember 2023',
     saldoPiutangTakTertagih: 2200000000,
     statusKpknl: 'RESTRUKTURISASI',
     umurPiutangHari: 918,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Perpanjangan Hak Lahan Galang',
   },
   {
@@ -800,6 +1037,7 @@ export const PIUTANG_TAK_TERTAGIH_DATA: PiutangTakTertagihItem[] = [
     saldoPiutangTakTertagih: 1750000000,
     statusKpknl: 'PROSES KPKNL / PUPN',
     umurPiutangHari: 855,
+    bracketDurasi: '> 365 Hari',
     unitLayanan: 'Jasa Dermaga Curah Cair',
   },
 ];

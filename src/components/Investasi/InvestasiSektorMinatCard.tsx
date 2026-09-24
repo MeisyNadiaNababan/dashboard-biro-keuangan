@@ -17,6 +17,7 @@ import {
   LabelList,
 } from 'recharts';
 import { MinatInvestasiItem } from '../../data/investasiData';
+import { InvestasiVisualHeader } from './InvestasiVisualHeader';
 
 interface InvestasiSektorMinatCardProps {
   minatList: MinatInvestasiItem[];
@@ -99,50 +100,37 @@ export const InvestasiSektorMinatCard: React.FC<InvestasiSektorMinatCardProps> =
   return (
     <div
       id="investasi-sektor-minat-card"
-      className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden p-3.5 sm:p-4 font-sans"
     >
-      {/* 1. Header Visualisasi */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-200/80 bg-slate-50/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100/70 border border-indigo-300/60 flex items-center justify-center text-indigo-800 shrink-0">
-            <Briefcase className="w-4 h-4" />
+      {/* 1. Header Visualisasi Standar Pembangunan Infrastruktur */}
+      <InvestasiVisualHeader
+        datasetNumber={14}
+        pdfPages="Hal. 48"
+        classification="TERTUTUP"
+        periode="PERSEMESTER"
+        title="DATA MINAT INVESTASI DARI KUNJUNGAN DAN PAMERAN DALAM DAN LUAR NEGERI"
+        visualName="Grafik Batang Vertikal Distribusi Minat per Sektor Industri (Vertical Column Chart)"
+        attributes={[
+          'SEMESTER',
+          'TAHUN',
+          'NAMA PERUSAHAAN',
+          'SEKTOR',
+          'MINAT INVESTASI',
+        ]}
+        onOpenFormula={() => onOpenFormulaModal('kpi_investasi_minat')}
+        rightControls={
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              onClick={handleExportCsv}
+              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              title="Unduh Data CSV"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden sm:inline">CSV</span>
+            </button>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
-                DATA MINAT INVESTASI BERDASARKAN SEKTOR
-              </h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono">
-                Dataset No. 14 • Satu Data
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-500">
-              Visualisasi grafik batang vertikal jumlah minat investasi berdasarkan sektor industri
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          <button
-            onClick={() => onOpenFormulaModal('kpi_investasi_minat')}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
-            title="Lihat Metadata Dataset 14"
-          >
-            <ExternalLink className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Katalog</span>
-          </button>
-
-          <button
-            onClick={handleExportCsv}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-            title="Ekspor data minat sektor ke CSV"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>Ekspor CSV</span>
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* 2. VISUALISASI UTAMA: GRAFIK BATANG KE ATAS (VERTICAL COLUMN/BAR CHART) */}
       <div className="p-4 sm:p-5">

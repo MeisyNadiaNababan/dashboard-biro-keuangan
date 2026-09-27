@@ -32,7 +32,7 @@ import { AirportRouteData, BandaraFilterState } from './types';
 import { BandaraVisualHeader } from './BandaraVisualHeader';
 
 interface Dataset9RuteLangsungCardProps {
-  filters: BandaraFilterState;
+  filters?: BandaraFilterState;
   onOpenFormula: () => void;
 }
 

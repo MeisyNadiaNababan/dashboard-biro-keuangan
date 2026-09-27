@@ -208,7 +208,7 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
   // Aggregate sub-dataset by Jenis Pemohon
   const currentAgg = useMemo(() => {
     const map = new Map<string, { pemohon: string; disetujui: number; ditolak: number; total: number }>();
-    currentSubData.forEach((item) => {
+    (currentSubData || []).forEach((item) => {
       const existing = map.get(item.jenisPemohon) || {
         pemohon: item.jenisPemohon,
         disetujui: 0,

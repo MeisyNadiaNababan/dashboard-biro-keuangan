@@ -27,6 +27,9 @@ import {
   FileCode2,
   Award,
   FileCheck2,
+  FileCheck,
+  Clock,
+  Search,
   Ship,
   MessageSquare,
   FolderKanban,
@@ -49,6 +52,7 @@ import {
   GraduationCap,
   AlertTriangle,
   PieChart,
+  Database,
 } from 'lucide-react';
 import { BP_BATAM_24_UNITS } from '../data/bpBatamUnits';
 
@@ -97,13 +101,57 @@ export const Header: React.FC<HeaderProps> = ({
   const getSubMenus = () => {
     if (activeUnitId === 'kepala-bp') {
       return [
-        { id: 'ikhtisar', label: 'Ikhtisar 4 IKS & Program', icon: LayoutDashboard },
+        { id: 'ikhtisar', label: 'Executive Command Center', icon: Compass },
         { id: 'investasi', label: 'IKS 1: Realisasi Investasi (Rp 70 T)', icon: TrendingUp },
         { id: 'ikm', label: 'IKS 2: Kepuasan Masyarakat (IKM 88)', icon: Award },
         { id: 'pnbp', label: 'IKS 3: Realisasi PNBP (Rp 2,447 T)', icon: CreditCard },
         { id: 'rb', label: 'IKS 4: Reformasi Birokrasi (80 BB)', icon: ShieldCheck },
+        { id: 'matriks_satker', label: 'Matriks 24 Satker (Satu Data)', icon: Building2, isSpecial: true },
         { id: 'naskah_perkin', label: 'Naskah Dinas Word (.doc)', icon: FileText, isSpecial: true },
         { id: 'kamus_iks', label: 'Manual 4 IKS (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'deputi-kebijakan-strategis') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Eksekutif', icon: LayoutDashboard },
+        { id: 'kpi_visual', label: 'Visualisasi 4 IKP & Anggaran', icon: Award },
+        { id: 'unit_kinerja', label: 'Kinerja 4 Unit (PTSP, Pusren, PHKS, PDSI)', icon: Building2 },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center', icon: Sparkles, isSpecial: true },
+        { id: 'satu_data', label: 'Katalog 64 Dataset (PDF)', icon: Database },
+      ];
+    } else if (activeUnitId === 'deputi-administrasi-keuangan') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Tata Kelola', icon: LayoutDashboard },
+        { id: 'fiskal', label: 'Performa Fiskal & Belanja Unit', icon: TrendingUp },
+        { id: 'sdm_merit', label: 'Kualifikasi & 8 Aspek Sistem Merit', icon: Award },
+        { id: 'deep_dive', label: 'Unit Deep-Dive (BK, SDM, OKMR)', icon: Sparkles, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Manual 4 IKP (PDF)', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'deputi-pengelolaan-lahan') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 3 IKP Lahan & Pesisir', icon: LayoutDashboard },
+        { id: 'kpi_visual', label: 'Visualisasi Spasial 7 SWP & Alokasi', icon: MapPin },
+        { id: 'unit_kinerja', label: 'Kinerja 3 Direktorat Pilar', icon: Building2 },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center', icon: Sparkles, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Manual 3 IKP (PDF)', icon: FileCode2 },
+        { id: 'satu_data', label: 'Katalog 23 Dataset (PDF)', icon: Database },
+      ];
+    } else if (activeUnitId === 'deputi-investasi') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Realisasi', icon: LayoutDashboard },
+        { id: 'kpi_visual', label: 'Visualisasi Realisasi, KEK & Pipeline', icon: TrendingUp },
+        { id: 'unit_kinerja', label: 'Kinerja 4 Unit Kerja Pengampu', icon: Building2 },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center (4 Unit)', icon: Sparkles, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Manual 4 IKP (PDF)', icon: FileCode2 },
+        { id: 'satu_data', label: 'Katalog 39 Dataset (PDF)', icon: Database },
+      ];
+    } else if (activeUnitId === 'deputi-pelayanan-umum') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 3 IKP Pelayanan Umum', icon: LayoutDashboard },
+        { id: 'finansial', label: 'Finansial & PNBP Control', icon: CreditCard },
+        { id: 'operasional', label: 'Kinerja 3 Satker Layanan', icon: TrendingUp },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center', icon: Sparkles, isSpecial: true },
+        { id: 'satu_data', label: 'Katalog 121 Dataset (PDF)', icon: Database },
+        { id: 'kamus_rumus', label: 'Kamus Rumus Perkin A6', icon: FileCode2 },
       ];
     } else if (activeUnitId === 'biro-keuangan') {
       return [
@@ -132,6 +180,22 @@ export const Header: React.FC<HeaderProps> = ({
         { id: 'sektor', label: 'Sektor Berusaha (Dataset 9)', icon: Briefcase },
         { id: 'pengaduan', label: 'Pengaduan (Dataset 6)', icon: MessageSquare },
         { id: 'kamus_rumus', label: 'Kamus Rumus PTSP', icon: FileCode2 },
+      ];
+    } else if (activeUnitId === 'pusat-perencanaan-program') {
+      return [
+        { id: 'masterplan', label: '5 Masterplan Strategis (DS 6, 7, 10, 11, 12)', icon: Layers },
+        { id: 'renstra', label: 'Renstra 2025-2029 & Bappenas (DS 3, 4, 15, 17)', icon: Award },
+        { id: 'monev', label: 'Monev Paket DIPA (DS 2, 5)', icon: TrendingUp },
+        { id: 'jalan', label: 'Masterplan Jalan & Spasial (DS 12, 13, 19)', icon: MapPin },
+        { id: 'kajian', label: 'Kajian Kelayakan & FS (DS 1, 14, 18)', icon: FileText },
+      ];
+    } else if (activeUnitId === 'pusat-harmonisasi') {
+      return [
+        { id: 'ikk', label: '4 Dimensi IKK & Evaluasi (DS 1)', icon: Award },
+        { id: 'tarif', label: 'Daftar 7 Level Tarif Layanan (DS 3)', icon: Scale },
+        { id: 'regulasi', label: 'Sinkronisasi Regulasi (DS 2, 4)', icon: FileCheck },
+        { id: 'rapim', label: 'Risalah RDP & Rapim (DS 6, 7)', icon: Clock },
+        { id: 'survei', label: 'Survei Kewajaran Tarif (DS 5)', icon: Search },
       ];
     } else if (activeUnitId === 'dit-pengembangan-kek') {
       return [

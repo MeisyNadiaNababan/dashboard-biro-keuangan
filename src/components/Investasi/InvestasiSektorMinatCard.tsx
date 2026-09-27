@@ -16,23 +16,25 @@ import {
   Cell,
   LabelList,
 } from 'recharts';
-import { MinatInvestasiItem } from '../../data/investasiData';
+import { MinatInvestasiItem, MINAT_INVESTASI_DATA } from '../../data/investasiData';
 import { InvestasiVisualHeader } from './InvestasiVisualHeader';
 
 interface InvestasiSektorMinatCardProps {
-  minatList: MinatInvestasiItem[];
+  minatList?: MinatInvestasiItem[];
   onOpenFormulaModal: (formulaId: string) => void;
 }
 
 export const InvestasiSektorMinatCard: React.FC<InvestasiSektorMinatCardProps> = ({
-  minatList,
+  minatList = MINAT_INVESTASI_DATA,
   onOpenFormulaModal,
 }) => {
   // 1. Agregasi Sektor: Nama Sektor & Jumlah yang Minat Investasi
+  const safeMinatList = minatList || [];
+
   const sektorRanking = useMemo(() => {
     const counts: Record<string, number> = {};
 
-    minatList.forEach((item) => {
+    safeMinatList.forEach((item) => {
       counts[item.sektor] = (counts[item.sektor] || 0) + 1;
     });
 
@@ -44,7 +46,7 @@ export const InvestasiSektorMinatCard: React.FC<InvestasiSektorMinatCardProps> =
     // Urutkan dari jumlah minat terbanyak
     entries.sort((a, b) => b.jumlahMinat - a.jumlahMinat || a.sektor.localeCompare(b.sektor));
     return entries;
-  }, [minatList]);
+  }, [safeMinatList]);
 
   // Palet Warna Bar Vertikal
   const BAR_COLORS = [
@@ -62,7 +64,7 @@ export const InvestasiSektorMinatCard: React.FC<InvestasiSektorMinatCardProps> =
   const handleExportCsv = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += 'No,Nama Sektor Industri,Jumlah Minat Investasi\n';
-    sektorRanking.forEach((r, idx) => {
+    (sektorRanking || []).forEach((r, idx) => {
       csvContent += `${idx + 1},"${r.sektor}",${r.jumlahMinat}\n`;
     });
     const encodedUri = encodeURI(csvContent);

@@ -13,14 +13,21 @@ import {
   ShieldCheck,
   ExternalLink,
 } from 'lucide-react';
+import { DAFTAR_MITRA_PENGUSAHAAN } from './pengendalianData';
 import { MitraKerjasama } from './types';
 
 interface DaftarKerjasamaCardsProps {
-  mitraList: MitraKerjasama[];
+  mitraList?: MitraKerjasama[];
+  onSelectMitra?: (mitra: any) => void;
 }
 
-export const DaftarKerjasamaCards: React.FC<DaftarKerjasamaCardsProps> = ({ mitraList }) => {
+export const DaftarKerjasamaCards: React.FC<DaftarKerjasamaCardsProps> = ({
+  mitraList = DAFTAR_MITRA_PENGUSAHAAN,
+  onSelectMitra,
+}) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const safeMitraList = mitraList || [];
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -54,7 +61,7 @@ export const DaftarKerjasamaCards: React.FC<DaftarKerjasamaCardsProps> = ({ mitr
     }
   };
 
-  if (mitraList.length === 0) {
+  if (safeMitraList.length === 0) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-xs">
         <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-3">
@@ -78,12 +85,12 @@ export const DaftarKerjasamaCards: React.FC<DaftarKerjasamaCardsProps> = ({ mitr
           </h3>
         </div>
         <span className="text-xs text-slate-500 font-mono">
-          {mitraList.length} Kontrak Ditampilkan
+          {safeMitraList.length} Kontrak Ditampilkan
         </span>
       </div>
 
       <div className="grid grid-cols-1 gap-3">
-        {mitraList.map((item) => {
+        {safeMitraList.map((item) => {
           const isExpanded = expandedId === item.id;
 
           return (

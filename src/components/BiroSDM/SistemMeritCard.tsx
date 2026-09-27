@@ -22,19 +22,20 @@ interface SistemMeritCardProps {
 }
 
 export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
-  aspekList,
+  aspekList = [],
   datasetRow,
   tahun,
   onOpenFormulaModal,
 }) => {
+  const safeAspekList = aspekList || [];
   const [activeTab, setActiveTab] = useState<'radar' | 'cards' | 'dataset' | 'kategori'>('radar');
-  const [selectedAspek, setSelectedAspek] = useState<SistemMeritAspect | null>(aspekList[0]);
+  const [selectedAspek, setSelectedAspek] = useState<SistemMeritAspect | null>(safeAspekList[0] || null);
 
   // Radar Chart coordinates math (8 vertices)
   const size = 320;
   const center = size / 2;
   const maxRadius = 115;
-  const numAspects = aspekList.length;
+  const numAspects = safeAspekList.length || 1;
 
   const getCoordinates = (index: number, valueRatio: number) => {
     const angle = (Math.PI * 2 / numAspects) * index - Math.PI / 2;
@@ -46,7 +47,7 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
   };
 
   // Polygon for actual index values (0.0 - 1.0)
-  const polygonPoints = aspekList
+  const polygonPoints = safeAspekList
     .map((item, idx) => {
       const { x, y } = getCoordinates(idx, item.indeksAspek);
       return `${x},${y}`;
@@ -54,7 +55,7 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
     .join(' ');
 
   // Outer reference ring polygon (target = 1.0)
-  const targetPoints = aspekList
+  const targetPoints = safeAspekList
     .map((_, idx) => {
       const { x, y } = getCoordinates(idx, 1.0);
       return `${x},${y}`;
@@ -62,7 +63,7 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
     .join(' ');
 
   // Mid reference ring polygon (baseline = 0.75)
-  const midPoints = aspekList
+  const midPoints = safeAspekList
     .map((_, idx) => {
       const { x, y } = getCoordinates(idx, 0.75);
       return `${x},${y}`;
@@ -266,7 +267,7 @@ export const SistemMeritCard: React.FC<SistemMeritCardProps> = ({
                         }`}
                         onClick={() => setSelectedAspek(aspek)}
                       >
-                        {aspek.nama.split(' ')[0]}
+                        {aspek?.nama?.split(' ')?.[0] || aspek?.nama || ''}
                       </text>
                     );
                   })}

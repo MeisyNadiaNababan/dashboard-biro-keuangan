@@ -64,7 +64,7 @@ export const PecahRevisiPlSheetSwapCard: React.FC<PecahRevisiPlSheetSwapCardProp
   // Aggregate by Jenis Pemohon
   const aggregateByPemohon = (data: RekapPermohonanItem[]) => {
     const map = new Map<string, { pemohon: string; disetujui: number; ditolak: number; total: number }>();
-    data.forEach((item) => {
+    (data || []).forEach((item) => {
       const existing = map.get(item.jenisPemohon) || {
         pemohon: item.jenisPemohon,
         disetujui: 0,

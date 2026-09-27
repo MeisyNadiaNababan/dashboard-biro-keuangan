@@ -30,37 +30,51 @@ import { OperatorFlightData, BandaraFilterState } from './types';
 import { OPERATOR_FLIGHT_DATA } from './bandaraData';
 import { BandaraVisualHeader } from './BandaraVisualHeader';
 
+const DEFAULT_FILTERS: BandaraFilterState = {
+  tahun: '2025',
+  jenisPenerbangan: 'Semua',
+  arahPergerakan: 'Semua',
+  kategoriOperator: 'Semua',
+  jenisPnbp: 'Semua',
+  searchQuery: '',
+};
+
 interface OperatorFlightChartProps {
-  filters: BandaraFilterState;
+  filters?: BandaraFilterState;
   onOpenFormulaModal?: (key: string | number) => void;
+  onOpenFormula?: () => void;
 }
 
 export const OperatorFlightChart: React.FC<OperatorFlightChartProps> = ({
-  filters,
+  filters = DEFAULT_FILTERS,
   onOpenFormulaModal,
+  onOpenFormula,
 }) => {
   const [viewMode, setViewMode] = useState<'bar' | 'donut' | 'cards'>('bar');
   const [selectedOperator, setSelectedOperator] = useState<OperatorFlightData | null>(null);
 
+  const activeFilters = filters || DEFAULT_FILTERS;
+
   // Filtered operators
   const filteredOperators = useMemo(() => {
+    const f = activeFilters;
     return OPERATOR_FLIGHT_DATA.filter((op) => {
       // Filter Kategori
-      if (filters.kategoriOperator !== 'Semua' && op.kategori !== filters.kategoriOperator) {
+      if (f.kategoriOperator && f.kategoriOperator !== 'Semua' && op.kategori !== f.kategoriOperator) {
         return false;
       }
       // Filter Jenis Penerbangan
-      if (filters.jenisPenerbangan !== 'Semua') {
-        if (filters.jenisPenerbangan === 'Domestik' && !op.jenisPenerbangan.includes('DOMESTIK')) {
+      if (f.jenisPenerbangan && f.jenisPenerbangan !== 'Semua') {
+        if (f.jenisPenerbangan === 'Domestik' && !op.jenisPenerbangan.includes('DOMESTIK')) {
           return false;
         }
-        if (filters.jenisPenerbangan === 'Internasional' && !op.jenisPenerbangan.includes('INTERNASIONAL')) {
+        if (f.jenisPenerbangan === 'Internasional' && !op.jenisPenerbangan.includes('INTERNASIONAL')) {
           return false;
         }
       }
       // Filter Search
-      if (filters.searchQuery.trim() !== '') {
-        const query = filters.searchQuery.toLowerCase();
+      if (f.searchQuery && f.searchQuery.trim() !== '') {
+        const query = f.searchQuery.toLowerCase();
         const matchName = op.namaMaskapai.toLowerCase().includes(query);
         const matchCode = op.kodeIata.toLowerCase().includes(query) || op.kodeIcao.toLowerCase().includes(query);
         const matchRoute = op.ruteUtama.some((r) => r.toLowerCase().includes(query));
@@ -70,7 +84,7 @@ export const OperatorFlightChart: React.FC<OperatorFlightChartProps> = ({
       }
       return true;
     });
-  }, [filters]);
+  }, [activeFilters]);
 
   const totalFilteredFlights = filteredOperators.reduce((sum, item) => sum + item.jumlahPenerbangan, 0);
   const maxFlightCount = Math.max(...filteredOperators.map((o) => o.jumlahPenerbangan), 1);
@@ -207,7 +221,7 @@ export const OperatorFlightChart: React.FC<OperatorFlightChartProps> = ({
             </button>
           </div>
         }
-        onOpenFormula={onOpenFormulaModal ? () => onOpenFormulaModal('operator_share') : undefined}
+        onOpenFormula={onOpenFormula ? onOpenFormula : (onOpenFormulaModal ? () => onOpenFormulaModal('operator_share') : undefined)}
       />
 
       {/* METRIC SUMMARY STRIP (RINGKAS & MUDAH DIPAHAMI) */}

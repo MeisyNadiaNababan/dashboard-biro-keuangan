@@ -157,7 +157,7 @@ export const PengamananFormulaModal: React.FC<PengamananFormulaModalProps> = ({
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                {item.datasetNo.split(' ')[0]} {item.datasetNo.split(' ')[1]}: {item.title.substring(0, 24)}...
+                {(item?.datasetNo?.split(' ')?.[0] || '')} {(item?.datasetNo?.split(' ')?.[1] || '')}: {item?.title?.substring(0, 24)}...
               </button>
             ))}
           </div>

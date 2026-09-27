@@ -14,15 +14,11 @@ import {
 import { PengelolaanLahanFilters } from './PengelolaanLahanFilters';
 import { PengelolaanLahanKpis } from './PengelolaanLahanKpis';
 import { SwpLahanTersediaCard } from './SwpLahanTersediaCard';
+import { ExecutivePnbpSlaCard } from './ExecutivePnbpSlaCard';
 import { SkptSpptSheetSwapCard } from './SkptSpptSheetSwapCard';
 import { PecahRevisiPlSheetSwapCard } from './PecahRevisiPlSheetSwapCard';
 import { HakAtasTanah3WaySheetSwapCard } from './HakAtasTanah3WaySheetSwapCard';
 import { EnamLayananLahanPieCard } from './EnamLayananLahanPieCard';
-import { LraBluCard } from './LraBluCard';
-import { LaporanKeuanganBluSheetSwapCard } from './LaporanKeuanganBluSheetSwapCard';
-import { SaldoBankRealTimeCard } from './SaldoBankRealTimeCard';
-import { PenerimaanSumberDanaCard } from './PenerimaanSumberDanaCard';
-import { PiutangTakTertagihCard } from './PiutangTakTertagihCard';
 import { LahanFormulaModal } from './LahanFormulaModal';
 import { LahanKpiWordDocView } from './LahanKpiWordDocView';
 import { LahanFilterState } from './types';
@@ -45,12 +41,8 @@ export const PengelolaanLahanDashboard: React.FC = () => {
   const [showWordDocView, setShowWordDocView] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<
     | 'all'
-    | 'lra-blu'
-    | 'lap-blu'
-    | 'kas-bank'
-    | 'sumber-dana'
-    | 'piutang'
     | 'swp'
+    | 'alokasi-pnbp'
     | 'skpt-pl'
     | 'hak'
     | 'layanan'
@@ -140,57 +132,7 @@ export const PengelolaanLahanDashboard: React.FC = () => {
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
-            Semua Visualisasi (Overview)
-          </button>
-          <button
-            onClick={() => setActiveTab('lra-blu')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'lra-blu'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            LRA BLU (30 Juni 2026)
-          </button>
-          <button
-            onClick={() => setActiveTab('lap-blu')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'lap-blu'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            4 Laporan Keuangan BLU
-          </button>
-          <button
-            onClick={() => setActiveTab('kas-bank')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'kas-bank'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Saldo Bank Real Time
-          </button>
-          <button
-            onClick={() => setActiveTab('sumber-dana')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'sumber-dana'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Penerimaan Sumber Dana
-          </button>
-          <button
-            onClick={() => setActiveTab('piutang')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'piutang'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Piutang Tak Tertagih
+            Semua Visualisasi Lahan (Overview 15 DS)
           </button>
           <button
             onClick={() => setActiveTab('swp')}
@@ -200,7 +142,17 @@ export const PengelolaanLahanDashboard: React.FC = () => {
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
-            Lahan SWP (#15)
+            Lahan Tersedia 9 SWP (#15)
+          </button>
+          <button
+            onClick={() => setActiveTab('alokasi-pnbp')}
+            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'alokasi-pnbp'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
+            }`}
+          >
+            Alokasi Investasi (#14) &amp; Target PNBP (#12)
           </button>
           <button
             onClick={() => setActiveTab('skpt-pl')}
@@ -220,7 +172,7 @@ export const PengelolaanLahanDashboard: React.FC = () => {
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
-            Peralihan Hak (#9 &amp; #13)
+            Peralihan &amp; Perpanjangan Hak (#5, #9, #13)
           </button>
           <button
             onClick={() => setActiveTab('layanan')}
@@ -230,7 +182,7 @@ export const PengelolaanLahanDashboard: React.FC = () => {
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
-            6 Layanan Lahan
+            6 Layanan Pengelolaan Lahan (#6, #7, #8, #10, #11)
           </button>
         </div>
       </div>
@@ -242,47 +194,19 @@ export const PengelolaanLahanDashboard: React.FC = () => {
         onResetFilters={handleResetFilters}
       />
 
-      {/* Primary KPI Row: Luas Alokasi, Lahan Tersedia SWP & Realisasi PNBP (DO NOT MODIFY AS REQUESTED - RULE 11) */}
+      {/* Primary KPI Row: Luas Alokasi, Lahan Tersedia SWP & Realisasi PNBP */}
       <PengelolaanLahanKpis
         totalSwpPersil={totalSwpPersil}
         totalSwpHa={totalSwpHa}
         onExplainKpi={(kpiId) => setActiveFormulaKpi(kpiId)}
       />
 
-      {/* SECTION 1: FINANCIAL & BUDGET REALIZATION OF BADAN LAYANAN UMUM (BLU) */}
-      {/* 1. LRA BLU per 30 Juni 2026 (Hal. 3 Item 3) */}
-      {(activeTab === 'all' || activeTab === 'lra-blu') && (
-        <LraBluCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
+      {/* SECTION 1: MONITORING EKSEKUTIF ALOKASI INVESTASI & PNBP UWT LAHAN (DATASET #12 & #14) */}
+      {(activeTab === 'all' || activeTab === 'alokasi-pnbp') && (
+        <ExecutivePnbpSlaCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
       )}
 
-      {/* 2-6. 4 Laporan Keuangan BLU: Ekuitas, Kas, Neraca, LO + Sheet Swap & Gabungan Nilai/Persentase */}
-      {(activeTab === 'all' || activeTab === 'lap-blu') && (
-        <LaporanKeuanganBluSheetSwapCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
-      )}
-
-      {/* 7. Laporan Saldo Bank Real Time (Hal. 4 Item 13) */}
-      {(activeTab === 'all' || activeTab === 'kas-bank') && (
-        <SaldoBankRealTimeCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
-      )}
-
-      {/* 8 & 9. Penerimaan Sumber Dana (#14) & Rekapitulasi Piutang Tak Tertagih (#20) */}
-      {(activeTab === 'all' || activeTab === 'sumber-dana' || activeTab === 'piutang') && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {(activeTab === 'all' || activeTab === 'sumber-dana') && (
-            <div className={activeTab === 'sumber-dana' ? 'xl:col-span-2' : ''}>
-              <PenerimaanSumberDanaCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
-            </div>
-          )}
-          {(activeTab === 'all' || activeTab === 'piutang') && (
-            <div className={activeTab === 'piutang' ? 'xl:col-span-2' : ''}>
-              <PiutangTakTertagihCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* SECTION 2: LAND MANAGEMENT CORE VISUALIZATIONS */}
-      {/* 1. VISUALISASI LAHAN TERSEDIA AREA SUB WILAYAH PENGEMBANG (SWP) */}
+      {/* SECTION 2: VISUALISASI LAHAN TERSEDIA AREA SUB WILAYAH PENGEMBANG (SWP - DATASET #15) */}
       {(activeTab === 'all' || activeTab === 'swp') && (
         <SwpLahanTersediaCard
           selectedSwpFilter={filters.swp}
@@ -290,9 +214,9 @@ export const PengelolaanLahanDashboard: React.FC = () => {
         />
       )}
 
-      {/* 2. MAIN ANALYTICAL VISUALIZATIONS */}
+      {/* SECTION 3: MAIN ANALYTICAL LAND VISUALIZATIONS */}
       <div className="space-y-4">
-        {/* Module 1: SKPT & SPPT + Pecah/Revisi PL */}
+        {/* Module 1: SKPT & SPPT + Pecah/Revisi PL (DATASET #1, #2, #3, #4) */}
         {(activeTab === 'all' || activeTab === 'skpt-pl') && (
           <div className="space-y-4">
             {/* Req 1: Rekapitulasi SKPT & SPPT Baru vs Perubahan */}
@@ -309,7 +233,7 @@ export const PengelolaanLahanDashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Module 2: Peralihan Hak & Perpanjangan Hak (Req 4: Pie Chart Komparasi + Sheet Swap Rincian) */}
+        {/* Module 2: Pembaharuan Hak, Peralihan Hak & Perpanjangan Hak (DATASET #5, #9, #13) */}
         {(activeTab === 'all' || activeTab === 'hak') && (
           <HakAtasTanah3WaySheetSwapCard
             filters={filters}
@@ -317,7 +241,7 @@ export const PengelolaanLahanDashboard: React.FC = () => {
           />
         )}
 
-        {/* Module 3: 6 Layanan Pengelolaan Lahan (Req 3: Pie Chart Semua Rekapitulasi + Sheet Swap Rincian Layanan) */}
+        {/* Module 3: 6 Layanan Pengelolaan Lahan (DATASET #6, #7, #8, #10, #11) */}
         {(activeTab === 'all' || activeTab === 'layanan') && (
           <EnamLayananLahanPieCard
             filters={filters}

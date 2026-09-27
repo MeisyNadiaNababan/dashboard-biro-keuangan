@@ -7,6 +7,8 @@ import { KpiMetricsRow } from './components/KpiMetricsRow';
 import { RevenuePerformanceCard } from './components/RevenuePerformanceCard';
 import { BudgetAbsorptionCard } from './components/BudgetAbsorptionCard';
 import { KepalaBpDashboard } from './components/KepalaBP/KepalaBpDashboard';
+import { AdministrasiKeuanganDashboard } from './components/AdministrasiKeuangan/AdministrasiKeuanganDashboard';
+import { PelayananUmumDashboard } from './components/PelayananUmum/PelayananUmumDashboard';
 import { BiroKeuanganDashboard } from './components/BiroKeuangan/BiroKeuanganDashboard';
 import { BiroKeuanganFinancialCard } from './components/BiroKeuanganFinancialCard';
 import { ReceivablesSection } from './components/ReceivablesSection';
@@ -30,6 +32,13 @@ import { PengendalianPengusahaanDashboard } from './components/PengendalianPengu
 import { PengelolaanBandaraDashboard } from './components/PengelolaanBandara/PengelolaanBandaraDashboard';
 import { BiroOrganisasiDashboard } from './components/BiroOrganisasi/BiroOrganisasiDashboard';
 import { BiroSDMDashboard } from './components/BiroSDM/BiroSDMDashboard';
+import { KebijakanStrategisDashboard } from './components/KebijakanStrategis/KebijakanStrategisDashboard';
+import { PengelolaanLahanPesisirDashboard } from './components/PengelolaanLahanPesisir/PengelolaanLahanPesisirDashboard';
+import { InvestasiPengusahaanDashboard } from './components/InvestasiPengusahaan/InvestasiPengusahaanDashboard';
+import { BandaraPelabuhanLlbDashboard } from './components/BandaraPelabuhanLlb/BandaraPelabuhanLlbDashboard';
+import { InfrastrukturPerkinA7Dashboard } from './components/InfrastrukturPerkinA7/InfrastrukturPerkinA7Dashboard';
+import { PusrenDashboard } from './components/Pusren/PusrenDashboard';
+import { HarmonisasiDashboard } from './components/Harmonisasi/HarmonisasiDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
 import { KpiWordDocumentView } from './components/KpiWordDocumentView';
@@ -43,8 +52,8 @@ import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State - Set default to kepala-bp as requested
-  const [activeUnitId, setActiveUnitId] = useState<string>('kepala-bp');
+  // Navigation & Multi-Unit State - Set default to deputi-infrastruktur (Perkin A7)
+  const [activeUnitId, setActiveUnitId] = useState<string>('deputi-infrastruktur');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 
@@ -256,6 +265,86 @@ export default function App() {
                   setSelectedKpiFormulaId(kpiId);
                   setIsKpiFormulaModalOpen(true);
                 }}
+                onNavigateToUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-kebijakan-strategis' ? (
+              /* --- DASHBOARD DEPUTI BIDANG KEBIJAKAN STRATEGIS DAN PERIZINAN (DEP A2 / PERKIN A2) --- */
+              <KebijakanStrategisDashboard
+                activeSheet={activeSheet}
+                onSelectSheet={handleSelectSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-perencanaan');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onNavigateToFullDashboard={(unitId) => handleSelectUnit(unitId)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-administrasi-keuangan' ? (
+              /* --- DASHBOARD DEPUTI BIDANG ADMINISTRASI DAN KEUANGAN (PERKIN A1) --- */
+              <AdministrasiKeuanganDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-rb');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-pengelolaan-lahan' ? (
+              /* --- DASHBOARD DEPUTI BIDANG PENGELOLAAN LAHAN, PESISIR DAN REKLAMASI (PERKIN A3) --- */
+              <PengelolaanLahanPesisirDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-lahan-investasi');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-investasi' ? (
+              /* --- DASHBOARD DEPUTI BIDANG INVESTASI DAN PENGUSAHAAN (PERKIN A4) --- */
+              <InvestasiPengusahaanDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-investasi-kpbpb');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-bandara-pelabuhan' ? (
+              /* --- DASHBOARD DEPUTI BIDANG PENGELOLAAN BANDARA, PELABUHAN DAN LALU LINTAS BARANG (PERKIN A5) --- */
+              <BandaraPelabuhanLlbDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-ikm-gabungan');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-pelayanan-umum' ? (
+              /* --- DASHBOARD DEPUTI PELAYANAN UMUM (PERKIN A6) --- */
+              <PelayananUmumDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
+              />
+            ) : activeUnitId === 'deputi-infrastruktur' ? (
+              /* --- DASHBOARD DEPUTI BIDANG INFRASTRUKTUR (PERKIN A7) --- */
+              <InfrastrukturPerkinA7Dashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId || 'ikp-1-pembangunan-infrastruktur');
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+                onSwitchUnit={(unitId) => handleSelectUnit(unitId)}
               />
             ) : activeSheet === 'kpi_word_doc' ? (
               <KpiWordDocumentView
@@ -322,6 +411,26 @@ export default function App() {
                   setSelectedKpiFormulaId(kpiId);
                   setIsKpiFormulaModalOpen(true);
                 }}
+              />
+            ) : activeUnitId === 'pusat-perencanaan-program' ? (
+              /* --- PUSAT PERENCANAAN PROGRAM STRATEGIS (P3S) DASHBOARD (HALAMAN 51-53 PDF) --- */
+              <PusrenDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
+              />
+            ) : activeUnitId === 'pusat-harmonisasi' ? (
+              /* --- PUSAT HARMONISASI KEBIJAKAN STRATEGIS (PHKS) DASHBOARD (HALAMAN 12-13 PDF) --- */
+              <HarmonisasiDashboard
+                activeSubTab={activeSheet}
+                onOpenFormulaModal={(kpiId) => {
+                  setSelectedKpiFormulaId(kpiId);
+                  setIsKpiFormulaModalOpen(true);
+                }}
+                onOpenExportModal={() => setIsExportModalOpen(true)}
               />
             ) : activeUnitId === 'dit-pengembangan-kek' ? (
               /* --- DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK DASHBOARD --- */

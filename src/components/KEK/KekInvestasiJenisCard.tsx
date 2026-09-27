@@ -12,32 +12,34 @@ import {
   ArrowUpRight,
   Filter,
 } from 'lucide-react';
-import { KekRealisasiInvestasi } from '../../data/kekData';
+import { KEK_INVESTASI_RAW, KekRealisasiInvestasi } from '../../data/kekData';
 import { KekVisualHeader } from './KekVisualHeader';
 
 interface KekInvestasiJenisCardProps {
-  investasiList: KekRealisasiInvestasi[];
+  investasiList?: KekRealisasiInvestasi[];
   onOpenFormulaModal: (formulaId: string) => void;
 }
 
 type SheetSwapMode = 'perbandingan_target_realisasi' | 'tren_triwulan' | 'tabel_kinerja';
 
 export const KekInvestasiJenisCard: React.FC<KekInvestasiJenisCardProps> = ({
-  investasiList,
+  investasiList = KEK_INVESTASI_RAW,
   onOpenFormulaModal,
 }) => {
   const [activeSheet, setActiveSheet] = useState<SheetSwapMode>('perbandingan_target_realisasi');
   const [selectedFilterJenis, setSelectedFilterJenis] = useState<'ALL' | 'PMA' | 'PMDN'>('ALL');
 
+  const safeInvestasiList = investasiList || [];
+
   // Filtered entries by local jenis filter if applicable
   const displayList = useMemo(() => {
-    if (selectedFilterJenis === 'ALL') return investasiList;
-    return investasiList.filter((item) => item.jenisInvestasi === selectedFilterJenis);
-  }, [investasiList, selectedFilterJenis]);
+    if (selectedFilterJenis === 'ALL') return safeInvestasiList;
+    return safeInvestasiList.filter((item) => item.jenisInvestasi === selectedFilterJenis);
+  }, [safeInvestasiList, selectedFilterJenis]);
 
   // Kalkulasi agregasi berdasarkan jenis investasi
-  const pmaEntries = investasiList.filter((item) => item.jenisInvestasi === 'PMA');
-  const pmdnEntries = investasiList.filter((item) => item.jenisInvestasi === 'PMDN');
+  const pmaEntries = safeInvestasiList.filter((item) => item.jenisInvestasi === 'PMA');
+  const pmdnEntries = safeInvestasiList.filter((item) => item.jenisInvestasi === 'PMDN');
 
   // Total Realisasi
   const totalPmaRealisasi = pmaEntries.reduce((acc, curr) => acc + curr.realisasiInvestasi, 0);

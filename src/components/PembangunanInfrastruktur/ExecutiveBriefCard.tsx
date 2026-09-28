@@ -320,20 +320,6 @@ export const ExecutiveBriefCard: React.FC<ExecutiveBriefCardProps> = ({
             </div>
 
             <div
-              onClick={() => onSelectTab && onSelectTab('dataset-3')}
-              className="py-1.5 flex items-center justify-between hover:bg-slate-50 px-1 rounded cursor-pointer transition-colors"
-            >
-              <div className="flex items-center gap-1.5">
-                <span className="font-mono text-[9.5px] font-bold px-1 rounded bg-slate-100 text-slate-700">#3</span>
-                <span className="font-medium text-slate-800">Jaringan Jalan Eksisting (LKONOF)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-slate-600">542,8 Km • 89.4% Mantap</span>
-                <span className="text-emerald-700 font-bold text-[10px]">Aktif</span>
-              </div>
-            </div>
-
-            <div
               onClick={() => onSelectTab && onSelectTab('dataset-4')}
               className="py-1.5 flex items-center justify-between hover:bg-slate-50 px-1 rounded cursor-pointer transition-colors"
             >

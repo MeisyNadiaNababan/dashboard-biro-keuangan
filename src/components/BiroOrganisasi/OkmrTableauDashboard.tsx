@@ -57,7 +57,6 @@ interface OkmrTableauDashboardProps {
 }
 
 type TableauTab =
-  | 'overview'
   | 'rb'
   | 'sakip'
   | 'blu_pie'
@@ -72,7 +71,7 @@ export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
   filters,
   onOpenFormulaModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<TableauTab>('overview');
+  const [activeTab, setActiveTab] = useState<TableauTab>('rb');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Rata-rata Indeks Pelayanan Publik (PEKPPP)
@@ -180,15 +179,14 @@ export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
       {/* ========================================================================= */}
       <div className="flex items-center gap-1 overflow-x-auto text-[11px] bg-slate-100 p-1 rounded-xl border border-slate-200/80">
         {[
-          { id: 'overview', label: '1. Dashboard Eksekutif', icon: Layers },
-          { id: 'rb', label: '2. Indeks Reformasi Birokrasi (8 Area)', icon: Award },
-          { id: 'sakip', label: '3. SAKIP (DS #2)', icon: Activity },
-          { id: 'blu_pie', label: '4. Penyelesaian BLU (DS #6 & #7)', icon: PieIcon },
-          { id: 'pengaduan', label: '5. Pengaduan Layanan (DS #10)', icon: MessageSquare },
-          { id: 'skm', label: '6. Rekap SKM (DS #11)', icon: Smile },
-          { id: 'piagam_risiko', label: '7. Piagam Risiko (DS #14)', icon: ShieldAlert },
-          { id: 'pekppp', label: '8. Evaluasi PEKPPP (DS #16)', icon: Building },
-          { id: 'spip', label: '9. Maturitas SPIP (DS #17)', icon: ShieldCheck },
+          { id: 'rb', label: '1. Indeks Reformasi Birokrasi (8 Area)', icon: Award },
+          { id: 'sakip', label: '2. SAKIP (DS #2)', icon: Activity },
+          { id: 'blu_pie', label: '3. Penyelesaian BLU (DS #6 & #7)', icon: PieIcon },
+          { id: 'pengaduan', label: '4. Pengaduan Layanan (DS #10)', icon: MessageSquare },
+          { id: 'skm', label: '5. Rekap SKM (DS #11)', icon: Smile },
+          { id: 'piagam_risiko', label: '6. Piagam Risiko (DS #14)', icon: ShieldAlert },
+          { id: 'pekppp', label: '7. Evaluasi PEKPPP (DS #16)', icon: Building },
+          { id: 'spip', label: '8. Maturitas SPIP (DS #17)', icon: ShieldCheck },
           { id: 'tableau_spec', label: '📐 Blueprint Tableau', icon: FileSpreadsheet },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -356,42 +354,42 @@ export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
       {/* ========================================================================= */}
 
       {/* 0. INDEKS REFORMASI BIROKRASI (8 AREA PERUBAHAN MENPAN-RB) */}
-      {(activeTab === 'overview' || activeTab === 'rb') && (
+      {activeTab === 'rb' && (
         <ReformasiBirokrasiCard onOpenFormulaModal={() => onOpenFormulaModal?.(2)} />
       )}
 
-      {/* 0b. INDEKS MATURITAS SPIP (5 UNSUR BPKP & 5 LEVEL MATURITAS) - DIBAWAH SETELAH INDEKS REFORMASI */}
-      {(activeTab === 'overview' || activeTab === 'spip') && (
+      {/* 0b. INDEKS MATURITAS SPIP (5 UNSUR BPKP & 5 LEVEL MATURITAS) */}
+      {activeTab === 'spip' && (
         <SpipMaturitasCard onOpenFormulaModal={() => onOpenFormulaModal?.(17)} />
       )}
 
       {/* 1. VISUALISASI SAKIP (Persyaratan #1 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'sakip') && (
+      {activeTab === 'sakip' && (
         <SakipEvaluationView onOpenFormula={onOpenFormulaModal} />
       )}
 
       {/* 2. VISUALISASI PERSENTASE PENYELESAIAN BLU & MODERNISASI DIGABUNG DALAM PIE CHART (Persyaratan #2 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'blu_pie') && (
+      {activeTab === 'blu_pie' && (
         <PenyelesaianBluPieChart onOpenFormula={onOpenFormulaModal} />
       )}
 
       {/* 3. VISUALISASI MONITORING & EVALUASI PENGELOLAAN PENGADUAN MASYARAKAT (Persyaratan #3 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'pengaduan') && (
+      {activeTab === 'pengaduan' && (
         <PengaduanMasyarakatChart filters={filters} onOpenFormula={onOpenFormulaModal} />
       )}
 
       {/* 4. VISUALISASI REKAPITULASI HASIL SURVEI KEPUASAN MASYARAKAT (SKM) (Persyaratan #4 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'skm') && (
+      {activeTab === 'skm' && (
         <SkmSurveyChart onOpenFormula={onOpenFormulaModal} />
       )}
 
       {/* 5. VISUALISASI PIAGAM RISIKO UNIT KERJA (Persyaratan #5 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'piagam_risiko') && (
+      {activeTab === 'piagam_risiko' && (
         <PiagamRisikoChart onOpenFormula={onOpenFormulaModal} />
       )}
 
       {/* 7. VISUALISASI PEKPPP PELAYANAN PUBLIK (Persyaratan #7 & #10) */}
-      {(activeTab === 'overview' || activeTab === 'pekppp') && (
+      {activeTab === 'pekppp' && (
         <PekpppChart onOpenFormula={onOpenFormulaModal} />
       )}
 

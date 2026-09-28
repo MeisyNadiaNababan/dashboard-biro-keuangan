@@ -48,13 +48,13 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
 > = ({ selectedUnitId, onSelectUnit, onOpenFormulaModal }) => {
   // Sub-tabs for Biro Keuangan view
   const [keuanganSubTab, setKeuanganSubTab] = useState<
-    'all' | 'lra' | 'surplus' | 'kas_bank' | 'sumber_dana' | 'piutang'
-  >('all');
+    'lra' | 'surplus' | 'finansial_blu' | 'kas_bank' | 'sumber_dana' | 'piutang'
+  >('lra');
 
   // Sub-tabs for Biro SDM view
   const [sdmSubTab, setSdmSubTab] = useState<
-    'all' | 'merit' | 'status' | 'pendidikan' | 'spip'
-  >('all');
+    'merit' | 'status' | 'pendidikan' | 'spip'
+  >('merit');
 
   // Data for SDM components
   const sdmYearData = SDM_DATA_BY_YEAR[2026] || SDM_DATA_BY_YEAR[2025];
@@ -131,20 +131,10 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
           <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
               <button
-                onClick={() => setKeuanganSubTab('all')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  keuanganSubTab === 'all'
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Semua Visualisasi
-              </button>
-              <button
                 onClick={() => setKeuanganSubTab('lra')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'lra'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -154,17 +144,27 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setKeuanganSubTab('surplus')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'surplus'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
                 Surplus/Defisit Satker
               </button>
               <button
+                onClick={() => setKeuanganSubTab('finansial_blu')}
+                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                  keuanganSubTab === 'finansial_blu'
+                    ? 'bg-blue-600 text-white shadow-2xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+                }`}
+              >
+                Laporan Finansial 4-Way
+              </button>
+              <button
                 onClick={() => setKeuanganSubTab('kas_bank')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'kas_bank'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -174,7 +174,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setKeuanganSubTab('sumber_dana')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'sumber_dana'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -184,7 +184,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setKeuanganSubTab('piutang')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'piutang'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -198,28 +198,28 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
             </div>
           </div>
 
-          {/* Render Components */}
-          {(keuanganSubTab === 'all' || keuanganSubTab === 'lra') && (
+          {/* Render ONLY the selected component */}
+          {keuanganSubTab === 'lra' && (
             <LraBluCard onOpenFormulaModal={onOpenFormulaModal} />
           )}
 
-          {(keuanganSubTab === 'all' || keuanganSubTab === 'surplus') && (
+          {keuanganSubTab === 'surplus' && (
             <SurplusDefisitUnitCard />
           )}
 
-          {keuanganSubTab === 'all' && (
+          {keuanganSubTab === 'finansial_blu' && (
             <LaporanFinansialBlu4WayCard />
           )}
 
-          {(keuanganSubTab === 'all' || keuanganSubTab === 'kas_bank') && (
+          {keuanganSubTab === 'kas_bank' && (
             <SaldoBankRealTimeCard />
           )}
 
-          {(keuanganSubTab === 'all' || keuanganSubTab === 'sumber_dana') && (
+          {keuanganSubTab === 'sumber_dana' && (
             <PenerimaanSumberDanaCard />
           )}
 
-          {(keuanganSubTab === 'all' || keuanganSubTab === 'piutang') && (
+          {keuanganSubTab === 'piutang' && (
             <PiutangTakTertagihCard />
           )}
         </div>
@@ -232,20 +232,10 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
           <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
               <button
-                onClick={() => setSdmSubTab('all')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  sdmSubTab === 'all'
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Semua Visualisasi SDM
-              </button>
-              <button
                 onClick={() => setSdmSubTab('merit')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   sdmSubTab === 'merit'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-indigo-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -255,7 +245,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setSdmSubTab('status')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   sdmSubTab === 'status'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-indigo-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -265,7 +255,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setSdmSubTab('pendidikan')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   sdmSubTab === 'pendidikan'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-indigo-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
@@ -275,7 +265,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 onClick={() => setSdmSubTab('spip')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   sdmSubTab === 'spip'
-                    ? 'bg-emerald-700 text-white'
+                    ? 'bg-emerald-700 text-white shadow-2xs'
                     : 'bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-200'
                 }`}
               >
@@ -296,8 +286,8 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
             onOpenFormulaModal={() => onOpenFormulaModal?.('ikp-2-merit')}
           />
 
-          {/* 8 Aspek Sistem Merit Card */}
-          {(sdmSubTab === 'all' || sdmSubTab === 'merit') && (
+          {/* Render ONLY the selected component */}
+          {sdmSubTab === 'merit' && (
             <SistemMeritCard
               aspekList={sdmYearData?.sistemMerit?.aspekList || []}
               datasetRow={sdmYearData?.sistemMerit?.datasetRow}
@@ -306,25 +296,20 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
             />
           )}
 
-          {/* Demographic & Education Grid */}
-          {(sdmSubTab === 'all' || sdmSubTab === 'status' || sdmSubTab === 'pendidikan') && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {(sdmSubTab === 'all' || sdmSubTab === 'status') && (
-                <StatusKepegawaianCard
-                  data={sdmYearData?.statusKepegawaian || []}
-                  totalPegawai={sdmYearData?.totalPegawai || 2978}
-                />
-              )}
-              {(sdmSubTab === 'all' || sdmSubTab === 'pendidikan') && (
-                <PendidikanPegawaiCard
-                  data={sdmYearData?.pendidikan || []}
-                  totalPegawai={sdmYearData?.totalPegawai || 2978}
-                />
-              )}
-            </div>
+          {sdmSubTab === 'status' && (
+            <StatusKepegawaianCard
+              data={sdmYearData?.statusKepegawaian || []}
+              totalPegawai={sdmYearData?.totalPegawai || 2978}
+            />
           )}
 
-          {/* Indeks Maturitas SPIP View for Biro SDM */}
+          {sdmSubTab === 'pendidikan' && (
+            <PendidikanPegawaiCard
+              data={sdmYearData?.pendidikan || []}
+              totalPegawai={sdmYearData?.totalPegawai || 2978}
+            />
+          )}
+
           {sdmSubTab === 'spip' && (
             <SpipMaturitasCard
               onOpenFormulaModal={() => onOpenFormulaModal?.('ikp-3-spip')}

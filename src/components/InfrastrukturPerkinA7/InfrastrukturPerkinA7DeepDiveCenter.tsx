@@ -37,30 +37,11 @@ import {
   SEMUA_PAKET_PERENCANAAN,
   KPI_SEKTOR_LIST,
 } from '../PerencanaanInfrastruktur/perencanaanData';
-import { PaketPerencanaan } from '../PerencanaanInfrastruktur/types';
 import { PerencanaanKpis } from '../PerencanaanInfrastruktur/PerencanaanKpis';
 import { PerencanaanVisualisasiData } from '../PerencanaanInfrastruktur/PerencanaanVisualisasiData';
-import { DaftarPaketPerencanaanCard } from '../PerencanaanInfrastruktur/DaftarPaketPerencanaanCard';
 
-// Unit 2: Pembangunan Infrastruktur imports
-import {
-  DATASET_6_PEMBANGUNAN_INFRASTRUKTUR,
-  DATASET_1_ROW_UTILITAS,
-  DATASET_2_ROW_PENGHIJAUAN,
-  DATASET_4_PROGRES_KONSTRUKSI,
-  DATASET_5_PEMATANGAN_TANAH,
-  DATASET_3_RUAS_JARINGAN_JALAN,
-  SUMMARY_RUAS_JARINGAN_JALAN,
-  SUMMARY_ROW_UTILITAS,
-  SUMMARY_ROW_PENGHIJAUAN,
-  SUMMARY_PEMATANGAN_TANAH,
-} from '../PembangunanInfrastruktur/infrastrukturData';
-import { DatasetRowUtilitasCard } from '../PembangunanInfrastruktur/DatasetRowUtilitasCard';
-import { DatasetRowPenghijauanCard } from '../PembangunanInfrastruktur/DatasetRowPenghijauanCard';
-import { DatasetJaringanJalanCard } from '../PembangunanInfrastruktur/DatasetJaringanJalanCard';
-import { ProgresKonstruksiCard } from '../PembangunanInfrastruktur/ProgresKonstruksiCard';
-import { DatasetPematanganTanahCard } from '../PembangunanInfrastruktur/DatasetPematanganTanahCard';
-import { JenisPembangunanCard } from '../PembangunanInfrastruktur/JenisPembangunanCard';
+// Unit 2: Pembangunan Infrastruktur imports (Dashboard Satu Data Lengkap)
+import { InfrastrukturSatuDataDashboard } from '../PembangunanInfrastruktur/InfrastrukturSatuDataDashboard';
 
 // Unit 3: Pengamanan Aset dan Kawasan (Ditpam) imports
 import {
@@ -103,10 +84,11 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
 
   // -------------------------------------------------------------
   // Unit 1: Perencanaan Infrastruktur Local State
+  // (Sheet Daftar Paket DED dihapus sesuai instruksi)
   // -------------------------------------------------------------
   const [subTabPerencanaan, setSubTabPerencanaan] = useState<
-    'paket-ded' | 'visual-sektor' | 'kpis'
-  >('paket-ded');
+    'visual-sektor' | 'kpis'
+  >('visual-sektor');
   const [selectedPerencanaanSektor, setSelectedPerencanaanSektor] = useState<string>('Semua');
   const [searchPerencanaan, setSearchPerencanaan] = useState<string>('');
 
@@ -144,16 +126,6 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
       };
     });
   }, [filteredPaketPerencanaan]);
-
-  // -------------------------------------------------------------
-  // Unit 2: Pembangunan Infrastruktur Local State (6 Datasets)
-  // -------------------------------------------------------------
-  const [subTabPembangunan, setSubTabPembangunan] = useState<
-    'dataset-4' | 'dataset-3' | 'dataset-1' | 'dataset-2' | 'dataset-5' | 'dataset-6'
-  >('dataset-4');
-  const [searchPembangunanDs4, setSearchPembangunanDs4] = useState<string>('');
-  const [statusFilterDs4, setStatusFilterDs4] = useState<string>('Semua');
-  const [selectedJenisPekerjaanDs6, setSelectedJenisPekerjaanDs6] = useState<string>('Semua');
 
   // -------------------------------------------------------------
   // Unit 3: Pengamanan Aset dan Kawasan (Ditpam) Local State
@@ -268,11 +240,10 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
       {/* ============================================================== */}
       {selectedUnitId === 'dit-perencanaan-infrastruktur' && (
         <div className="space-y-4">
-          {/* Sub-tab Navigation Bar for Perencanaan */}
+          {/* Sub-tab Navigation Bar for Perencanaan (Hanya Visualisasi & Scorecard, Daftar Paket Dihapus) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
             <div className="flex flex-wrap items-center gap-1.5">
               {[
-                { id: 'paket-ded', label: 'Daftar & Detail Paket DED (43 Paket)', icon: FileText },
                 { id: 'visual-sektor', label: 'Visualisasi Matriks & Sektor Capex', icon: BarChart3 },
                 { id: 'kpis', label: 'Ringkasan Scorecard 6 Sektor', icon: Layers },
               ].map((tab) => {
@@ -300,24 +271,14 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
             </div>
           </div>
 
-          {/* Sub-view: Paket DED Table & Modal */}
-          {subTabPerencanaan === 'paket-ded' && (
-            <DaftarPaketPerencanaanCard
-              pakets={filteredPaketPerencanaan}
-              allPakets={SEMUA_PAKET_PERENCANAAN}
-              selectedSektor={selectedPerencanaanSektor}
-              onSelectSektor={setSelectedPerencanaanSektor}
-              onOpenFormula={(datasetNo) => onOpenFormulaModal('kpi-ded-perencanaan')}
-            />
-          )}
-
-          {/* Sub-view: Visualisasi Matriks & Capex */}
+          {/* Sub-view: Visualisasi Matriks & Capex (Persentase Pemanfaatan Dokumen Dihapus) */}
           {subTabPerencanaan === 'visual-sektor' && (
             <PerencanaanVisualisasiData
               pakets={filteredPaketPerencanaan}
               selectedSektor={selectedPerencanaanSektor}
               onSelectSektor={setSelectedPerencanaanSektor}
               onOpenFormula={(datasetNo) => onOpenFormulaModal('kpi-ded-perencanaan')}
+              hidePemanfaatan={true}
             />
           )}
 
@@ -335,237 +296,13 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
 
       {/* ============================================================== */}
       {/* 4. UNIT 2: DIREKTORAT PEMBANGUNAN INFRASTRUKTUR DEEP-DIVE      */}
+      {/* (Menggunakan Dashboard Pembangunan yang sebelumnya dibuatkan)   */}
       {/* ============================================================== */}
       {selectedUnitId === 'dit-pembangunan-infrastruktur' && (
         <div className="space-y-4">
-          {/* Sub-tab Navigation Across 6 Datasets of Satu Data (Hal. 48-51) */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
-            {[
-              {
-                id: 'dataset-4',
-                label: 'Dataset 4: Progres Fisik & SCM Kurva S',
-                badge: '12 Paket',
-                icon: TrendingUp,
-              },
-              {
-                id: 'dataset-3',
-                label: 'Dataset 3: Ruas Jaringan Jalan',
-                badge: '542,8 Km (88,2% Mantap)',
-                icon: Route,
-              },
-              {
-                id: 'dataset-1',
-                label: 'Dataset 1: ROW Utilitas',
-                badge: '12 Izin (Rp 4,85 M)',
-                icon: Zap,
-              },
-              {
-                id: 'dataset-2',
-                label: 'Dataset 2: ROW Penghijauan',
-                badge: '38 Titik RTH',
-                icon: Trees,
-              },
-              {
-                id: 'dataset-5',
-                label: 'Dataset 5: Pematangan Tanah BSW',
-                badge: '280 Ha',
-                icon: Mountain,
-              },
-              {
-                id: 'dataset-6',
-                label: 'Dataset 6: Pembangunan Fisik',
-                badge: '14 Proyek',
-                icon: Layers,
-              },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = subTabPembangunan === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setSubTabPembangunan(tab.id as any)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow-2xs'
-                      : 'bg-white text-slate-700 hover:bg-slate-200/80 border border-slate-200'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{tab.label}</span>
-                  <span
-                    className={`text-[9.5px] px-1.5 py-0.2 rounded font-mono ${
-                      isActive ? 'bg-blue-800 text-white' : 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {tab.badge}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Dataset 4: Progres Konstruksi & SCM Kurva S */}
-          {subTabPembangunan === 'dataset-4' && (
-            <div className="space-y-3">
-              <div className="bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-900 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-sky-200 text-sky-900 rounded text-[10px]">
-                    DATASET NO. 4 • HAL. 49-50
-                  </span>
-                  <span>
-                    Pemantauan kurva S kontraktual, deviasi mingguan, serta status rapat pembuktian keterlambatan (Show Cause Meeting/SCM).
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('kpi-kurva-s')}
-                  className="px-2 py-1 rounded bg-white hover:bg-sky-100 text-sky-800 border border-sky-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula Kurva S</span>
-                </button>
-              </div>
-
-              <ProgresKonstruksiCard
-                searchQuery={searchPembangunanDs4}
-                statusFilter={statusFilterDs4}
-                onOpenFormula={(kpiType) => onOpenFormulaModal('kpi-kurva-s')}
-              />
-            </div>
-          )}
-
-          {/* Dataset 3: Ruas Jaringan Jalan Eksisting (542,8 Km) */}
-          {subTabPembangunan === 'dataset-3' && (
-            <div className="space-y-3">
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-xs text-indigo-900 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-indigo-200 text-indigo-900 rounded text-[10px]">
-                    DATASET NO. 3 • HAL. 48-49
-                  </span>
-                  <span>
-                    Panjang total jalan 542,80 Km dengan <strong>478,75 Km (88,20%)</strong> dalam kondisi Mantap (Baik &amp; Sedang).
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('kpi-ruas-jalan')}
-                  className="px-2 py-1 rounded bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula Kemantapan Jalan</span>
-                </button>
-              </div>
-
-              <DatasetJaringanJalanCard
-                onOpenFormula={(kpi) => onOpenFormulaModal('kpi-ruas-jalan')}
-              />
-            </div>
-          )}
-
-          {/* Dataset 1: ROW Utilitas */}
-          {subTabPembangunan === 'dataset-1' && (
-            <div className="space-y-3">
-              <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-3 text-xs text-cyan-900 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-cyan-200 text-cyan-900 rounded text-[10px]">
-                    DATASET NO. 1 • HAL. 48
-                  </span>
-                  <span>
-                    Rekapitulasi perizinan pemanfaatan koridor jalan untuk galian kabel fiber optik, pipa gas bumi, pipa air SPAM, dan kabel PLN. Realisasi PNBP <strong>Rp 4,85 Miliar (110,2%)</strong>.
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('kpi-row-utilitas')}
-                  className="px-2 py-1 rounded bg-white hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula PNBP ROW</span>
-                </button>
-              </div>
-
-              <DatasetRowUtilitasCard
-                onOpenFormula={(kpi) => onOpenFormulaModal('kpi-row-utilitas')}
-              />
-            </div>
-          )}
-
-          {/* Dataset 2: ROW Penghijauan */}
-          {subTabPembangunan === 'dataset-2' && (
-            <div className="space-y-3">
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded text-[10px]">
-                    DATASET NO. 2 • HAL. 48
-                  </span>
-                  <span>
-                    Pengelolaan Ruang Terbuka Hijau (RTH) median dan sempadan jalan protokol di 38 titik lokasi seluas <strong>142.500 m²</strong>.
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('kpi-row-penghijauan')}
-                  className="px-2 py-1 rounded bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula RTH Hijau</span>
-                </button>
-              </div>
-
-              <DatasetRowPenghijauanCard
-                onOpenFormula={(kpi) => onOpenFormulaModal('kpi-row-penghijauan')}
-              />
-            </div>
-          )}
-
-          {/* Dataset 5: Pematangan Tanah Cut and Fill BSW */}
-          {subTabPembangunan === 'dataset-5' && (
-            <div className="space-y-3">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-amber-200 text-amber-900 rounded text-[10px]">
-                    DATASET NO. 5 • HAL. 50-51
-                  </span>
-                  <span>
-                    Total pematangan lahan seluas <strong>280 Hektar</strong> pada 5 Wilayah Pengembangan Strategis (BSW) dengan total volume <strong>4.270.000 m³</strong> cut and fill dan nilai kontrak Rp 418,1 M.
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('kpi-pematangan')}
-                  className="px-2 py-1 rounded bg-white hover:bg-amber-100 text-amber-800 border border-amber-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula Pematangan BSW</span>
-                </button>
-              </div>
-
-              <DatasetPematanganTanahCard />
-            </div>
-          )}
-
-          {/* Dataset 6: Rekap Jenis Pembangunan Fisik */}
-          {subTabPembangunan === 'dataset-6' && (
-            <div className="space-y-3">
-              <div className="bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold px-2 py-0.5 bg-slate-900 text-white rounded text-[10px]">
-                    DATASET NO. 6 • HAL. 49
-                  </span>
-                  <span>
-                    Rekapitulasi 14 paket pembangunan fisik jalan tol/non-tol, jembatan &amp; flyover, dermaga pelabuhan, drainase primer, dan gedung utilitas.
-                  </span>
-                </div>
-                <button
-                  onClick={() => onOpenFormulaModal('ikp-1-pembangunan-infrastruktur')}
-                  className="px-2 py-1 rounded bg-white hover:bg-slate-200 text-slate-800 border border-slate-300 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>Formula IKP Fisik</span>
-                </button>
-              </div>
-
-              <JenisPembangunanCard
-                selectedJenisPekerjaan={selectedJenisPekerjaanDs6}
-                onSelectJenis={setSelectedJenisPekerjaanDs6}
-              />
-            </div>
-          )}
+          <InfrastrukturSatuDataDashboard
+            onOpenFormula={(kpiType) => onOpenFormulaModal(kpiType)}
+          />
         </div>
       )}
 
@@ -574,7 +311,7 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
       {/* ============================================================== */}
       {selectedUnitId === 'dit-pam-aset' && (
         <div className="space-y-4">
-          {/* Executive Ditpam BAN KPI Cards (Poin 1-4) */}
+          {/* Executive Ditpam BAN KPI Cards */}
           <PengamananAsetKpis
             onOpenFormulaModal={(kpiId) => onOpenFormulaModal(kpiId || 'kpi_bangunan_liar')}
           />
@@ -649,62 +386,33 @@ export const InfrastrukturPerkinA7DeepDiveCenter: React.FC<
 
           {/* Module 1: Rekap Penertiban Rutin & Bangunan Liar */}
           {subTabPengamanan === 'penertiban' && (
-            <div className="space-y-3">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-center justify-between gap-2">
-                <span>
-                  <strong>Sterilisasi Koridor ROW &amp; Aset Fisik:</strong> Penertiban 1.030 unit bangunan liar tanpa izin di koridor pelebaran jalan Sudirman, Waduk Duriangkang, Sekupang, dan Rempang guna menjamin kelancaran pekerjaan fisik infrastruktur.
-                </span>
-                <span className="font-mono font-bold px-2 py-0.5 bg-amber-200 rounded text-[10px] shrink-0">
-                  SATU DATA HAL. 18-19
-                </span>
-              </div>
-              <RekapPenertibanCard filters={pengamananFilters} />
-            </div>
+            <RekapPenertibanCard
+              filters={pengamananFilters}
+              onOpenFormula={() => onOpenFormulaModal('kpi_bangunan_liar')}
+            />
           )}
 
-          {/* Module 2: Rekap Pengamanan Unjuk Rasa */}
+          {/* Module 2: Pengamanan Unjuk Rasa & Kamtibmas Kawasan */}
           {subTabPengamanan === 'unjuk-rasa' && (
-            <div className="space-y-3">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between gap-2">
-                <span>
-                  <strong>Stabilitas Kamtibmas Aset &amp; Kantor BP Batam:</strong> Penanganan 28 aksi demonstrasi dan unjuk rasa aliansi serikat buruh serta ormas dengan eskalasi kondusif tanpa kerusakan fasilitas umum.
-                </span>
-                <span className="font-mono font-bold px-2 py-0.5 bg-blue-200 rounded text-[10px] shrink-0">
-                  SATU DATA HAL. 18
-                </span>
-              </div>
-              <RekapUnjukRasaCard filters={pengamananFilters} />
-            </div>
+            <RekapUnjukRasaCard
+              filters={pengamananFilters}
+              onOpenFormula={() => onOpenFormulaModal('kpi_unjuk_rasa')}
+            />
           )}
 
-          {/* Module 3: Rekap Bencana Alam & Rescue */}
+          {/* Module 3: Bencana Alam, Karhutla & Operasi Rescue */}
           {subTabPengamanan === 'bencana' && (
-            <div className="space-y-3">
-              <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-900 flex items-center justify-between gap-2">
-                <span>
-                  <strong>Tanggap Darurat Rescue &amp; Damkar Ditpam:</strong> Respon cepat 124 kejadian bencana (karhutla, pohon tumbang di jalan arteri, dan longsor lereng) dengan rata-rata waktu respon 12,4 menit.
-                </span>
-                <span className="font-mono font-bold px-2 py-0.5 bg-rose-200 rounded text-[10px] shrink-0">
-                  SATU DATA HAL. 18
-                </span>
-              </div>
-              <RekapBencanaAlamCard filters={pengamananFilters} />
-            </div>
+            <RekapBencanaAlamCard
+              filters={pengamananFilters}
+              onOpenFormula={() => onOpenFormulaModal('kpi_bencana_alam')}
+            />
           )}
 
-          {/* Module 4: Kesiapsiagaan Obvitnas & Hutan Lindung */}
+          {/* Module 4: Monitoring Atasan & Sektor Rawan Obvitnas */}
           {subTabPengamanan === 'monitoring' && (
-            <div className="space-y-3">
-              <div className="bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 flex items-center justify-between gap-2">
-                <span>
-                  <strong>Patroli Objek Vital Nasional (Obvitnas) &amp; Penindakan Hutan Lindung:</strong> Pengamanan 7 Obvitnas (Bandara Hang Nadim, Pelabuhan Batu Ampar, Sekupang, Kabil, Batamindo, Waduk Duriangkang, dan Kantor BP Batam) serta sterilisasi 1.042 Ha kawasan lindung.
-                </span>
-                <span className="font-mono font-bold px-2 py-0.5 bg-slate-900 text-white rounded text-[10px] shrink-0">
-                  SATU DATA HAL. 17
-                </span>
-              </div>
-              <MonitoringPengamananAtasan filters={pengamananFilters} />
-            </div>
+            <MonitoringPengamananAtasan
+              onOpenFormula={() => onOpenFormulaModal('kpi_bangunan_liar')}
+            />
           )}
         </div>
       )}

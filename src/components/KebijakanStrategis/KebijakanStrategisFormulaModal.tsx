@@ -124,14 +124,90 @@ export const KebijakanStrategisFormulaModal: React.FC<KebijakanStrategisFormulaM
           )}
 
           {currentIkp.id === 'ikp-2-kebijakan' && (
-            <div className="space-y-2">
-              <h5 className="font-bold text-slate-900">4 Dimensi Penilaian Indeks Kualitas Kebijakan (IKK):</h5>
-              <ul className="list-disc list-inside space-y-1 text-slate-600 text-[11.5px] leading-relaxed">
-                <li><strong>Agenda Setting (Bobot 20%):</strong> Uji urgensi dan keterlibatan stakeholder dalam perumusan isu.</li>
-                <li><strong>Formulasi Kebijakan (Bobot 30%):</strong> Kajian akademis, harmonisasi vertikal-horizontal, dan konsultasi publik.</li>
-                <li><strong>Implementasi Kebijakan (Bobot 25%):</strong> Kesiapan juknis, SOP unit operasional, dan sosialisasi regulasi.</li>
-                <li><strong>Evaluasi Kebijakan (Bobot 25%):</strong> Pengukuran dampak ekonomi, kepatuhan tarif, dan evaluasi purna regulasi.</li>
-              </ul>
+            <div className="space-y-3">
+              <h5 className="font-bold text-slate-900 text-xs sm:text-sm">
+                Formula Perhitungan Indeks Kualitas Kebijakan (IKK LAN-RI) per Dimensi &amp; Poin:
+              </h5>
+              
+              <div className="p-3 rounded-xl bg-sky-50 border border-sky-200 text-xs space-y-2">
+                <div className="font-mono text-sky-950 font-bold">
+                  Rumus Matematika: IKK = &Sigma; (Skor Mentah Dimensi &times; Bobot Dimensi %)
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  Setiap dimensi dinilai dengan skala 0 - 100 berdasarkan instrumen evaluasi kebijakan LAN RI, kemudian dikalikan dengan bobot persentase masing-masing untuk menghasilkan kontribusi poin indeks:
+                </p>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {/* Dimensi 1 */}
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between font-bold text-slate-900">
+                    <span>1. Agenda Setting Kebijakan (Bobot: 20% / 0.20)</span>
+                    <span className="font-mono text-sky-700 font-extrabold">14.80 Poin</span>
+                  </div>
+                  <div className="text-[11px] font-mono text-slate-600 bg-white p-1.5 rounded border border-slate-100">
+                    Perhitungan: Skor Mentah <strong>74.00</strong> &times; 20% = <strong>14.80 Poin</strong>
+                  </div>
+                  <p className="text-[10.5px] text-slate-500">
+                    Indikator: Keterlibatan stakeholder kawasan (asosiasi pengusaha/Kadin), analisis urgensi isu strategis, dan kelengkapan basis data riset pendukung.
+                  </p>
+                </div>
+
+                {/* Dimensi 2 */}
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between font-bold text-slate-900">
+                    <span>2. Formulasi Kebijakan (Bobot: 30% / 0.30)</span>
+                    <span className="font-mono text-sky-700 font-extrabold">21.90 Poin</span>
+                  </div>
+                  <div className="text-[11px] font-mono text-slate-600 bg-white p-1.5 rounded border border-slate-100">
+                    Perhitungan: Skor Mentah <strong>73.00</strong> &times; 30% = <strong>21.90 Poin</strong>
+                  </div>
+                  <p className="text-[10.5px] text-slate-500">
+                    Indikator: Analisis Regulatory Impact Assessment (RIA), penyusunan naskah urgensi/kajian akademis, proses harmonisasi kementerian/lembaga terkait, dan konsultasi publik transparan.
+                  </p>
+                </div>
+
+                {/* Dimensi 3 */}
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between font-bold text-slate-900">
+                    <span>3. Implementasi Kebijakan (Bobot: 25% / 0.25)</span>
+                    <span className="font-mono text-sky-700 font-extrabold">17.80 Poin</span>
+                  </div>
+                  <div className="text-[11px] font-mono text-slate-600 bg-white p-1.5 rounded border border-slate-100">
+                    Perhitungan: Skor Mentah <strong>71.20</strong> &times; 25% = <strong>17.80 Poin</strong>
+                  </div>
+                  <p className="text-[10.5px] text-slate-500">
+                    Indikator: Kecepatan penerbitan petunjuk teknis pelaksanaan (Juknis), standardisasi SOP unit kerja operasional, dan sosialisasi Perka/Kepka kepada pelaku usaha.
+                  </p>
+                </div>
+
+                {/* Dimensi 4 */}
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between font-bold text-slate-900">
+                    <span>4. Evaluasi Kemanfaatan Kebijakan (Bobot: 25% / 0.25)</span>
+                    <span className="font-mono text-sky-700 font-extrabold">17.30 Poin</span>
+                  </div>
+                  <div className="text-[11px] font-mono text-slate-600 bg-white p-1.5 rounded border border-slate-100">
+                    Perhitungan: Skor Mentah <strong>69.20</strong> &times; 25% = <strong>17.30 Poin</strong>
+                  </div>
+                  <p className="text-[10.5px] text-slate-500">
+                    Indikator: Pengukuran kepatuhan tarif dan evaluasi purna regulasi, survei kepuasan stakeholders, dan rekomendasi penyempurnaan regulasi.
+                  </p>
+                </div>
+              </div>
+
+              {/* Total Aggregate Calculation Box */}
+              <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1 font-mono text-xs">
+                <div className="text-amber-400 font-bold uppercase tracking-wider text-[10px]">
+                  AKUMULASI TOTAL INDEKS KUALITAS KEBIJAKAN (IKK):
+                </div>
+                <div className="text-sm font-black text-emerald-400">
+                  14.80 + 21.90 + 17.80 + 17.30 = 71.80 Poin
+                </div>
+                <div className="text-[10.5px] text-slate-300 font-sans">
+                  Target Perkin: <strong>65.00 Poin</strong> &bull; Capaian: <strong className="text-emerald-300">110.46% (Kategori Cukup Baik)</strong>
+                </div>
+              </div>
             </div>
           )}
 

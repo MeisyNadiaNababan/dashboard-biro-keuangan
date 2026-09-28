@@ -23,7 +23,6 @@ import {
 } from './perkinA7Data';
 import { InfrastrukturPerkinA7KpiRow } from './InfrastrukturPerkinA7KpiRow';
 import { InfrastrukturPerkinA7VisualCharts } from './InfrastrukturPerkinA7VisualCharts';
-import { InfrastrukturPerkinA7UnitCards } from './InfrastrukturPerkinA7UnitCards';
 import { InfrastrukturPerkinA7DeepDiveCenter } from './InfrastrukturPerkinA7DeepDiveCenter';
 import { InfrastrukturPerkinA7FormulaModal } from './InfrastrukturPerkinA7FormulaModal';
 import { InfrastrukturPerkinA7WordDocView } from './InfrastrukturPerkinA7WordDocView';
@@ -271,64 +270,7 @@ export const InfrastrukturPerkinA7Dashboard: React.FC<
       ) : (
         <>
           {/* ============================================================== */}
-          {/* 2. EXECUTIVE COMMAND BANNER                                    */}
-          {/* ============================================================== */}
-          <div className="bg-gradient-to-r from-[#002B49] via-[#0A3D62] to-[#13315C] text-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-700/60 relative overflow-hidden">
-            {/* Background Decorative Glow */}
-            <div className="absolute right-0 top-0 w-80 h-80 bg-cyan-400/5 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute right-32 bottom-0 w-64 h-64 bg-blue-400/5 rounded-full blur-xl pointer-events-none" />
-
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div className="space-y-1.5 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-md bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono font-bold uppercase tracking-wider">
-                    PERKIN A.7 &bull; DEPUTI BIDANG INFRASTRUKTUR
-                  </span>
-                  <span className="text-[11px] text-slate-300 font-mono">
-                    {PERKIN_A7_METADATA.nomorPerkin} &bull; Batam, {PERKIN_A7_METADATA.tanggalPenetapan}
-                  </span>
-                </div>
-
-                <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white">
-                  Pusat Komando Eksekutif Perkin A.7: Infrastruktur BP Batam
-                </h1>
-
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                  Sasaran Program: <strong>&ldquo;{PERKIN_A7_METADATA.sasaranProgram}&rdquo;</strong>. Mengintegrasikan 24 dataset resmi dari 3 unit kerja pengampu: <strong>Direktorat Perencanaan Infrastruktur</strong>, <strong>Direktorat Pembangunan Infrastruktur</strong>, dan <strong>Direktorat Pengamanan Aset dan Kawasan</strong>.
-                </p>
-              </div>
-
-              {/* Quick Fiscal Metrics Capsule */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 shrink-0">
-                <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-                  <div className="text-[10px] font-mono text-slate-400">TOTAL PAGU PROGRAM</div>
-                  <div className="text-sm sm:text-base font-black font-mono text-cyan-300">
-                    Rp 842,50 M
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono">5 Sektor Terintegrasi</div>
-                </div>
-
-                <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-                  <div className="text-[10px] font-mono text-slate-400">REALISASI BELANJA</div>
-                  <div className="text-sm sm:text-base font-black font-mono text-emerald-400">
-                    Rp 682,43 M
-                  </div>
-                  <div className="text-[10px] text-emerald-400 font-mono font-bold">81,00% Serapan</div>
-                </div>
-
-                <div className="col-span-2 sm:col-span-1 bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-                  <div className="text-[10px] font-mono text-slate-400">PNBP ROW UTILITAS</div>
-                  <div className="text-sm sm:text-base font-black font-mono text-amber-300">
-                    Rp 7,45 M
-                  </div>
-                  <div className="text-[10px] text-emerald-400 font-mono font-bold">109,22% Capaian</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ============================================================== */}
-          {/* 3. DUA INDIKATOR KINERJA PROGRAM (IKP) SESUAI INSTRUKSI POIN 1 */}
+          {/* 2. DUA INDIKATOR KINERJA PROGRAM (IKP)                         */}
           {/* ============================================================== */}
           <InfrastrukturPerkinA7KpiRow
             onOpenFormulaModal={handleOpenFormula}
@@ -336,7 +278,7 @@ export const InfrastrukturPerkinA7Dashboard: React.FC<
           />
 
           {/* ============================================================== */}
-          {/* 4. VISUALISASI SETELAH KPI (SESUAI INSTRUKSI POIN 2 & 5)       */}
+          {/* 3. VISUALISASI SETELAH KPI (KURVA S, PAGU, JALAN, PNBP ROW)    */}
           {/* ============================================================== */}
           <InfrastrukturPerkinA7VisualCharts
             onOpenFormulaModal={handleOpenFormula}
@@ -344,15 +286,7 @@ export const InfrastrukturPerkinA7Dashboard: React.FC<
           />
 
           {/* ============================================================== */}
-          {/* 5. 3 UNIT KERJA PENGAMPU INFRASTRUKTUR (SESUAI POIN 3)         */}
-          {/* ============================================================== */}
-          <InfrastrukturPerkinA7UnitCards
-            onAnalyzeUnit={handleSelectDeepDive}
-            onNavigateToUnit={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
-          />
-
-          {/* ============================================================== */}
-          {/* 6. UNIT DEEP-DIVE CENTER SESUAI 3 UNIT (SESUAI POIN 6 & 8)     */}
+          {/* 4. UNIT DEEP-DIVE CENTER • 3 UNIT KERJA PERKIN A.7             */}
           {/* ============================================================== */}
           <InfrastrukturPerkinA7DeepDiveCenter
             selectedUnitId={selectedDeepDiveUnit}

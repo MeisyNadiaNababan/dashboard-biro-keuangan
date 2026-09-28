@@ -34,12 +34,14 @@ interface PerencanaanVisualisasiDataProps {
   onSelectSektor?: (sektor: string) => void;
   selectedSektor?: string;
   onOpenFormula?: (datasetNo: number) => void;
+  hidePemanfaatan?: boolean;
 }
 
 export const PerencanaanVisualisasiData: React.FC<PerencanaanVisualisasiDataProps> = ({
   onSelectSektor,
   selectedSektor = 'Semua',
   onOpenFormula,
+  hidePemanfaatan = false,
 }) => {
   // Filter tampilan fokus: 'semua' | 'sektor' | 'pemanfaatan'
   const [activeSection, setActiveSection] = useState<'semua' | 'sektor' | 'pemanfaatan'>('semua');
@@ -112,44 +114,50 @@ export const PerencanaanVisualisasiData: React.FC<PerencanaanVisualisasiDataProp
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Penyajian visual langsung untuk <strong>Rekapitulasi 6 Sektor (Data 1-6)</strong> dan{' '}
-              <strong>Pemanfaatan Dokumen Teknis (Data 7-9)</strong>.
+              {hidePemanfaatan ? (
+                <>Penyajian visual langsung untuk <strong>Rekapitulasi 6 Sektor Perencanaan Teknis DED (Data 1-6)</strong>.</>
+              ) : (
+                <>Penyajian visual langsung untuk <strong>Rekapitulasi 6 Sektor (Data 1-6)</strong> dan{' '}
+                <strong>Pemanfaatan Dokumen Teknis (Data 7-9)</strong>.</>
+              )}
             </p>
           </div>
 
           {/* Quick View Filter Segment */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs self-start md:self-auto shrink-0">
-            <button
-              onClick={() => setActiveSection('semua')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-                activeSection === 'semua'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Semua Visualisasi
-            </button>
-            <button
-              onClick={() => setActiveSection('sektor')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-                activeSection === 'sektor'
-                  ? 'bg-white text-sky-700 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              1. Rekap 6 Sektor (Data 1-6)
-            </button>
-            <button
-              onClick={() => setActiveSection('pemanfaatan')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
-                activeSection === 'pemanfaatan'
-                  ? 'bg-white text-emerald-700 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              2. Pemanfaatan Dokumen (Data 7-9)
-            </button>
-          </div>
+          {!hidePemanfaatan && (
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs self-start md:self-auto shrink-0">
+              <button
+                onClick={() => setActiveSection('semua')}
+                className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
+                  activeSection === 'semua'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Semua Visualisasi
+              </button>
+              <button
+                onClick={() => setActiveSection('sektor')}
+                className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
+                  activeSection === 'sektor'
+                    ? 'bg-white text-sky-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                1. Rekap 6 Sektor (Data 1-6)
+              </button>
+              <button
+                onClick={() => setActiveSection('pemanfaatan')}
+                className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
+                  activeSection === 'pemanfaatan'
+                    ? 'bg-white text-emerald-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                2. Pemanfaatan Dokumen (Data 7-9)
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -276,7 +284,7 @@ export const PerencanaanVisualisasiData: React.FC<PerencanaanVisualisasiDataProp
           BAGIAN 2: PERSENTASE PEMANFAATAN DOKUMEN PERENCANAAN TEKNIS (DATASET NO. 7 - 9)
           (RESPONS USER REQUEST 3: HAPUS TOTAL PAGU, HANYA NILAI DED, TAHUN, DAN UNIT PENGGUNA, TAMPILAN LEGA TIDAK MENUMPUK)
          ========================================================================= */}
-      {(activeSection === 'semua' || activeSection === 'pemanfaatan') && (
+      {!hidePemanfaatan && (activeSection === 'semua' || activeSection === 'pemanfaatan') && (
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs">
           {/* Header Card 2 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 mb-4 border-b border-slate-100 gap-2.5">

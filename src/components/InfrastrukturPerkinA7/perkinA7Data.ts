@@ -96,24 +96,70 @@ export const PERKIN_A7_KPIS: PerkinA7KpiItem[] = [
 
 // ====================================================================
 // 3. KURVA S AGREGAT KONSTRUKSI BULANAN (Jan - Des)
+// Mengintegrasikan Dataset No. 4 & 6 Dit. Pembangunan Infrastruktur
+// Atribut Utama: PRGRS_PEK, VOL_PEK, KTGR_PEK, KD_ANGG, NPAGU_F, NKON_S
+// Dan Data Realisasi Belanja Biro Keuangan (Data No. 1 & 12)
 // ====================================================================
+export const KURVA_S_METADATA_ATRIBUT = {
+  rencanaFisik: {
+    unit: 'Direktorat Pembangunan Infrastruktur',
+    dataNo: 'Data No. 4 & Data No. 6',
+    namaData: 'Laporan Progres Pekerjaan Kontruksi Tahun Berjalan (Hal. 49-50) & Pembangunan Infrastruktur BP Batam (Hal. 50-51)',
+    atributUtama: 'VOL_PEK',
+    atributPendukung: ['KTGR_PEK', 'TGL_MUL', 'TGL_SEL', 'KD_ANGG', 'NPAGU_F'],
+    deskripsi: 'Target kurva S rencana fisik kumulatif dihitung dari bobot volume pekerjaan (VOL_PEK) terhadap rentang waktu kontrak (TGL_MUL s.d. TGL_SEL).',
+  },
+  realisasiFisik: {
+    unit: 'Direktorat Pembangunan Infrastruktur',
+    dataNo: 'Data No. 4 & Data No. 6',
+    namaData: 'Laporan Progres Pekerjaan Kontruksi Tahun Berjalan (Hal. 49-50) & Pembangunan Infrastruktur BP Batam (Hal. 50-51)',
+    atributUtama: 'PRGRS_PEK',
+    atributPendukung: ['NAMOBJ', 'VOL_PEK', 'NKON_S', 'KENDALA', 'SUBDIT', 'NM_PPK'],
+    deskripsi: 'Realisasi fisik kumulatif lapangan dicatat resmi dari opname mingguan/bulanan konsultan supervisi dan PPK pada atribut PRGRS_PEK.',
+  },
+  realisasiKeuangan: {
+    unit: 'Biro Keuangan & Pusat Perencanaan Program Strategis',
+    dataNo: 'Biro Keuangan: Data No. 1 & Data No. 12 | Pusren: Data No. 2',
+    namaData: 'Persentase Realisasi Belanja & Laporan Realisasi Anggaran (Hal. 2, 4) & Monev Program Kerja (Hal. 51)',
+    atributUtama: 'REALISASI',
+    atributPendukung: ['% YTD CAPAIAN BELANJA', 'ANGGARAN', 'PAGU DIPA', 'PROGRES PAKET', 'KODE MA'],
+    deskripsi: 'Serapan pencairan keuangan belanja modal kumulatif DIPA BP Batam berbasis SP2D per bendahara pengeluaran.',
+  },
+  skemaAtributLengkapPdf: [
+    { kode: 'PRGRS_PEK', nama: 'Progres Pekerjaan Fisik (%)', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4 & 6', hal: 'Hal. 49-51', deskripsi: 'Atribut persentase capaian riil fisik lapangan proyek konstruksi.' },
+    { kode: 'VOL_PEK', nama: 'Volume Pekerjaan', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4, 5 & 6', hal: 'Hal. 49-51', deskripsi: 'Ukuran kuantitas fisik (m2, km, meter lari, unit) pekerjaan kontraktual.' },
+    { kode: 'KTGR_PEK', nama: 'Kategori Pekerjaan', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4, 5 & 6', hal: 'Hal. 49-51', deskripsi: 'Klasifikasi sektor: jalan & jembatan, drainase, dermaga, pematangan tanah.' },
+    { kode: 'NPAGU_F', nama: 'Nilai Pagu Finansial (Rp)', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4, 5 & 6', hal: 'Hal. 49-51', deskripsi: 'Alokasi plafon pagu anggaran DIPA per paket pekerjaan fisik.' },
+    { kode: 'NKON_S / NKON_F', nama: 'Nilai Kontrak (Rp)', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4, 5 & 6', hal: 'Hal. 49-51', deskripsi: 'Nilai kontrak penyedia jasa fisik dan konsultan supervisi.' },
+    { kode: 'KD_ANGG', nama: 'Kode Anggaran (MAK)', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4, 5 & 6', hal: 'Hal. 49-51', deskripsi: 'Mata anggaran akun keluaran belanja modal infrastruktur BP Batam.' },
+    { kode: 'TGL_MUL & TGL_SEL', nama: 'Jadwal Kontrak (Mulai-Selesai)', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4 & 5', hal: 'Hal. 49-50', deskripsi: 'Tanggal mulai SPMK dan batas akhir penyelesaian pekerjaan (PHO).' },
+    { kode: 'KENDALA', nama: 'Catatan Kendala Lapangan', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4 & 6', hal: 'Hal. 49-51', deskripsi: 'Catatan hambatan utilitas PLN/Telkom, cuaca, atau penertiban ruang jalan.' },
+    { kode: 'SUBDIT', nama: 'Subdit Pengampu', unit: 'Dit. Pembangunan', dataNo: 'Data No. 4 & 6', hal: 'Hal. 49-51', deskripsi: 'Sub-Direktorat teknis pengampu pengawasan paket proyek.' },
+    { kode: 'REALISASI', nama: 'Realisasi Belanja Kas (Rp)', unit: 'Biro Keuangan', dataNo: 'Data No. 12', hal: 'Hal. 4', deskripsi: 'Angka realisasi belanja kas SP2D pada Laporan Realisasi Anggaran.' },
+  ],
+};
+
 export const KURVA_S_INFRASTRUKTUR_BULANAN = [
-  { bulan: 'Jan', targetFisik: 5.2, realisasiFisik: 5.8, keuangan: 5.0, status: 'Ahead' },
-  { bulan: 'Feb', targetFisik: 12.8, realisasiFisik: 13.5, keuangan: 12.0, status: 'Ahead' },
-  { bulan: 'Mar', targetFisik: 22.4, realisasiFisik: 24.1, keuangan: 20.5, status: 'Ahead' },
-  { bulan: 'Apr', targetFisik: 33.5, realisasiFisik: 34.2, keuangan: 31.0, status: 'Ahead' },
-  { bulan: 'Mei', targetFisik: 45.0, realisasiFisik: 44.8, keuangan: 40.2, status: 'On Track' },
-  { bulan: 'Jun', targetFisik: 56.4, realisasiFisik: 55.1, keuangan: 51.5, status: 'On Track' },
-  { bulan: 'Jul', targetFisik: 68.0, realisasiFisik: 67.2, keuangan: 62.0, status: 'On Track' },
-  { bulan: 'Agt', targetFisik: 79.5, realisasiFisik: 78.8, keuangan: 73.4, status: 'On Track' },
-  { bulan: 'Sep', targetFisik: 88.0, realisasiFisik: 86.5, keuangan: 81.0, status: 'On Track' },
-  { bulan: 'Okt (T)', targetFisik: 94.2, realisasiFisik: null, keuangan: null, status: 'Target' },
-  { bulan: 'Nov (T)', targetFisik: 98.0, realisasiFisik: null, keuangan: null, status: 'Target' },
-  { bulan: 'Des (T)', targetFisik: 100.0, realisasiFisik: null, keuangan: null, status: 'Target' },
+  { bulan: 'Jan', targetFisik: 5.2, realisasiFisik: 5.8, keuangan: 5.0, status: 'Ahead', deviasi: '+0.6%', atributFisik: 'PRGRS_PEK: 5.8%', catatan: 'Mobilisasi alat berat & material tiang pancang Sei Ladi.' },
+  { bulan: 'Feb', targetFisik: 12.8, realisasiFisik: 13.5, keuangan: 12.0, status: 'Ahead', deviasi: '+0.7%', atributFisik: 'PRGRS_PEK: 13.5%', catatan: 'Pekerjaan bore pile & cut & fill Rempang BSW Zona A.' },
+  { bulan: 'Mar', targetFisik: 22.4, realisasiFisik: 24.1, keuangan: 20.5, status: 'Ahead', deviasi: '+1.7%', atributFisik: 'PRGRS_PEK: 24.1%', catatan: 'Struktur pier flyover & pemancangan dermaga utara Batu Ampar.' },
+  { bulan: 'Apr', targetFisik: 33.5, realisasiFisik: 34.2, keuangan: 31.0, status: 'Ahead', deviasi: '+0.7%', atributFisik: 'PRGRS_PEK: 34.2%', catatan: 'Erection girder jembatan & penimbunan badan jalan Sudirman.' },
+  { bulan: 'Mei', targetFisik: 45.0, realisasiFisik: 44.8, keuangan: 40.2, status: 'On Track', deviasi: '-0.2%', atributFisik: 'PRGRS_PEK: 44.8%', catatan: 'Percepatan drainase primer Baloi Indah antisipasi pasang rob.' },
+  { bulan: 'Jun', targetFisik: 56.4, realisasiFisik: 55.1, keuangan: 51.5, status: 'On Track', deviasi: '-1.3%', atributFisik: 'PRGRS_PEK: 55.1%', catatan: 'Pengecoran lantai jembatan & pengaspalan AC-Base ruas Sudirman.' },
+  { bulan: 'Jul', targetFisik: 68.0, realisasiFisik: 67.2, keuangan: 62.0, status: 'On Track', deviasi: '-0.8%', atributFisik: 'PRGRS_PEK: 67.2%', catatan: 'Pemasangan box culvert & perapihan koridor ROW Nongsa.' },
+  { bulan: 'Agt', targetFisik: 79.5, realisasiFisik: 78.8, keuangan: 73.4, status: 'On Track', deviasi: '-0.7%', atributFisik: 'PRGRS_PEK: 78.8%', catatan: 'Pengaspalan AC-WC & finishing lantai dermaga kontainer.' },
+  { bulan: 'Sep', targetFisik: 88.0, realisasiFisik: 86.5, keuangan: 81.0, status: 'On Track', deviasi: '-1.5%', atributFisik: 'PRGRS_PEK: 86.5%', catatan: 'Finishing trotoar Sei Ladi, uji beban & perapihan marka jalan.' },
+  { bulan: 'Okt (T)', targetFisik: 94.2, realisasiFisik: null, keuangan: null, status: 'Target', deviasi: 'Proyeksi', atributFisik: 'Target VOL_PEK', catatan: 'Proyeksi penyelesaian fisik 94,2% (Uji fungsi dermaga & kolam retensi).' },
+  { bulan: 'Nov (T)', targetFisik: 98.0, realisasiFisik: null, keuangan: null, status: 'Target', deviasi: 'Proyeksi', atributFisik: 'Target VOL_PEK', catatan: 'Proyeksi PHO 11 paket pekerjaan fisik utama.' },
+  { bulan: 'Des (T)', targetFisik: 100.0, realisasiFisik: null, keuangan: null, status: 'Target', deviasi: 'Proyeksi', atributFisik: 'Target VOL_PEK', catatan: 'Target akhir tahun 100% tuntas tepat waktu & tepat mutu.' },
 ];
 
 // ====================================================================
 // 4. ALOKASI PAGU & REALISASI BELANJA PER SEKTOR INFRASTRUKTUR
+// Mengintegrasikan:
+// - Biro Keuangan Data No. 12 & 23 (Hal. 4-5)
+// - Dit. Pembangunan Infrastruktur Data No. 4, 5, 6 (Hal. 49-51)
+// - Dit. Perencanaan Infrastruktur Data No. 1 s.d. 6 (Hal. 53)
 // ====================================================================
 export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
   {
@@ -124,6 +170,11 @@ export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
     totalPaket: 6,
     icon: 'Route',
     keterangan: 'Pelebaran 5 lajur Sudirman, Flyover Sei Ladi, Koridor KEK Nongsa, dll',
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur & Biro Keuangan',
+    dataNoSatuData: 'Dit. Pembangunan: Data No. 4 & 6 | Dit. Perencanaan: Data No. 5 | Biro Keuangan: Data No. 12 & 23',
+    namaDatasetSatuData: 'Laporan Progres Kontruksi & Rekapitulasi Pagu Anggaran',
+    atributTerpakai: ['KD_ANGG', 'KTGR_PEK', 'JNS_PEK', 'NPAGU_F', 'NKON_S', 'PRGRS_PEK', 'NM_PPK', 'SUMBER DANA_RM', 'SUMBER DANA_PNBP'],
+    halamanPdf: 'Buku Satu Data Hal. 49-51, Hal. 53, Hal. 4-5',
   },
   {
     kategori: 'Pematangan Kawasan BSW Rempang',
@@ -133,6 +184,11 @@ export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
     totalPaket: 5,
     icon: 'Mountain',
     keterangan: 'Cut & Fill 280 Ha di Rempang Eco-City, Kabil, Sekupang, Tg Sengkuang',
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur & Biro Keuangan',
+    dataNoSatuData: 'Dit. Pembangunan: Data No. 5 | Biro Keuangan: Data No. 22',
+    namaDatasetSatuData: 'Pematangan Tanah (BSW) & Rincian Kertas Kerja Satker',
+    atributTerpakai: ['NAMOBJ', 'KD_ANGG', 'KTGR_PEK', 'NPAGU_F', 'NKON_S', 'VOL_PEK', 'KONTRAKTOR', 'NM_PPK', 'HARGA SATUAN', 'JUMLAH BIAYA'],
+    halamanPdf: 'Buku Satu Data Hal. 50 & Hal. 5',
   },
   {
     kategori: 'Drainase & Pengendalian Banjir',
@@ -142,6 +198,11 @@ export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
     totalPaket: 3,
     icon: 'Droplets',
     keterangan: 'Kolam Retensi Baloi Indah, Saluran U-Ditch Batam Centre',
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur & Dit. Perencanaan',
+    dataNoSatuData: 'Dit. Pembangunan: Data No. 4 & 6 | Dit. Perencanaan: Data No. 3 | Biro Keuangan: Data No. 12',
+    namaDatasetSatuData: 'Laporan Progres Kontruksi, DED Drainase/Air, Laporan Realisasi Anggaran',
+    atributTerpakai: ['KTGR_PEK', 'JNS_PEK', 'NPAGU_F', 'NKON_S', 'PRGRS_PEK', 'BIAYA DED', 'JUMLAH DED', 'ANGGARAN', 'REALISASI'],
+    halamanPdf: 'Buku Satu Data Hal. 49-51 & Hal. 53',
   },
   {
     kategori: 'Dermaga & Pelabuhan Logistik',
@@ -151,6 +212,11 @@ export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
     totalPaket: 2,
     icon: 'Ship',
     keterangan: 'Revitalisasi Dermaga Utara Kargo Batu Ampar Tahap 2',
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur & Dit. Perencanaan',
+    dataNoSatuData: 'Dit. Pembangunan: Data No. 4 & 6 | Dit. Perencanaan: Data No. 6 | Biro Keuangan: Data No. 12',
+    namaDatasetSatuData: 'Laporan Progres Kontruksi & DED Infrastruktur Laut',
+    atributTerpakai: ['KTGR_PEK', 'NPAGU_F', 'NKON_S', 'PRGRS_PEK', 'NM_PPK', 'BIAYA DED', 'WAKTU PELAKSANAAN PENYUSUNAN DED'],
+    halamanPdf: 'Buku Satu Data Hal. 49-51 & Hal. 53',
   },
   {
     kategori: 'Perencanaan & Kajian DED 6 Sektor',
@@ -160,12 +226,41 @@ export const SEKTOR_INFRASTRUKTUR_ALOKASI = [
     totalPaket: 43,
     icon: 'Compass',
     keterangan: 'Detail Engineering Design Gedung, Utilitas, Wisata, Pertanaman, Laut/Udara',
+    unitPengampu: 'Direktorat Perencanaan Infrastruktur & Biro Keuangan',
+    dataNoSatuData: 'Dit. Perencanaan: Data No. 1 s.d. No. 6 | Biro Keuangan: Data No. 12 & 23',
+    namaDatasetSatuData: 'Rekapitulasi Perencanaan Pembangunan (Gedung, Utilitas, Air, Kawasan, Darat, Laut)',
+    atributTerpakai: ['JUMLAH DED', 'BIAYA DED', 'WAKTU PELAKSANAAN PENYUSUNAN DED', 'ANGGARAN', 'REALISASI', 'SUMBER DANA_PNBP'],
+    halamanPdf: 'Buku Satu Data Hal. 53 & Hal. 4-5',
   },
 ];
 
 // ====================================================================
-// 5. KEMANTAPAN RUAS JARINGAN JALAN BP BATAM (Dataset 3 Satu Data Hal. 49)
+// 5. KEMANTAPAN RUAS JARINGAN JALAN BP BATAM (Dataset 3 Satu Data Hal. 48-49)
+// Unit: DIREKTORAT PEMBANGUNAN INFRASTRUKTUR
+// Nama Data: JARINGAN JALAN (EKSISTING) (Data Spasial | Terbuka)
+// Atribut Data: NAMOBJ, RUAS, LBRJLN, KONRJL, KLSRJL, FGSRJL, MATRJL, SHAPE_LENG, WLYRJL, REMARK
 // ====================================================================
+export const KEMANTAPAN_JALAN_METADATA = {
+  unitPengampu: 'Direktorat Pembangunan Infrastruktur',
+  dataNoSatuData: 'Data No. 3: JARINGAN JALAN (EKSISTING)',
+  jenisData: 'Data Spasial',
+  sifatData: 'Terbuka',
+  periodeData: 'Jika Update',
+  halamanPdf: 'Buku Satu Data Hal. 48-49',
+  atributTerpakai: [
+    { kode: 'NAMOBJ', label: 'Nama Objek Ruas Jalan' },
+    { kode: 'RUAS', label: 'Kode Ruas Jalan' },
+    { kode: 'LBRJLN', label: 'Lebar Badan Jalan (Meter)' },
+    { kode: 'KONRJL', label: 'Kondisi Ruas Jalan (Mantap / Rusak Ringan / Rusak Berat)' },
+    { kode: 'KLSRJL', label: 'Kelas Jalan (Kelas I, II, III)' },
+    { kode: 'FGSRJL', label: 'Fungsi Jaringan Jalan (Arteri / Kolektor / Lokal / Akses Khusus)' },
+    { kode: 'MATRJL', label: 'Material Perkerasan (Hotmix Aspal / Rigid Beton)' },
+    { kode: 'SHAPE_LENG', label: 'Panjang Segmen Jalan (Km)' },
+    { kode: 'WLYRJL', label: 'Wilayah Administrasi / Kecamatan' },
+    { kode: 'REMARK', label: 'Catatan Spesifikasi Teknis' },
+  ],
+};
+
 export const KEMANTAPAN_JALAN_DATA = {
   totalPanjangKm: 542.8,
   ruasMantapKm: 496.1,
@@ -175,12 +270,58 @@ export const KEMANTAPAN_JALAN_DATA = {
   ruasRusakBeratKm: 14.2,
   persenRusakBerat: 2.6,
   distribusiHierarki: [
-    { nama: 'Arteri Primer', panjangKm: 184.5, mantapKm: 175.2, persen: 95.0, lajur: '4 - 10 Lajur' },
-    { nama: 'Kolektor Primer', panjangKm: 198.2, mantapKm: 182.3, persen: 92.0, lajur: '2 - 4 Lajur' },
-    { nama: 'Lokal Primer', panjangKm: 112.4, mantapKm: 98.4, persen: 87.5, lajur: '2 Lajur' },
-    { nama: 'Akses Kawasan Khusus (Pelabuhan/Bandara/KEK)', panjangKm: 47.7, mantapKm: 40.2, persen: 84.3, lajur: '4 Lajur' },
+    { nama: 'Arteri Primer', panjangKm: 184.5, mantapKm: 175.2, persen: 95.0, lajur: '4 - 10 Lajur', atributFgs: 'FGSRJL: Arteri Primer', atributMat: 'MATRJL: Aspal Hotmix / Rigid', atributLbr: 'LBRJLN: 14 - 35 m' },
+    { nama: 'Kolektor Primer', panjangKm: 198.2, mantapKm: 182.3, persen: 92.0, lajur: '2 - 4 Lajur', atributFgs: 'FGSRJL: Kolektor Primer', atributMat: 'MATRJL: Aspal Hotmix', atributLbr: 'LBRJLN: 9 - 14 m' },
+    { nama: 'Lokal Primer', panjangKm: 112.4, mantapKm: 98.4, persen: 87.5, lajur: '2 Lajur', atributFgs: 'FGSRJL: Lokal Primer', atributMat: 'MATRJL: Aspal / Beton', atributLbr: 'LBRJLN: 6 - 9 m' },
+    { nama: 'Akses Kawasan Khusus (Pelabuhan/Bandara/KEK)', panjangKm: 47.7, mantapKm: 40.2, persen: 84.3, lajur: '4 Lajur', atributFgs: 'FGSRJL: Akses Strategis', atributMat: 'MATRJL: Rigid Beton Heavy Duty', atributLbr: 'LBRJLN: 14 - 24 m' },
   ],
 };
+
+// ====================================================================
+// 6. REKAPITULASI PNBP ROW UTILITAS & PENGHIJAUAN (Dataset 1 & 2 Satu Data)
+// Unit: DIREKTORAT PEMBANGUNAN INFRASTRUKTUR & BIRO KEUANGAN
+// ====================================================================
+export const PNBP_ROW_METADATA = {
+  utilitas: {
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur (Subdit ROW Utilitas)',
+    dataNoSatuData: 'Data No. 1: REKAPITULASI PERIZINAN PEMANFAATAN ROW UNTUK UTILITAS',
+    jenisData: 'Data Statistik',
+    periodeData: 'Perbulan',
+    sifatData: 'Tertutup',
+    halamanPdf: 'Buku Satu Data Hal. 48',
+    atribut: [
+      'TAHUN TERBIT', 'NOMOR SURAT', 'TANGGAL SURAT', 'NAMA PEMOHON', 'LOKASI KEGIATAN',
+      'JENIS UTILITAS', 'GALIAN TERBUKA', 'GALIAN CROSSING', 'TOTAL GALIAN',
+      'TMT MULAI IZIN', 'TMT AKHIR IZIN', 'KODE TRANSAKSI'
+    ],
+  },
+  penghijauan: {
+    unitPengampu: 'Direktorat Pembangunan Infrastruktur (Subdit ROW Penghijauan)',
+    dataNoSatuData: 'Data No. 2: REKAPITULASI PERIZINAN PEMANFAATAN ROW UNTUK PENGHIJAUAN',
+    jenisData: 'Data Statistik',
+    periodeData: 'Perbulan',
+    sifatData: 'Tertutup',
+    halamanPdf: 'Buku Satu Data Hal. 48',
+    atribut: [
+      'TAHUN TERBIT', 'NOMOR SURAT', 'TANGGAL SURAT', 'NAMA PEMOHON', 'NIB/NIK PEMOHON',
+      'LOKASI KEGIATAN', 'JENIS PENGHIJAUAN', 'LUAS PENGHIJAUAN',
+      'TMT MULAI IZIN', 'TMT AKHIR IZIN', 'KODE TRANSAKSI'
+    ],
+  },
+  keuangan: {
+    unitPengampu: 'Biro Keuangan BP Batam',
+    dataNoSatuData: 'Data No. 7 & No. 8: RINCIAN & REKAPITULASI TARGET PNBP',
+    jenisData: 'Data Statistik',
+    periodeData: 'Pertahun',
+    sifatData: 'Tertutup',
+    halamanPdf: 'Buku Satu Data Hal. 4',
+    atribut: [
+      'KODE', 'PENGGUNA', 'MATA UANG', 'SATUAN', 'TARIF', 'VOLUME', 'JUMLAH',
+      'KODE KEGIATAN', 'NAMA UNIT', 'NAMA LAYANAN'
+    ],
+  },
+};
+
 
 // ====================================================================
 // 6. REKAPITULASI PNBP ROW UTILITAS & PENGHIJAUAN (Dataset 1 & 2 Satu Data)
@@ -192,10 +333,10 @@ export const PNBP_INFRASTRUKTUR_DETAIL = {
   komponen: [
     {
       sumber: 'Izin Pemanfaatan ROW Utilitas',
-      kodeDataset: 'Dataset No. 1',
-      targetRupiah: 4400000000,
-      realisasiRupiah: 4850000000,
-      persen: 110.23,
+      kodeDataset: 'Dataset No. 1 (Hal. 48)',
+      targetRupiah: 4800000000,
+      realisasiRupiah: 5250000000,
+      persen: 109.38,
       volume: '482 Km Jaringan Kabel FO / Pipa Gas & Air',
       skTerbit: 148,
       slaHari: '3.2 Hari (Target 5 Hari)',
@@ -203,25 +344,14 @@ export const PNBP_INFRASTRUKTUR_DETAIL = {
     },
     {
       sumber: 'Izin Pemanfaatan ROW Penghijauan',
-      kodeDataset: 'Dataset No. 2',
-      targetRupiah: 1521000000,
-      realisasiRupiah: 1620000000,
-      persen: 106.51,
+      kodeDataset: 'Dataset No. 2 (Hal. 48)',
+      targetRupiah: 2021000000,
+      realisasiRupiah: 2200000000,
+      persen: 108.86,
       volume: '84 Lokasi RTH / Koridor Taman Median Jalan',
       skTerbit: 52,
       slaHari: '2.8 Hari (Target 5 Hari)',
       mitraUtama: 'Batamindo, Panbil Group, Nongsa Digital Park, Citra Buana',
-    },
-    {
-      sumber: 'Retribusi Sewa Fasilitas Penunjang Infrastruktur',
-      kodeDataset: 'Dataset Retribusi',
-      targetRupiah: 900000000,
-      realisasiRupiah: 980000000,
-      persen: 108.89,
-      volume: '34 Lokasi Tapak Reklame / JPO / Tower Penunjang',
-      skTerbit: 34,
-      slaHari: '2.1 Hari (Target 3 Hari)',
-      mitraUtama: 'Pengembang Kawasan & Asosiasi Pengiklan Batam',
     },
   ],
 };

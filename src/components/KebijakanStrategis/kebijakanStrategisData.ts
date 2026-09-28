@@ -511,35 +511,108 @@ export const IKK_DIMENSI_DATA: DimensiIkkItem[] = [
   {
     dimensi: 'Agenda Setting Kebijakan',
     bobot: 20,
-    skor: 74.5,
+    skor: 74.0,
     target: 65.0,
-    capaian: 114.6,
+    capaian: 113.8,
+    poinTerbobot: 14.80,
+    formulaRumus: '74.00 × 20% = 14.80 Poin',
+    indikatorKunci: 'Urgensi masalah, keterlibatan stakeholder kawasan & riset data empiris',
     tahapan: ['Identifikasi Masalah Strategis Kawasan', 'Uji Kebutuhan Regulasi Investasi', 'Riset Data Empiris & Kajian Akademis'],
   },
   {
     dimensi: 'Formulasi Kebijakan',
     bobot: 30,
-    skor: 73.2,
+    skor: 73.0,
     target: 65.0,
-    capaian: 112.6,
+    capaian: 112.3,
+    poinTerbobot: 21.90,
+    formulaRumus: '73.00 × 30% = 21.90 Poin',
+    indikatorKunci: 'Regulatory Impact Assessment (RIA), harmonisasi K/L/D & konsultasi publik',
     tahapan: ['Penyusunan Naskah Urgensi Regulasi', 'Harmonisasi Antar Instansi K/L/D', 'Konsultasi Publik dengan Pelaku Usaha'],
   },
   {
     dimensi: 'Implementasi Kebijakan',
     bobot: 25,
-    skor: 70.8,
+    skor: 71.2,
     target: 65.0,
-    capaian: 108.9,
+    capaian: 109.5,
+    poinTerbobot: 17.80,
+    formulaRumus: '71.20 × 25% = 17.80 Poin',
+    indikatorKunci: 'Kesiapan juknis operasional, standardisasi SOP & sosialisasi regulasi',
     tahapan: ['Sosialisasi Perka/Kepka Terbit', 'Kesiapan Petunjuk Teknis & SOP Unit', 'Alokasi Sumber Daya Pelaksana'],
   },
   {
     dimensi: 'Evaluasi Kemanfaatan Kebijakan',
     bobot: 25,
-    skor: 68.6,
+    skor: 69.2,
     target: 65.0,
-    capaian: 105.5,
+    capaian: 106.5,
+    poinTerbobot: 17.30,
+    formulaRumus: '69.20 × 25% = 17.30 Poin',
+    indikatorKunci: 'Survei dampak ekonomi, kepatuhan tarif layanan & evaluasi purna regulasi',
     tahapan: ['Survei Dampak Kebijakan Ekonomi', 'Uji Kewajaran Tarif Layanan Badan Usaha', 'Penyusunan Rekomendasi Revisi Kebijakan'],
   },
+];
+
+// ============================================================================
+// 6b. DATA TARIF LAYANAN 7 LEVEL (SUMBER: PDF data-tarif-layanan-new & SATU DATA HAL. 13)
+// Total 7.395 Entri Layanan Terverifikasi Menurut Unit Penyedia Layanan
+// ============================================================================
+
+export interface TarifLayananPdfEntry {
+  id: number;
+  unit: string;
+  l1: string;
+  l2: string;
+  l3: string;
+  l4: string;
+  l5: string;
+  l6: string;
+  l7: string;
+  layanan: string;
+  kewajaranSurvei: number;
+  status: 'Wajar' | 'Penyesuaian';
+}
+
+export const DATA_TARIF_LAYANAN_NEW_ENTRIES: TarifLayananPdfEntry[] = [
+  { id: 14483, unit: 'Badan Usaha Bandar Udara', l1: '2', l2: '7', l3: '4', l4: '1', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Tertutup AC (Ruang Tunggu Keberangkatan)', kewajaranSurvei: 90.5, status: 'Wajar' },
+  { id: 14484, unit: 'Badan Usaha Bandar Udara', l1: '2', l2: '7', l3: '4', l4: '2', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Tertutup AC (Gate Khusus VIP/Charter)', kewajaranSurvei: 89.8, status: 'Wajar' },
+  { id: 14485, unit: 'Badan Usaha Fasilitas dan Lingkungan', l1: '1', l2: '5', l3: '1', l4: '5', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Pegawai BP Batam (Sewa Rusun / Fasilitas)', kewajaranSurvei: 92.4, status: 'Wajar' },
+  { id: 14486, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '9', l3: '6', l4: '7', l5: '7', l6: '3', l7: 'N/A', layanan: 'Kelas I, III, V (Kecil) - Tindakan Medis', kewajaranSurvei: 91.0, status: 'Wajar' },
+  { id: 14487, unit: 'Kuningan Guest House', l1: '2', l2: '6', l3: 'N/A', l4: 'N/A', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Day & Nite Package (Transit Room)', kewajaranSurvei: 91.5, status: 'Wajar' },
+  { id: 14488, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '15', l3: '7', l4: '1', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Peserta s.d 30 Orang (MCU Kolektif)', kewajaranSurvei: 88.5, status: 'Wajar' },
+  { id: 14489, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '2', l4: '3', l5: '9', l6: 'N/A', l7: 'N/A', layanan: 'Pasang tampon anterior (THT Rawat Jalan)', kewajaranSurvei: 93.0, status: 'Wajar' },
+  { id: 14490, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '4', l4: '3', l5: '9', l6: 'N/A', l7: 'N/A', layanan: 'Pasang tampon anterior (Spesialis Khusus)', kewajaranSurvei: 92.8, status: 'Wajar' },
+  { id: 14491, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '3', l4: '3', l5: '9', l6: 'N/A', l7: 'N/A', layanan: 'Pasang tampon anterior (Cito/IGD)', kewajaranSurvei: 93.2, status: 'Wajar' },
+  { id: 14492, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '1', l4: '3', l5: '9', l6: 'N/A', l7: 'N/A', layanan: 'Pasang tampon anterior (Klinik Eksekutif)', kewajaranSurvei: 91.5, status: 'Wajar' },
+  { id: 14493, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '3', l3: '8', l4: 'N/A', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Ruangan ICU/CVCU (Rawat Intensif per Hari)', kewajaranSurvei: 90.2, status: 'Wajar' },
+  { id: 14494, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '5', l3: '5', l4: '2', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Knee Joint Exercise (Fisioterapi & Rehab)', kewajaranSurvei: 89.4, status: 'Wajar' },
+  { id: 14495, unit: 'Badan Usaha Pelabuhan', l1: '2', l2: '6', l3: '5', l4: '3', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Sedan, Pick up, dan sejenisnya (Pass Masuk)', kewajaranSurvei: 88.0, status: 'Wajar' },
+  { id: 14496, unit: 'Badan Usaha Fasilitas dan Lingkungan', l1: '1', l2: '2', l3: '5', l4: '2', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Penggunaan Bulanan (Air Bersih Sambungan Domestik)', kewajaranSurvei: 86.5, status: 'Wajar' },
+  { id: 14497, unit: 'Badan Usaha Pelabuhan', l1: '2', l2: '6', l3: '5', l4: '2', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Sepeda Motor dan Sepeda (Pass Masuk Pelabuhan)', kewajaranSurvei: 87.5, status: 'Wajar' },
+  { id: 14498, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '9', l3: '10', l4: '10', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Tindakan Operasi Kecil (Bedah Minor)', kewajaranSurvei: 91.5, status: 'Wajar' },
+  { id: 14499, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '1', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Kateter Hemodialisa)', kewajaranSurvei: 93.5, status: 'Wajar' },
+  { id: 14500, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '4', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Pelepasan Subklavia)', kewajaranSurvei: 92.0, status: 'Wajar' },
+  { id: 14501, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '3', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Perawatan Intensif)', kewajaranSurvei: 92.4, status: 'Wajar' },
+  { id: 14502, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '2', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Ruang Dialisis)', kewajaranSurvei: 93.1, status: 'Wajar' },
+];
+
+export const TARIF_UNIT_DISTRIBUSI = [
+  { unit: 'Badan Usaha Rumah Sakit', entri: 4862, persen: 65.7, skorKewajaran: 91.2, color: '#0284C7', badge: 'RSBP' },
+  { unit: 'Badan Usaha Pelabuhan', entri: 1240, persen: 16.8, skorKewajaran: 88.4, color: '#0D9488', badge: 'Pelabuhan' },
+  { unit: 'Badan Usaha Bandar Udara', entri: 685, persen: 9.3, skorKewajaran: 89.6, color: '#6366F1', badge: 'Bandara Hang Nadim' },
+  { unit: 'Badan Usaha Fasilitas & Lingkungan', entri: 468, persen: 6.3, skorKewajaran: 86.8, color: '#D97706', badge: 'SPAM & Fasling' },
+  { unit: 'Kuningan Guest House', entri: 140, persen: 1.9, skorKewajaran: 91.5, color: '#EC4899', badge: 'Guest House' },
+];
+
+export const TARIF_LEVEL_DEPTH_STAT = [
+  { level: 'LEVEL 1', nama: 'Klasifikasi Bidang Induk', jangkauan: '100% (7.395)', depth: 100 },
+  { level: 'LEVEL 2', nama: 'Sub-Kategori Operasional', jangkauan: '100% (7.395)', depth: 100 },
+  { level: 'LEVEL 3', nama: 'Kelompok Ruang & Fasilitas', jangkauan: '92.4% (6.833)', depth: 92.4 },
+  { level: 'LEVEL 4', nama: 'Jenis Tindakan / Pemakaian', jangkauan: '78.5% (5.805)', depth: 78.5 },
+  { level: 'LEVEL 5', nama: 'Spesifikasi / Kapasitas / Skala', jangkauan: '54.2% (4.008)', depth: 54.2 },
+  { level: 'LEVEL 6', nama: 'Kualifikasi Khusus / Kelas', jangkauan: '14.8% (1.095)', depth: 14.8 },
+  { level: 'LEVEL 7', nama: 'Detil Sub-Spesifik Layanan', jangkauan: '4.1% (303)', depth: 4.1 },
 ];
 
 export const PHKS_TARIF_EVALUASI_DATA = [

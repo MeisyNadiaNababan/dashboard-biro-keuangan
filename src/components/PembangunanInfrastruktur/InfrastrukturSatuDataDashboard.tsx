@@ -32,7 +32,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
   onOpenWordDoc,
   onOpenVisualCatalog,
 }) => {
-  // Tab pilihan dataset: 'semua' | 'ds4' | 'ds3' | 'ds1' | 'ds2' | 'ds5' | 'ds6'
+  // Tab pilihan dataset: 'semua' | 'ds4' | 'ds1' | 'ds2' | 'ds5' | 'ds6'
   const [activeTab, setActiveTab] = useState<string>('semua');
 
   // Filter & sortir untuk Dataset 4 (NAMOBJ & PRGRS_PEK)
@@ -41,9 +41,6 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
 
   // View mode untuk Dataset 6
   const [dataset6ViewMode, setDataset6ViewMode] = useState<'bar' | 'treemap'>('bar');
-
-  // Toggle tampilan formula angka 88,2% saat kartu kondisi mantap diklik
-  const [showMantapFormula, setShowMantapFormula] = useState<boolean>(false);
 
   // Data paket Dataset 4 terfilter & tersortir murni berdasarkan NAMOBJ dan PRGRS_PEK
   const filteredDs4 = DATASET_4_PROGRES_KONSTRUKSI.filter((p) => {
@@ -77,7 +74,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
                   Buku Satu Data Hal. 48 - 51
                 </span>
                 <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> 6 Dataset Terverifikasi
+                  <CheckCircle2 className="w-3 h-3" /> 5 Dataset Statistik Terverifikasi
                 </span>
               </div>
               <h1 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
@@ -133,7 +130,6 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
           {[
             { key: 'semua', label: 'Semua Dataset', icon: <Layers className="w-3.5 h-3.5" /> },
             { key: 'ds4', label: 'Dataset 4: Progres Fisik (NAMOBJ & PRGRS)', icon: <HardHat className="w-3.5 h-3.5" />, badge: '12 Proyek' },
-            { key: 'ds3', label: 'Dataset 3: Total Jaringan Jalan', icon: <Route className="w-3.5 h-3.5" />, badge: '542,80 Km' },
             { key: 'ds1', label: 'Dataset 1: ROW Utilitas', icon: <Zap className="w-3.5 h-3.5" />, badge: '142 Izin' },
             { key: 'ds2', label: 'Dataset 2: ROW Penghijauan', icon: <Trees className="w-3.5 h-3.5" />, badge: '34,2 Ha' },
             { key: 'ds5', label: 'Dataset 5: Pematangan Tanah BSW', icon: <Mountain className="w-3.5 h-3.5" />, badge: '5 Kawasan' },
@@ -170,14 +166,14 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
       <div>
         <div className="flex items-center justify-between mb-1.5 px-0.5">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
-            Ringkasan Indikator 6 Dataset
+            Ringkasan Indikator 5 Dataset Statistik
           </span>
           <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-800 border border-purple-200 font-mono">
             🏷️ Visualisasi: Kartu Metrik KPI (BANs)
           </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
           {/* Dataset 1 */}
           <div
             onClick={() => {
@@ -223,35 +219,6 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
             <div className="text-[9.5px] text-emerald-700 font-semibold flex items-center gap-1 mt-1.5 pt-1 border-t border-slate-100 group-hover:underline">
               <Calculator className="w-3 h-3 text-emerald-600 shrink-0" />
               <span>Lihat Formula &amp; Atribut</span>
-            </div>
-          </div>
-
-          {/* Dataset 3 - KPI TOTAL JARINGAN JALAN EKSISTING */}
-          <div
-            onClick={() => {
-              setActiveTab('ds3');
-              if (onOpenFormula) onOpenFormula('kpi-ruas-jalan');
-            }}
-            className={`p-3 rounded-xl border-2 transition-all cursor-pointer bg-white hover:border-indigo-500 group relative ${
-              activeTab === 'ds3' ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-xs bg-indigo-50/30' : 'border-indigo-200 shadow-2xs bg-indigo-50/15'
-            }`}
-            title="Klik untuk melihat Atribut SHAPE_LENG, WLYRJL & LKONOF Jaringan Jalan"
-          >
-            <div className="flex items-center justify-between text-slate-500 text-[10.5px] mb-1">
-              <span className="font-bold text-indigo-700">DATASET 3</span>
-              <Route className="w-3.5 h-3.5 text-indigo-600" />
-            </div>
-            <span className="text-[11px] font-bold text-indigo-950 block line-clamp-1">Total Jaringan Jalan</span>
-            <div className="text-xl font-black text-indigo-700 font-mono my-0.5 flex items-baseline gap-1">
-              <span>542,80 Km</span>
-            </div>
-            {/* Breakdown Ringkas Atribut */}
-            <div className="text-[9.5px] text-slate-600 bg-white/80 px-1.5 py-0.5 rounded font-mono border border-indigo-100 mt-0.5 truncate">
-              125 Ruas • Atribut SHAPE_LENG
-            </div>
-            <div className="text-[9.5px] text-indigo-700 font-bold flex items-center gap-1 mt-1.5 pt-1 border-t border-indigo-100 group-hover:underline">
-              <Calculator className="w-3 h-3 text-indigo-600 shrink-0" />
-              <span>Lihat Detail &amp; Atribut</span>
             </div>
           </div>
 
@@ -474,138 +441,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
       )}
 
       {/* ========================================================================= */}
-      {/* 5. DATASET 3: JARINGAN JALAN EKSISTING (PENJELASAN GAMBLANG FORMULA 88,2%) */}
-      {/* ========================================================================= */}
-      {(activeTab === 'semua' || activeTab === 'ds3') && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-mono">
-                  DATASET NO. 3 (Hal. 48-49)
-                </span>
-                <h2 className="text-sm font-bold text-slate-900">
-                  Jaringan Jalan Eksisting Kota Batam
-                </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200 font-mono">
-                  🏷️ Visualisasi: Grafik Batang Horizontal (Horizontal Bar Chart)
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded font-mono">
-                  Atribut yang Ditampilkan: <strong>WLYRJL</strong> (Wilayah Jalan), <strong>SHAPE_LENG</strong> (Panjang Km), &amp; <strong>LKONOF</strong> (Kondisi Fisik)
-                </span>
-              </div>
-            </div>
-
-            <div className="text-right">
-              <span className="text-xl font-black font-mono text-indigo-700">542,80 Km</span>
-              <span className="text-[10px] text-slate-500 block">Total Jaringan Jalan (SHAPE_LENG)</span>
-            </div>
-          </div>
-
-          {/* 3 Status Utama Kondisi Jalan */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-3.5">
-            <button
-              type="button"
-              onClick={() => setShowMantapFormula((prev) => !prev)}
-              className={`p-2.5 rounded-lg border transition-all cursor-pointer text-left sm:text-center group ${
-                showMantapFormula
-                  ? 'bg-emerald-100/90 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
-                  : 'bg-emerald-50 hover:bg-emerald-100/50 border-emerald-200 hover:border-emerald-300'
-              }`}
-              title="Klik kartu Kondisi Mantap untuk melihat / menutup Formula 88,2%"
-            >
-              <div className="flex items-center justify-between sm:justify-center gap-1.5">
-                <span className="text-xs font-bold text-emerald-900">Kondisi Mantap (Baik &amp; Sedang)</span>
-                <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-800 font-mono">
-                  {showMantapFormula ? 'Tutup Formula ▲' : 'Buka Formula ▼'}
-                </span>
-              </div>
-              <div className="text-xl font-black font-mono text-emerald-700 my-0.5">478,8 Km (88,2%)</div>
-              <span className="text-[9.5px] text-emerald-700 font-medium block">
-                {showMantapFormula ? 'Klik untuk sembunyikan formula' : '💡 Klik kartu untuk melihat panduan formula'}
-              </span>
-            </button>
-
-            <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-center">
-              <span className="text-xs font-bold text-amber-900 block">Kondisi Rusak Ringan</span>
-              <div className="text-xl font-black font-mono text-amber-700 my-0.5">45,6 Km (8,4%)</div>
-              <span className="text-[9.5px] text-amber-700 font-medium block">LKONOF = Rusak Ringan</span>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-center">
-              <span className="text-xs font-bold text-rose-900 block">Kondisi Rusak Berat</span>
-              <div className="text-xl font-black font-mono text-rose-700 my-0.5">18,4 Km (3,4%)</div>
-              <span className="text-[9.5px] text-rose-700 font-medium block">LKONOF = Rusak Berat</span>
-            </div>
-          </div>
-
-          {/* CALLOUT PENJELASAN ATRIBUT DARI MANA 88,2% DIPEROLEH (MUNCUL SAAT CARD KONDISI MANTAP DIKLIK) */}
-          {showMantapFormula && (
-            <div className="p-3 mb-3.5 rounded-xl bg-indigo-50/90 border-2 border-indigo-300 text-xs shadow-xs animate-in fade-in duration-200">
-              <div className="flex items-center justify-between font-bold text-indigo-950 mb-1.5 pb-1 border-b border-indigo-200/80">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-indigo-600" />
-                  <span>PANDUAN ATRIBUT &amp; FORMULA ANGKA 88,2%:</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowMantapFormula(false)}
-                  className="text-[10.5px] text-indigo-700 hover:text-indigo-900 font-semibold underline cursor-pointer"
-                >
-                  Tutup Formula
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1.5 text-slate-700 font-mono text-[11px]">
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 shadow-2xs">
-                  <span className="text-slate-500 block text-[10px] font-semibold">ATRIBUT PEMBILANG (JALAN MANTAP)</span>
-                  <strong className="text-emerald-700 text-sm">478,80 Km</strong>
-                  <span className="text-[9.5px] text-slate-500 block mt-0.5 font-sans">SHAPE_LENG difilter LKONOF = Baik/Sedang</span>
-                </div>
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 shadow-2xs">
-                  <span className="text-slate-500 block text-[10px] font-semibold">ATRIBUT PENYEBUT (TOTAL SELURUH JALAN)</span>
-                  <strong className="text-indigo-900 text-sm">542,80 Km</strong>
-                  <span className="text-[9.5px] text-slate-500 block mt-0.5 font-sans">SUM(SHAPE_LENG) seluruh ruas arteri &amp; kolektor</span>
-                </div>
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 shadow-2xs">
-                  <span className="text-slate-500 block text-[10px] font-semibold">FORMULA PEMBAGIAN (%)</span>
-                  <strong className="text-indigo-700 text-sm">(478,8 ÷ 542,8) × 100% = 88,2%</strong>
-                  <span className="text-[9.5px] text-emerald-700 font-bold block mt-0.5 font-sans">Memenuhi standar IKU nasional (&ge; 85%)</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* GRAFIK BATANG HORIZONTAL: Kemantapan per Wilayah Batam (WLYRJL) */}
-          <div className="space-y-2">
-            <h4 className="text-xs font-bold text-slate-800">
-              Grafik Batang Kemantapan Jalan per Wilayah Administrasi (WLYRJL):
-            </h4>
-            {[
-              { wilayah: 'Batam Centre', km: '132,5 Km', persen: 93.8 },
-              { wilayah: 'Batu Ampar & Bengkong', km: '98,2 Km', persen: 91.5 },
-              { wilayah: 'Sekupang', km: '84,5 Km', persen: 90.4 },
-              { wilayah: 'Mukakuning & Batu Aji', km: '124,6 Km', persen: 88.2 },
-              { wilayah: 'Nongsa & Kabil', km: '68,0 Km', persen: 86.7 },
-              { wilayah: 'Barelang & Rempang', km: '35,0 Km', persen: 84.0 },
-            ].map((w) => (
-              <div key={w.wilayah} className="p-2 rounded-lg bg-slate-50 border border-slate-200">
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-bold text-slate-800">{w.wilayah} ({w.km})</span>
-                  <span className="font-mono font-bold text-indigo-700">{w.persen}% Mantap</span>
-                </div>
-                <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                  <div className="bg-indigo-600 h-full rounded-full" style={{ width: `${w.persen}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* 6. DATASET 1 & 2: ROW UTILITAS & ROW PENGHIJAUAN                         */}
+      {/* 5. DATASET 1 & 2: ROW UTILITAS & ROW PENGHIJAUAN                         */}
       {/* ========================================================================= */}
       {(activeTab === 'semua' || activeTab === 'ds1' || activeTab === 'ds2') && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">

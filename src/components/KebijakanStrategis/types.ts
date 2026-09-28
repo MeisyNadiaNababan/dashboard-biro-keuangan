@@ -60,7 +60,25 @@ export interface DimensiIkkItem {
   skor: number;
   target: number;
   capaian: number;
+  poinTerbobot?: number;
+  formulaRumus?: string;
+  indikatorKunci?: string;
   tahapan: string[];
+}
+
+export interface TarifLayananPdfEntry {
+  id: number;
+  unit: string;
+  l1: string;
+  l2: string;
+  l3: string;
+  l4: string;
+  l5: string;
+  l6: string;
+  l7: string;
+  layanan: string;
+  kewajaranSurvei: number;
+  status: 'Wajar' | 'Penyesuaian';
 }
 
 export interface MasterplanProgressItem {

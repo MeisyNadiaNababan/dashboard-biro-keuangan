@@ -52,8 +52,8 @@ import { BP_BATAM_24_UNITS, BpBatamUnit } from './data/bpBatamUnits';
 import { CheckCircle2, FileCode2, Database, Layers, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Multi-Unit State - Set default to deputi-infrastruktur (Perkin A7)
-  const [activeUnitId, setActiveUnitId] = useState<string>('deputi-infrastruktur');
+  // Navigation & Multi-Unit State - Set default to deputi-kebijakan-strategis (Perkin A2 / DEP A2)
+  const [activeUnitId, setActiveUnitId] = useState<string>('deputi-kebijakan-strategis');
   const [isUnitsDrawerOpen, setIsUnitsDrawerOpen] = useState<boolean>(false);
   const [activeSheet, setActiveSheet] = useState<string>('ikhtisar');
 

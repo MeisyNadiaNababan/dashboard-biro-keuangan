@@ -7,8 +7,6 @@ import {
   Server,
   Award,
   Layers,
-  Sparkles,
-  AlertTriangle,
   CheckCircle2,
   ChevronRight,
   ArrowUpRight,
@@ -43,7 +41,6 @@ import {
   PROGRAM_ACTIVITIES_BUDGET,
   PTSP_SEKTOR_PERFORMANCES,
   PTSP_MONTHLY_TREND,
-  PTSP_BOTTLENECK_ITEMS,
   PTSP_IKM_9_UNSUR,
   SPBE_DOMAINS_DATA,
   PDSI_INFRASTRUCTURE_DATA,
@@ -187,132 +184,135 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
       </div>
 
       {/* =================================================================== */}
-      {/* TAB 1: IKP RADAR & ALOKASI ANGGARAN 4 KEGIATAN PROGRAM */}
+      {/* TAB 1: IKP RADAR & ALOKASI ANGGARAN 4 KEGIATAN PROGRAM               */}
       {/* =================================================================== */}
       {activeTab === 'ikp_anggaran' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Left: Radar Chart 4 IKP Capaian vs Target */}
-          <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-sky-600" />
-                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                  Radar Capaian 4 IKP vs Target
-                </h4>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                100% On-Target
-              </span>
-            </div>
-
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarIkpData}>
-                  <PolarGrid stroke="#E2E8F0" />
-                  <PolarAngleAxis
-                    dataKey="subject"
-                    tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }}
-                  />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#94A3B8" fontSize={9} />
-                  <Radar
-                    name="Target 2025"
-                    dataKey="target"
-                    stroke="#94A3B8"
-                    fill="#94A3B8"
-                    fillOpacity={0.2}
-                    strokeDasharray="4 4"
-                  />
-                  <Radar
-                    name="Realisasi Kinerja"
-                    dataKey="realisasi"
-                    stroke="#0284C7"
-                    fill="#0284C7"
-                    fillOpacity={0.45}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                  <Tooltip
-                    formatter={(val: any, name: any) => [
-                      `${Number(val).toFixed(1)} Poin`,
-                      name,
-                    ]}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
-              <div className="flex items-center justify-between">
-                <span>Rata-rata Capaian IKP:</span>
-                <span className="font-bold text-emerald-700">105.18% (Melampaui Target)</span>
-              </div>
-              <div className="text-[10px] text-slate-500">
-                *Indeks SPBE diskalakan ke 100 untuk keseragaman visual radar (Realisasi: 4.12 dari target 3.90).
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Bar Chart Pagu & Realisasi 4 Kegiatan Program */}
-          <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <Scale className="w-4 h-4 text-emerald-600" />
-                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                  Alokasi Anggaran 4 Kegiatan Program A2 (Total: Rp 75,87 M)
-                </h4>
-              </div>
-              <span className="text-[10px] font-mono text-slate-500">Dalam Miliar Rupiah</span>
-            </div>
-
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={PROGRAM_ACTIVITIES_BUDGET.map((act) => ({
-                    unit: act.unit,
-                    paguM: Number((act.pagu / 1e9).toFixed(2)),
-                    realisasiM: Number((act.realisasi / 1e9).toFixed(2)),
-                    serapan: act.serapanPersen,
-                  }))}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-                  <XAxis dataKey="unit" tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }} />
-                  <YAxis tick={{ fill: '#64748B', fontSize: 10 }} />
-                  <Tooltip
-                    formatter={(val: any, name: any) => [
-                      `Rp ${Number(val).toFixed(2)} Miliar`,
-                      name === 'paguM' ? 'Pagu Alokasi' : 'Realisasi Belanja',
-                    ]}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                  <Bar dataKey="paguM" fill="#94A3B8" name="Pagu Anggaran (DIPA)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="realisasiM" fill="#0D9488" name="Realisasi Belanja YTD" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Activities Table Breakdown */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-              {PROGRAM_ACTIVITIES_BUDGET.map((act) => (
-                <div
-                  key={act.id}
-                  className="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
-                >
-                  <div className="truncate pr-2">
-                    <span className="font-bold text-slate-800 block truncate">{act.nama}</span>
-                    <span className="text-[10px] text-slate-500 font-mono">
-                      Unit: {act.unit} · DIPA: {act.kodeDipa}
-                    </span>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <span className="font-mono font-extrabold text-slate-900 block">
-                      Rp {(act.pagu / 1e9).toFixed(2)} M
-                    </span>
-                    <span className="text-[10px] font-mono font-bold text-emerald-700">
-                      {act.serapanPersen.toFixed(1)}% Serapan
-                    </span>
-                  </div>
+        <div className="space-y-4">
+          {/* Charts Row: Radar 4 IKP & Pagu Bar Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Left: Radar Chart 4 IKP Capaian vs Target */}
+            <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-sky-600" />
+                  <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                    Radar Capaian 4 IKP vs Target
+                  </h4>
                 </div>
-              ))}
+                <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  100% On-Target
+                </span>
+              </div>
+
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={radarIkpData}>
+                    <PolarGrid stroke="#E2E8F0" />
+                    <PolarAngleAxis
+                      dataKey="subject"
+                      tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }}
+                    />
+                    <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#94A3B8" fontSize={9} />
+                    <Radar
+                      name="Target 2025"
+                      dataKey="target"
+                      stroke="#94A3B8"
+                      fill="#94A3B8"
+                      fillOpacity={0.2}
+                      strokeDasharray="4 4"
+                    />
+                    <Radar
+                      name="Realisasi Kinerja"
+                      dataKey="realisasi"
+                      stroke="#0284C7"
+                      fill="#0284C7"
+                      fillOpacity={0.45}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                    <Tooltip
+                      formatter={(val: any, name: any) => [
+                        `${Number(val).toFixed(1)} Poin`,
+                        name,
+                      ]}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span>Rata-rata Capaian IKP:</span>
+                  <span className="font-bold text-emerald-700">105.18% (Melampaui Target)</span>
+                </div>
+                <div className="text-[10px] text-slate-500">
+                  *Indeks SPBE diskalakan ke 100 untuk keseragaman visual radar (Realisasi: 4.12 dari target 3.90).
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Bar Chart Pagu & Realisasi 4 Kegiatan Program */}
+            <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Scale className="w-4 h-4 text-emerald-600" />
+                  <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                    Alokasi Anggaran 4 Kegiatan Program A2 (Total: Rp 75,87 M)
+                  </h4>
+                </div>
+                <span className="text-[10px] font-mono text-slate-500">Sumber: DIPA Perkin 2025</span>
+              </div>
+
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={PROGRAM_ACTIVITIES_BUDGET.map((act) => ({
+                      unit: act.unit,
+                      paguM: Number((act.pagu / 1e9).toFixed(2)),
+                      realisasiM: Number((act.realisasi / 1e9).toFixed(2)),
+                      serapan: act.serapanPersen,
+                    }))}
+                    margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                    <XAxis dataKey="unit" tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }} />
+                    <YAxis tick={{ fill: '#64748B', fontSize: 10 }} />
+                    <Tooltip
+                      formatter={(val: any, name: any) => [
+                        `Rp ${Number(val).toFixed(2)} Miliar`,
+                        name === 'paguM' ? 'Pagu Alokasi' : 'Realisasi Belanja',
+                      ]}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                    <Bar dataKey="paguM" fill="#94A3B8" name="Pagu Anggaran (DIPA)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="realisasiM" fill="#0D9488" name="Realisasi Belanja YTD" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Activities Table Breakdown */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                {PROGRAM_ACTIVITIES_BUDGET.map((act) => (
+                  <div
+                    key={act.id}
+                    className="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
+                  >
+                    <div className="truncate pr-2">
+                      <span className="font-bold text-slate-800 block truncate">{act.nama}</span>
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        Unit: {act.unit} · DIPA: {act.kodeDipa}
+                      </span>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="font-mono font-extrabold text-slate-900 block">
+                        Rp {(act.pagu / 1e9).toFixed(2)} M
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-emerald-700">
+                        {act.serapanPersen.toFixed(1)}% Serapan
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -323,12 +323,17 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
       {/* =================================================================== */}
       {activeTab === 'perizinan_ptsp' && (
         <div className="space-y-4">
-          {/* Top Metric Cards Row (Inspired by user's screenshot, elevated & responsive) */}
+          {/* Top Metric Cards Row with Satu Data Source Badges */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
-                Total Permohonan YTD
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Total Permohonan YTD
+                </span>
+                <span className="text-[9px] font-mono text-sky-800 bg-sky-50 px-1 py-0.2 rounded font-bold">
+                  Data PTSP No. 2
+                </span>
+              </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black font-mono text-slate-900">1.842</span>
                 <span className="text-xs text-slate-500 font-medium">berkas</span>
@@ -337,9 +342,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
-                Izin Terbit Resmi
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Izin Terbit Resmi
+                </span>
+                <span className="text-[9px] font-mono text-sky-800 bg-sky-50 px-1 py-0.2 rounded font-bold">
+                  Data PTSP No. 2
+                </span>
+              </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black font-mono text-emerald-600">1.486</span>
                 <span className="text-xs text-slate-500 font-medium">izin</span>
@@ -348,9 +358,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
-                Backlog Aktif
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Backlog Aktif
+                </span>
+                <span className="text-[9px] font-mono text-amber-800 bg-amber-50 px-1 py-0.2 rounded font-bold">
+                  Data PTSP No. 3
+                </span>
+              </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black font-mono text-amber-600">214</span>
                 <span className="text-xs text-slate-500 font-medium">berkas</span>
@@ -359,9 +374,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
-                Kepatuhan SLA Rata-rata
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Kepatuhan SLA Rata-rata
+                </span>
+                <span className="text-[9px] font-mono text-sky-800 bg-sky-50 px-1 py-0.2 rounded font-bold">
+                  Data PTSP No. 14
+                </span>
+              </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black font-mono text-sky-700">82.4%</span>
                 <span className="text-xs text-slate-500 font-medium">SLA</span>
@@ -370,9 +390,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
-                IKM Layanan PTSP (IKP-4)
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  IKM Layanan (IKP-4)
+                </span>
+                <span className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded font-bold">
+                  Data PTSP No. 4
+                </span>
+              </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-black font-mono text-emerald-700">88.42</span>
                 <span className="text-xs text-emerald-600 font-bold">Mutu A</span>
@@ -381,31 +406,56 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
             </div>
           </div>
 
-          {/* Charts Row: Trend Line + Sektor SLA Bars + Status Donut */}
+          {/* Charts Row: Trend Line (WITH EXPLICIT BLUE VS GREEN LEGEND) + Sektor SLA Bars + Status Donut */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Chart 1: Tren Volume Permohonan Bulanan */}
-            <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <TrendingUp className="w-4 h-4 text-sky-600" />
-                  <h4 className="text-xs font-black uppercase text-slate-900">
-                    Tren Volume Permohonan
-                  </h4>
+            <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="space-y-1.5 pb-2 border-b border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <TrendingUp className="w-4 h-4 text-sky-600" />
+                    <h4 className="text-xs font-black uppercase text-slate-900">
+                      Tren Volume Permohonan &amp; Izin Terbit
+                    </h4>
+                  </div>
+                  <span className="text-[9.5px] font-mono font-bold text-sky-800 bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200">
+                    Data PTSP No. 2 (Satu Data)
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-400">Jan - Apr 2026</span>
+
+                {/* Explicit Color-Coded Distinction Badges (Addresses User Point 2) */}
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
+                  <div className="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 font-bold text-blue-900">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#0284C7] inline-block" />
+                    <span>🔵 Garis Biru: Permohonan Masuk (Diajukan)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold text-emerald-900">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] inline-block" />
+                    <span>🟢 Garis Hijau: Izin Terbit (Disetujui)</span>
+                  </div>
+                </div>
               </div>
 
+              {/* Chart with Legend */}
               <div className="h-52 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={PTSP_MONTHLY_TREND} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <LineChart data={PTSP_MONTHLY_TREND} margin={{ top: 10, right: 15, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-                    <XAxis dataKey="bulan" tick={{ fill: '#64748B', fontSize: 10 }} />
+                    <XAxis dataKey="bulan" tick={{ fill: '#64748B', fontSize: 10, fontWeight: 700 }} />
                     <YAxis tick={{ fill: '#64748B', fontSize: 10 }} />
                     <Tooltip
                       formatter={(val: any, name: any) => [
                         `${val} Berkas`,
-                        name === 'permohonan' ? 'Total Masuk' : 'Izin Terbit',
+                        name === 'permohonan' ? '🔵 Total Permohonan Masuk' : '🟢 Izin Resmi Terbit',
                       ]}
+                    />
+                    <Legend
+                      verticalAlign="top"
+                      height={30}
+                      wrapperStyle={{ fontSize: '11px', fontWeight: 600 }}
+                      formatter={(value) =>
+                        value === 'permohonan' ? 'Permohonan Masuk (Biru)' : 'Izin Terbit (Hijau)'
+                      }
                     />
                     <Line
                       type="monotone"
@@ -413,28 +463,34 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                       stroke="#0284C7"
                       strokeWidth={2.5}
                       dot={{ r: 4, fill: '#0284C7' }}
-                      name="Permohonan Masuk"
+                      name="permohonan"
                     />
                     <Line
                       type="monotone"
                       dataKey="terbit"
                       stroke="#10B981"
-                      strokeWidth={2}
-                      dot={{ r: 3, fill: '#10B981' }}
-                      name="Izin Terbit"
+                      strokeWidth={2.5}
+                      dot={{ r: 4, fill: '#10B981' }}
+                      name="terbit"
                     />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-between">
-                <span>Peak Volume:</span>
-                <span className="font-bold text-slate-900">April (1.842 Berkas Masuk)</span>
+              {/* Explanatory callout for crystal clarity */}
+              <div className="text-[10.5px] text-slate-600 bg-sky-50/70 p-2.5 rounded-lg border border-sky-100 space-y-1">
+                <div className="flex items-center justify-between font-bold text-slate-800">
+                  <span>💡 Penjelasan Makna Garis:</span>
+                  <span className="text-emerald-700">Rasio Penyelesaian: 95.4%</span>
+                </div>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  <strong>Garis Biru</strong> = total berkas yang diajukan pemohon. <strong>Garis Hijau</strong> = jumlah izin yang telah selesai diverifikasi &amp; diterbitkan. Selisih merupakan berkas yang sedang dalam proses verifikasi teknis/lapangan.
+                </p>
               </div>
             </div>
 
             {/* Chart 2: SLA per Sektor (Direct comparison with targets) */}
-            <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3">
+            <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-emerald-600" />
@@ -442,7 +498,9 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                     Kepatuhan SLA per Sektor Usaha
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500">Target SLA ≥85%</span>
+                <span className="text-[9.5px] font-mono font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                  Data PTSP No. 14
+                </span>
               </div>
 
               <div className="space-y-3 pt-1">
@@ -542,99 +600,6 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
               </div>
             </div>
           </div>
-
-          {/* Bottom Row: Titik Hambatan Utama + Monitoring Isu Strategis */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            {/* Titik Hambatan Utama (Atensi Manajemen) */}
-            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
-                  <h4 className="text-xs font-black uppercase text-slate-900">
-                    Titik Hambatan Utama (Atensi Manajemen)
-                  </h4>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">
-                  Perlu Intervensi
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {PTSP_BOTTLENECK_ITEMS.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="font-bold text-xs text-slate-900 leading-snug">
-                        {item.judul}
-                      </span>
-                      <span
-                        className={`text-[11px] font-mono font-black px-2 py-0.5 rounded shrink-0 ${
-                          item.level === 'critical'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-amber-100 text-amber-800'
-                        }`}
-                      >
-                        {item.jumlahKasus} Kasus
-                      </span>
-                    </div>
-                    <p className="text-[10.5px] text-slate-500 leading-relaxed">{item.dampak}</p>
-                    <div className="text-[10.5px] text-sky-800 font-semibold bg-sky-50 p-1.5 rounded border border-sky-100">
-                      Rekomendasi: {item.rekomendasi}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Strategic Insights & Operational Highlights */}
-            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-indigo-600" />
-                  <h4 className="text-xs font-black uppercase text-slate-900">
-                    Executive Strategic Insights &amp; Alert
-                  </h4>
-                </div>
-                <span className="text-[10px] font-mono text-slate-400">PTSP BP Batam</span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-lg bg-emerald-50/70 border border-emerald-200/80 space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">
-                    SLA Tertinggi
-                  </span>
-                  <div className="text-base font-black text-slate-900">LOGISTIK &amp; MARITIM</div>
-                  <div className="text-xl font-black font-mono text-emerald-700">91.1%</div>
-                  <p className="text-[10px] text-emerald-800">
-                    Proses digitalisasi rekomendasi bongkar muat &amp; kapal berjalan efektif.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg bg-red-50/70 border border-red-200/80 space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-red-800 block">
-                    SLA Terendah
-                  </span>
-                  <div className="text-base font-black text-slate-900">KELAUTAN &amp; TUKS</div>
-                  <div className="text-xl font-black font-mono text-red-700">68.0%</div>
-                  <p className="text-[10px] text-red-800">
-                    31 berkas mengalami aging &gt; 14 hari kerja karena verifikasi lintas instansi.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-lg bg-slate-900 text-white space-y-2">
-                <div className="flex items-center gap-2 text-sky-400 text-xs font-bold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Kesimpulan Rekomendasi Deputi A2 (DEP A2)</span>
-                </div>
-                <p className="text-[11px] text-slate-300 leading-relaxed">
-                  "Pertumbuhan volume permohonan perizinan naik 14.2% YTD memerlukan penguatan integrasi data teknis bersama Kemenhub/KSOP dan Bappenas. Fokus percepatan pada sektor kelautan dan dokumen lingkungan akan meningkatkan kepatuhan SLA global menjadi &gt;90%."
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 
@@ -653,9 +618,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                     Evaluasi 6 Domain Arsitektur SPBE (Skor: 4.12 / 5.0)
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
-                  Target: 3.90
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9.5px] font-mono font-bold text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">
+                    Data PDSI No. 1 (Satu Data)
+                  </span>
+                  <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                    Target: 3.90
+                  </span>
+                </div>
               </div>
 
               <div className="h-64 w-full">
@@ -815,9 +785,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                     Indeks Kualitas Kebijakan (IKK: 71.80 / Target: 65.0)
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  +10.46% di atas target
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9.5px] font-mono font-bold text-sky-800 bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200">
+                    Data PHKS No. 1 (Satu Data)
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    +10.46%
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-3 pt-1">
@@ -919,9 +894,14 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                     Progres 5 Masterplan Strategis Pembangunan
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  Rata-rata: 91.9%
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9.5px] font-mono font-bold text-teal-800 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">
+                    Data P3S No. 6 (Satu Data)
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Avg 91.9%
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-3 pt-1">
@@ -952,41 +932,81 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
               </div>
             </div>
 
-            {/* Right: IPPN Bappenas & Keselarasan Renstra */}
+            {/* Right: Evaluasi Capaian Renstra & Rencana Kerja BP Batam (Data P3S No. 3, 4, 17) */}
             <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3 flex flex-col justify-between">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-emerald-600" />
+                  <Award className="w-4 h-4 text-amber-600" />
                   <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                    Indeks Keselarasan IPPN Bappenas (IKP-1)
+                    Capaian Sasaran Renstra &amp; Target RO
                   </h4>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  Skor: 94.20
+                <span className="text-[10px] font-mono text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                  Data P3S No. 3 &amp; 17
                 </span>
               </div>
 
-              <div className="p-4 rounded-xl bg-linear-to-br from-slate-900 to-slate-800 text-white space-y-2">
-                <div className="text-[10px] uppercase font-bold tracking-wider text-sky-400">
-                  Kategori Penilaian Nasional
+              <div className="space-y-3">
+                <div className="p-3 rounded-xl bg-slate-900 text-white space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] uppercase font-bold tracking-wider text-amber-400">
+                    <span>Indeks Capaian Program Strategis</span>
+                    <span className="font-mono text-emerald-400 font-black text-xs">96.10% (On-Target)</span>
+                  </div>
+                  <div className="text-xl font-black font-mono text-white">
+                    28 dari 29 Rincian Output Selesai
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-snug">
+                    Berdasarkan Rekapitulasi Rencana Strategis (Dataset No. 3) &amp; Pemantauan Capaian (Dataset No. 17), pelaksanaan program strategis BP Batam mencapai tingkat ketercapaian 96.10%.
+                  </p>
                 </div>
-                <div className="text-3xl font-black font-mono text-emerald-400">
-                  SANGAT BAIK
+
+                {/* 4 Pilar Sasaran Program Renstra */}
+                <div className="space-y-2 text-xs">
+                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-slate-800">1. Konektivitas &amp; Logistik Terpadu</span>
+                      <span className="font-mono font-bold text-emerald-700">96.5%</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-emerald-600 h-full rounded-full" style={{ width: '96.5%' }} />
+                    </div>
+                  </div>
+
+                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-slate-800">2. Iklim Investasi &amp; KEK Digital</span>
+                      <span className="font-mono font-bold text-emerald-700">98.2%</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-emerald-600 h-full rounded-full" style={{ width: '98.2%' }} />
+                    </div>
+                  </div>
+
+                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-slate-800">3. Penataan Ruang &amp; Utilitas Kawasan</span>
+                      <span className="font-mono font-bold text-sky-700">94.8%</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-sky-600 h-full rounded-full" style={{ width: '94.8%' }} />
+                    </div>
+                  </div>
+
+                  <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-slate-800">4. Tata Kelola &amp; Pemanfaatan FS</span>
+                      <span className="font-mono font-bold text-sky-700">95.0%</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-sky-600 h-full rounded-full" style={{ width: '95.0%' }} />
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Berdasarkan evaluasi Surat Edaran Menteri PPN/Kepala Bappenas No. 3 Tahun 2023, seluruh Renstra, RKA, dan KRO BP Batam selaras 100% dengan sasaran strategis prioritas pembangunan nasional RPJMN.
-                </p>
               </div>
 
-              <div className="space-y-2 text-xs text-slate-600 pt-1">
-                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
-                  <span>Partisipasi Pelaporan KRO:</span>
-                  <span className="font-mono font-bold text-slate-900">100% Tepat Waktu</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
-                  <span>Feedback Stakeholder Positif:</span>
-                  <span className="font-mono font-bold text-emerald-700">91.4% (Sangat Mendukung)</span>
-                </div>
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                <span>Pemanfaatan Dokumen FS: 100%</span>
+                <span className="text-emerald-700 font-bold">Data P3S No. 1 &amp; 4</span>
               </div>
             </div>
           </div>

@@ -149,10 +149,10 @@ export const PtspExecutiveOverview: React.FC<PtspExecutiveOverviewProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-                  LIC_VOL • LIC_ISSUED • LIC_SLA
+                  Data PTSP No. 2 (Satu Data)
                 </span>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Kinerja Operasional
+                  Kinerja Operasional PTSP
                 </span>
               </div>
               <h3 className="text-sm font-extrabold text-slate-900">
@@ -174,27 +174,32 @@ export const PtspExecutiveOverview: React.FC<PtspExecutiveOverviewProps> = ({
                 </button>
               )}
               <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
-                SLA YTD: 94,6% (Hijau)
+                SLA YTD: 94,6%
               </span>
             </div>
           </div>
 
           {/* Clean Custom SVG & Grid Visualizer (Zero External Dependencies) */}
-          <div className="pt-4 flex flex-col justify-between flex-1">
-            {/* Chart Legend */}
-            <div className="flex flex-wrap items-center justify-end gap-3 text-xs mb-3">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded bg-blue-600 inline-block" />
-                <span className="text-slate-600 font-medium">Permohonan Masuk (LIC_VOL)</span>
+          <div className="pt-3 flex flex-col justify-between flex-1">
+            {/* Chart Legend with clear distinction */}
+            <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200/70 text-xs mb-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                  <span className="w-3 h-3 rounded bg-blue-600 inline-block" />
+                  <span className="text-blue-900 font-bold text-[11px]">🔵 Biru: Permohonan Masuk (Diajukan)</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="w-3 h-3 rounded bg-emerald-500 inline-block" />
+                  <span className="text-emerald-900 font-bold text-[11px]">🟢 Hijau: Izin Terbit (Disetujui)</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                  <span className="w-4 h-1 bg-amber-500 rounded inline-block" />
+                  <span className="text-amber-900 font-bold text-[11px]">🟡 SLA Tepat Waktu</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded bg-emerald-500 inline-block" />
-                <span className="text-slate-600 font-medium">Izin Terbit (LIC_ISSUED)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-4 h-1 bg-amber-500 rounded inline-block" />
-                <span className="text-slate-600 font-medium">SLA Tepat Waktu (LIC_SLA)</span>
-              </div>
+              <span className="text-[10px] text-slate-500 font-mono italic">
+                Gap = Berkas Proses/Verifikasi
+              </span>
             </div>
 
             {/* Visual Bar & Metric Grid */}

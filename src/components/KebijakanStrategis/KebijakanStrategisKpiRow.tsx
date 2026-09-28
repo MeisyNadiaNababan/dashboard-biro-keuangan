@@ -121,10 +121,13 @@ export const KebijakanStrategisKpiRow: React.FC<KebijakanStrategisKpiRowProps> =
 
               {/* Attribution & Activities */}
               <div className="space-y-1.5 text-[10.5px] text-slate-600 pt-1 border-t border-slate-100">
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex items-start justify-between gap-1.5">
                   <span className="text-slate-400 font-medium shrink-0">Sumber:</span>
-                  <span className="font-bold text-slate-800 text-right truncate">
-                    {ikp.sumberData.split('BP')[0].trim()}
+                  <span className="font-mono font-bold text-sky-800 text-[10px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200 truncate">
+                    {ikp.id === 'ikp-1-perencanaan' && 'Data P3S No. 3 (Satu Data)'}
+                    {ikp.id === 'ikp-2-kebijakan' && 'Data PHKS No. 1 (Satu Data)'}
+                    {ikp.id === 'ikp-3-spbe' && 'Data PDSI No. 1 (Satu Data)'}
+                    {ikp.id === 'ikp-4-ikm-ptsp' && 'Data PTSP No. 4 (Satu Data)'}
                   </span>
                 </div>
                 <div className="flex items-start justify-between gap-2">

@@ -17,6 +17,10 @@ import {
   DollarSign,
   Building2,
   CheckCircle2,
+  Activity,
+  Building,
+  MessageSquare,
+  ShieldAlert,
 } from 'lucide-react';
 import {
   FISCAL_REVENUE_SUMMARY_DATA,
@@ -40,6 +44,10 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
+import { SakipEvaluationView } from '../BiroOrganisasi/SakipEvaluationView';
+import { PekpppChart } from '../BiroOrganisasi/PekpppChart';
+import { PengaduanMasyarakatChart } from '../BiroOrganisasi/PengaduanMasyarakatChart';
+import { PiagamRisikoChart } from '../BiroOrganisasi/PiagamRisikoChart';
 
 interface AdministrasiKeuanganVisualChartsProps {
   onOpenFormulaModal?: (kpiId: string) => void;
@@ -55,6 +63,11 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
   // Expense Unit Filter Mode: 'all_units' vs 'perkin_units'
   const [expenseUnitMode, setExpenseUnitMode] = useState<'all_units' | 'perkin_units'>('all_units');
+
+  // Sub-tab under Akuntabilitas & OKMR
+  const [okmrSubTab, setOkmrSubTab] = useState<
+    'radar' | 'sakip' | 'pekppp' | 'pengaduan' | 'piagam_risiko'
+  >('radar');
 
   // Radar Data for 6 Vital Indices related to Deputi Administrasi & Keuangan & Biro OKMR
   const radarData = [
@@ -534,135 +547,222 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
       )}
 
       {/* ==================================================================== */}
-      {/* VIEW 3: RADAR AKUNTABILITAS & OKMR + KONSOLIDASI INDEKS TATA KELOLA  */}
-      {/* MENAMPILKAN RADAR INDEKS DAN KONSOLIDASI LENGKAP NILAI INDEKS TATA KELOLA */}
+      {/* VIEW 3: AKUNTABILITAS & TATA KELOLA BIRO OKMR (DEP A1)               */}
+      {/* MENGINTEGRASIKAN RADAR, SAKIP, PEKPPP, PENGADUAN, DAN PIAGAM RISIKO */}
       {/* ==================================================================== */}
       {activeTab === 'akuntabilitas_okmr' && (
         <div className="space-y-4">
-          {/* Top Row: Radar Chart Indeks Akuntabilitas & Tata Kelola OKMR */}
-          <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-            <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-100 gap-2">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-cyan-600" />
-                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
-                  RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR
-                </h4>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold">
-                  SAKIP Predikat A (82.68) • RB Predikat A (81.14)
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
-                  Target vs Realisasi
-                </span>
-              </div>
-            </div>
+          {/* Sub-Tabs for OKMR Governance Visualizations */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100 rounded-xl border border-slate-200/80">
+            <button
+              onClick={() => setOkmrSubTab('radar')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'radar'
+                  ? 'bg-white text-blue-700 shadow-2xs font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Radar &amp; 9 Indeks Tata Kelola</span>
+            </button>
 
-            <div className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarData}>
-                  <PolarGrid stroke="#E2E8F0" />
-                  <PolarAngleAxis
-                    dataKey="subject"
-                    tick={{ fontSize: 10.5, fill: '#334155', fontWeight: 600 }}
-                  />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#94A3B8' }} />
-                  <Radar
-                    name="Target Standar / Perkin"
-                    dataKey="target"
-                    stroke="#94A3B8"
-                    fill="#94A3B8"
-                    fillOpacity={0.2}
-                  />
-                  <Radar
-                    name="Realisasi Capaian"
-                    dataKey="realisasi"
-                    stroke="#0284C7"
-                    fill="#0284C7"
-                    fillOpacity={0.45}
-                  />
-                  <Tooltip
-                    formatter={(value: any, name: any) => [`${value}% Skala 100`, name]}
-                    contentStyle={{ fontSize: '11px', borderRadius: '8px', border: '1px solid #CBD5E1' }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
+            <button
+              onClick={() => setOkmrSubTab('sakip')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'sakip'
+                  ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Nilai SAKIP (82.68 - A)</span>
+            </button>
 
-            <div className="text-[10.5px] text-slate-500 pt-2 border-t border-slate-100 font-mono flex flex-wrap items-center justify-between gap-2">
-              <span>Pengampu Utama: Biro OKMR, didukung Biro SDM &amp; Biro Keuangan</span>
-              <span className="text-emerald-700 font-bold flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                6 Indeks Seluruhnya Melampaui Target
-              </span>
-            </div>
+            <button
+              onClick={() => setOkmrSubTab('pekppp')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'pekppp'
+                  ? 'bg-white text-teal-700 shadow-2xs font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Building className="w-3.5 h-3.5" />
+              <span>Pelayanan Publik (PEKPPP 4.38)</span>
+            </button>
+
+            <button
+              onClick={() => setOkmrSubTab('pengaduan')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'pengaduan'
+                  ? 'bg-white text-sky-700 shadow-2xs font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Pengaduan Masyarakat (96.2%)</span>
+            </button>
+
+            <button
+              onClick={() => setOkmrSubTab('piagam_risiko')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'piagam_risiko'
+                  ? 'bg-white text-rose-700 shadow-2xs font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Piagam Risiko (Mitigasi 100%)</span>
+            </button>
           </div>
 
-          {/* Bottom Section: KONSOLIDASI LENGKAP INDEKS-INDEKS TATA KELOLA & AKUNTABILITAS */}
-          <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-3">
-            <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
-                  <Scale className="w-4 h-4" />
+          {/* VIEW 3A: RADAR & 9 INDEKS */}
+          {okmrSubTab === 'radar' && (
+            <div className="space-y-4">
+              {/* Radar Chart */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
+                <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-100 gap-2">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-cyan-600" />
+                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
+                      RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR
+                    </h4>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold">
+                      SAKIP Predikat A (82.68) • RB Predikat A (81.14)
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
+                      Target vs Realisasi
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
-                    KONSOLIDASI INDEKS TATA KELOLA &amp; AKUNTABILITAS UNIT (BIRO OKMR, SDM, KEUANGAN)
-                  </h4>
-                  <p className="text-[10.5px] text-slate-500">
-                    Rincian parameter, target perkin, capaian riil, serta predikat akuntabilitas di bawah koordinasi Deputi Bidang Administrasi dan Keuangan
-                  </p>
+
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={radarData}>
+                      <PolarGrid stroke="#E2E8F0" />
+                      <PolarAngleAxis
+                        dataKey="subject"
+                        tick={{ fontSize: 10.5, fill: '#334155', fontWeight: 600 }}
+                      />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#94A3B8' }} />
+                      <Radar
+                        name="Target Standar / Perkin"
+                        dataKey="target"
+                        stroke="#94A3B8"
+                        fill="#94A3B8"
+                        fillOpacity={0.2}
+                      />
+                      <Radar
+                        name="Realisasi Capaian"
+                        dataKey="realisasi"
+                        stroke="#0284C7"
+                        fill="#0284C7"
+                        fillOpacity={0.45}
+                      />
+                      <Tooltip
+                        formatter={(value: any, name: any) => [`${value}% Skala 100`, name]}
+                        contentStyle={{ fontSize: '11px', borderRadius: '8px', border: '1px solid #CBD5E1' }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="text-[10.5px] text-slate-500 pt-2 border-t border-slate-100 font-mono flex flex-wrap items-center justify-between gap-2">
+                  <span>Pengampu Utama: Biro OKMR, didukung Biro SDM &amp; Biro Keuangan</span>
+                  <span className="text-emerald-700 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    6 Indeks Seluruhnya Melampaui Target
+                  </span>
                 </div>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-bold">
-                9 INDEKS KONSOLIDASI
-              </span>
-            </div>
 
-            {/* Grid 9 Index Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {OKMR_GOVERNANCE_INDICES.map((idx) => (
-                <div
-                  key={idx.id}
-                  className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-2xs transition-all flex flex-col justify-between space-y-2.5"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-start justify-between gap-1.5">
-                      <span className="text-[11px] font-extrabold text-slate-900 leading-snug">
-                        {idx.label}
-                      </span>
-                      <span
-                        className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${idx.badgeColor}`}
-                      >
-                        {idx.predikat}
-                      </span>
+              {/* 9 Indeks Cards */}
+              <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-3">
+                <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
+                      <Scale className="w-4 h-4" />
                     </div>
-                    <p className="text-[10px] text-slate-500 leading-snug">
-                      {idx.subtext}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-slate-400 font-mono block">
-                        {idx.target}
-                      </span>
-                      <span className="text-base font-black text-slate-900 font-mono">
-                        {idx.realisasi}
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[9px] text-slate-400 font-mono block">Pengampu:</span>
-                      <span className="text-[10px] font-semibold text-slate-700 font-mono">
-                        {idx.pengampu.split('(')[0].trim()}
-                      </span>
+                      <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
+                        KONSOLIDASI INDEKS TATA KELOLA &amp; AKUNTABILITAS UNIT (BIRO OKMR, SDM, KEUANGAN)
+                      </h4>
+                      <p className="text-[10.5px] text-slate-500">
+                        Rincian parameter, target perkin, capaian riil, serta predikat akuntabilitas di bawah koordinasi Deputi Bidang Administrasi dan Keuangan
+                      </p>
                     </div>
                   </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-bold">
+                    9 INDEKS KONSOLIDASI
+                  </span>
                 </div>
-              ))}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {OKMR_GOVERNANCE_INDICES.map((idx) => (
+                    <div
+                      key={idx.id}
+                      className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-2xs transition-all flex flex-col justify-between space-y-2.5"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-start justify-between gap-1.5">
+                          <span className="text-[11px] font-extrabold text-slate-900 leading-snug">
+                            {idx.label}
+                          </span>
+                          <span
+                            className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${idx.badgeColor}`}
+                          >
+                            {idx.predikat}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 leading-snug">
+                          {idx.subtext}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                        <div>
+                          <span className="text-[10px] text-slate-400 font-mono block">
+                            {idx.target}
+                          </span>
+                          <span className="text-base font-black text-slate-900 font-mono">
+                            {idx.realisasi}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[9px] text-slate-400 font-mono block">Pengampu:</span>
+                          <span className="text-[10px] font-semibold text-slate-700 font-mono">
+                            {idx.pengampu.split('(')[0].trim()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* VIEW 3B: SAKIP */}
+          {okmrSubTab === 'sakip' && (
+            <SakipEvaluationView onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
+          )}
+
+          {/* VIEW 3C: PEKPPP */}
+          {okmrSubTab === 'pekppp' && (
+            <PekpppChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
+          )}
+
+          {/* VIEW 3D: PENGADUAN LAYANAN BADAN USAHA */}
+          {okmrSubTab === 'pengaduan' && (
+            <PengaduanMasyarakatChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
+          )}
+
+          {/* VIEW 3E: PIAGAM RISIKO */}
+          {okmrSubTab === 'piagam_risiko' && (
+            <PiagamRisikoChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
+          )}
         </div>
       )}
     </div>

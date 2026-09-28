@@ -51,8 +51,8 @@ const FO_CORE_TIERS = [
 ];
 
 export const PdsiSatuDataVisualSuite: React.FC = () => {
-  // Navigation Tabs for the 7 active visualizations
-  const [activeVisualTab, setActiveVisualTab] = useState<string>('all');
+  // Navigation Tabs for the 7 active visualizations (default to 1. Jalur FO)
+  const [activeVisualTab, setActiveVisualTab] = useState<string>('vis-1');
 
   // Visualization 1: Fiber Optic Filter & Active Node/Corridor
   const [selectedFoWilayah, setSelectedFoWilayah] = useState<string>('ALL');
@@ -121,24 +121,16 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
     // Distinct, vibrant color coding by Core capacity
     let bgColor = '#0284c7';
     let strokeColor = '#7dd3fc';
-    let badgeTextColor = '#0369a1';
 
-    if (isSelected) {
-      bgColor = '#0c2847'; // High-contrast BP Batam Deep Navy
-      strokeColor = '#38bdf8'; // Glowing Cyan border
-      badgeTextColor = '#0369a1';
-    } else if (kapasitasCore === 96) {
-      bgColor = '#047857'; // Vibrant Emerald
+    if (kapasitasCore === 96) {
+      bgColor = isSelected ? '#064e3b' : '#047857'; // Vibrant Emerald / Deep Forest Emerald when selected
       strokeColor = '#34d399';
-      badgeTextColor = '#065f46';
     } else if (kapasitasCore === 72) {
-      bgColor = '#0284c7'; // Sky / Ocean Blue
+      bgColor = isSelected ? '#0c4a6e' : '#0284c7'; // Vibrant Sky Ocean / Deep Navy when selected
       strokeColor = '#7dd3fc';
-      badgeTextColor = '#0369a1';
     } else if (kapasitasCore === 48) {
-      bgColor = '#6366f1'; // Royal Violet / Indigo
+      bgColor = isSelected ? '#3730a3' : '#6366f1'; // Royal Violet / Indigo when selected
       strokeColor = '#c4b5fd';
-      badgeTextColor = '#3730a3';
     }
 
     // Share of total bentang percentage
@@ -155,14 +147,14 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
     }
 
     const isTwoLines = titleLines.length > 1;
-    const showDetails = width > 100 && height > 70;
-    const showCompact = width > 55 && height > 38;
+    const showDetails = width > 90 && height > 60;
+    const showCompact = width > 50 && height > 35;
 
     // Y position calculations
-    const line1Y = isTwoLines ? y + 17 : y + 21;
-    const line2Y = y + 33;
-    const metricY = isTwoLines ? y + 53 : y + 43;
-    const badgeY = metricY + 9;
+    const line1Y = isTwoLines ? y + 16 : y + 20;
+    const line2Y = y + 32;
+    const metricY = isTwoLines ? y + 51 : y + 42;
+    const badgeY = metricY + 8;
 
     return (
       <g
@@ -177,14 +169,14 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
           y={y + 2}
           width={Math.max(width - 4, 0)}
           height={Math.max(height - 4, 0)}
-          rx={7}
-          ry={7}
+          rx={8}
+          ry={8}
           fill={bgColor}
           stroke={isSelected ? '#38bdf8' : isHovered ? '#ffffff' : strokeColor}
-          strokeWidth={isSelected ? 3 : isHovered ? 2 : 1.2}
+          strokeWidth={isSelected ? 3.5 : isHovered ? 2 : 1.2}
           style={{
             filter: isSelected
-              ? 'drop-shadow(0 4px 12px rgba(12, 40, 71, 0.6))'
+              ? 'drop-shadow(0 4px 14px rgba(12, 40, 71, 0.7))'
               : isHovered
               ? 'brightness(1.15) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25))'
               : 'none',
@@ -202,23 +194,23 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
             rx={5}
             ry={5}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.7)"
-            strokeWidth={1}
+            stroke="rgba(255, 255, 255, 0.85)"
+            strokeWidth={1.2}
             strokeDasharray="4 3"
           />
         )}
 
         {/* Selected Badge Indicator in Top-Right Corner */}
-        {isSelected && width > 115 && height > 55 && (
-          <g transform={`translate(${x + width - 74}, ${y + 6})`}>
-            <rect width={68} height={18} rx={4} fill="#38bdf8" />
+        {isSelected && width > 100 && height > 45 && (
+          <g transform={`translate(${x + width - 78}, ${y + 6})`}>
+            <rect width={72} height={18} rx={4} fill="#38bdf8" />
             <text
-              x={34}
+              x={36}
               y={13}
               textAnchor="middle"
-              fill="#0c2847"
+              fill="#082f49"
               fontSize={9}
-              fontWeight="bold"
+              fontWeight="900"
               letterSpacing="0.05em"
               style={{ pointerEvents: 'none' }}
             >
@@ -237,7 +229,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
               fill="#ffffff"
               fontSize={isTwoLines ? 12 : 13.5}
               fontWeight="bold"
-              style={{ pointerEvents: 'none' }}
+              style={{ pointerEvents: 'none', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
             >
               {titleLines[0]}
             </text>
@@ -248,7 +240,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
                 fill="#e0f2fe"
                 fontSize={11}
                 fontWeight="600"
-                style={{ pointerEvents: 'none' }}
+                style={{ pointerEvents: 'none', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
               >
                 {titleLines[1]}
               </text>
@@ -256,49 +248,49 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
 
             {/* Panjang Km & Percentage of Total */}
             <text x={x + 10} y={metricY} style={{ pointerEvents: 'none' }}>
-              <tspan fill="#ffffff" fontSize={18} fontWeight="bold" fontFamily="monospace">
+              <tspan fill="#ffffff" fontSize={18} fontWeight="900" fontFamily="monospace" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
                 {panjangKm}
               </tspan>
               <tspan fill="#e0f2fe" fontSize={12} fontWeight="bold">
                 {' '}Km{' '}
               </tspan>
-              {width > 125 && (
+              {width > 120 && (
                 <tspan fill="#bae6fd" fontSize={10.5} fontWeight="normal">
                   ({pct})
                 </tspan>
               )}
             </text>
 
-            {/* Solid High-Contrast Core Capacity Badge */}
-            {height > 105 && (
+            {/* Solid Ultra High-Contrast Core Capacity Pill Badge (Dark Backdrop + White Bold Text) */}
+            {height > 68 && (
               <g transform={`translate(${x + 10}, ${badgeY})`} style={{ pointerEvents: 'none' }}>
                 <rect
-                  width={Math.min(width - 24, 94)}
+                  width={Math.min(width - 24, 102)}
                   height={19}
                   rx={4}
-                  fill="#ffffff"
-                  stroke="rgba(0,0,0,0.15)"
+                  fill="rgba(15, 23, 42, 0.75)"
+                  stroke="rgba(255, 255, 255, 0.4)"
                   strokeWidth={0.8}
                 />
                 <text
-                  x={7}
+                  x={8}
                   y={13.5}
-                  fill={badgeTextColor}
+                  fill="#ffffff"
                   fontSize={10}
                   fontWeight="bold"
                   fontFamily="monospace"
                 >
-                  {kapasitasCore} CORE SM
+                  ⚡ {kapasitasCore} CORE SM
                 </text>
               </g>
             )}
 
-            {/* Large Tile Bonus: Tipe Jalur & Status (e.g., Sekupang, Nongsa) */}
-            {height > 155 && width > 130 && (
+            {/* Large Tile Bonus: Tipe Jalur & Status */}
+            {height > 130 && width > 125 && (
               <>
                 <text
                   x={x + 10}
-                  y={badgeY + 34}
+                  y={badgeY + 32}
                   fill="#f1f5f9"
                   fontSize={10.5}
                   fontStyle="italic"
@@ -308,13 +300,13 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
                 </text>
                 <text
                   x={x + 10}
-                  y={badgeY + 50}
+                  y={badgeY + 48}
                   fill="#a7f3d0"
                   fontSize={10}
-                  fontWeight="600"
+                  fontWeight="700"
                   style={{ pointerEvents: 'none' }}
                 >
-                  ● {statusKoneksi}
+                  ● {statusKoneksi || 'Optimal'}
                 </text>
               </>
             )}
@@ -346,8 +338,8 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
               <text
                 x={x + 8}
                 y={y + 45}
-                fill="#bae6fd"
-                fontSize={9}
+                fill="#ffffff"
+                fontSize={9.5}
                 fontWeight="bold"
                 fontFamily="monospace"
                 style={{ pointerEvents: 'none' }}
@@ -454,7 +446,6 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
 
   // 7 Visualizations (Daftar Software dihapus sesuai permintaan user)
   const visualNavButtons = [
-    { id: 'all', label: 'Semua (7 Visualisasi)', icon: Layers },
     { id: 'vis-1', label: '1. Jalur FO', icon: Network },
     { id: 'vis-2', label: '2. Rak Data Center', icon: Server },
     { id: 'vis-3', label: '3. Kepuasan DC', icon: SmilePlus },
@@ -506,7 +497,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* ========================================================================= */}
       {/* 1. VISUALISASI DATA JALUR FIBER OPTIC (FO) - DATASET NO. 5 */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-1') && (
+      {activeVisualTab === 'vis-1' && (
         <div id="vis-1" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Visualisasi & Atribut */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -890,7 +881,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* 2. VISUALISASI DATA RAK DATA CENTER - DATASET NO. 8 */}
       {/* Catatan Sesuai Permintaan User: Denah Okupansi Slot Rak telah DIHAPUS */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-2') && (
+      {activeVisualTab === 'vis-2' && (
         <div id="vis-2" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -995,7 +986,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* ========================================================================= */}
       {/* 3. VISUALISASI DATA KEPUASAN PELANGGAN DATA CENTRE - DATASET NO. 11 */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-3') && (
+      {activeVisualTab === 'vis-3' && (
         <div id="vis-3" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -1070,7 +1061,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* ========================================================================= */}
       {/* 4. VISUALISASI DATA SERANGAN KEAMANAN IT - DATASET NO. 12 */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-4') && (
+      {activeVisualTab === 'vis-4' && (
         <div id="vis-4" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -1161,7 +1152,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* ========================================================================= */}
       {/* 5. VISUALISASI REKAP INFRASTRUKTUR SERVER DAN STORAGE - DATASET NO. 13 */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-5') && (
+      {activeVisualTab === 'vis-5' && (
         <div id="vis-5" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -1251,7 +1242,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* VISUALISASI BARU: Treemap Hierarki & Tabel Matriks Berdasarkan Unit Operasional */}
       {/* Sesuai Permintaan: Bukan Card Kotak-Kotak! */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-6') && (
+      {activeVisualTab === 'vis-6' && (
         <div id="vis-6" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
@@ -1482,7 +1473,7 @@ export const PdsiSatuDataVisualSuite: React.FC = () => {
       {/* ========================================================================= */}
       {/* 7. VISUALISASI DATA PERMINTAAN LAYANAN IT (HELPDESK) - DATASET NO. 21 */}
       {/* ========================================================================= */}
-      {(activeVisualTab === 'all' || activeVisualTab === 'vis-7') && (
+      {activeVisualTab === 'vis-7' && (
         <div id="vis-7" className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
           {/* Header Standardisasi Point 9 */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">

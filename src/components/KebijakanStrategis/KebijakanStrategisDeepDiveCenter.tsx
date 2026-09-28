@@ -39,12 +39,6 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
   // Sub-tabs for PDSI view
   const [pdsiSubMenu, setPdsiSubMenu] = useState<string>('ikhtisar');
 
-  // Sub-tabs for Pusren view
-  const [pusrenSubTab, setPusrenSubTab] = useState<string>('masterplan');
-
-  // Sub-tabs for PHKS view
-  const [harmonisasiSubTab, setHarmonisasiSubTab] = useState<string>('ikk');
-
   const normalizedUnitId =
     selectedUnitId === 'pusren'
       ? 'pusat-perencanaan-program'
@@ -156,16 +150,6 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
                 Jenis Layanan (DS 14)
               </button>
               <button
-                onClick={() => setPtspSubMenu('sheet_swap')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  ptspSubMenu === 'sheet_swap'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Sheet Swap Perizinan
-              </button>
-              <button
                 onClick={() => setPtspSubMenu('sektor')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   ptspSubMenu === 'sektor'
@@ -258,69 +242,7 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
       {/* UNIT 3: PUSAT PERENCANAAN PROGRAM STRATEGIS (PUSREN) */}
       {normalizedUnitId === 'pusat-perencanaan-program' && (
         <div className="space-y-4">
-          {/* Sub-filter Bar for Pusren */}
-          <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-              <button
-                onClick={() => setPusrenSubTab('masterplan')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pusrenSubTab === 'masterplan'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                5 Masterplan Kawasan
-              </button>
-              <button
-                onClick={() => setPusrenSubTab('renstra')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pusrenSubTab === 'renstra'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Renstra 2025-2029 &amp; Bappenas
-              </button>
-              <button
-                onClick={() => setPusrenSubTab('monev')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pusrenSubTab === 'monev'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Monev DIPA RKA (Rp 13,66 M)
-              </button>
-              <button
-                onClick={() => setPusrenSubTab('jalan')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pusrenSubTab === 'jalan'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Masterplan Jalan &amp; Spasial
-              </button>
-              <button
-                onClick={() => setPusrenSubTab('kajian')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pusrenSubTab === 'kajian'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Kajian FS &amp; Kelayakan
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-              <span>IPPN 94.20 • 28/29 RO Selesai • Pagu Rp 13,66 M</span>
-            </div>
-          </div>
-
           <PusrenDashboard
-            activeSubTab={pusrenSubTab}
             onOpenFormulaModal={onOpenFormulaModal}
             onOpenExportModal={onOpenExportModal}
           />
@@ -330,69 +252,7 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
       {/* UNIT 4: PUSAT HARMONISASI KEBIJAKAN STRATEGIS (PHKS) */}
       {normalizedUnitId === 'pusat-harmonisasi' && (
         <div className="space-y-4">
-          {/* Sub-filter Bar for PHKS */}
-          <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-              <button
-                onClick={() => setHarmonisasiSubTab('ikk')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  harmonisasiSubTab === 'ikk'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                4 Dimensi IKK (71.80)
-              </button>
-              <button
-                onClick={() => setHarmonisasiSubTab('tarif')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  harmonisasiSubTab === 'tarif'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                7 Level Tarif Layanan
-              </button>
-              <button
-                onClick={() => setHarmonisasiSubTab('regulasi')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  harmonisasiSubTab === 'regulasi'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Sinkronisasi Regulasi
-              </button>
-              <button
-                onClick={() => setHarmonisasiSubTab('rapim')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  harmonisasiSubTab === 'rapim'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Risalah RDP &amp; Rapim
-              </button>
-              <button
-                onClick={() => setHarmonisasiSubTab('survei')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  harmonisasiSubTab === 'survei'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Survei Kewajaran Tarif WTP
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
-              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-              <span>IKK 71.80 • 42 Perka/Kepka • 7 Level Tarif Valid</span>
-            </div>
-          </div>
-
           <HarmonisasiDashboard
-            activeSubTab={harmonisasiSubTab}
             onOpenFormulaModal={onOpenFormulaModal}
             onOpenExportModal={onOpenExportModal}
           />

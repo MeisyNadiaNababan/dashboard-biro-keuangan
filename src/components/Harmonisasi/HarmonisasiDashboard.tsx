@@ -8,19 +8,37 @@ import {
   FileSpreadsheet,
   CheckCircle2,
   AlertCircle,
-  Clock,
   Briefcase,
   Search,
   Filter,
   DollarSign,
   TrendingUp,
+  BarChart3,
+  PieChart as PieIcon,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 import {
   PHKS_IKK_POLICIES,
   PHKS_TARIF_LAYANAN,
   PHKS_SINKRONISASI_REGULASI,
   PHKS_SURVEI_KEWAJARAN,
-  PHKS_RAPIM_LIST,
   PhksTarifLayananDetail,
 } from '../../data/harmonisasiData';
 
@@ -35,8 +53,8 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
   onOpenFormulaModal,
   onOpenExportModal,
 }) => {
-  const [currentTab, setCurrentTab] = useState<'ikk' | 'tarif' | 'regulasi' | 'rapim' | 'survei'>(
-    (activeSubTab as any) || 'ikk'
+  const [currentTab, setCurrentTab] = useState<'ikk' | 'tarif' | 'regulasi' | 'survei'>(
+    activeSubTab === 'rapim' ? 'regulasi' : (activeSubTab as any) || 'ikk'
   );
   const [selectedTarifUnit, setSelectedTarifUnit] = useState<string>('ALL');
   const [tarifSearch, setTarifSearch] = useState('');
@@ -50,78 +68,86 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
     return matchesUnit && matchesSearch;
   });
 
+  // 4 Dimensi IKK chart data
+  const ikkDimensiChartData = [
+    { dimensi: 'Agenda Setting', skor: 75.0, target: 65.0, fullMark: 100 },
+    { dimensi: 'Formulasi Kebijakan', skor: 72.5, target: 65.0, fullMark: 100 },
+    { dimensi: 'Implementasi', skor: 68.0, target: 65.0, fullMark: 100 },
+    { dimensi: 'Evaluasi & Manfaat', skor: 71.7, target: 65.0, fullMark: 100 },
+  ];
+
+  // Tarif visual comparison per Unit (Rata-rata Cost vs Tarif)
+  const tarifUnitSummary = [
+    { unit: 'Pelabuhan', tarifAvg: 185000, costAvg: 172000, validitas: 92 },
+    { unit: 'RSBP', tarifAvg: 450000, costAvg: 410000, validitas: 94 },
+    { unit: 'SPAM / Air', tarifAvg: 38000, costAvg: 35000, validitas: 88 },
+    { unit: 'Lahan', tarifAvg: 290000, costAvg: 260000, validitas: 89 },
+    { unit: 'Bandara', tarifAvg: 145000, costAvg: 138000, validitas: 91 },
+  ];
+
+  // Regulasi Status chart data
+  const regulasiStatusData = [
+    { name: 'Harmonis Selesai', count: 34, color: '#10B981' },
+    { name: 'Dalam Pembahasan', count: 5, color: '#0284C7' },
+    { name: 'Reviu Antar-Instansi', count: 3, color: '#F59E0B' },
+  ];
+
+  // Survei Kewajaran data
+  const surveiChartData = PHKS_SURVEI_KEWAJARAN.map((s) => ({
+    lokasi: s.lokasi.replace('Kawasan ', ''),
+    wajar: s.persentaseWajar,
+    responden: s.jumlahResponden,
+  }));
+
   return (
     <div className="space-y-4 font-sans select-none pb-12">
-      {/* Top Header Banner */}
-      <div className="bg-[#002B49] text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-700/60 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded font-mono text-[10.5px] font-black uppercase bg-sky-500/20 text-sky-300 border border-sky-400/40">
-              UNIT KERJA PHKS · HALAMAN 12 - 13 PDF (7 DATASET)
-            </span>
-            <span className="text-xs text-slate-300">
-              Perkin A2 (DEP A2): Kebijakan Strategis &amp; Perizinan
-            </span>
-          </div>
-          <h1 className="text-lg sm:text-xl lg:text-2xl font-black tracking-tight">
-            Pusat Harmonisasi Kebijakan Strategis (PHKS BP Batam)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-            Pengendalian Mutu Kebijakan Melalui Indeks Kualitas Kebijakan (IKK 4 Dimensi), Pengujian Kewajaran 7 Level Tarif Layanan Badan Usaha, Sinkronisasi Regulasi Vertikal/Horizontal, dan Risalah Rapim Pimpinan.
-          </p>
-          <div className="text-[11px] text-slate-300 flex flex-wrap items-center gap-2 pt-1 font-medium">
-            <span>Pimpinan: <strong className="text-white">Kepala Pusat Harmonisasi Kebijakan Strategis</strong></span>
-            <span>·</span>
-            <span>Pagu DIPA: <strong className="text-sky-300 font-mono">Rp 4.550.000.000,-</strong></span>
-            <span>·</span>
-            <span>IKP Terhubung: <strong className="text-amber-300">IKP-2 Indeks Kualitas Kebijakan (71.80)</strong></span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2 shrink-0">
-          {onOpenFormulaModal && (
-            <button
-              onClick={() => onOpenFormulaModal('ikp-2-kebijakan')}
-              className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
-            >
-              <Award className="w-3.5 h-3.5 text-amber-400" />
-              <span>Manual IKP-2 (71.80)</span>
-            </button>
-          )}
-          {onOpenExportModal && (
-            <button
-              onClick={onOpenExportModal}
-              className="px-3.5 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span>Ekspor 7 Dataset</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* 4 Summary Cards for PHKS */}
+      {/* 4 Summary Cards for PHKS with Official Satu Data Badges */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
-          <span className="text-[10px] font-bold uppercase text-slate-400 block">Indeks Kualitas Kebijakan</span>
-          <div className="text-xl sm:text-2xl font-black font-mono text-sky-700">71.80 / 100</div>
+        <div
+          onClick={() => onOpenFormulaModal && onOpenFormulaModal('ikp-2-kebijakan')}
+          className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1 hover:border-indigo-400 cursor-pointer transition-all"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">Indeks Kualitas Kebijakan</span>
+            <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 font-bold">
+              Data PHKS No. 1
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-indigo-700">71.80 / 100</div>
           <span className="text-[10.5px] font-semibold text-emerald-600 block">Cukup Baik (LAN RI Standard)</span>
         </div>
+
         <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
-          <span className="text-[10px] font-bold uppercase text-slate-400 block">Regulasi Disinkronisasi</span>
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">Sinkronisasi Eksternal</span>
+            <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 font-bold">
+              Data PHKS No. 2
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">94.4% Selaras</div>
+          <span className="text-[10.5px] font-semibold text-emerald-600 block">Harmonisasi K/L &amp; PP 41/2021</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">Daftar Tarif Layanan</span>
+            <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 font-bold">
+              Data PHKS No. 3
+            </span>
+          </div>
+          <div className="text-xl sm:text-2xl font-black font-mono text-emerald-700">7 Level Tarif</div>
+          <span className="text-[10.5px] font-semibold text-slate-500 block">Unit Cost vs Tarif Berlaku</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">Regulasi Internal BP Batam</span>
+            <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 font-bold">
+              Data PHKS No. 4
+            </span>
+          </div>
           <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">42 Produk Hukum</div>
-          <span className="text-[10.5px] font-semibold text-teal-600 block">Perka, Kepka, &amp; PP 41/2021</span>
-        </div>
-        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
-          <span className="text-[10px] font-bold uppercase text-slate-400 block">Kewajaran 7 Level Tarif</span>
-          <div className="text-xl sm:text-2xl font-black font-mono text-emerald-700">89.5% Tingkat Valid</div>
-          <span className="text-[10.5px] font-semibold text-slate-500 block">Cost-Recovery 100% Layanan</span>
-        </div>
-        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
-          <span className="text-[10px] font-bold uppercase text-slate-400 block">Tindak Lanjut Rapim</span>
-          <div className="text-xl sm:text-2xl font-black font-mono text-slate-900">76 Nota Dinas</div>
-          <span className="text-[10.5px] font-semibold text-emerald-600 block">94.5% Rekomendasi Tuntas</span>
+          <span className="text-[10.5px] font-semibold text-teal-600 block">Perka &amp; Kepka Harmonis</span>
         </div>
       </div>
 
@@ -134,7 +160,7 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
           }`}
         >
           <Award className="w-3.5 h-3.5" />
-          <span>4 Dimensi IKK &amp; Evaluasi Kebijakan (DS 1)</span>
+          <span>4 Dimensi IKK &amp; Kebijakan (DS 1)</span>
         </button>
         <button
           onClick={() => setCurrentTab('tarif')}
@@ -143,7 +169,7 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
           }`}
         >
           <DollarSign className="w-3.5 h-3.5" />
-          <span>Daftar 7 Level Tarif Layanan (DS 3)</span>
+          <span>7 Level Tarif Layanan &amp; Unit Cost (DS 3)</span>
         </button>
         <button
           onClick={() => setCurrentTab('regulasi')}
@@ -152,16 +178,7 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
           }`}
         >
           <Scale className="w-3.5 h-3.5" />
-          <span>Sinkronisasi Regulasi Internal/Eksternal (DS 2, 4)</span>
-        </button>
-        <button
-          onClick={() => setCurrentTab('rapim')}
-          className={`px-3.5 py-2 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-            currentTab === 'rapim' ? 'bg-[#002B49] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-          }`}
-        >
-          <Clock className="w-3.5 h-3.5" />
-          <span>Risalah RDP &amp; Tindak Lanjut Rapim (DS 6, 7)</span>
+          <span>Sinkronisasi Regulasi Eksternal &amp; Internal (DS 2 &amp; 4)</span>
         </button>
         <button
           onClick={() => setCurrentTab('survei')}
@@ -174,75 +191,144 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
         </button>
       </div>
 
-      {/* Tab 1: IKK 4 Dimensi Policy Evaluation */}
+      {/* Tab 1: IKK 4 Dimensi Policy Evaluation + Compact Visual Chart */}
       {currentTab === 'ikk' && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
-              Evaluasi 5 Sampel Kebijakan Utama BP Batam (Dataset #1 - IKK 71.80)
-            </h3>
-            <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-              Standar LAN RI
-            </span>
+        <div className="space-y-4">
+          {/* Compact Chart: 4 Dimensi IKK vs Target LAN RI */}
+          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-xs sm:text-sm font-black uppercase text-slate-900">
+                  Visualisasi 4 Dimensi Indeks Kualitas Kebijakan (IKK: 71.80)
+                </h3>
+              </div>
+              <span className="text-[9.5px] font-mono font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                Data PHKS No. 1 (Satu Data)
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-3">
+              {/* Compact Bar Chart (Height 170px) */}
+              <div className="lg:col-span-8 h-44 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={ikkDimensiChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                    <XAxis dataKey="dimensi" tick={{ fill: '#475569', fontSize: 10, fontWeight: 700 }} />
+                    <YAxis domain={[0, 100]} tick={{ fill: '#64748B', fontSize: 10 }} />
+                    <Tooltip formatter={(val: any) => [`${val} Poin`, 'Skor']} />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '4px' }} />
+                    <Bar dataKey="skor" fill="#6366F1" name="Skor Riil Dimensi" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="target" fill="#CBD5E1" name="Standar Target LAN (65.0)" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Summary Metrics */}
+              <div className="lg:col-span-4 bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2 text-xs">
+                <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider">
+                  Evaluasi Kualitas Kebijakan:
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Skor Konsolidasi:</span>
+                  <span className="font-mono font-black text-indigo-700">71.80 / 100</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Kategori:</span>
+                  <span className="font-bold text-emerald-700">Cukup Baik (Melampaui Target)</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Dimensi Tertinggi:</span>
+                  <span className="font-bold text-slate-800">Agenda Setting (75.0)</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-500">
-                <tr>
-                  <th className="py-2.5 px-3">Nomor Perka / Kepka</th>
-                  <th className="py-2.5 px-3">Nama Kebijakan Strategis</th>
-                  <th className="py-2.5 px-2">Penetapan</th>
-                  <th className="py-2.5 px-2">MAK</th>
-                  <th className="py-2.5 px-3">Analis Instansi</th>
-                  <th className="py-2.5 px-2 text-right">Skor IKK</th>
-                  <th className="py-2.5 px-2 text-center">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                {PHKS_IKK_POLICIES.map((p) => (
-                  <tr key={p.nomor} className="hover:bg-slate-50">
-                    <td className="py-2.5 px-3 font-mono font-bold text-sky-800">{p.nomor}</td>
-                    <td className="py-2.5 px-3">
-                      <span className="font-bold text-slate-900 block">{p.namaKebijakan}</span>
-                      <span className="text-[10px] text-slate-500">Dimensi Unggul: {p.dimensiUnggul}</span>
-                    </td>
-                    <td className="py-2.5 px-2 font-mono text-slate-500">{p.tahunPenetapan}</td>
-                    <td className="py-2.5 px-2 font-mono text-slate-600">{p.mak}</td>
-                    <td className="py-2.5 px-3 text-slate-700">{p.analisInstansi}</td>
-                    <td className="py-2.5 px-2 text-right font-mono font-black text-sky-700">{p.skorIkk}</td>
-                    <td className="py-2.5 px-2 text-center">
-                      <span
-                        className={`text-[9.5px] font-bold px-2 py-0.5 rounded border ${
-                          p.status === 'Efektif'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : 'bg-amber-50 text-amber-700 border-amber-200'
-                        }`}
-                      >
-                        {p.status}
-                      </span>
-                    </td>
+          {/* Table */}
+          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-3">
+            <h4 className="text-xs font-black uppercase text-slate-900">
+              Evaluasi 5 Sampel Kebijakan Utama BP Batam (Standar LAN RI)
+            </h4>
+
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-500">
+                  <tr>
+                    <th className="py-2.5 px-3">Nomor Perka / Kepka</th>
+                    <th className="py-2.5 px-3">Nama Kebijakan Strategis</th>
+                    <th className="py-2.5 px-2">Penetapan</th>
+                    <th className="py-2.5 px-2">MAK</th>
+                    <th className="py-2.5 px-3">Analis Instansi</th>
+                    <th className="py-2.5 px-2 text-right">Skor IKK</th>
+                    <th className="py-2.5 px-2 text-center">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                  {PHKS_IKK_POLICIES.map((p) => (
+                    <tr key={p.nomor} className="hover:bg-slate-50">
+                      <td className="py-2.5 px-3 font-mono font-bold text-indigo-800">{p.nomor}</td>
+                      <td className="py-2.5 px-3">
+                        <span className="font-bold text-slate-900 block">{p.namaKebijakan}</span>
+                        <span className="text-[10px] text-slate-500">Dimensi Unggul: {p.dimensiUnggul}</span>
+                      </td>
+                      <td className="py-2.5 px-2 font-mono text-slate-500">{p.tahunPenetapan}</td>
+                      <td className="py-2.5 px-2 font-mono text-slate-600">{p.mak}</td>
+                      <td className="py-2.5 px-3 text-slate-700">{p.analisInstansi}</td>
+                      <td className="py-2.5 px-2 text-right font-mono font-black text-indigo-700">{p.skorIkk}</td>
+                      <td className="py-2.5 px-2 text-center">
+                        <span
+                          className={`text-[9.5px] font-bold px-2 py-0.5 rounded border ${
+                            p.status === 'Efektif'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-amber-50 text-amber-700 border-amber-200'
+                          }`}
+                        >
+                          {p.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Tab 2: 7 Level Tarif Layanan */}
+      {/* Tab 2: 7 Level Tarif Layanan + Compact Chart */}
       {currentTab === 'tarif' && (
         <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
             <div>
               <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
-                Daftar Tarif Layanan 7 Level Hierarki BP Batam (Dataset #3)
+                Daftar Tarif Layanan 7 Level Hierarki BP Batam (Evaluasi PMK &amp; Cost-Recovery)
               </h3>
               <p className="text-[11px] text-slate-500">
                 Meliputi Kepelabuhanan, RSBP, SPAM &amp; KPLI, Lahan Industri, dan Kebandaraan.
               </p>
             </div>
+            <span className="text-[9.5px] font-mono font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+              Data PHKS No. 3 (Satu Data)
+            </span>
+          </div>
 
+          {/* Compact Chart: Rata-rata Validitas Tarif per Unit BU */}
+          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={tarifUnitSummary} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="unit" tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }} />
+                  <YAxis domain={[0, 100]} tick={{ fill: '#64748B', fontSize: 10 }} />
+                  <Tooltip formatter={(val: any) => [`${val}%`, 'Tingkat Validitas & Kewajaran']} />
+                  <Bar dataKey="validitas" fill="#0D9488" name="Tingkat Validitas Biaya Riil (%)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <select
                 value={selectedTarifUnit}
@@ -301,7 +387,7 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
                     <td className="py-2.5 px-3 text-right font-mono text-slate-600">
                       Rp {t.unitCost.toLocaleString('id-ID')}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-mono font-bold text-sky-800">
+                    <td className="py-2.5 px-3 text-right font-mono font-bold text-indigo-800">
                       Rp {t.tarifBerlaku.toLocaleString('id-ID')}
                     </td>
                     <td className="py-2.5 px-3 text-right font-mono text-slate-500">
@@ -321,14 +407,50 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
         </div>
       )}
 
-      {/* Tab 3: Sinkronisasi Regulasi Internal/Eksternal */}
+      {/* Tab 3: Sinkronisasi Regulasi + Compact Chart */}
       {currentTab === 'regulasi' && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
-              Pipeline Regulasi &amp; Sinkronisasi Kebijakan (Dataset #2 &amp; #4)
-            </h3>
-            <span className="text-[10px] font-mono text-slate-500">Harmonisasi Vertikal UU Ciptaker / PP 41</span>
+        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+            <div>
+              <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
+                Pipeline Regulasi &amp; Sinkronisasi Kebijakan (42 Produk Hukum)
+              </h3>
+              <span className="text-[10px] font-mono text-slate-500">Harmonisasi Vertikal UU Ciptaker / PP 41/2021</span>
+            </div>
+            <span className="text-[9.5px] font-mono font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+              Data PHKS No. 4 (Satu Data)
+            </span>
+          </div>
+
+          {/* Compact Chart: Status Regulasi */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center bg-slate-50/70 p-3 rounded-xl border border-slate-100">
+            <div className="lg:col-span-6 h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={regulasiStatusData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="name" tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }} />
+                  <YAxis tick={{ fill: '#64748B', fontSize: 10 }} />
+                  <Tooltip formatter={(val: any) => [`${val} Produk Hukum`, 'Jumlah']} />
+                  <Bar dataKey="count" name="Jumlah Produk Hukum" radius={[4, 4, 0, 0]}>
+                    {regulasiStatusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="lg:col-span-6 space-y-2 text-xs">
+              <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900">
+                <span className="text-[10px] uppercase font-bold text-emerald-700 block">Status Harmonisasi:</span>
+                <span className="text-base font-black font-mono">34 Regulasi Harmonis (81.0%)</span>
+                <p className="text-[10px] text-emerald-800 mt-0.5">Sesuai ketentuan perundang-undangan kawasan bebas Batam.</p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Dalam Tahapan Pembahasan:</span>
+                <span className="font-bold text-slate-800">5 Perka Proses Konsultasi Teknis &amp; 3 Reviu</span>
+              </div>
+            </div>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -346,7 +468,7 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                 {PHKS_SINKRONISASI_REGULASI.map((r, i) => (
                   <tr key={i} className="hover:bg-slate-50">
-                    <td className="py-2.5 px-3 font-mono font-bold text-sky-800">{r.nomor}</td>
+                    <td className="py-2.5 px-3 font-mono font-bold text-indigo-800">{r.nomor}</td>
                     <td className="py-2.5 px-3 font-bold text-slate-900">{r.tentang}</td>
                     <td className="py-2.5 px-2 text-slate-600">{r.kategori}</td>
                     <td className="py-2.5 px-2">
@@ -374,76 +496,61 @@ export const HarmonisasiDashboard: React.FC<HarmonisasiDashboardProps> = ({
         </div>
       )}
 
-      {/* Tab 4: Risalah RDP & Tindak Lanjut Rapim */}
-      {currentTab === 'rapim' && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
-              Monitoring Tindak Lanjut Rapim Pimpinan BP Batam (Dataset #6 &amp; #7)
-            </h3>
-            <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-              94.5% Rekomendasi Tuntas
+      {/* Tab 4: Survei Kewajaran & Evaluasi Tarif (Dataset No. 5) */}
+      {currentTab === 'survei' && (
+        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+            <div>
+              <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
+                Survei Kewajaran dan Evaluasi Tarif Layanan BLU BP Batam
+              </h3>
+              <p className="text-[11px] text-slate-500">
+                Tingkat Penerimaan Wajar Publik Berdasarkan Instrumen Survei ATP/WTP &amp; Cost-Recovery Unit Cost
+              </p>
+            </div>
+            <span className="text-[9.5px] font-mono font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+              Data PHKS No. 5 (Satu Data Hal. 13)
             </span>
           </div>
 
-          <div className="space-y-3">
-            {PHKS_RAPIM_LIST.map((rp) => (
-              <div key={rp.id} className="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <h4 className="font-bold text-xs text-slate-900">{rp.judulRapat}</h4>
-                    <span className="text-[10px] text-slate-500 font-mono">
-                      {rp.tanggalRapat} ({rp.waktu}) · Lokasi: {rp.tempat}
-                    </span>
-                  </div>
-                  <span
-                    className={`text-[9.5px] font-bold px-2 py-0.5 rounded border shrink-0 ${
-                      rp.statusTindakLanjut === 'Selesai 100%'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : 'bg-amber-50 text-amber-700 border-amber-200'
-                    }`}
-                  >
-                    {rp.statusTindakLanjut}
-                  </span>
-                </div>
-
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs space-y-1">
-                  <div className="flex items-center gap-2 font-mono text-[10.5px]">
-                    <span className="text-slate-400 font-bold">Nota Dinas:</span>
-                    <strong className="text-slate-800">{rp.notaDinasPengantar}</strong>
-                    <span>·</span>
-                    <span className="text-slate-400 font-bold">Pelaksana:</span>
-                    <strong className="text-sky-700">{rp.unitPelaksana}</strong>
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">
-                    <strong className="font-semibold">Matriks Tindak Lanjut:</strong> {rp.matrikTindakLanjut}
-                  </p>
-                </div>
-              </div>
-            ))}
+          {/* Formula Explanation Callout Box */}
+          <div className="p-3 bg-linear-to-r from-indigo-50/80 to-sky-50/80 rounded-xl border border-indigo-200/70 text-xs text-slate-700 space-y-1.5">
+            <div className="flex items-center gap-2 text-indigo-900 font-bold">
+              <Scale className="w-4 h-4 text-indigo-700" />
+              <span>Metodologi &amp; Formula Perhitungan Skor Kewajaran Tarif (Data No. 3 &amp; No. 5):</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-600">
+              Skor Kewajaran dihitung melalui 2 pilar terpadu:
+              <strong> (1) Cost Recovery Rate (CRR)</strong> = <code className="font-mono bg-white px-1 py-0.5 rounded border border-indigo-200">(Tarif Berlaku ÷ Unit Cost) × 100%</code>, serta
+              <strong> (2) Survei Penerimaan Publik (WTP/ATP)</strong> = persentase responden yang menilai tarif sebanding dengan kualitas fasilitas.
+              Kategori <strong>"Valid"</strong> diberikan bila Skor Kewajaran ≥ 85.0% dan CRR berada dalam koridor PMK/Perka.
+            </p>
           </div>
-        </div>
-      )}
 
-      {/* Tab 5: Survei Kewajaran Tarif */}
-      {currentTab === 'survei' && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h3 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900">
-              Hasil Survei Kewajaran Tarif Layanan Badan Usaha (Dataset #5)
-            </h3>
-            <span className="text-[10px] font-mono text-slate-500">Skor Validitas: 89.5%</span>
+          {/* Compact Chart: Persentase Kewajaran per Lokasi */}
+          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={surveiChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="lokasi" tick={{ fill: '#334155', fontSize: 10, fontWeight: 700 }} />
+                  <YAxis domain={[0, 100]} tick={{ fill: '#64748B', fontSize: 10 }} />
+                  <Tooltip formatter={(val: any) => [`${val}% Wajar`, 'Tingkat Penerimaan']} />
+                  <Bar dataKey="wajar" fill="#4F46E5" name="Tingkat Penerimaan / Kewajaran (%)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {PHKS_SURVEI_KEWAJARAN.map((s, idx) => (
-              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+              <div key={idx} className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h4 className="font-bold text-xs text-slate-900">{s.lokasi}</h4>
                     <span className="text-[10px] text-slate-500">Kriteria: {s.kriteria}</span>
                   </div>
-                  <span className="font-mono text-sm font-black text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                  <span className="font-mono text-sm font-black text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
                     {s.persentaseWajar}% Wajar
                   </span>
                 </div>

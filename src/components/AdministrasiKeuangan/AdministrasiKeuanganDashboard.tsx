@@ -25,7 +25,6 @@ import {
 } from './administrasiKeuanganData';
 import { AdministrasiKeuanganKpiRow } from './AdministrasiKeuanganKpiRow';
 import { AdministrasiKeuanganVisualCharts } from './AdministrasiKeuanganVisualCharts';
-import { AdministrasiKeuanganUnitCards } from './AdministrasiKeuanganUnitCards';
 import { AdministrasiKeuanganDeepDiveCenter } from './AdministrasiKeuanganDeepDiveCenter';
 import { AdministrasiKeuanganFormulaModal } from './AdministrasiKeuanganFormulaModal';
 
@@ -196,74 +195,7 @@ export const AdministrasiKeuanganDashboard: React.FC<
         </div>
       </div>
 
-      {/* 2. TOP EXECUTIVE HERO BANNER (IDENTITAS RESMI PERKIN A1) */}
-      <div className="bg-gradient-to-r from-[#002B49] via-[#0F223D] to-[#1E3A8A] text-white rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
-        {/* Background Subtle Watermark */}
-        <div className="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-6">
-          <Award className="w-64 h-64 text-white" />
-        </div>
-
-        <div className="relative z-10 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 pb-2.5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                PERKIN A1 RESMI
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-white/10 text-cyan-200 border border-white/20">
-                Nomor: {PERKIN_A1_INFO.nomorPerkin}
-              </span>
-              <span className="text-[11px] text-slate-300 font-mono">
-                Batam, {PERKIN_A1_INFO.tanggalPenetapan}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 text-xs font-mono text-cyan-200">
-              <span>Pihak I: <strong>{PERKIN_A1_INFO.pejabatPihakPertama}</strong></span>
-              <span className="text-white/40">|</span>
-              <span>Pihak II: <strong>{PERKIN_A1_INFO.pejabatPihakKedua}</strong></span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-            {/* Title & Mission (8 cols) */}
-            <div className="lg:col-span-8 space-y-1">
-              <h1 className="text-lg sm:text-2xl font-black text-white tracking-tight uppercase">
-                {PERKIN_A1_INFO.jabatanPihakPertama}
-              </h1>
-              <p className="text-xs sm:text-sm text-cyan-100 font-medium">
-                Sasaran Program: <span className="text-white font-bold">&ldquo;{PERKIN_A1_INFO.sasaranProgram}&rdquo;</span>
-              </p>
-              <p className="text-[11px] text-slate-300 leading-relaxed max-w-3xl">
-                Mengintegrasikan 4 Indikator Kinerja Program utama (Indeks RB BB, Indeks Sistem Merit 280, Indeks Maturitas SPIP 3,2, dan Opini BPK WTP) didukung alokasi 5 kegiatan program serta supervisi teknis 3 unit kerja pilar (Biro Keuangan, Biro SDM, dan Biro OKMR).
-              </p>
-            </div>
-
-            {/* Total Budget Card (4 cols) */}
-            <div className="lg:col-span-4 bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-1.5">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-cyan-200 uppercase font-mono font-bold">
-                  TOTAL PAGU PERKIN A1:
-                </span>
-                <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold">
-                  5 Kegiatan
-                </span>
-              </div>
-              <div className="text-xl sm:text-2xl font-black font-mono text-white tracking-tight">
-                {PERKIN_A1_INFO.totalPaguFormatted}
-              </div>
-              <div className="flex items-center justify-between text-[10.5px] text-slate-300 border-t border-white/15 pt-1">
-                <span>Realisasi s.d Cut-Off:</span>
-                <span className="font-mono font-bold text-cyan-200">
-                  Rp 241,65 Miliar ({PERKIN_A1_INFO.persentaseSerapan}%)
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. SECTION 1: 4 KPI UTAMA INDIKATOR KINERJA PROGRAM */}
+      {/* 2. SECTION 1: 4 KPI UTAMA INDIKATOR KINERJA PROGRAM */}
       <AdministrasiKeuanganKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedKpiId={modalKpiId}
@@ -274,13 +206,7 @@ export const AdministrasiKeuanganDashboard: React.FC<
         onOpenFormulaModal={handleOpenFormula}
       />
 
-      {/* 5. SECTION 3: 3 PILAR UNIT KERJA ADMINISTRASI & KEUANGAN */}
-      <AdministrasiKeuanganUnitCards
-        onAnalyzeUnit={handleSelectDeepDive}
-        onNavigateToUnit={onSwitchUnit}
-      />
-
-      {/* 6. SECTION 4: FULL-WIDTH UNIT DEEP-DIVE CENTER */}
+      {/* 5. SECTION 3: FULL-WIDTH UNIT DEEP-DIVE CENTER */}
       <div id="administrasi-deep-dive-section" className="pt-2 scroll-mt-6">
         <AdministrasiKeuanganDeepDiveCenter
           selectedUnitId={selectedDeepDiveUnit}

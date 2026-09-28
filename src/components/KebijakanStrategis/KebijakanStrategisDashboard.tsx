@@ -17,7 +17,6 @@ import {
 import { PERKIN_METADATA } from './kebijakanStrategisData';
 import { KebijakanStrategisKpiRow } from './KebijakanStrategisKpiRow';
 import { KebijakanStrategisVisualCharts } from './KebijakanStrategisVisualCharts';
-import { KebijakanStrategisUnitCards } from './KebijakanStrategisUnitCards';
 import { KebijakanStrategisDeepDiveCenter } from './KebijakanStrategisDeepDiveCenter';
 import { KebijakanStrategisFormulaModal } from './KebijakanStrategisFormulaModal';
 
@@ -308,16 +307,7 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
         />
       </div>
 
-      {/* 5. SECTION 3: 4 PILAR UNIT KERJA KEBIJAKAN STRATEGIS & PERIZINAN */}
-      <div id="kebijakan-unit-cards-section" className="scroll-mt-6">
-        <KebijakanStrategisUnitCards
-          onSelectUnitDeepDive={handleSelectDeepDive}
-          onNavigateToFullDashboard={onNavigateToFullDashboard || onSwitchUnit}
-          selectedUnit={selectedSatkerFilter}
-        />
-      </div>
-
-      {/* 6. SECTION 4: FULL-WIDTH UNIT DEEP-DIVE CENTER (MIRRORS ADMINISTRASI KEUANGAN DEEP DIVE) */}
+      {/* 5. SECTION 3: FULL-WIDTH UNIT DEEP-DIVE CENTER (MIRRORS ADMINISTRASI KEUANGAN DEEP DIVE) */}
       <div id="kebijakan-deep-dive-section" className="pt-2 scroll-mt-6">
         <KebijakanStrategisDeepDiveCenter
           selectedUnitId={selectedDeepDiveUnit}

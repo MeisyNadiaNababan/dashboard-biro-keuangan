@@ -34,6 +34,7 @@ import { SdmKpiCards } from '../BiroSDM/SdmKpiCards';
 import { SDM_DATA_BY_YEAR, DEFAULT_SDM_FILTERS } from '../BiroSDM/sdmData';
 
 import { OkmrTableauDashboard } from '../BiroOrganisasi/OkmrTableauDashboard';
+import { SpipMaturitasCard } from '../BiroOrganisasi/SpipMaturitasCard';
 import { DEFAULT_BOKMR_FILTERS } from '../BiroOrganisasi/bokmrData';
 
 interface AdministrasiKeuanganDeepDiveCenterProps {
@@ -52,7 +53,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
 
   // Sub-tabs for Biro SDM view
   const [sdmSubTab, setSdmSubTab] = useState<
-    'all' | 'merit' | 'status' | 'pendidikan'
+    'all' | 'merit' | 'status' | 'pendidikan' | 'spip'
   >('all');
 
   // Data for SDM components
@@ -270,6 +271,17 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
               >
                 Kualifikasi Pendidikan
               </button>
+              <button
+                onClick={() => setSdmSubTab('spip')}
+                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  sdmSubTab === 'spip'
+                    ? 'bg-emerald-700 text-white'
+                    : 'bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-200'
+                }`}
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Indeks Maturitas SPIP</span>
+              </button>
             </div>
 
             <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
@@ -311,23 +323,20 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
               )}
             </div>
           )}
+
+          {/* Indeks Maturitas SPIP View for Biro SDM */}
+          {sdmSubTab === 'spip' && (
+            <SpipMaturitasCard
+              onOpenFormulaModal={() => onOpenFormulaModal?.('ikp-3-spip')}
+            />
+          )}
         </div>
       )}
 
       {/* UNIT 3: BIRO ORGANISASI, KEPATUHAN DAN MANAJEMEN RISIKO */}
       {selectedUnitId === 'biro-organisasi' && (
         <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-              <ShieldAlert className="w-4 h-4 text-cyan-600" />
-              <span>Dashboard Terintegrasi Biro OKMR (18 Dataset Buku Satu Data BP Batam)</span>
-            </div>
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
-              <span>SAKIP: 82.68 (A) • SPIP: 3.42 • PEKPPP: 4.38 • MRI: 3.65</span>
-            </div>
-          </div>
-
-          {/* Embedded Tableau Dashboard suite from Biro Organisasi */}
+          {/* Embedded Tableau Dashboard Suite: KPI Cards di atas, Indeks Reformasi Birokrasi tepat di bawah KPI, diikuti Indeks Maturitas SPIP */}
           <OkmrTableauDashboard
             filters={DEFAULT_BOKMR_FILTERS}
             onOpenFormulaModal={(idx) => onOpenFormulaModal?.(idx === 17 ? 'ikp-3-spip' : 'ikp-1-rb')}

@@ -1327,6 +1327,12 @@ export interface SatkerMatrixItem {
   statusKinerja: 'Tercapai' | 'On Track' | 'Perlu Perhatian';
   jumlahDatasetSatuData: number;
   halamanPdf: string;
+  // Field Tambahan untuk Pemantauan Kinerja Substantif Kepala BP Batam (Non-Belanja)
+  capaianSubstantifNilai?: string;
+  labelCapaianUtama?: string;
+  persenKinerjaSubstantif?: number;
+  ringkasanMultiMetrik?: string[];
+  unitRouteId?: string;
 }
 
 export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
@@ -1343,6 +1349,16 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 4,
     halamanPdf: 'Perkin No. 1/SPJ/KA/1/2026',
+    labelCapaianUtama: 'Agregat 4 Kompas Strategis',
+    capaianSubstantifNilai: '4 IKS Tercapai Prima',
+    persenKinerjaSubstantif: 100.5,
+    ringkasanMultiMetrik: [
+      'Investasi: Rp 54,68T (78,1% On Track)',
+      'Kepuasan Publik: IKM 88,42 (Mutu A)',
+      'Penerimaan PNBP: Rp 1,892T (77,3%)',
+      'Reformasi Birokrasi: 81,35 (Predikat A)',
+    ],
+    unitRouteId: 'kepala-bp',
   },
   {
     id: 'dep-a1',
@@ -1357,6 +1373,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 59,
     halamanPdf: 'Perkin A1 (Hal 1-6, 38-40)',
+    labelCapaianUtama: 'Tata Kelola RB & Sistem Merit',
+    capaianSubstantifNilai: '81,35 (A) & 342,5 Merit',
+    persenKinerjaSubstantif: 101.2,
+    ringkasanMultiMetrik: [
+      'Indeks Reformasi Birokrasi: 81,35 (Predikat A Memuaskan)',
+      'Sistem Merit ASN KASN: 342,5 (Kategori IV Sangat Baik)',
+      'Maturitas SPIP: 3,42 (Level 3 Terdefinisi - BOKMR)',
+      'Opini Laporan Keuangan: WTP BPK 8 Tahun Berturut-turut',
+      'Likuiditas Kas BLU: Rp 1,428 Triliun (Aman & Solid)',
+    ],
+    unitRouteId: 'deputi-administrasi-keuangan',
   },
   {
     id: 'dep-a2',
@@ -1371,6 +1398,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 64,
     halamanPdf: 'Perkin A2 (Hal 12-13, 21-28, 40-43, 51-53)',
+    labelCapaianUtama: 'Kedaulatan SPBE & Layanan Izin',
+    capaianSubstantifNilai: '4,12 (Level 4) & 89,2 IKM',
+    persenKinerjaSubstantif: 100.0,
+    ringkasanMultiMetrik: [
+      'Kematangan SPBE: 4,12 (Level 4 Keterpaduan Layanan PDSI)',
+      'Indeks Kepuasan PTSP: 89,24 (Mutu A Pelayanan Prima)',
+      'SLA Izin Berusaha: Rerata 1,8 Hari (13.150 izin terbit)',
+      'Indeks Perencanaan: 94,20 & Indeks Kualitas Kebijakan: 71,80',
+      'Penyusunan Kebijakan: 14 Rekomendasi Kajian Strategis',
+    ],
+    unitRouteId: 'deputi-kebijakan-strategis',
   },
   {
     id: 'dep-a3',
@@ -1385,6 +1423,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 23,
     halamanPdf: 'Perkin A3 (Hal 6-8, 11, 13-14)',
+    labelCapaianUtama: 'Alokasi Lahan & Ruang Laut',
+    capaianSubstantifNilai: '248,5 Ha Lahan & 162,8 Ha Laut',
+    persenKinerjaSubstantif: 124.3,
+    ringkasanMultiMetrik: [
+      'Alokasi Lahan Investasi: 248,50 Ha (Target 200 Ha / 124,3%)',
+      'Izin Ruang Laut & Reklamasi: 162,80 Ha (PKKPRL Disahkan)',
+      'Kontribusi PNBP: Rp 748,21 Miliar (Penyumbang 39,5% PNBP BP)',
+      'Penyelesaian Berkas: 1.650 SKPT, SPPT, UWT & Pecah PL',
+      'Pengawasan & Pengendalian Spasial Lahan: 93,8% Terpantau',
+    ],
+    unitRouteId: 'deputi-pengelolaan-lahan',
   },
   {
     id: 'dep-a4',
@@ -1399,6 +1448,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 39,
     halamanPdf: 'Perkin A4 (Hal 8-11, 14, 46-48)',
+    labelCapaianUtama: 'Realisasi Investasi & KEK',
+    capaianSubstantifNilai: 'Rp 54,68T Investasi (78,1%)',
+    persenKinerjaSubstantif: 78.1,
+    ringkasanMultiMetrik: [
+      'Investasi Total Batam: Rp 54,68 Triliun (Target Rp 70 T)',
+      'Kontribusi 4 KEK: Rp 9,09 Triliun (BAT, Nongsa, Sekupang, Tanjung Sauh)',
+      'Fasilitasi Calon Investor: 52 Investor PMA/PMDN Masuk Pipeline',
+      'Nilai Ekspor FTZ: US$ 14,82 Miliar (Surplus Neraca +US$ 2,64B)',
+      'Monitoring Kerjasama: 42 Perjanjian Kerjasama (PKS) Aktif',
+    ],
+    unitRouteId: 'deputi-investasi',
   },
   {
     id: 'dep-a5',
@@ -1413,6 +1473,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 46,
     halamanPdf: 'Perkin A5 (Hal 8-9, 11-12, 14-17)',
+    labelCapaianUtama: 'Logistik Maritim & Konektivitas Udara',
+    capaianSubstantifNilai: '612k TEUs & 4,12M Pax',
+    persenKinerjaSubstantif: 86.5,
+    ringkasanMultiMetrik: [
+      'Bongkar Muat Peti Kemas: 612.400 TEUs Batu Ampar',
+      'Pergerakan Penumpang Aviasi: 4.120.500 Penumpang Hang Nadim',
+      'Kunjungan Kapal: 18.420 Call Kapal & 34.250 Penerbangan',
+      'Layanan Dokumen Ekspor-Impor: 48.250 PPFTZ (SLA 1,4 Jam)',
+      'Realisasi PNBP Gabungan: Rp 489,22 Miliar (Pelabuhan + Bandara)',
+    ],
+    unitRouteId: 'deputi-bandara-pelabuhan',
   },
   {
     id: 'dep-a6',
@@ -1427,6 +1498,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 121,
     halamanPdf: 'Perkin A6 (Hal 17-21, 28-37)',
+    labelCapaianUtama: 'Air Baku, Medis & Pengamanan Aset',
+    capaianSubstantifNilai: '88,06 IKM & 161,9M m³ Air',
+    persenKinerjaSubstantif: 100.5,
+    ringkasanMultiMetrik: [
+      'Ketahanan Air 6 Waduk: 161,96 Jt m³ (96,8% Kapasitas Tampungan)',
+      'Produksi Air Minum WTP: 3.420 Liter/detik (312k Pelanggan)',
+      'Bed Occupancy Rate RSBP: 76,2% (2.100 Kunjungan, CRR 111,4%)',
+      'Operasi Penertiban Ditpam: 874 Bangunan Liar Ditertibkan',
+      'Pengolahan Limbah B3 KPLI: 14.850 Ton & Rusunawa 94% Terisi',
+    ],
+    unitRouteId: 'deputi-pelayanan-umum',
   },
   {
     id: 'dep-a7',
@@ -1441,6 +1523,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 24,
     halamanPdf: 'Perkin A7 (Hal 17-19, 48-51, 53)',
+    labelCapaianUtama: 'Proyek Strategis & Jalan Kota',
+    capaianSubstantifNilai: '14 Proyek & 542 Km Jalan',
+    persenKinerjaSubstantif: 92.4,
+    ringkasanMultiMetrik: [
+      'Proyek Fisik Strategis: 14 Proyek (Flyover Sei Ladi, Sudirman)',
+      'Jaringan Jalan Kota: 542,8 Km Jalan Arteri & Kolektor Prima',
+      'Perencanaan Teknis: 43 Paket DED 6 Sektor Tuntas',
+      'Kesiapan Lahan Industri: 280 Ha Pematangan Lahan (Cut & Fill)',
+      'Progres Konstruksi Rata-rata: 92,4% Sesuai Timeline Kurva S',
+    ],
+    unitRouteId: 'deputi-infrastruktur',
   },
   {
     id: 'bu-rsbp',
@@ -1455,6 +1548,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 18,
     halamanPdf: 'Hal. 19-21',
+    labelCapaianUtama: 'Okupansi Bed & Layanan Medis',
+    capaianSubstantifNilai: 'BOR 76,2% · CRR 111,4%',
+    persenKinerjaSubstantif: 88.9,
+    ringkasanMultiMetrik: [
+      'Tingkat Hunian Bed (BOR): 76,2% (Standar Kemenkes 70-85%)',
+      'Pasien Dilayani: 2.100 Pasien Rawat Inap & 18 Poliklinik',
+      'Cost Recovery Rate: 111,4% (Surplus Operasional Sehat)',
+      'Layanan Unggulan: Cath Lab Jantung, Hemodialisa, MCU KEK',
+      'Indeks Kepuasan: 86,95 (Mutu A Sangat Baik)',
+    ],
+    unitRouteId: 'bu-rumah-sakit',
   },
   {
     id: 'ditpam',
@@ -1469,6 +1573,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 12,
     halamanPdf: 'Hal. 17-19',
+    labelCapaianUtama: 'Penertiban Aset & Obvitnas',
+    capaianSubstantifNilai: '874 Tertib · 7 Obvitnas Aman',
+    persenKinerjaSubstantif: 84.8,
+    ringkasanMultiMetrik: [
+      'Penertiban Bangunan Liar: 874 Lokasi Selesai (84,8%)',
+      'Sterilisasi Waduk: 142 Ha Catchment Area Duriangkang Bebas Okupasi',
+      'Pengamanan Obvitnas: 7 Objek Vital 100% Kondusif & Terjaga',
+      'Kekuatan Pengamanan: 524 Personel Patroli Rutin Tersebar',
+      'Waktu Tanggap Darurat: 12,4 Menit (Damkar & Evakuasi Rescue)',
+    ],
+    unitRouteId: 'dit-pam-aset',
   },
   {
     id: 'bu-spam',
@@ -1483,6 +1598,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'On Track',
     jumlahDatasetSatuData: 91,
     halamanPdf: 'Hal. 28-37',
+    labelCapaianUtama: 'Air Bersih & Pengolahan Limbah B3',
+    capaianSubstantifNilai: '3.420 L/dtk · 161,9M m³ Air',
+    persenKinerjaSubstantif: 96.8,
+    ringkasanMultiMetrik: [
+      'Produksi Air Curah: 3.420 L/detik untuk 312.000 Pelanggan',
+      'Kapasitas 6 Waduk: 161,96 Jt m³ (96,8% Isi Tampungan)',
+      'Limbah B3 Industri: 14.850 Ton Diolah Aman di KPLI Kabil',
+      'Hunian Rusunawa: 94% Terisi (4.250 Pekerja Industri)',
+      'Realisasi PNBP Air & Fasling: Rp 592,62 Miliar (31,3% Total BP)',
+    ],
+    unitRouteId: 'deputi-pelayanan-umum',
   },
   {
     id: 'dit-pelabuhan',
@@ -1497,6 +1623,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 25,
     halamanPdf: 'Hal. 14-17',
+    labelCapaianUtama: 'Arus Petikemas & Kunjungan Kapal',
+    capaianSubstantifNilai: '612k TEUs · 18.420 Kapal',
+    persenKinerjaSubstantif: 86.2,
+    ringkasanMultiMetrik: [
+      'Bongkar Muat Peti Kemas: 612.400 TEUs di Pelabuhan Batu Ampar',
+      'Kunjungan Kapal: 18.420 Call Kapal Barang, Curah & Ro-Ro',
+      'Terminal Penumpang: 1,84 Juta Penumpang Domestik/Internasional',
+      'Operasional Dermaga: 11 Dermaga Komersial Termonitor',
+      'PNBP Kepelabuhanan: Rp 382,40 Miliar (Kontribusi 20,2% BLU)',
+    ],
+    unitRouteId: 'dit-pelabuhan',
   },
   {
     id: 'dit-bandara',
@@ -1511,6 +1648,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 12,
     halamanPdf: 'Hal. 11-12',
+    labelCapaianUtama: 'Arus Penumpang & Kargo Udara',
+    capaianSubstantifNilai: '4,12M Pax · 42.150 Ton EMPU',
+    persenKinerjaSubstantif: 88.2,
+    ringkasanMultiMetrik: [
+      'Pergerakan Penumpang: 4.120.500 Penumpang Datang/Berangkat',
+      'Lalu Lintas Pesawat: 34.250 Flight (Take-off & Landing)',
+      'Ekspedisi Muatan Udara: 42.150 Ton Kargo EMPU Terdistribusi',
+      'Infrastruktur Runway: 4.025 Meter Terpanjang di Indonesia',
+      'PNBP Bandara: Rp 106,82 Miliar & Pengembangan KEK Aviasi BAT',
+    ],
+    unitRouteId: 'dit-bandara',
   },
   {
     id: 'dit-lahan',
@@ -1525,6 +1673,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 15,
     halamanPdf: 'Hal. 6-8',
+    labelCapaianUtama: 'Alokasi Lahan Investasi 7 SWP',
+    capaianSubstantifNilai: '248,5 Ha · Rp 748,2M UWT',
+    persenKinerjaSubstantif: 124.3,
+    ringkasanMultiMetrik: [
+      'Realisasi Alokasi Lahan: 248,50 Ha di 7 Sub-Wilayah Pengembangan',
+      'Penyelesaian Dokumen: 1.650 Berkas SKPT, SPPT, & Pecah PL',
+      'Penerimaan UWT: Rp 748,21 Miliar (39,5% Total Penerimaan BP)',
+      'Rekuperasi Lahan Mangkrak: 94,60 Ha Berhasil Dikembalikan ke Aset BP',
+      'Digitalisasi Sistem Lahan: Integrasi SIHPL Online Terakselerasi',
+    ],
+    unitRouteId: 'dit-lahan',
   },
   {
     id: 'dit-pembangunan',
@@ -1539,6 +1698,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'On Track',
     jumlahDatasetSatuData: 6,
     halamanPdf: 'Hal. 48-50',
+    labelCapaianUtama: 'Konstruksi Proyek Strategis & Jalan',
+    capaianSubstantifNilai: '14 Proyek · 542,8 Km Jalan',
+    persenKinerjaSubstantif: 92.4,
+    ringkasanMultiMetrik: [
+      'Proyek Fisik Berjalan: 14 Paket Konstruksi Jalan, Flyover & Drainase',
+      'Flyover Sei Ladi: Progres 84% (Menghilangkan Titik Macet Barat)',
+      'Pelebaran Jalan: Koridor Utama Batam Center - Bandara - Nongsa',
+      'Kesiapan Tapak Industri: 280 Ha Pematangan Lahan (Cut & Fill)',
+      'Jaringan Jalan Mantap: 542,8 Km Terpelihara dengan Kondisi Baik',
+    ],
+    unitRouteId: 'dit-pembangunan-infrastruktur',
   },
   {
     id: 'dit-perencanaan',
@@ -1553,6 +1723,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'On Track',
     jumlahDatasetSatuData: 6,
     halamanPdf: 'Hal. 53',
+    labelCapaianUtama: 'Paket Detail Engineering Design (DED)',
+    capaianSubstantifNilai: '43 Paket DED 6 Sektor',
+    persenKinerjaSubstantif: 91.5,
+    ringkasanMultiMetrik: [
+      'Dokumen DED Selesai: 43 Paket Desain Teknis Multisektoral',
+      'Sektor Prioritas: 12 Paket Jalan, 8 Gedung, 9 Drainase/Air, 6 Wisata',
+      'Studi Kelayakan Teknis (FS): 8 Kajian Kelayakan Proyek Baru',
+      'Sinkronisasi Tata Ruang: Kepatuhan RDTR Kota Batam 100%',
+      'Standardisasi Biaya Konstruksi: Update ASB & SSH Sesuai Regulasi',
+    ],
+    unitRouteId: 'dit-perencanaan-infrastruktur',
   },
   {
     id: 'ptsp',
@@ -1567,6 +1748,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 17,
     halamanPdf: 'Hal. 21-28',
+    labelCapaianUtama: 'Kecepatan Izin Berusaha & IKM',
+    capaianSubstantifNilai: '13.150 Izin · SLA 1,8 Hari',
+    persenKinerjaSubstantif: 89.2,
+    ringkasanMultiMetrik: [
+      'Izin Berusaha Terbit: 13.150 Izin dari 14.850 Permohonan (88,6%)',
+      'Kecepatan Layanan: 1,8 Hari Kerja (Standar SLA Maksimal 3 Hari)',
+      'Indeks Kepuasan Masyarakat: 89,24 (Mutu A Pelayanan Prima)',
+      'Layanan Unggulan: SKKBM, SKKAB, SKKAA, TUKS, MPP Digital 24 Jam',
+      'Pengaduan Masyarakat: 96,1% Pengaduan Diselesaikan Tuntas',
+    ],
+    unitRouteId: 'ptsp',
   },
   {
     id: 'pdsi',
@@ -1581,6 +1773,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 21,
     halamanPdf: 'Hal. 40-43',
+    labelCapaianUtama: 'Indeks SPBE & Infrastruktur TIK',
+    capaianSubstantifNilai: 'SPBE 4,12 (Lv 4) · 99,9% Uptime',
+    persenKinerjaSubstantif: 100.0,
+    ringkasanMultiMetrik: [
+      'Tingkat Kematangan SPBE: 4,12 (Level 4 Keterpaduan Layanan)',
+      'Data Center Tier-3: 96 Rak Co-location Aktif (Uptime 99,98%)',
+      'Jaringan Fiber Optik: 210 Km Menghubungkan Seluruh Gedung BP',
+      'Keamanan Siber: CSIRT BP Batam Tangkal 142 Ribu Ancaman Serangan',
+      'PNBP TIK & Komputasi: Rp 10,85 Miliar dari Layanan Data Center',
+    ],
+    unitRouteId: 'pdsi',
   },
   {
     id: 'biro-keuangan',
@@ -1595,6 +1798,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 28,
     halamanPdf: 'Hal. 2-6',
+    labelCapaianUtama: 'Kemandirian Fiskal & Akuntabilitas',
+    capaianSubstantifNilai: 'WTP 8x · Kas BLU Rp 1,42T',
+    persenKinerjaSubstantif: 100.0,
+    ringkasanMultiMetrik: [
+      'Opini Laporan Keuangan: WTP BPK RI (8 Tahun Berturut-turut)',
+      'Likuiditas Kas BLU: Rp 1,428 Triliun Ditempatkan Aman di Bank Persepsi',
+      'Indikator Kinerja Pelaksanaan Anggaran (IKPA): 95,8 (Sangat Baik)',
+      'Penyelesaian Piutang: Rp 142,8 Miliar Tertagih YTD',
+      'Rasio Kemandirian Finansial: 0,96 Menjamin Operasional Mandiri',
+    ],
+    unitRouteId: 'biro-keuangan',
   },
   {
     id: 'biro-sdm',
@@ -1609,6 +1823,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 13,
     halamanPdf: 'Hal. 1-2',
+    labelCapaianUtama: 'Sistem Merit ASN & Kapasitas SDM',
+    capaianSubstantifNilai: 'Merit 342,5 · 2.978 Pegawai',
+    persenKinerjaSubstantif: 100.0,
+    ringkasanMultiMetrik: [
+      'Indeks Sistem Merit KASN: 342,5 / 400 (Kategori IV Sangat Baik)',
+      'Total Aparatur Termonitor: 2.978 Pegawai (PNS 842, PPPK 418, PTT 1.718)',
+      'Pengembangan Kompetensi: Rata-rata 22,4 Jam Pelajaran (JP) / Pegawai',
+      'Manajemen Talenta: 100% Posisi Kunci Terpetakan Dalam Talent Pool',
+      'Digitalisasi Presensi: Kehadiran 98,2% Terdata Real-Time di SIAP',
+    ],
+    unitRouteId: 'biro-sdm',
   },
   {
     id: 'biro-okmr',
@@ -1623,6 +1848,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 18,
     halamanPdf: 'Hal. 38-40',
+    labelCapaianUtama: 'SAKIP, SPIP & Manajemen Risiko',
+    capaianSubstantifNilai: 'SAKIP 82,68 (A) · SPIP 3,42',
+    persenKinerjaSubstantif: 101.7,
+    ringkasanMultiMetrik: [
+      'Nilai Akuntabilitas Kinerja (SAKIP): 82,68 (Predikat A Memuaskan)',
+      'Maturitas SPIP: 3,42 (Level 3 Terdefinisi - Standar BPKP)',
+      'Piagam Manajemen Risiko: 24 Unit Kerja Memiliki Risk Register Valid',
+      'Indeks Pelayanan Publik (PEKPPP): 4,38 (Sangat Baik / Pelayanan Prima)',
+      'Tindak Lanjut Rekomendasi Pengawasan: 94,8% Selesai Ditindaklanjuti',
+    ],
+    unitRouteId: 'biro-organisasi',
   },
   {
     id: 'biro-umum',
@@ -1637,6 +1873,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 27,
     halamanPdf: 'Hal. 43-46',
+    labelCapaianUtama: 'Pengadaan Barang & Manajemen BMN',
+    capaianSubstantifNilai: 'BMN Rp 4,8T · LPSE Akuntabel',
+    persenKinerjaSubstantif: 98.0,
+    ringkasanMultiMetrik: [
+      'Nilai Barang Milik Negara (BMN): Rp 4,82 Triliun Terinventarisasi 100%',
+      'Efisiensi Pengadaan Tender: Penghematan Rp 42,5 Miliar Melalui e-Katalog',
+      'Tender LPSE: 148 Paket Pengadaan Berjalan Tanpa Sanggah Banding',
+      'Indeks Pengelolaan Aset: 85,2 (Kategori Sangat Baik)',
+      'Sertifikasi BMN: 182 Sertifikat Aset Gedung & Tanah Diselesaikan',
+    ],
+    unitRouteId: 'biro-organisasi',
   },
   {
     id: 'biro-hukum',
@@ -1651,6 +1898,17 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'On Track',
     jumlahDatasetSatuData: 10,
     halamanPdf: 'Hal. 2',
+    labelCapaianUtama: 'Regulasi Perka & Advokasi Hukum',
+    capaianSubstantifNilai: '28 Perka Disahkan · 100% Advokasi',
+    persenKinerjaSubstantif: 100.0,
+    ringkasanMultiMetrik: [
+      'Produk Hukum Disahkan: 28 Peraturan Kepala & Keputusan Kepala BP',
+      'Harmonisasi Regulasi: Deregulasi Kemudahan Investasi & Tarif BLU',
+      'Advokasi Litigasi: 100% Perkara Perdata/TUN Dimenangkan / Selesai Damai',
+      'Pemberian Legal Opinion: 84 Pendapat Hukum untuk Pengambilan Keputusan',
+      'Jaringan Dokumentasi Informasi Hukum (JDIH): Terintegrasi Nasional',
+    ],
+    unitRouteId: 'biro-hukum',
   },
   {
     id: 'spi',
@@ -1665,8 +1923,362 @@ export const MATRIKS_24_SATKER_DATA: SatkerMatrixItem[] = [
     statusKinerja: 'Tercapai',
     jumlahDatasetSatuData: 5,
     halamanPdf: 'Hal. 8',
+    labelCapaianUtama: 'Audit Kepatuhan & Tindak Lanjut BPK',
+    capaianSubstantifNilai: '92,4% TL BPK · 24 Satker Diaudit',
+    persenKinerjaSubstantif: 98.5,
+    ringkasanMultiMetrik: [
+      'Tindak Lanjut Temuan BPK RI: 92,4% Rekomendasi Selesai Tuntas',
+      'Audit Operasional Internal: 24 Satuan Kerja Diaudit Berbasis Risiko',
+      'Probity Audit Megaproyek: Pendampingan Pengadaan Fisik Strategis',
+      'Pencegahan Gratifikasi & WBS: 100% Laporan Whistleblowing Ditindaklanjuti',
+      'Maturitas Tata Kelola Pengawasan: Sinergi dengan BPKP & Itjen Kemenkeu',
+    ],
+    unitRouteId: 'biro-organisasi',
   },
 ];
+
+// ============================================================================
+// DATA RANGKUMAN MULTI-INDIKATOR STRATEGIS LINTAS DIREKTORAT, BIRO, PUSAT & BADAN USAHA
+// Untuk memenuhi kebutuhan pemantauan komprehensif Kepala BP Batam (Multi-Metrik per Sektor)
+// ============================================================================
+export interface MultiMetrikItem {
+  label: string;
+  nilai: string;
+  target?: string;
+  status: 'Tercapai' | 'On Track' | 'Perlu Perhatian' | 'Normal';
+  subtext: string;
+}
+
+export interface MultiSektorStrategicSummary {
+  id: string;
+  sektor: string;
+  judul: string;
+  deskripsi: string;
+  satkerTerkait: { nama: string; routeId: string; kode: string }[];
+  metrikList: MultiMetrikItem[];
+  highlightUtama: string;
+  iconName: string;
+  themeColor: string;
+}
+
+export const KONSOLIDASI_MULTI_SEKTOR_BP_BATAM: MultiSektorStrategicSummary[] = [
+  {
+    id: 'sektor-logistik-aviasi',
+    sektor: 'Konektivitas Logistik & Aviasi Bebas',
+    judul: 'Maritim Batu Ampar, Bandara Hang Nadim & Lalu Lintas Barang',
+    deskripsi:
+      'Integrasi multi-moda transportasi laut, udara, dan percepatan dokumen logistik ekspor-impor kawasan perdagangan bebas.',
+    satkerTerkait: [
+      { nama: 'Dit. Pengelolaan Kepelabuhanan', routeId: 'dit-pelabuhan', kode: 'BUP' },
+      { nama: 'Dit. Kawasan Bandara Hang Nadim', routeId: 'dit-bandara', kode: 'BANDARA' },
+      { nama: 'Dit. Lalu Lintas Barang', routeId: 'dit-lalu-lintas-barang', kode: 'LLB' },
+    ],
+    metrikList: [
+      {
+        label: 'Arus Peti Kemas Batu Ampar',
+        nilai: '612.400 TEUs',
+        target: 'Target 650k TEUs',
+        status: 'On Track',
+        subtext: 'Didukung STS Crane modernisasi dermaga kontainer',
+      },
+      {
+        label: 'Pergerakan Penumpang Aviasi',
+        nilai: '4.120.500 Pax',
+        target: 'Target 4,5M Pax',
+        status: 'On Track',
+        subtext: '34.250 Pergerakan penerbangan (Runway 4.025m)',
+      },
+      {
+        label: 'Kargo Udara EMPU Hang Nadim',
+        nilai: '42.150 Ton',
+        target: 'Target 45k Ton',
+        status: 'On Track',
+        subtext: 'Kargo logistik ekspor & transit KEK BAT',
+      },
+      {
+        label: 'Layanan Dokumen PPFTZ',
+        nilai: '48.250 Dokumen',
+        target: 'SLA Rerata 1,4 Jam',
+        status: 'Tercapai',
+        subtext: 'Pengawasan kuota barang konsumsi & KBLI kawasan',
+      },
+      {
+        label: 'Realisasi PNBP Gabungan',
+        nilai: 'Rp 489,22 Miliar',
+        target: 'Kontribusi 25,8% BLU',
+        status: 'Tercapai',
+        subtext: 'Pelabuhan Rp 382,4M + Bandara Rp 106,8M',
+      },
+    ],
+    highlightUtama: 'Surplus Neraca Ekspor FTZ US$ 2,64 Miliar dengan 18.420 Call Kapal & 11 Dermaga Aktif',
+    iconName: 'Ship',
+    themeColor: 'from-blue-900 to-indigo-950',
+  },
+  {
+    id: 'sektor-investasi-kek',
+    sektor: 'Investasi, KEK & Kemudahan Berusaha',
+    judul: 'Investasi PMA/PMDN, 4 Klaster KEK & Perizinan Berusaha PTSP',
+    deskripsi:
+      'Akselerasi realisasi investasi modal tetap dan lancar, pengembangan kawasan ekonomi khusus, dan pelayanan terpadu digital.',
+    satkerTerkait: [
+      { nama: 'Dit. Pengembangan KEK & Investasi', routeId: 'dit-investasi', kode: 'INVESTASI' },
+      { nama: 'Pusat Pelayanan Terpadu Satu Pintu', routeId: 'ptsp', kode: 'PTSP' },
+      { nama: 'Dit. Pengendalian Pengusahaan', routeId: 'dit-pengendalian-pengusahaan', kode: 'PP' },
+      { nama: 'Dit. Kawasan KEK', routeId: 'dit-kek', kode: 'KEK' },
+    ],
+    metrikList: [
+      {
+        label: 'Nilai Realisasi Investasi',
+        nilai: 'Rp 54,68 Triliun',
+        target: 'Target Rp 70,0 T (78,1%)',
+        status: 'On Track',
+        subtext: 'PMA US$ 2,8B (KPU Bea Cukai) + PMDN Rp 12,4T',
+      },
+      {
+        label: 'Investasi 4 Klaster KEK',
+        nilai: 'Rp 9,09 Triliun',
+        target: 'Target Rp 11,5 T',
+        status: 'On Track',
+        subtext: 'KEK BAT, Nongsa Digital, Sekupang, Tanjung Sauh',
+      },
+      {
+        label: 'Penerbitan Izin Berusaha PTSP',
+        nilai: '13.150 Izin Terbit',
+        target: 'Efektivitas 88,6%',
+        status: 'Tercapai',
+        subtext: 'Dari 14.850 permohonan masuk di MPP Digital',
+      },
+      {
+        label: 'Kecepatan SLA Perizinan',
+        nilai: '1,8 Hari Kerja',
+        target: 'Standar SLA Maks 3 Hari',
+        status: 'Tercapai',
+        subtext: 'SKKBM, SKKAB, TUKS, Izin Berusaha Investasi',
+      },
+      {
+        label: 'Investor Dalam Pipeline',
+        nilai: '52 Investor PMA/PMDN',
+        target: 'Komitmen Rp 18,2 T',
+        status: 'On Track',
+        subtext: '42 Perjanjian Kerjasama (PKS) Usaha Termonitor',
+      },
+    ],
+    highlightUtama: 'Skor IKM PTSP 89,24 (Mutu A Pelayanan Prima) dengan 52 Calon Investor Baru dalam Pipeline',
+    iconName: 'TrendingUp',
+    themeColor: 'from-sky-900 to-blue-950',
+  },
+  {
+    id: 'sektor-air-medis-lingkungan',
+    sektor: 'Ketahanan Air Baku, Medis & Fasilitas Kawasan',
+    judul: 'BU SPAM 6 Waduk, KPLI Kabil & Rumah Sakit BP Batam (RSBP)',
+    deskripsi:
+      'Jaminan ketersediaan air bersih kota, pengelolaan limbah B3 industri berstandar lingkungan, dan layanan kesehatan rujukan.',
+    satkerTerkait: [
+      { nama: 'BU SPAM, Fasilitas dan Lingkungan', routeId: 'deputi-pelayanan-umum', kode: 'SPAM' },
+      { nama: 'Badan Usaha Rumah Sakit (RSBP)', routeId: 'bu-rumah-sakit', kode: 'BURS' },
+      { nama: 'Dit. Pengamanan Aset (Waduk)', routeId: 'dit-pam-aset', kode: 'DITPAM' },
+    ],
+    metrikList: [
+      {
+        label: 'Volume Tampungan 6 Waduk',
+        nilai: '161,96 Juta m³',
+        target: '96,8% Kapasitas Tampung',
+        status: 'Normal',
+        subtext: 'Duriangkang 78,5M, Tembesi 56,4M, Mukakuning 13,2M',
+      },
+      {
+        label: 'Distribusi Air Bersih WTP',
+        nilai: '3.420 Liter/detik',
+        target: '312.000 Pelanggan',
+        status: 'Normal',
+        subtext: '23 District Meter Area (DMZ) termonitor telemetri',
+      },
+      {
+        label: 'Bed Occupancy Rate RSBP',
+        nilai: '76,2% BOR',
+        target: 'Ideal 70 - 85%',
+        status: 'Tercapai',
+        subtext: 'Cost Recovery Rate 111,4% (Surplus Operasional Sehat)',
+      },
+      {
+        label: 'Kunjungan Pasien & Spesialis',
+        nilai: '2.100 Pasien Inap',
+        target: '18 Poliklinik Aktif',
+        status: 'Tercapai',
+        subtext: 'Layanan Cath Lab Jantung, Hemodialisa, MCU KEK',
+      },
+      {
+        label: 'Pengolahan Limbah B3 KPLI',
+        nilai: '14.850 Ton Limbah B3',
+        target: 'Kawasan KPLI Kabil',
+        status: 'Normal',
+        subtext: 'Serta tingkat hunian Rusunawa industri 94% (4.250 jiwa)',
+      },
+    ],
+    highlightUtama: 'Kapasitas 6 Waduk Aman pada 161,9M m³ & RSBP Mencatat Cost Recovery Rate 111,4% Mandiri',
+    iconName: 'Droplets',
+    themeColor: 'from-teal-900 to-cyan-950',
+  },
+  {
+    id: 'sektor-lahan-aset-keamanan',
+    sektor: 'Tata Ruang Darat, Pesisir & Pengamanan Aset',
+    judul: 'Alokasi Lahan 7 SWP, Reklamasi Ruang Laut & Penertiban Ditpam',
+    deskripsi:
+      'Optimalisasi tata guna tanah, penerbitan UWT, perlindungan kawasan hutan lindung, dan penertiban aset vital BP Batam.',
+    satkerTerkait: [
+      { nama: 'Dit. Pengelolaan Pertanahan', routeId: 'dit-lahan', kode: 'DPL' },
+      { nama: 'Dit. Pengamanan Aset & Kawasan', routeId: 'dit-pam-aset', kode: 'DITPAM' },
+      { nama: 'Dit. Pengendalian Pertanahan', routeId: 'dit-pengendalian-lahan', kode: 'D-KONTROL' },
+      { nama: 'Dit. Kawasan Pesisir & Reklamasi', routeId: 'dit-pesisir-reklamasi', kode: 'PESISIR' },
+    ],
+    metrikList: [
+      {
+        label: 'Alokasi Lahan Investasi 7 SWP',
+        nilai: '248,50 Hektar',
+        target: 'Target 200 Ha (124,3%)',
+        status: 'Tercapai',
+        subtext: 'Tersebar di Batam Kota, Nongsa KEK, Sekupang, Batu Aji',
+      },
+      {
+        label: 'Izin Ruang Laut & Reklamasi',
+        nilai: '162,80 Hektar',
+        target: 'Dokumen PKKPRL Disahkan',
+        status: 'Tercapai',
+        subtext: 'Kesesuaian pemanfaatan ruang perairan pesisir',
+      },
+      {
+        label: 'Operasi Penertiban Bangunan Liar',
+        nilai: '874 Lokasi Tertib',
+        target: 'Dari 1.030 Terdata (84,8%)',
+        status: 'Tercapai',
+        subtext: 'Dilaksanakan 524 personel Ditpam & Damkar terpadu',
+      },
+      {
+        label: 'Sterilisasi Catchment Area Waduk',
+        nilai: '142 Hektar Steril',
+        target: 'Waduk Duriangkang Aman',
+        status: 'Tercapai',
+        subtext: 'Bebas dari perambahan perkebunan & hunian ilegal',
+      },
+      {
+        label: 'PNBP Pengelolaan Lahan (UWT)',
+        nilai: 'Rp 748,21 Miliar',
+        target: 'Porsi 39,5% PNBP BP Batam',
+        status: 'Tercapai',
+        subtext: 'Penyelesaian 1.650 berkas SKPT, SPPT, & UWT Perpanjangan',
+      },
+    ],
+    highlightUtama: 'Alokasi Lahan Melampaui Target (124,3%) & 142 Ha Catchment Area Duriangkang Berhasil Disterilisasi',
+    iconName: 'Shield',
+    themeColor: 'from-emerald-950 to-slate-900',
+  },
+  {
+    id: 'sektor-infrastruktur-teknis',
+    sektor: 'Infrastruktur Konektivitas & Desain Teknis',
+    judul: 'Proyek Fisik Strategis, Jalan Raya & Perencanaan DED',
+    deskripsi:
+      'Percepatan konektivitas darat kota Batam, pembangunan flyover pengurai kemacetan, drainase pengendali banjir, dan kesiapan tapak kawasan.',
+    satkerTerkait: [
+      { nama: 'Dit. Pembangunan Infrastruktur', routeId: 'dit-pembangunan-infrastruktur', kode: 'DPI' },
+      { nama: 'Dit. Perencanaan Infrastruktur', routeId: 'dit-perencanaan-infrastruktur', kode: 'DPR' },
+    ],
+    metrikList: [
+      {
+        label: 'Proyek Konstruksi Fisik Berjalan',
+        nilai: '14 Paket Proyek',
+        target: 'Kurva S Rerata 92,4%',
+        status: 'On Track',
+        subtext: 'Flyover Sei Ladi 84%, Koridor Sudirman, Akses Rempang',
+      },
+      {
+        label: 'Jaringan Jalan Arteri & Kolektor',
+        nilai: '542,8 Km Mantap',
+        target: 'Kondisi Baik 96,2%',
+        status: 'Tercapai',
+        subtext: 'Pemeliharaan berkala ruas penghubung bandara-pelabuhan',
+      },
+      {
+        label: 'Paket Desain DED 6 Sektor',
+        nilai: '43 Paket DED',
+        target: '100% Siap Tender Konstruksi',
+        status: 'Tercapai',
+        subtext: 'Gedung, jalan, jembatan, drainase, dermaga, wisata',
+      },
+      {
+        label: 'Pematangan Lahan Industri (BSW)',
+        nilai: '280 Hektar',
+        target: 'Kesiapan Tapak Investasi',
+        status: 'Tercapai',
+        subtext: 'Cut & Fill area pengembangan industri & logistik',
+      },
+      {
+        label: 'Pagu Belanja Modal Fisik',
+        nilai: 'Rp 682,43 Miliar',
+        target: 'Serapan Fisik 92,4%',
+        status: 'On Track',
+        subtext: 'Realisasi belanja kas Rp 466,8M (68,4%)',
+      },
+    ],
+    highlightUtama: 'Flyover Sei Ladi Mencapai 84% & 43 Paket DED Siap Ditenderkan Mendukung Konektivitas Kawasan',
+    iconName: 'HardHat',
+    themeColor: 'from-amber-950 to-slate-900',
+  },
+  {
+    id: 'sektor-tata-kelola-institusi',
+    sektor: 'Tata Kelola, Keuangan, SDM & SPBE Digital',
+    judul: 'SAKIP, Sistem Merit ASN, Kedaulatan SPBE & Opini BPK WTP',
+    deskripsi:
+      'Akuntabilitas pelaksanaan anggaran, profesionalitas aparatur, integrasi satu data dan sistem pemerintahan berbasis elektronik.',
+    satkerTerkait: [
+      { nama: 'Biro Keuangan', routeId: 'biro-keuangan', kode: 'BK' },
+      { nama: 'Biro Sumber Daya Manusia', routeId: 'biro-sdm', kode: 'BSDM' },
+      { nama: 'Biro OKMR', routeId: 'biro-organisasi', kode: 'BOKMR' },
+      { nama: 'Pusat Data & Sistem Informasi', routeId: 'pdsi', kode: 'PDSI' },
+      { nama: 'Biro Hukum', routeId: 'biro-hukum', kode: 'BHUK' },
+    ],
+    metrikList: [
+      {
+        label: 'Akuntabilitas Kinerja (SAKIP)',
+        nilai: 'Nilai 82,68',
+        target: 'Predikat A (Memuaskan)',
+        status: 'Tercapai',
+        subtext: 'Cascading kinerja pimpinan ke staf berorientasi hasil',
+      },
+      {
+        label: 'Indeks Sistem Merit Aparatur',
+        nilai: 'Skor 342,5 / 400',
+        target: 'Kategori IV Sangat Baik KASN',
+        status: 'Tercapai',
+        subtext: 'Untuk 2.978 pegawai (PNS, PPPK, PTT Kontrak)',
+      },
+      {
+        label: 'Kematangan SPBE Digital',
+        nilai: 'Indeks 4,12 (Level 4)',
+        target: 'Keterpaduan Layanan Satu Data',
+        status: 'Tercapai',
+        subtext: 'Tier-3 Data Center (99,9% Uptime) & CSIRT Cyber Shield',
+      },
+      {
+        label: 'Opini BPK atas LapKeu',
+        nilai: 'WTP (Wajar Tanpa Pengecualian)',
+        target: '8 Tahun Berturut-turut',
+        status: 'Tercapai',
+        subtext: 'Saldo kas penampung BLU Rp 1,428 Triliun terjaga sehat',
+      },
+      {
+        label: 'Maturitas SPIP & Regulasi',
+        nilai: 'SPIP 3,42 (Level 3)',
+        target: '24 Piagam Risiko Aktif',
+        status: 'Tercapai',
+        subtext: 'Serta 28 Perka/Kepka regulasi harmonisasi disahkan',
+      },
+    ],
+    highlightUtama: 'Opini BPK WTP 8x Berturut-turut, Sistem Merit 342,5 & Maturitas SPIP Level 3 Terdefinisi',
+    iconName: 'Building2',
+    themeColor: 'from-purple-950 to-slate-900',
+  },
+];
+
 
 // ============================================================================
 // 9. DATA TAMBAHAN PEMANTAUAN STRATEGIS KEPALA BP BATAM

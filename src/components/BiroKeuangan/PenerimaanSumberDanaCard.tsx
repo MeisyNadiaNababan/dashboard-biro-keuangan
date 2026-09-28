@@ -46,7 +46,7 @@ const PALETTE = [
 export const PenerimaanSumberDanaCard: React.FC<PenerimaanSumberDanaCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  const [viewMode, setViewMode] = useState<'donut' | 'bar' | 'table'>('donut');
+  const [viewMode, setViewMode] = useState<'donut' | 'table'>('donut');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const filteredItems = useMemo(() => {
@@ -109,7 +109,7 @@ export const PenerimaanSumberDanaCard: React.FC<PenerimaanSumberDanaCardProps> =
           classification="TERTUTUP"
           periode="PERBULAN"
           title="LAPORAN PENERIMAAN SUMBER DANA"
-          visualName="Donut &amp; Breakdown Bar Chart Penerimaan per Sumber Dana &amp; Satker Penerima"
+          visualName="Donut Pangsa &amp; Tabel Rincian Penerimaan per Sumber Dana &amp; Satker Penerima"
           attributes={['SUMBER DANA', 'UNIT KERJA', 'NILAI', 'PANGSA (%)']}
           onOpenFormula={() =>
             onOpenFormulaModal && onOpenFormulaModal('penerimaan_sumber_dana')
@@ -127,16 +127,6 @@ export const PenerimaanSumberDanaCard: React.FC<PenerimaanSumberDanaCardProps> =
                   }`}
                 >
                   Donut Pangsa
-                </button>
-                <button
-                  onClick={() => setViewMode('bar')}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
-                    viewMode === 'bar'
-                      ? 'bg-white text-slate-900 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Diagram Batang
                 </button>
                 <button
                   onClick={() => setViewMode('table')}
@@ -265,50 +255,6 @@ export const PenerimaanSumberDanaCard: React.FC<PenerimaanSumberDanaCardProps> =
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        ) : viewMode === 'bar' ? (
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-slate-800">
-                Penerimaan per Sumber Dana (Miliar Rupiah)
-              </span>
-              <span className="text-[10.5px] font-mono text-slate-500">
-                Unit Kerja Penghasil PNBP BLU
-              </span>
-            </div>
-
-            <div className="h-[250px] w-full bg-slate-50/70 border border-slate-200 rounded-xl p-2.5">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 15, right: 15, left: 10, bottom: 25 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                  <XAxis
-                    dataKey="name"
-                    tick={{ fill: '#475569', fontSize: 10.5 }}
-                    interval={0}
-                    angle={-10}
-                    textAnchor="end"
-                  />
-                  <YAxis tick={{ fill: '#64748B', fontSize: 10.5 }} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#FFFFFF',
-                      borderColor: '#E2E8F0',
-                      borderRadius: '8px',
-                      fontSize: '11px',
-                    }}
-                    formatter={(val: any, name: any, item: any) => [
-                      `Rp ${Number(val).toLocaleString('id-ID')} M (${item.payload.percent}%)`,
-                      item.payload.fullName,
-                    ]}
-                  />
-                  <Bar dataKey="value" name="Nilai Penerimaan" radius={[4, 4, 0, 0]}>
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
             </div>
           </div>
         ) : (

@@ -28,7 +28,10 @@ import {
   Anchor,
   Globe,
   Briefcase,
-  FileText
+  FileText,
+  Award,
+  Zap,
+  BarChart3
 } from 'lucide-react';
 import {
   EMPAT_IKS_KEPALA_BP,
@@ -39,12 +42,11 @@ import {
   KONSOLIDASI_OPERASIONAL_SELURUH_UNIT,
   KONSOLIDASI_BELANJA_BP_BATAM,
   KONSOLIDASI_TATA_KELOLA_RB,
-  MATRIKS_24_SATKER_DATA,
   DATA_6_WADUK_BATAM,
   DATA_LOGISTIK_FTZ_BATAM,
   DATA_SDM_DAN_TATA_KELOLA,
   DATA_7_SWP_LAHAN,
-  SatkerMatrixItem,
+  KONSOLIDASI_MULTI_SEKTOR_BP_BATAM,
   UnitIkmKonsolidasi,
   WadukBatamItem
 } from './kepalaBpData';
@@ -67,14 +69,10 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
 }) => {
   // Modal states for on-demand details
   const [selectedIkmModal, setSelectedIkmModal] = useState<UnitIkmKonsolidasi | null>(null);
-  const [selectedUnitModal, setSelectedUnitModal] = useState<SatkerMatrixItem | null>(null);
   const [selectedWadukModal, setSelectedWadukModal] = useState<WadukBatamItem | null>(null);
   const [isFtzModalOpen, setIsFtzModalOpen] = useState<boolean>(false);
   const [isSdmModalOpen, setIsSdmModalOpen] = useState<boolean>(false);
   const [isSwpModalOpen, setIsSwpModalOpen] = useState<boolean>(false);
-
-  // Filter for Widget 4 (Pemantauan Setiap Unit)
-  const [unitViewMode, setUnitViewMode] = useState<'deputi' | 'operasional' | 'biro'>('deputi');
 
   // Helper to jump to satker dashboard
   const handleJumpToUnit = (unitIdOrCode: string) => {
@@ -117,26 +115,25 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
     }
   };
 
-  // 7 Deputi list from MATRIKS_24_SATKER_DATA
-  const deputiUnits = MATRIKS_24_SATKER_DATA.filter((s) => s.id.startsWith('dep-'));
-
-  // Operational Satker list from MATRIKS_24_SATKER_DATA
-  const operasionalUnits = MATRIKS_24_SATKER_DATA.filter(
-    (s) => s.klaster === 'Badan Usaha' || s.klaster === 'Direktorat'
-  ).slice(0, 7);
-
-  // Biro & Pusat list
-  const biroUnits = MATRIKS_24_SATKER_DATA.filter(
-    (s) => s.klaster === 'Biro' || s.klaster === 'Pusat' || s.klaster === 'Satuan'
-  ).slice(0, 7);
-
-  // Filtered unit list for Widget 4
-  const displayUnitsForWidget4 =
-    unitViewMode === 'deputi'
-      ? deputiUnits
-      : unitViewMode === 'operasional'
-      ? operasionalUnits
-      : biroUnits;
+  // Helper for multi-sector icon rendering
+  const renderSectorIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Ship':
+        return <Ship className="w-4 h-4 text-blue-600" />;
+      case 'TrendingUp':
+        return <TrendingUp className="w-4 h-4 text-emerald-600" />;
+      case 'Droplets':
+        return <Droplets className="w-4 h-4 text-cyan-600" />;
+      case 'Shield':
+        return <Shield className="w-4 h-4 text-rose-600" />;
+      case 'HardHat':
+        return <HardHat className="w-4 h-4 text-amber-600" />;
+      case 'Building2':
+        return <Building2 className="w-4 h-4 text-purple-600" />;
+      default:
+        return <Layers className="w-4 h-4 text-slate-600" />;
+    }
+  };
 
   return (
     <div className="space-y-3.5 font-sans text-slate-800">
@@ -358,117 +355,168 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
       {/* 3. ROW 2: 6 SLEEK EXECUTIVE QUICK STRIP CARDS (PULSA LINTAS SEKTOR)  */}
       {/* ==================================================================== */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-        {/* Strip 1: Serapan Belanja */}
-        <div className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              BELANJA
-            </span>
-            <span className="text-xs font-black font-mono text-slate-900">77,6%</span>
+        {/* Strip 1: Serapan Realisasi Belanja */}
+        <div className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between hover:border-amber-300 transition-colors">
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="Serapan Anggaran Belanja Konsolidasi BP Batam">
+                SERAPAN BELANJA
+              </span>
+              <span className="text-xs font-black font-mono text-slate-900">77,6%</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              Realisasi Rp 1,96T (Pagu 2,53T)
+            </div>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-amber-500 rounded-full" style={{ width: '77.6%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-slate-400 text-right mt-1">
-            TGT: 75,0%
-          </div>
-        </div>
-
-        {/* Strip 2: SLA Perizinan */}
-        <div className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              SLA PTSP
-            </span>
-            <span className="text-xs font-black font-mono text-slate-900">88,6%</span>
-          </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-amber-500 rounded-full" style={{ width: '88.6%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-slate-400 text-right mt-1">
-            1,8 HARI
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-amber-500 rounded-full" style={{ width: '77.6%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-slate-400 text-right mt-1 font-bold">
+              TGT PERKIN: 75,0%
+            </div>
           </div>
         </div>
 
-        {/* Strip 3: Ditpam Aset */}
-        <div className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              DITPAM ASET
-            </span>
-            <span className="text-xs font-black font-mono text-slate-900">84,8%</span>
+        {/* Strip 2: SLA Perizinan Berusaha PTSP */}
+        <div
+          onClick={() => handleJumpToUnit('ptsp')}
+          className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between hover:border-emerald-300 transition-colors cursor-pointer"
+        >
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="SLA Perizinan Berusaha Pusat Pelayanan Terpadu Satu Pintu">
+                SLA PERIZINAN PTSP
+              </span>
+              <span className="text-xs font-black font-mono text-slate-900">88,6%</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              Ketepatan Waktu Penerbitan Izin
+            </div>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-emerald-500 rounded-full" style={{ width: '84.8%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-slate-400 text-right mt-1">
-            874 TERTIB
-          </div>
-        </div>
-
-        {/* Strip 4: Rasio Finansial */}
-        <div className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              RASIO BLU
-            </span>
-            <span className="text-xs font-black font-mono text-slate-900">0,96</span>
-          </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-indigo-500 rounded-full" style={{ width: '96%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-slate-400 text-right mt-1">
-            KAS: 1,42T
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-emerald-500 rounded-full" style={{ width: '88.6%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-emerald-700 text-right mt-1 font-bold">
+              1,8 HARI (SLA &lt; 3 HARI)
+            </div>
           </div>
         </div>
 
-        {/* Strip 5: Ekspor FTZ */}
+        {/* Strip 3: Penertiban & Pengamanan Aset */}
+        <div
+          onClick={() => handleJumpToUnit('dit-pam-aset')}
+          className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between hover:border-rose-300 transition-colors cursor-pointer"
+        >
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="Penertiban Bangunan Liar & Pengamanan Aset Vital Ditpam">
+                PENERTIBAN ASET
+              </span>
+              <span className="text-xs font-black font-mono text-slate-900">84,8%</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              874 Bangunan Liar Ditertibkan
+            </div>
+          </div>
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-emerald-500 rounded-full" style={{ width: '84.8%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-slate-500 text-right mt-1 font-bold">
+              874 LOKASI TERTIB
+            </div>
+          </div>
+        </div>
+
+        {/* Strip 4: Kemandirian Keuangan BLU */}
+        <div
+          onClick={() => handleJumpToUnit('biro-keuangan')}
+          className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between hover:border-indigo-300 transition-colors cursor-pointer"
+        >
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="Rasio Kemandirian Finansial BLU (Pendapatan vs Belanja)">
+                KEMANDIRIAN BLU
+              </span>
+              <span className="text-xs font-black font-mono text-slate-900">0,96</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              Rasio Pendapatan vs Belanja
+            </div>
+          </div>
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-indigo-500 rounded-full" style={{ width: '96%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-indigo-700 text-right mt-1 font-bold">
+              KAS BLU: RP 1,42T
+            </div>
+          </div>
+        </div>
+
+        {/* Strip 5: Total Nilai Ekspor FTZ Batam */}
         <div
           onClick={() => setIsFtzModalOpen(true)}
           className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between cursor-pointer hover:border-blue-300 transition-colors"
         >
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              EKSPOR FTZ
-            </span>
-            <span className="text-xs font-black font-mono text-blue-700">$14,8B</span>
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="Total Nilai Ekspor Bebas Pajak KPBPB Batam">
+                EKSPOR FTZ BATAM
+              </span>
+              <span className="text-xs font-black font-mono text-blue-700">$14,8B</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              Ekspor Bebas Pajak KPBPB
+            </div>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full" style={{ width: '82%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-emerald-700 text-right mt-1 font-bold">
-            SURPLUS +$2,6B
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-blue-600 rounded-full" style={{ width: '82%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-emerald-700 text-right mt-1 font-bold">
+              SURPLUS +$2,6B (KPBPB)
+            </div>
           </div>
         </div>
 
-        {/* Strip 6: Ketahanan 6 Waduk */}
+        {/* Strip 6: Ketahanan Air Baku 6 Waduk */}
         <div
           onClick={() => setSelectedWadukModal(DATA_6_WADUK_BATAM[0])}
           className="bg-white rounded-xl p-2.5 border border-slate-200/90 shadow-2xs flex flex-col justify-between cursor-pointer hover:border-cyan-300 transition-colors"
         >
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono truncate">
-              AIR 6 WADUK
-            </span>
-            <span className="text-xs font-black font-mono text-cyan-800">161,9M m³</span>
+          <div>
+            <div className="flex items-center justify-between text-xs mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-600 font-mono truncate" title="Kapasitas Tampung 6 Waduk Air Baku Kota Batam (BU SPAM)">
+                AIR 6 WADUK
+              </span>
+              <span className="text-xs font-black font-mono text-cyan-800">161,9M m³</span>
+            </div>
+            <div className="text-[9px] text-slate-500 font-medium truncate mb-1">
+              Kapasitas Tampung 96,8%
+            </div>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-cyan-600 rounded-full" style={{ width: '96.8%' }} />
-          </div>
-          <div className="text-[9px] font-mono text-slate-400 text-right mt-1">
-            3.420 L/DTK
+          <div>
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-cyan-600 rounded-full" style={{ width: '96.8%' }} />
+            </div>
+            <div className="text-[9px] font-mono text-cyan-700 text-right mt-1 font-bold">
+              WTP: 3.420 L/DTK
+            </div>
           </div>
         </div>
       </div>
 
       {/* ==================================================================== */}
-      {/* 4. ROW 3: 4 BALANCED EXECUTIVE WIDGETS (FOKUS MONITORING LINTAS UNIT)*/}
+      {/* 4. ROW 3: 3 BALANCED EXECUTIVE WIDGETS (FOKUS MONITORING LINTAS UNIT)*/}
       {/* ==================================================================== */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3.5">
         {/* ------------------------------------------------------------------ */}
-        {/* WIDGET 1: KONSOLIDASI IKM UNIT LAYANAN (3 COLS)                    */}
+        {/* WIDGET 1: KONSOLIDASI IKM UNIT LAYANAN (4 COLS)                    */}
         {/* ------------------------------------------------------------------ */}
-        <div className="xl:col-span-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
+        <div className="xl:col-span-4 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
@@ -479,7 +527,7 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
               </span>
             </div>
 
-            {/* List 6 Units */}
+            {/* List 6 Units with small clear font & full names */}
             <div className="space-y-1.5 mt-2">
               {KONSOLIDASI_IKM_SELURUH_UNIT.map((unit) => {
                 const isMutuA = unit.mutuPelayanan === 'A';
@@ -487,15 +535,25 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
                   <div
                     key={unit.id}
                     onClick={() => setSelectedIkmModal(unit)}
-                    className="group cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition-colors"
+                    className="group cursor-pointer hover:bg-slate-50 p-2 rounded-lg border border-transparent hover:border-slate-200 transition-all"
                   >
-                    <div className="flex items-center justify-between text-xs font-mono mb-1">
-                      <span className="font-bold text-slate-800 truncate max-w-[155px] text-[11px]">
-                        {unit.namaUnit.split('(')[0]}
-                      </span>
-                      <span className="font-black text-slate-900 text-[11px]">
-                        {unit.skorIkm.toFixed(1)}%
-                      </span>
+                    <div className="flex items-start justify-between gap-1.5 mb-1">
+                      <div className="flex-1 min-w-0 pr-1">
+                        <div className="text-[10px] sm:text-[10.5px] font-bold text-slate-800 leading-tight">
+                          {unit.namaUnit}
+                        </div>
+                        <div className="text-[8.5px] text-slate-400 font-mono mt-0.5">
+                          {unit.jumlahResponden.toLocaleString('id-ID')} Responden • {unit.kategori.split('&')[0]}
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="font-mono font-black text-slate-900 text-[11px]">
+                          {unit.skorIkm.toFixed(2)}
+                        </div>
+                        <span className="text-[8.5px] font-mono font-bold px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60 inline-block mt-0.5">
+                          Mutu {unit.mutuPelayanan}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
@@ -519,9 +577,9 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
         </div>
 
         {/* ------------------------------------------------------------------ */}
-        {/* WIDGET 2: RINGKASAN KEUANGAN KONSOLIDASI (4 COLS)                  */}
+        {/* WIDGET 2: RINGKASAN KEUANGAN KONSOLIDASI (5 COLS)                  */}
         {/* ------------------------------------------------------------------ */}
-        <div className="xl:col-span-4 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
+        <div className="xl:col-span-5 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
@@ -614,252 +672,149 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
         </div>
 
         {/* ------------------------------------------------------------------ */}
-        {/* WIDGET 3: KINERJA OPERASIONAL SATKER KUNCI (2 COLS)                */}
+        {/* WIDGET 3: KINERJA OPERASIONAL SATKER KUNCI (3 COLS)                */}
+        {/* HASIL CAPAIAN NYATA MENGGANTIKAN PERSENTASE SESUAI ARAHAN KEPALA   */}
         {/* ------------------------------------------------------------------ */}
-        <div className="xl:col-span-2 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
+        <div className="xl:col-span-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
                 OPERASIONAL SATKER
               </span>
+              <span className="text-[9px] font-mono text-slate-400">OUTPUT UTAMA</span>
             </div>
 
-            {/* Clean Icon Rows */}
+            {/* Clean Real Output Rows - No Ambiguous Percentages */}
             <div className="space-y-1.5 mt-2">
+              {/* 1. LAHAN */}
               <div
                 onClick={() => handleJumpToUnit('dit-lahan')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/50">
                     <MapPin className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">LAHAN</div>
-                    <div className="text-[9px] text-slate-400">248 Ha Alokasi</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Alokasi Lahan</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>77,6%</span>
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>248 Ha</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
 
+              {/* 2. INFRAS */}
               <div
                 onClick={() => handleJumpToUnit('dit-pembangunan-infrastruktur')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200/50">
                     <HardHat className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">INFRAS</div>
-                    <div className="text-[9px] text-slate-400">14 Proyek</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Proyek Strategis Konstruksi</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>68,4%</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>14 Proyek</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
 
+              {/* 3. PELABUHAN */}
               <div
                 onClick={() => handleJumpToUnit('dit-pelabuhan')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-200/50">
                     <Ship className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">PELABUHAN</div>
-                    <div className="text-[9px] text-slate-400">612k TEUs</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Arus Petikemas Batu Ampar</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>84,0%</span>
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>612k TEUs</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
 
+              {/* 4. BANDARA */}
               <div
                 onClick={() => handleJumpToUnit('dit-bandara')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-700 flex items-center justify-center shrink-0 border border-indigo-200/50">
                     <Plane className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">BANDARA</div>
-                    <div className="text-[9px] text-slate-400">4,12M Pax</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Pergerakan Penumpang Udara</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>79,1%</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>4,12M Pax</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
 
+              {/* 5. DITPAM */}
               <div
                 onClick={() => handleJumpToUnit('dit-pam-aset')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-rose-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-200/50">
                     <Shield className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">DITPAM</div>
-                    <div className="text-[9px] text-slate-400">874 Tertib</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Operasi Penertiban & Aset</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>84,8%</span>
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>874 Tertib</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
 
+              {/* 6. RSBP */}
               <div
                 onClick={() => handleJumpToUnit('bu-rumah-sakit')}
-                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-teal-700 shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-teal-50 text-teal-700 flex items-center justify-center shrink-0 border border-teal-200/50">
                     <Stethoscope className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
                     <div className="text-[10.5px] font-bold text-slate-800 leading-tight">RSBP</div>
-                    <div className="text-[9px] text-slate-400">BOR 76,2%</div>
+                    <div className="text-[9px] text-slate-500 font-medium">Okupansi Tempat Tidur Rawat</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-800 shrink-0">
-                  <span>88,9%</span>
+                <div className="flex items-center gap-1 font-mono text-xs font-black text-slate-900 shrink-0">
+                  <span>76,2% BOR</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* WIDGET 4: PEMANTAUAN SETIAP UNIT (3 COLS)                          */}
-        {/* (PENGGANTI EWS - FOKUS PENUH MONITORING KINERJA SETIAP UNIT)       */}
-        {/* ------------------------------------------------------------------ */}
-        <div className="xl:col-span-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2">
-          <div>
-            {/* Header with Unit Filter Selector */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono flex items-center gap-1 text-[#002B49]">
-                <Layers className="w-3.5 h-3.5 text-blue-700" />
-                PEMANTAUAN SETIAP UNIT
-              </span>
-
-              {/* View Switcher Pills */}
-              <div className="flex items-center gap-1 text-[9.5px] font-mono font-bold">
-                <button
-                  onClick={() => setUnitViewMode('deputi')}
-                  className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
-                    unitViewMode === 'deputi'
-                      ? 'bg-[#002B49] text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  7 DEPUTI
-                </button>
-                <button
-                  onClick={() => setUnitViewMode('operasional')}
-                  className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
-                    unitViewMode === 'operasional'
-                      ? 'bg-[#002B49] text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  SATKER
-                </button>
-                <button
-                  onClick={() => setUnitViewMode('biro')}
-                  className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
-                    unitViewMode === 'biro'
-                      ? 'bg-[#002B49] text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  BIRO
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Status Count Strip */}
-            <div className="flex items-center justify-between py-1 px-1.5 bg-slate-50 rounded-lg text-[9.5px] font-mono font-semibold text-slate-600 my-1.5 border border-slate-200/60">
-              <span className="text-emerald-700 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                19 Tercapai (&gt;100%)
-              </span>
-              <span className="text-blue-700 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                5 On Track
-              </span>
-            </div>
-
-            {/* Interactive Unit Rows */}
-            <div className="space-y-1.5 max-h-[220px] overflow-y-auto no-scrollbar pr-0.5">
-              {displayUnitsForWidget4.map((unit) => {
-                const isTercapai = unit.statusKinerja === 'Tercapai';
-                return (
-                  <div
-                    key={unit.id}
-                    onClick={() => setSelectedUnitModal(unit)}
-                    className="group cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg border border-slate-100 hover:border-slate-200 transition-all"
-                  >
-                    <div className="flex items-center justify-between text-xs font-mono mb-1">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0">
-                          {unit.kode}
-                        </span>
-                        <span className="font-bold text-slate-800 truncate max-w-[130px] text-[10.5px]">
-                          {unit.nama.replace('Anggota/Deputi Bidang ', '').replace('Deputi Bidang ', '')}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 font-mono text-[10.5px] font-black text-slate-900 shrink-0">
-                        <span>{unit.serapanPersen}%</span>
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            isTercapai ? 'bg-emerald-500' : 'bg-blue-500'
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Thin Progress bar */}
-                    <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          isTercapai ? 'bg-emerald-600' : 'bg-blue-600'
-                        }`}
-                        style={{ width: `${Math.min(unit.serapanPersen, 100)}%` }}
-                      />
-                    </div>
-
-                    {/* Output subtext */}
-                    <div className="text-[9.5px] font-mono text-slate-400 mt-1 truncate">
-                      {unit.ikpIksUtama}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Footer Action */}
           <div className="pt-2 border-t border-slate-100 text-[10px] font-mono text-slate-400 flex items-center justify-between">
-            <span>24 Satker Termonitor</span>
+            <span>6 Satker Terpilih</span>
             <button
               onClick={onNavigateToCrossUnitMatrix}
               className="text-blue-700 hover:text-blue-900 font-bold flex items-center gap-0.5 cursor-pointer"
             >
-              <span>Semua Unit</span>
+              <span>Matriks 24 Satker</span>
               <ChevronRight className="w-3 h-3" />
             </button>
           </div>
@@ -867,219 +822,134 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
       </div>
 
       {/* ==================================================================== */}
-      {/* 5. ROW 4: 3 PILAR STRATEGIS TAMBAHAN YANG DIPANTAU KEPALA BP BATAM  */}
+      {/* 5. SEKSI BARU: KONSOLIDASI MULTI-INDIKATOR LINTAS DIREKTORAT/BIRO/BU */}
       {/* ==================================================================== */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between px-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wide text-slate-600 font-mono flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-blue-700" />
-            <span>PEMANTAUAN SEKTOR VITAL &amp; KETAHANAN KAWASAN KEPALA BP BATAM</span>
-          </span>
-          <span className="text-[10px] font-mono text-slate-400">
-            Data Terkonsolidasi Seluruh Satker
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center justify-between px-1 gap-2">
+          <div className="flex items-center gap-2">
+            <span className="p-1 rounded-md bg-[#002B49] text-cyan-300">
+              <Zap className="w-3.5 h-3.5" />
+            </span>
+            <div>
+              <span className="text-[11.5px] font-black uppercase tracking-tight text-slate-900 font-mono flex items-center gap-1.5">
+                KONSOLIDASI MULTI-INDIKATOR STRATEGIS DIREKTORAT, BIRO & BADAN USAHA
+              </span>
+              <span className="text-[9.5px] font-mono text-slate-500">
+                Sintesis komprehensif seluruh indikator output lintas unit kerja BP Batam untuk Pengawasan Terpadu Kepala BP
+              </span>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200/60">
+            6 KLASTER SEKTORAL TERPADU
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {/* Card A: Ketahanan Air Waduk & Lingkungan (BU SPAM) */}
-          <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2.5">
-            <div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <span className="p-1 rounded-md bg-cyan-50 text-cyan-700">
-                    <Droplets className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
-                    KETAHANAN 6 WADUK AIR BATAM
-                  </span>
-                </div>
-                <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800">
-                  BU SPAM
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 mt-2 font-mono text-xs">
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Kapasitas 6 Waduk</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">161,96 Jt m³</div>
-                  <div className="text-[9.5px] font-bold text-emerald-700 mt-0.5">96,8% Tampungan</div>
-                </div>
-
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Distribusi WTP</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">3.420 L/dtk</div>
-                  <div className="text-[9.5px] font-bold text-cyan-700 mt-0.5">312k Pelanggan</div>
-                </div>
-              </div>
-
-              {/* 6 Reservoirs Mini Progress */}
-              <div className="space-y-1.5 mt-2.5 text-[10px] font-mono">
-                {DATA_6_WADUK_BATAM.slice(0, 4).map((w) => (
-                  <div
-                    key={w.id}
-                    onClick={() => setSelectedWadukModal(w)}
-                    className="cursor-pointer hover:bg-slate-50 p-1 rounded transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="font-semibold text-slate-700">{w.nama}</span>
-                      <span className="text-slate-500">
-                        {w.kapasitasJutaM3}M m³ · <span className={w.status === 'Siaga' ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold'}>{w.status}</span>
-                      </span>
-                    </div>
-                    <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${w.status === 'Siaga' ? 'bg-amber-500' : 'bg-cyan-600'}`}
-                        style={{ width: `${w.persenIsi}%` }}
-                      />
+        {/* 6 Comprehensive Multi-Metric Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          {KONSOLIDASI_MULTI_SEKTOR_BP_BATAM.map((sektor) => (
+            <div
+              key={sektor.id}
+              className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-3 hover:border-blue-300 hover:shadow-xs transition-all"
+            >
+              <div>
+                {/* Sector Header */}
+                <div className="flex items-start justify-between gap-2 pb-2 border-b border-slate-100">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="p-1.5 rounded-lg bg-slate-50 border border-slate-200/80 shrink-0">
+                      {renderSectorIcon(sektor.iconName)}
+                    </span>
+                    <div className="min-w-0">
+                      <h4 className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono truncate" title={sektor.judul}>
+                        {sektor.judul}
+                      </h4>
+                      <div className="text-[9px] text-slate-500 truncate mt-0.5">
+                        {sektor.deskripsi}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 text-[10px] font-mono text-slate-400 flex items-center justify-between">
-              <span>Limbah B3 KPLI: 14.850 Ton</span>
-              <button
-                onClick={() => setSelectedWadukModal(DATA_6_WADUK_BATAM[0])}
-                className="text-cyan-700 hover:text-cyan-900 font-bold cursor-pointer"
-              >
-                Detail 6 Waduk →
-              </button>
-            </div>
-          </div>
-
-          {/* Card B: Perdagangan Bebas FTZ & Logistik */}
-          <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2.5">
-            <div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <span className="p-1 rounded-md bg-blue-50 text-blue-700">
-                    <Globe className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
-                    PERDAGANGAN FTZ &amp; LOGISTIK
+                  <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 shrink-0">
+                    {sektor.sektor}
                   </span>
                 </div>
-                <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-800">
-                  KPBPB BATAM
-                </span>
-              </div>
 
-              <div className="grid grid-cols-2 gap-2 mt-2 font-mono text-xs">
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Ekspor KPBPB</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">$14,82 Miliar</div>
-                  <div className="text-[9.5px] font-bold text-emerald-700 mt-0.5">Surplus +$2,64B</div>
+                {/* Primary Headline Highlight */}
+                <div className="mt-2.5 p-2 rounded-lg bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                  <div className="min-w-0 pr-2">
+                    <div className="text-[8.5px] font-mono text-slate-400 uppercase">Sorotan Kinerja Utama</div>
+                    <div className="text-[10.5px] font-bold text-slate-900 leading-snug line-clamp-2">
+                      {sektor.highlightUtama}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      Aktif & Terkendali
+                    </span>
+                  </div>
                 </div>
 
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Dokumen PPFTZ</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">48.250 Dok</div>
-                  <div className="text-[9.5px] font-bold text-blue-700 mt-0.5">SLA 1,4 Jam</div>
-                </div>
-              </div>
-
-              {/* Logistik Multi-Moda */}
-              <div className="space-y-1.5 mt-2.5 text-[10.5px] font-mono">
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600 flex items-center gap-1.5">
-                    <Ship className="w-3 h-3 text-blue-700" />
-                    Peti Kemas Batu Ampar:
+                {/* Multi-Metrics List (Rangkuman Banyak Informasi per Sektor) */}
+                <div className="mt-2.5 space-y-1.5">
+                  <span className="text-[9px] font-mono font-extrabold uppercase text-slate-400 block tracking-wider">
+                    INDIKATOR CAPAIAN MULTI-DIMENSI:
                   </span>
-                  <span className="font-bold text-slate-900">612.400 TEUs</span>
-                </div>
-
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600 flex items-center gap-1.5">
-                    <Plane className="w-3 h-3 text-indigo-700" />
-                    Penerbangan Hang Nadim:
-                  </span>
-                  <span className="font-bold text-slate-900">34.250 Flight (4,12M Pax)</span>
-                </div>
-
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600 flex items-center gap-1.5">
-                    <Activity className="w-3 h-3 text-purple-700" />
-                    Kargo Udara EMPU:
-                  </span>
-                  <span className="font-bold text-slate-900">42.150 Ton</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 text-[10px] font-mono text-slate-400 flex items-center justify-between">
-              <span>Runway: 4.025m (Terpanjang RI)</span>
-              <button
-                onClick={() => setIsFtzModalOpen(true)}
-                className="text-blue-700 hover:text-blue-900 font-bold cursor-pointer"
-              >
-                Detail FTZ &amp; Logistik →
-              </button>
-            </div>
-          </div>
-
-          {/* Card C: Tata Kelola SDM & Lahan 7 SWP */}
-          <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 flex flex-col justify-between space-y-2.5">
-            <div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <span className="p-1 rounded-md bg-purple-50 text-purple-700">
-                    <Users className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 font-mono">
-                    SDM APARATUR &amp; LAHAN 7 SWP
-                  </span>
-                </div>
-                <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-100 text-purple-800">
-                  TATA KELOLA
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 mt-2 font-mono text-xs">
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Total SDM BP</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">2.978 Pegawai</div>
-                  <div className="text-[9.5px] font-bold text-emerald-700 mt-0.5">Merit: 342,5 (KASN)</div>
-                </div>
-
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                  <div className="text-[9.5px] text-slate-400 uppercase">Alokasi Lahan</div>
-                  <div className="text-sm font-black text-slate-900 mt-0.5">248,50 Ha</div>
-                  <div className="text-[9.5px] font-bold text-blue-700 mt-0.5">7 SWP Batam</div>
+                  {sektor.metrikList.map((m, idx) => (
+                    <div
+                      key={idx}
+                      className="p-1.5 rounded-md bg-white border border-slate-100 hover:border-slate-200 flex items-center justify-between text-[10px] font-mono transition-colors"
+                    >
+                      <div className="min-w-0 pr-2">
+                        <div className="text-slate-700 font-semibold truncate leading-tight">
+                          {m.label}
+                        </div>
+                        <div className="text-[8.5px] text-slate-400 truncate">
+                          {m.subtext} {m.target ? `· ${m.target}` : ''}
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="font-black text-slate-900 text-[10.5px]">
+                          {m.nilai}
+                        </div>
+                        <div
+                          className={`text-[8px] font-bold ${
+                            m.status === 'Tercapai' || m.status === 'Normal'
+                              ? 'text-emerald-700'
+                              : 'text-blue-700'
+                          }`}
+                        >
+                          {m.status}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Status Tata Kelola & Ruang Laut */}
-              <div className="space-y-1.5 mt-2.5 text-[10.5px] font-mono">
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600">Akuntabilitas Kinerja (SAKIP):</span>
-                  <span className="font-bold text-emerald-700">82,68 (Predikat A)</span>
+              {/* Direct Jump Buttons to Underlying Units */}
+              <div className="pt-2 border-t border-slate-100">
+                <div className="text-[8.5px] font-mono text-slate-400 mb-1 flex items-center justify-between">
+                  <span>UNIT KERJA TERKAIT:</span>
+                  <span className="text-blue-700 font-bold">KLIK MENUJU DASHBOARD</span>
                 </div>
-
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600">Izin Ruang Laut &amp; Reklamasi:</span>
-                  <span className="font-bold text-slate-900">162,80 Ha (PKKPRL)</span>
-                </div>
-
-                <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-200/50">
-                  <span className="text-slate-600">Opini BPK atas LapKeu:</span>
-                  <span className="font-bold text-emerald-700">WTP (8x Berturut)</span>
+                <div className="flex flex-wrap gap-1">
+                  {sektor.satkerTerkait.map((u) => (
+                    <button
+                      key={u.routeId}
+                      onClick={() => handleJumpToUnit(u.routeId)}
+                      className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-100 text-slate-700 hover:bg-[#002B49] hover:text-white transition-all cursor-pointer border border-slate-200 flex items-center gap-1"
+                      title={`Buka dashboard ${u.nama}`}
+                    >
+                      <span>{u.kode || u.nama}</span>
+                      <ChevronRight className="w-2.5 h-2.5 opacity-60" />
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
-
-            <div className="pt-2 border-t border-slate-100 text-[10px] font-mono text-slate-400 flex items-center justify-between">
-              <span>Piutang Tertagih: Rp 142,8M</span>
-              <button
-                onClick={() => setIsSdmModalOpen(true)}
-                className="text-purple-700 hover:text-purple-900 font-bold cursor-pointer"
-              >
-                Detail SDM &amp; SWP →
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
+
+
 
       {/* ==================================================================== */}
       {/* 6. ROW 5: NARASI STRATEGIS EKSEKUTIF (MATCHING REFERENCE IMAGE)     */}
@@ -1290,104 +1160,7 @@ export const ExecutiveCommandCenterView: React.FC<ExecutiveCommandCenterViewProp
         </div>
       )}
 
-      {/* ==================================================================== */}
-      {/* 9. INTERACTIVE DETAIL MODAL: DETAIL KINERJA SATKER                   */}
-      {/* ==================================================================== */}
-      {selectedUnitModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-slate-200 space-y-4 animate-in fade-in zoom-in duration-150">
-            <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <span className="p-1.5 rounded-lg bg-blue-100 text-blue-800">
-                  <Building2 className="w-5 h-5" />
-                </span>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded bg-blue-100 text-blue-800">
-                      {selectedUnitModal.kode}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-mono">
-                      Klaster: {selectedUnitModal.klaster}
-                    </span>
-                  </div>
-                  <h3 className="text-sm font-black text-slate-900 mt-0.5">
-                    {selectedUnitModal.nama}
-                  </h3>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedUnitModal(null)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-mono">
-                <div>
-                  <span className="text-[10px] text-slate-500 block">PAGU ANGGARAN</span>
-                  <span className="text-sm font-black text-slate-900">
-                    Rp {selectedUnitModal.paguMiliar.toFixed(2)} M
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 block">REALISASI BELANJA</span>
-                  <span className="text-sm font-black text-blue-700">
-                    Rp {selectedUnitModal.realisasiMiliar.toFixed(2)} M ({selectedUnitModal.serapanPersen}%)
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 block">PENERIMAAN PNBP</span>
-                  <span className="text-sm font-black text-indigo-700">
-                    Rp {selectedUnitModal.pnbpMiliar.toFixed(2)} M
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 block">STATUS KINERJA</span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                    {selectedUnitModal.statusKinerja}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <span className="font-extrabold uppercase font-mono text-[10px] text-slate-400 block mb-1">
-                  IKP &amp; OUTPUT STRATEGIS UTAMA:
-                </span>
-                <p className="p-2.5 bg-slate-50 rounded-lg border border-slate-200/80 text-slate-800 text-[11.5px] leading-relaxed">
-                  {selectedUnitModal.ikpIksUtama}
-                </p>
-              </div>
-
-              <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between pt-1">
-                <span>Dataset Satu Data: {selectedUnitModal.jumlahDatasetSatuData} Dataset</span>
-                <span>Sumber: {selectedUnitModal.halamanPdf}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-              <button
-                onClick={() => {
-                  handleJumpToUnit(selectedUnitModal.id);
-                  setSelectedUnitModal(null);
-                }}
-                className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 flex items-center gap-1 cursor-pointer"
-              >
-                <span>Buka Dashboard Unit</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </button>
-
-              <button
-                onClick={() => setSelectedUnitModal(null)}
-                className="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 cursor-pointer"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ==================================================================== */}
       {/* 10. INTERACTIVE DETAIL MODAL: WADUK AIR BATAM                        */}

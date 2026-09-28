@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Target,
   Layers,
-  FileSpreadsheet,
   Award,
   TrendingUp,
   MapPin,
@@ -51,59 +50,16 @@ export const PusrenDashboard: React.FC<PusrenDashboardProps> = ({
 
   return (
     <div className="space-y-4 font-sans select-none pb-12">
-      {/* Top Header Card */}
-      <div className="bg-[#002B49] text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-700/60 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded font-mono text-[10.5px] font-black uppercase bg-teal-500/20 text-teal-300 border border-teal-400/40">
-              UNIT KERJA P3S · HALAMAN 51 - 53 PDF (19 DATASET)
-            </span>
-            <span className="text-xs text-slate-300">
-              Perkin A2 (DEP A2): Kebijakan Strategis &amp; Perizinan
-            </span>
-          </div>
-          <h1 className="text-lg sm:text-xl lg:text-2xl font-black tracking-tight">
-            Pusat Perencanaan Program Strategis (Pusren BP Batam)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-            Pusat Komando Perencanaan Jangka Menengah &amp; Panjang, 5 Dokumen Masterplan Kawasan, Keselarasan Renstra 2025-2029, dan Evaluasi e-Monev Bappenas (SE PPN No. 3/2023).
-          </p>
-          <div className="text-[11px] text-slate-300 flex flex-wrap items-center gap-2 pt-1 font-medium">
-            <span>Pimpinan: <strong className="text-white">Kepala Pusat Perencanaan Program Strategis</strong></span>
-            <span>·</span>
-            <span>Pagu DIPA: <strong className="text-teal-300 font-mono">Rp 13.660.000.000,-</strong></span>
-            <span>·</span>
-            <span>IKP Terhubung: <strong className="text-amber-300">IKP-1 Indeks Perencanaan (94.20)</strong></span>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="flex items-center gap-2 shrink-0">
-          {onOpenFormulaModal && (
-            <button
-              onClick={() => onOpenFormulaModal('ikp-1-perencanaan')}
-              className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
-            >
-              <Award className="w-3.5 h-3.5 text-amber-400" />
-              <span>Manual IKP-1 (94.20)</span>
-            </button>
-          )}
-          {onOpenExportModal && (
-            <button
-              onClick={onOpenExportModal}
-              className="px-3.5 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-900 text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span>Ekspor 19 Dataset</span>
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* 4 KPI Summary Cards for Pusren */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
-          <span className="text-[10px] font-bold uppercase text-slate-400 block">Indeks Perencanaan (IPPN)</span>
+        <div
+          onClick={() => onOpenFormulaModal && onOpenFormulaModal('ikp-1-perencanaan')}
+          className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1 hover:border-teal-400 cursor-pointer transition-all"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">Indeks Perencanaan (IPPN)</span>
+            <span className="text-[9px] font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200 font-bold">Manual IKP-1</span>
+          </div>
           <div className="text-xl sm:text-2xl font-black font-mono text-teal-700">94.20 / 100</div>
           <span className="text-[10.5px] font-semibold text-emerald-600 block">Sangat Baik (Bappenas SE 3/2023)</span>
         </div>

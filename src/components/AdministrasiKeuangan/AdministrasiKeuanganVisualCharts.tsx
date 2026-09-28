@@ -8,22 +8,20 @@ import {
   Sparkles,
   ChevronRight,
   BookOpen,
-  PieChart as PieIcon,
   FileCheck2,
   Layers,
   ArrowUpRight,
   GraduationCap,
   Briefcase,
-  Table as TableIcon,
   BarChart2,
-  Filter,
+  DollarSign,
+  Building2,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   FISCAL_REVENUE_SUMMARY_DATA,
   FISCAL_EXPENSE_SUMMARY_DATA,
   FISCAL_EXPENSE_PERKIN_UNITS,
-  PEGAWAI_STATUS_DETAIL_DATA,
-  PEGAWAI_PENDIDIKAN_DETAIL_DATA,
   MATRIKS_STATUS_PENDIDIKAN_DATA,
   FiscalSummaryExpense,
 } from './administrasiKeuanganData';
@@ -50,7 +48,7 @@ interface AdministrasiKeuanganVisualChartsProps {
 export const AdministrasiKeuanganVisualCharts: React.FC<
   AdministrasiKeuanganVisualChartsProps
 > = ({ onOpenFormulaModal }) => {
-  // Navigation tabs (Anggaran Perkin removed as requested by user)
+  // Navigation tabs
   const [activeTab, setActiveTab] = useState<
     'fiskal_keuangan' | 'sdm_demografi' | 'akuntabilitas_okmr'
   >('fiskal_keuangan');
@@ -58,18 +56,108 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
   // Expense Unit Filter Mode: 'all_units' vs 'perkin_units'
   const [expenseUnitMode, setExpenseUnitMode] = useState<'all_units' | 'perkin_units'>('all_units');
 
-  // SDM Tab Sub-View: 'kartu_distribusi' | 'matriks_silang' | 'grafik_analisis'
-  const [sdmSubView, setSdmSubView] = useState<'kartu_distribusi' | 'matriks_silang' | 'grafik_analisis'>('kartu_distribusi');
-
-  // Selected Status for Matrix Highlighting
-  const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
-
-  // Radar Data for 4 IKP
+  // Radar Data for 6 Vital Indices related to Deputi Administrasi & Keuangan & Biro OKMR
   const radarData = [
-    { subject: 'Indeks RB (BB)', target: 80, realisasi: 78.45, fullMark: 100 },
-    { subject: 'Sistem Merit (IV)', target: 70, realisasi: 85.6, fullMark: 100 },
-    { subject: 'Maturitas SPIP', target: 64, realisasi: 68.4, fullMark: 100 },
-    { subject: 'Opini BPK WTP', target: 100, realisasi: 100, fullMark: 100 },
+    { subject: 'Indeks RB', target: 80.0, realisasi: 81.14, fullMark: 100 },
+    { subject: 'Nilai SAKIP', target: 81.5, realisasi: 82.68, fullMark: 100 },
+    { subject: 'Maturitas SPIP', target: 66.0, realisasi: 68.4, fullMark: 100 },
+    { subject: 'Sistem Merit', target: 70.0, realisasi: 85.6, fullMark: 100 },
+    { subject: 'Manajemen Risiko (MRI)', target: 64.0, realisasi: 67.0, fullMark: 100 },
+    { subject: 'Evaluasi Kelembagaan', target: 75.0, realisasi: 78.4, fullMark: 100 },
+  ];
+
+  // Data Konsolidasi Nilai Indeks-Indeks Tata Kelola & Akuntabilitas Biro OKMR & Deputi 1
+  const OKMR_GOVERNANCE_INDICES = [
+    {
+      id: 'sakip',
+      label: 'Nilai Akuntabilitas Kinerja (SAKIP)',
+      subtext: 'Perencanaan, Pengukuran & LAKIP BP',
+      target: 'Target: 81.50',
+      realisasi: '82.68',
+      predikat: 'Predikat A Memuaskan',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      pengampu: 'Biro OKMR & Pimpinan BP Batam',
+    },
+    {
+      id: 'spip',
+      label: 'Maturitas SPIP Terintegrasi',
+      subtext: 'Kematangan Pengendalian Intern BPKP',
+      target: 'Target: 3.30',
+      realisasi: '3.42',
+      predikat: 'Level 3 Terdefinisi',
+      badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
+      pengampu: 'Biro OKMR & Seluruh Satker',
+    },
+    {
+      id: 'rb',
+      label: 'Indeks Reformasi Birokrasi (RB)',
+      subtext: 'Evaluasi 8 Area Perubahan MenPAN-RB',
+      target: 'Target: 80.00',
+      realisasi: '81.14',
+      predikat: 'Predikat A',
+      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      pengampu: 'Biro OKMR (Tata Laksana & RB)',
+    },
+    {
+      id: 'lhkpn',
+      label: 'Tingkat Kepatuhan LHKPN',
+      subtext: 'Kepatuhan Wajib Lapor KPK RI',
+      target: 'Target: 100%',
+      realisasi: '100%',
+      predikat: 'Selesai Tepat Waktu',
+      badgeColor: 'bg-teal-50 text-teal-700 border-teal-200',
+      pengampu: 'Kepatuhan Internal Biro OKMR',
+    },
+    {
+      id: 'mri',
+      label: 'Manajemen Risiko Indeks (MRI)',
+      subtext: 'Validasi Piagam Register Risiko 24 Satker',
+      target: 'Target: 3.20',
+      realisasi: '3.35',
+      predikat: 'Level 3 Terkelola',
+      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+      pengampu: 'Biro OKMR (Bagian MR)',
+    },
+    {
+      id: 'kelembagaan',
+      label: 'Evaluasi Kelembagaan',
+      subtext: 'Tingkat Kematangan Struktur & Tata Kelola',
+      target: 'Target: 75.00',
+      realisasi: '78.40',
+      predikat: 'Efektif & Efisien',
+      badgeColor: 'bg-sky-50 text-sky-700 border-sky-200',
+      pengampu: 'Biro OKMR (Bagian Organisasi)',
+    },
+    {
+      id: 'merit',
+      label: 'Indeks Penerapan Sistem Merit',
+      subtext: 'Evaluasi 8 Aspek KASN & BKN RI',
+      target: 'Target: 280 Poin',
+      realisasi: '342.5 Poin',
+      predikat: 'Kategori IV (Sangat Baik)',
+      badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
+      pengampu: 'Biro Sumber Daya Manusia',
+    },
+    {
+      id: 'wtp_ikpa',
+      label: 'Opini BPK & Akuntabilitas Keuangan (IKPA)',
+      subtext: 'Laporan Keuangan SAP & Nilai IKPA Kemenkeu',
+      target: 'Target: WTP / IKPA 95.0',
+      realisasi: 'WTP / 96.25',
+      predikat: 'Paripurna (8x Berturut)',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      pengampu: 'Biro Keuangan',
+    },
+    {
+      id: 'pekppp',
+      label: 'Indeks Pelayanan Publik (PEKPPP)',
+      subtext: 'Kualitas Pelayanan Terpadu & Sektor Usaha',
+      target: 'Target: 4.00 / 5.0',
+      realisasi: '4.38 / 5.0',
+      predikat: 'Predikat A- (Sangat Baik)',
+      badgeColor: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+      pengampu: 'Biro OKMR & Satker Pelayanan',
+    },
   ];
 
   const activeExpenseList: FiscalSummaryExpense[] =
@@ -79,7 +167,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
   const totalSerapanFiltered = activeExpenseList.reduce((acc, curr) => acc + curr.serapan, 0);
   const avgSerapanPercent = totalPaguFiltered > 0 ? (totalSerapanFiltered / totalPaguFiltered) * 100 : 0;
 
-  // Chart Data for Stacked / Grouped Status vs Education
+  // Chart Data for Grouped / Stacked Status vs Jenjang Pendidikan
   const chartDataStatusPendidikan = MATRIKS_STATUS_PENDIDIKAN_DATA.map((row) => ({
     name: row.kode,
     fullName: row.statusNama,
@@ -94,7 +182,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
   return (
     <div className="space-y-4">
-      {/* Tab Navigation Controls (Without Anggaran Perkin) */}
+      {/* Tab Navigation Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200/90 shadow-2xs">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center shrink-0">
@@ -105,7 +193,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
               VISUALISASI EKSEKUTIF PERFORMA & TATA KELOLA
             </h3>
             <p className="text-[10.5px] text-slate-500">
-              Analisis terpadu performa fiskal, serapan belanja unit, distribusi status PNS & jenjang pendidikan, serta 8 aspek sistem merit
+              Analisis terpadu performa fiskal, serapan belanja unit, distribusi status kepegawaian & kualifikasi pendidikan, serta radar 4 indeks akuntabilitas
             </p>
           </div>
         </div>
@@ -132,8 +220,8 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Award className="w-3.5 h-3.5" />
-            <span>Kualifikasi Pendidikan & Sistem Merit (8 Aspek)</span>
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>Kualifikasi Pendidikan & Status Pegawai</span>
           </button>
 
           <button
@@ -150,153 +238,129 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
         </div>
       </div>
 
-      {/* VIEW 1: KINERJA FISKAL & BELANJA UNIT (DILENGKAPI DETAIL SERAPAN BELANJA UNIT) */}
+      {/* ==================================================================== */}
+      {/* VIEW 1: KINERJA FISKAL & BELANJA UNIT                                */}
+      {/* MENGIKUTI FORMAT RINGKASAN KEUANGAN DASHBOARD KEPALA BP BATAM        */}
+      {/* ==================================================================== */}
       {activeTab === 'fiskal_keuangan' && (
-        <div className="space-y-4">
-          {/* Executive Fiscal Cards Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                Target Pendapatan
-              </span>
-              <span className="text-base sm:text-lg font-black text-slate-900 font-mono block">
-                Rp 2.45T
-              </span>
-              <span className="text-[9.5px] text-slate-400 block">PNBP BLU 2026</span>
+        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 sm:p-5 space-y-4">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
+                <DollarSign className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900 font-mono">
+                  RINGKASAN KEUANGAN & REALISASI FISKAL KONSOLIDASI
+                </span>
+                <div className="text-[10px] text-slate-400 font-mono">
+                  REALISASI YTD TAHUN ANGGARAN 2026 • BADAN PENGUSAHAAN BATAM
+                </div>
+              </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white border border-emerald-200 bg-emerald-50/20 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">
-                Realisasi Pendapatan
+            {/* Quick Indicators Pill */}
+            <div className="flex items-center gap-2 font-mono text-[10.5px]">
+              <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                Surplus: +Rp 36,2 M
               </span>
-              <span className="text-base sm:text-lg font-black text-emerald-700 font-mono block">
-                Rp 981.2M
+              <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-bold">
+                Kemandirian: 0.86
               </span>
-              <span className="text-[9.5px] text-emerald-600 font-bold block">40.1% Tercapai</span>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                Target Belanja
-              </span>
-              <span className="text-base sm:text-lg font-black text-slate-900 font-mono block">
-                Rp 3.32T
-              </span>
-              <span className="text-[9.5px] text-slate-400 block">Pagu DIPA BLU</span>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white border border-blue-200 bg-blue-50/20 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 block">
-                Realisasi Belanja
-              </span>
-              <span className="text-base sm:text-lg font-black text-blue-700 font-mono block">
-                Rp 945.0M
-              </span>
-              <span className="text-[9.5px] text-blue-600 font-bold block">28.5% Serapan</span>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white border border-amber-200 bg-amber-50/20 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 block">
-                Coverage Ratio
-              </span>
-              <span className="text-base sm:text-lg font-black text-amber-700 font-mono block">
-                0.86
-              </span>
-              <span className="text-[9.5px] text-amber-600 font-bold block">Kemandirian Finansial</span>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white border border-rose-200 bg-rose-50/20 shadow-2xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-800 block">
-                Revenue Gap
-              </span>
-              <span className="text-base sm:text-lg font-black text-rose-700 font-mono block">
-                Rp -1.47T
-              </span>
-              <span className="text-[9.5px] text-rose-600 font-bold block">Target s/d Akhir TA</span>
             </div>
           </div>
 
-          {/* TWO BALANCED COLUMNS: DETAIL PENDAPATAN & DETAIL SERAPAN BELANJA UNIT */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            {/* Column 1: DETAIL PERFORMA PENDAPATAN (6 Sektor PNBP) */}
-            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                    <TrendingUp className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                      DETAIL PERFORMA PENDAPATAN (PNBP)
-                    </h4>
-                    <span className="text-[10px] text-slate-400">Target vs Realisasi per Sektor Badan Layanan Umum</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 text-[10px] font-mono font-bold text-slate-500">
-                  <span className="text-slate-400">TARGET</span>
-                  <span className="text-emerald-700">REALISASI</span>
-                </div>
+          {/* Penerimaan vs Belanja Strip (Identik dengan format Kepala BP Batam) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-1">
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="font-extrabold text-slate-500 uppercase tracking-wide">
+                  PENERIMAAN (PNBP BLU)
+                </span>
+                <span className="text-slate-400">Target: Rp 2,45 T</span>
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-900">
+                Rp 981,2 M
+              </div>
+              <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-200/60">
+                <span className="font-bold text-emerald-700">40.1% Capaian Target</span>
+                <span className="text-slate-400">6 Sektor PNBP Aktif</span>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-1">
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="font-extrabold text-slate-500 uppercase tracking-wide">
+                  REALISASI BELANJA
+                </span>
+                <span className="text-slate-400">Pagu DIPA: Rp 3,32 T</span>
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-900">
+                Rp 945,0 M
+              </div>
+              <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-200/60">
+                <span className="font-bold text-blue-700">28.5% Serapan Anggaran</span>
+                <span className="text-slate-400">Termin Pengadaan Berjalan</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Two Sub-columns: Performa Penerimaan vs Realisasi Belanja Unit */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2 border-t border-slate-100 text-[10.5px]">
+            {/* Left Sub-column: Sektor Penerimaan PNBP */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono">
+                  RINCIAN PENERIMAAN (PNBP BLU)
+                </span>
+                <span className="text-[9.5px] font-mono text-emerald-700 font-bold">
+                  KONTRIBUTOR UTAMA
+                </span>
               </div>
 
-              <div className="space-y-3.5">
+              <div className="space-y-1.5 font-mono">
                 {FISCAL_REVENUE_SUMMARY_DATA.map((item, idx) => (
-                  <div key={idx} className="space-y-1.5 p-2 rounded-lg hover:bg-slate-50/80 transition-colors">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="w-4 h-4 rounded-full bg-slate-100 text-slate-700 font-mono text-[9px] font-bold flex items-center justify-center">
-                          {idx + 1}
-                        </span>
-                        <span className="font-bold text-slate-800 uppercase tracking-tight">
+                  <div
+                    key={idx}
+                    className="p-2 rounded-lg bg-slate-50/70 border border-slate-200/60 flex items-center justify-between hover:bg-slate-100/70 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                      <span className="w-4 h-4 rounded bg-slate-200 text-slate-700 text-[9px] font-bold flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+                      <div className="truncate">
+                        <div className="text-[11px] font-bold text-slate-800 truncate uppercase">
                           {item.sektor}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 font-mono text-xs">
-                        <span className="text-slate-400">
-                          Rp {(item.target / 1000000000).toFixed(1)}M
-                        </span>
-                        <span className="font-bold text-emerald-600">
-                          Rp {(item.realisasi / 1000000000).toFixed(1)}M
-                        </span>
-                        <span className="text-[10.5px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          {item.persentase.toFixed(1)}%
-                        </span>
+                        </div>
+                        <div className="text-[9px] text-slate-400">
+                          Target: Rp {(item.target / 1000000000).toFixed(1)}M
+                        </div>
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                        style={{ width: `${Math.min(item.persentase, 100)}%` }}
-                      />
+                    <div className="text-right shrink-0">
+                      <div className="font-bold text-slate-900 text-xs">
+                        Rp {(item.realisasi / 1000000000).toFixed(1)}M
+                      </div>
+                      <div className="text-[9.5px] font-bold text-emerald-700">
+                        {item.persentase.toFixed(1)}% Capaian
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <div className="p-3 rounded-lg bg-emerald-50/50 border border-emerald-100 flex items-center justify-between text-[11px] text-emerald-900">
-                <span className="font-medium">Total PNBP Sektor Utama:</span>
-                <span className="font-mono font-bold">Rp 981,2 Miliar / Rp 2.447,9 Miliar (40,1%)</span>
-              </div>
             </div>
 
-            {/* Column 2: DETAIL SERAPAN BELANJA UNIT (PAGU VS SERAPAN) */}
-            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2.5 border-b border-slate-100 gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-700 flex items-center justify-center">
-                    <Scale className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                      DETAIL SERAPAN BELANJA UNIT
-                    </h4>
-                    <span className="text-[10px] text-slate-400">Pagu DIPA vs Serapan Realisasi per Satker</span>
-                  </div>
-                </div>
+            {/* Right Sub-column: Realisasi Serapan Belanja Satker */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold uppercase tracking-wide text-slate-500 font-mono">
+                  REALISASI BELANJA SATKER
+                </span>
 
-                {/* Scope Switcher Toggle */}
-                <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-md text-[10px]">
+                {/* Scope Switcher */}
+                <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-md text-[9.5px] font-sans">
                   <button
                     onClick={() => setExpenseUnitMode('all_units')}
                     className={`px-2 py-0.5 rounded font-bold transition-all cursor-pointer ${
@@ -320,572 +384,283 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
                 </div>
               </div>
 
-              {/* Serapan Unit List */}
-              <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+              <div className="space-y-1.5 font-mono max-h-[310px] overflow-y-auto pr-0.5">
                 {activeExpenseList.map((item, idx) => (
-                  <div key={idx} className="space-y-1.5 p-2 rounded-lg hover:bg-slate-50/80 transition-colors">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2 max-w-[55%]">
-                        <span className="w-4 h-4 rounded-full bg-slate-100 text-slate-700 font-mono text-[9px] font-bold flex items-center justify-center shrink-0">
-                          {idx + 1}
-                        </span>
-                        <div className="truncate">
-                          <span className="font-bold text-slate-800 uppercase tracking-tight block truncate">
-                            {item.unitKerja}
-                          </span>
-                          <span className="text-[9.5px] font-mono text-slate-400">
-                            Kode: {item.kodeUnit}
-                          </span>
+                  <div
+                    key={idx}
+                    className="p-2 rounded-lg bg-slate-50/70 border border-slate-200/60 flex items-center justify-between hover:bg-slate-100/70 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                      <span className="w-4 h-4 rounded bg-slate-200 text-slate-700 text-[9px] font-bold flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+                      <div className="truncate">
+                        <div className="text-[11px] font-bold text-slate-800 truncate uppercase">
+                          {item.unitKerja}
                         </div>
-                      </div>
-
-                      <div className="flex items-center gap-3 font-mono text-xs text-right">
-                        <div>
-                          <div className="flex items-center justify-end gap-2">
-                            <span className="text-[10px] text-slate-400">Pagu:</span>
-                            <span className="text-slate-500 font-bold">
-                              Rp {(item.pagu / 1000000000).toFixed(1)}M
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-end gap-2">
-                            <span className="text-[10px] text-slate-400">Serap:</span>
-                            <span className="text-blue-700 font-bold">
-                              Rp {(item.serapan / 1000000000).toFixed(1)}M
-                            </span>
-                          </div>
+                        <div className="text-[9px] text-slate-400">
+                          Pagu: Rp {(item.pagu / 1000000000).toFixed(1)}M
                         </div>
-
-                        <span
-                          className={`text-[10.5px] font-bold px-1.5 py-0.5 rounded border whitespace-nowrap ${
-                            item.status === 'OPTIMAL'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                              : 'bg-blue-50 text-blue-700 border-blue-200'
-                          }`}
-                        >
-                          {item.persentase.toFixed(1)}%
-                        </span>
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div className="text-right shrink-0">
+                      <div className="font-bold text-slate-900 text-xs">
+                        Rp {(item.serapan / 1000000000).toFixed(1)}M
+                      </div>
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${
+                        className={`text-[9.5px] font-bold ${
                           item.persentase >= 35
-                            ? 'bg-emerald-500'
+                            ? 'text-emerald-700'
                             : item.persentase >= 30
-                            ? 'bg-blue-500'
-                            : 'bg-sky-500'
+                            ? 'text-blue-700'
+                            : 'text-slate-600'
                         }`}
-                        style={{ width: `${Math.min(item.persentase, 100)}%` }}
-                      />
+                      >
+                        {item.persentase.toFixed(1)}% Serapan
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <div className="p-3 rounded-lg bg-blue-50/50 border border-blue-100 flex items-center justify-between text-[11px] text-blue-900">
-                <span className="font-medium">Total Konsolidasi Belanja Unit:</span>
-                <span className="font-mono font-bold">
-                  Rp {(totalSerapanFiltered / 1000000000).toFixed(1)}M / Rp {(totalPaguFiltered / 1000000000).toFixed(1)}M ({avgSerapanPercent.toFixed(1)}%)
-                </span>
-              </div>
             </div>
           </div>
 
-          {/* LOWER SECTION: KEMANDIRIAN FISKAL, SUMBER PENDANAAN & ANALISIS BIRO KEUANGAN */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Donut 1: Kemandirian Fiskal */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs text-center space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 block">
-                KEMANDIRIAN FISKAL
-              </span>
-              <div className="h-24 w-full flex items-center justify-center">
-                <div className="relative w-20 h-20 rounded-full border-6 border-slate-900 border-t-cyan-500 border-r-cyan-400 flex items-center justify-center">
-                  <div className="text-center">
-                    <span className="text-base font-black font-mono text-slate-900">0.86</span>
-                    <span className="text-[7.5px] font-mono text-slate-400 block">RATIO</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-[10px] text-slate-500 italic">
-                &ldquo;Tingkat kemandirian finansial level moderat.&rdquo;
-              </p>
+          {/* Footer Status Line (Identik dengan format Kepala BP Batam) */}
+          <div className="pt-2 border-t border-slate-100 text-[10.5px] font-mono text-emerald-700 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Status: Saldo kas bank penampung BLU Rp 1,42T tersimpan aman di Bank Himbara.</span>
             </div>
-
-            {/* Donut 2: Sumber Pendanaan */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs text-center space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 block">
-                SUMBER PENDANAAN
-              </span>
-              <div className="h-24 w-full flex items-center justify-center">
-                <div className="relative w-20 h-20 rounded-full border-6 border-[#002B49] border-l-sky-400 flex items-center justify-center">
-                  <div className="text-center">
-                    <span className="text-xs font-black font-mono text-slate-900">BLU</span>
-                    <span className="text-[7.5px] font-mono text-slate-400 block">74% PNBP</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-[10px] text-slate-500 italic">
-                &ldquo;Dominan jasa kepelabuhanan & pertanahan.&rdquo;
-              </p>
-            </div>
-
-            {/* Metric 3: Rasio Surplus / Efisiensi Operasional */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 block">
-                SURPLUS / DEFISIT OPERASIONAL
-              </span>
-              <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
-                <span className="text-lg font-black font-mono text-emerald-800 block">
-                  +Rp 36,2 M
-                </span>
-                <span className="text-[9.5px] font-bold text-emerald-600 block">
-                  Net Surplus Berjalan BLU
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-500 leading-snug">
-                Penerimaan PNBP (Rp 981,2 M) melampaui realisasi belanja s.d saat ini (Rp 945,0 M).
-              </p>
-            </div>
-
-            {/* Box 4: Advisory Insight Biro Keuangan */}
-            <div className="p-4 rounded-xl bg-slate-900 text-white shadow-xs space-y-2 flex flex-col justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-1.5 text-cyan-300 font-mono text-xs font-bold uppercase">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>ANALISIS KEUANGAN DEPUTI 1</span>
-                </div>
-                <ul className="space-y-1 text-[10.5px] text-slate-300">
-                  <li className="flex items-start gap-1.5">
-                    <span className="text-cyan-400 font-mono font-bold">01</span>
-                    <span>Pendapatan didominasi pertanahan & pelabuhan (65,4%).</span>
-                  </li>
-                  <li className="flex items-start gap-1.5">
-                    <span className="text-cyan-400 font-mono font-bold">02</span>
-                    <span>Serapan belanja unit sejalan dengan jadwal termin pengadaan.</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="pt-2 border-t border-slate-800 text-[9.5px] text-slate-400 flex items-center justify-between">
-                <span>Kas Bank Real-Time:</span>
-                <span className="font-mono text-cyan-300 font-bold">Rp 1,42 Triliun</span>
-              </div>
-            </div>
+            <span className="text-slate-500">Nilai IKPA Kemenkeu: <strong>96.25 (Sangat Baik)</strong></span>
           </div>
         </div>
       )}
 
-      {/* VIEW 2: KUALIFIKASI PENDIDIKAN, STATUS PNS & NON-PNS, DAN 8 ASPEK SISTEM MERIT */}
+      {/* ==================================================================== */}
+      {/* VIEW 2: KUALIFIKASI PENDIDIKAN DAN STATUS PEGAWAI                    */}
+      {/* HANYA MENAMPILKAN GRAFIK BATANG SESUAI PERMINTAAN USER               */}
+      {/* ==================================================================== */}
       {activeTab === 'sdm_demografi' && (
-        <div className="space-y-4">
-          {/* SECTION A: DISTRIBUSI KARYAWAN BERDASARKAN STATUS PNS & JENJANG PENDIDIKAN */}
-          <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center">
-                  <Users className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                    JUMLAH KARYAWAN BERDASARKAN STATUS PNS & JENJANG PENDIDIKAN
-                  </h4>
-                  <span className="text-[10.5px] text-slate-500">
-                    Buku Satu Data BP Batam (Hal. 1-2): 2.978 Total Pegawai Aktif
-                  </span>
-                </div>
+        <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center">
+                <Users className="w-4 h-4" />
               </div>
-
-              {/* Sub-view Switcher (Cards vs Matrix Table vs Chart) */}
-              <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg text-xs">
-                <button
-                  onClick={() => setSdmSubView('kartu_distribusi')}
-                  className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    sdmSubView === 'kartu_distribusi'
-                      ? 'bg-white text-blue-700 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>Rincian Kartu</span>
-                </button>
-
-                <button
-                  onClick={() => setSdmSubView('matriks_silang')}
-                  className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    sdmSubView === 'matriks_silang'
-                      ? 'bg-white text-indigo-700 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <TableIcon className="w-3.5 h-3.5" />
-                  <span>Matriks Silang Status x Pendidikan</span>
-                </button>
-
-                <button
-                  onClick={() => setSdmSubView('grafik_analisis')}
-                  className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    sdmSubView === 'grafik_analisis'
-                      ? 'bg-white text-teal-700 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <BarChart2 className="w-3.5 h-3.5" />
-                  <span>Grafik Batang</span>
-                </button>
+              <div>
+                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
+                  KUALIFIKASI PENDIDIKAN DAN STATUS PEGAWAI
+                </h4>
+                <span className="text-[10.5px] text-slate-500">
+                  Buku Satu Data BP Batam (Hal. 1-2): Komposisi Jenjang Pendidikan pada 5 Status Kepegawaian (Total 2.978 Pegawai)
+                </span>
               </div>
             </div>
 
-            {/* SUB-VIEW 1: RINCIAN KARTU (STATUS KEPEGAWAIAN & JENJANG PENDIDIKAN) */}
-            {sdmSubView === 'kartu_distribusi' && (
-              <div className="space-y-5">
-                {/* 1. KELOMPOK STATUS KEPEGAWAIAN (PNS, P2K, PPPK, PTT, PROFESIONAL) */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-extrabold uppercase tracking-tight text-slate-800 flex items-center gap-2">
-                      <Briefcase className="w-3.5 h-3.5 text-blue-600" />
-                      <span>1. Jumlah Karyawan Berdasarkan Status Kepegawaian (PNS & Non-PNS)</span>
-                    </span>
-                    <span className="font-mono text-slate-500 text-[11px]">Total: 2.978 Pegawai</span>
-                  </div>
+            <div className="flex items-center gap-2 font-mono text-xs text-slate-700">
+              <span className="px-2.5 py-1 rounded bg-slate-100 font-bold border border-slate-200">
+                Total: 2.978 Pegawai
+              </span>
+              <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                Sarjana+: 64.5% (1.920 Org)
+              </span>
+            </div>
+          </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                    {PEGAWAI_STATUS_DETAIL_DATA.map((st) => (
-                      <div
-                        key={st.id}
-                        className="rounded-xl border border-slate-200/90 p-3.5 bg-white hover:border-blue-300 hover:shadow-2xs transition-all space-y-2 flex flex-col justify-between"
-                      >
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <span
-                              className="text-[10px] font-mono font-bold px-2 py-0.5 rounded text-white"
-                              style={{ backgroundColor: st.warna }}
-                            >
-                              {st.kodeStatus}
-                            </span>
-                            <span className="text-xs font-mono font-bold text-slate-600">
-                              {st.persentase.toFixed(1)}%
-                            </span>
-                          </div>
+          {/* GRAFIK BATANG KOMPARASI STATUS VS PENDIDIKAN */}
+          <div className="space-y-3 pt-1">
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartDataStatusPendidikan}
+                  margin={{ top: 20, right: 30, left: 10, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                  <XAxis
+                    dataKey="fullName"
+                    tick={{ fontSize: 11, fill: '#334155', fontWeight: 600 }}
+                  />
+                  <YAxis tick={{ fontSize: 11, fill: '#334155' }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0F172A',
+                      borderColor: '#334155',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '11px',
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                  <Bar dataKey="S1" stackId="a" fill="#0284C7" name="S1 / D4" />
+                  <Bar dataKey="S2" stackId="a" fill="#2563EB" name="S2 (Magister)" />
+                  <Bar dataKey="S3" stackId="a" fill="#4338CA" name="S3 (Doktor)" />
+                  <Bar dataKey="D3" stackId="a" fill="#0D9488" name="D3 (Diploma)" />
+                  <Bar dataKey="SMA" stackId="a" fill="#F59E0B" name="SMA / SMK" />
+                  <Bar dataKey="SD_SMP" stackId="a" fill="#94A3B8" name="SMP / SD" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
-                          <h5 className="text-xs font-black text-slate-900 uppercase tracking-tight line-clamp-1">
-                            {st.statusPegawai}
-                          </h5>
-
-                          <div className="flex items-baseline gap-1 pt-1">
-                            <span className="text-xl font-black font-mono text-slate-900">
-                              {st.jumlah.toLocaleString('id-ID')}
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-400">Orang</span>
-                          </div>
-
-                          <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed">
-                            {st.deskripsi}
-                          </p>
-                        </div>
-
-                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                          <span className="flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                            <span>Pria: {st.komposisiGender.pria}</span>
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                            <span>Wanita: {st.komposisiGender.wanita}</span>
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 2. KELOMPOK JENJANG PENDIDIKAN (S3, S2, S1, D3, SMA, SMP/SD) */}
-                <div className="space-y-2.5 pt-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-extrabold uppercase tracking-tight text-slate-800 flex items-center gap-2">
-                      <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
-                      <span>2. Jumlah Karyawan Berdasarkan Jenjang Pendidikan Terakhir</span>
-                    </span>
-                    <span className="font-mono font-bold text-emerald-700 text-[11px]">
-                      Sarjana+ (S1-S3): 64,5% (1.920 Pegawai)
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {PEGAWAI_PENDIDIKAN_DETAIL_DATA.map((pen) => (
-                      <div
-                        key={pen.id}
-                        className="rounded-xl border border-slate-200/90 p-3 bg-white hover:border-indigo-300 hover:shadow-2xs transition-all space-y-1.5 flex flex-col justify-between"
-                      >
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span
-                              className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded text-white"
-                              style={{ backgroundColor: pen.warna }}
-                            >
-                              {pen.jenjang}
-                            </span>
-                            <span className="text-[10px] font-mono font-bold text-slate-500">
-                              {pen.persentase.toFixed(1)}%
-                            </span>
-                          </div>
-
-                          <div className="flex items-baseline gap-1 pt-1">
-                            <span className="text-lg font-black font-mono text-slate-900">
-                              {pen.jumlah.toLocaleString('id-ID')}
-                            </span>
-                            <span className="text-[9.5px] text-slate-400">Pegawai</span>
-                          </div>
-
-                          <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">
-                            {pen.kategoriTingkat}
-                          </span>
-                        </div>
-
-                        <p className="text-[9.5px] text-slate-500 line-clamp-2 leading-snug border-t border-slate-100 pt-1.5">
-                          {pen.jabatanDominan}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            {/* Status Breakdown Quick Summary Row */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-slate-100 font-mono text-xs">
+              <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/70">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">PNS (1.042)</span>
+                <span className="font-extrabold text-blue-700">79.5% Sarjana+</span>
               </div>
-            )}
-
-            {/* SUB-VIEW 2: MATRIKS SILANG (STATUS PNS & LAINNYA VS JENJANG PENDIDIKAN) */}
-            {sdmSubView === 'matriks_silang' && (
-              <div className="space-y-3">
-                <div className="p-2.5 rounded-lg bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-900 flex items-center justify-between">
-                  <span className="font-medium">
-                    Tabel Matriks Silang: Distribusi Riil Jenjang Pendidikan untuk Masing-masing Status Kepegawaian BP Batam
-                  </span>
-                  <span className="font-mono font-bold text-[11px]">Satu Data Hal. 1-2</span>
-                </div>
-
-                <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">
-                  <table className="w-full text-xs text-left border-collapse">
-                    <thead className="bg-slate-100/90 text-slate-700 font-mono text-[11px] uppercase tracking-wider border-b border-slate-200">
-                      <tr>
-                        <th className="py-2.5 px-3 font-extrabold">Status Kepegawaian</th>
-                        <th className="py-2.5 px-2.5 text-center">S3 (Doktor)</th>
-                        <th className="py-2.5 px-2.5 text-center">S2 (Magister)</th>
-                        <th className="py-2.5 px-2.5 text-center">S1 / D4</th>
-                        <th className="py-2.5 px-2.5 text-center">D3 (Diploma)</th>
-                        <th className="py-2.5 px-2.5 text-center">SMA / SMK</th>
-                        <th className="py-2.5 px-2.5 text-center">SMP / SD</th>
-                        <th className="py-2.5 px-3 text-right font-black bg-slate-200/50">Total</th>
-                        <th className="py-2.5 px-3 text-right font-black text-emerald-800 bg-emerald-50/60">% Sarjana+</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200">
-                      {MATRIKS_STATUS_PENDIDIKAN_DATA.map((row) => {
-                        const isSelected = selectedStatusId === row.statusId;
-                        return (
-                          <tr
-                            key={row.statusId}
-                            onClick={() => setSelectedStatusId(isSelected ? null : row.statusId)}
-                            className={`transition-colors cursor-pointer ${
-                              isSelected
-                                ? 'bg-indigo-50/80 font-medium'
-                                : 'hover:bg-slate-50'
-                            }`}
-                          >
-                            <td className="py-2.5 px-3">
-                              <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-blue-600" />
-                                <span className="font-bold text-slate-900">{row.statusNama}</span>
-                                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-bold">
-                                  {row.kode}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="py-2.5 px-2.5 text-center font-mono">{row.s3}</td>
-                            <td className="py-2.5 px-2.5 text-center font-mono">{row.s2}</td>
-                            <td className="py-2.5 px-2.5 text-center font-mono font-bold text-blue-700">{row.s1_d4}</td>
-                            <td className="py-2.5 px-2.5 text-center font-mono">{row.d3}</td>
-                            <td className="py-2.5 px-2.5 text-center font-mono">{row.sma_smk}</td>
-                            <td className="py-2.5 px-2.5 text-center font-mono text-slate-400">{row.smp_sd}</td>
-                            <td className="py-2.5 px-3 text-right font-mono font-black text-slate-900 bg-slate-50/70">
-                              {row.totalPegawai.toLocaleString('id-ID')} Org
-                            </td>
-                            <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-700 bg-emerald-50/30">
-                              {row.persenSarjanaPlus.toFixed(1)}%
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot className="bg-slate-900 text-white font-mono text-xs border-t-2 border-slate-700">
-                      <tr>
-                        <td className="py-2.5 px-3 font-black uppercase">TOTAL KONSOLIDASI BP BATAM</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">24</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">312</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">1.584</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">428</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">562</td>
-                        <td className="py-2.5 px-2.5 text-center font-bold text-cyan-300">68</td>
-                        <td className="py-2.5 px-3 text-right font-black text-amber-300 bg-slate-800">
-                          2.978 Org
-                        </td>
-                        <td className="py-2.5 px-3 text-right font-black text-emerald-400 bg-slate-800">
-                          64.5%
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-
-                <p className="text-[10.5px] text-slate-500 italic">
-                  * Catatan: Sebanyak 79,5% Pegawai Negeri Sipil (PNS) berpendidikan Sarjana hingga Doktor (S1-S3), sedangkan tenaga operasional lapangan didukung oleh formasi vokasi D3 dan PTT.
-                </p>
+              <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/70">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">P2K Tetap (872)</span>
+                <span className="font-extrabold text-indigo-700">65.8% Sarjana+</span>
               </div>
-            )}
-
-            {/* SUB-VIEW 3: GRAFIK KOMPARASI STATUS VS PENDIDIKAN */}
-            {sdmSubView === 'grafik_analisis' && (
-              <div className="space-y-3">
-                <div className="h-72 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartDataStatusPendidikan} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#334155' }} />
-                      <YAxis tick={{ fontSize: 11, fill: '#334155' }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#0F172A',
-                          borderColor: '#334155',
-                          borderRadius: '8px',
-                          color: '#fff',
-                          fontSize: '11px',
-                        }}
-                      />
-                      <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                      <Bar dataKey="S1" stackId="a" fill="#0284C7" name="S1 / D4" />
-                      <Bar dataKey="S2" stackId="a" fill="#2563EB" name="S2 (Magister)" />
-                      <Bar dataKey="S3" stackId="a" fill="#4338CA" name="S3 (Doktor)" />
-                      <Bar dataKey="D3" stackId="a" fill="#0D9488" name="D3 (Diploma)" />
-                      <Bar dataKey="SMA" stackId="a" fill="#F59E0B" name="SMA / SMK" />
-                      <Bar dataKey="SD_SMP" stackId="a" fill="#94A3B8" name="SMP / SD" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="flex flex-wrap items-center justify-between text-xs text-slate-600 border-t border-slate-100 pt-2">
-                  <span>Keterangan Status: <strong>PNS</strong> = Pegawai Negeri Sipil (1.042) | <strong>P2K</strong> = Pegawai Tetap (872) | <strong>PPPK</strong> = P3K (485) | <strong>PTT</strong> = Kontrak (396) | <strong>PROF</strong> = Tenaga Khusus (183).</span>
-                </div>
+              <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/70">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">PPPK (485)</span>
+                <span className="font-extrabold text-cyan-700">68.5% Sarjana+</span>
               </div>
-            )}
+              <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/70">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">PTT Kontrak (396)</span>
+                <span className="font-extrabold text-amber-700">22.2% Sarjana+</span>
+              </div>
+              <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/70">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Profesional (183)</span>
+                <span className="font-extrabold text-emerald-700">93.4% Sarjana+</span>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-500 italic pt-1">
+              * Keterangan: PNS = Pegawai Negeri Sipil (1.042 org) • P2K = Pegawai Perjanjian Kerja Tetap (872 org) • PPPK = Pegawai Pemerintah dgn Perjanjian Kerja (485 org) • PTT = Pegawai Tidak Tetap Operasional (396 org) • PROF = Tenaga Profesional Khusus/Medis (183 org).
+            </div>
           </div>
         </div>
       )}
 
-      {/* VIEW 3: RADAR AKUNTABILITAS & OKMR */}
+      {/* ==================================================================== */}
+      {/* VIEW 3: RADAR AKUNTABILITAS & OKMR + KONSOLIDASI INDEKS TATA KELOLA  */}
+      {/* MENAMPILKAN RADAR INDEKS DAN KONSOLIDASI LENGKAP NILAI INDEKS TATA KELOLA */}
+      {/* ==================================================================== */}
       {activeTab === 'akuntabilitas_okmr' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Radar Chart 4 IKP */}
-          <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="space-y-4">
+          {/* Top Row: Radar Chart Indeks Akuntabilitas & Tata Kelola OKMR */}
+          <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
+            <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-100 gap-2">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-cyan-600" />
-                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
-                  RADAR CAPAIAN 4 INDIKATOR KINERJA PROGRAM
+                <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
+                  RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR
                 </h4>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
-                Target vs Realisasi
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold">
+                  SAKIP Predikat A (82.68) • RB Predikat A (81.14)
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
+                  Target vs Realisasi
+                </span>
+              </div>
             </div>
 
-            <div className="h-64 w-full">
+            <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: '#334155' }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                  <PolarGrid stroke="#E2E8F0" />
+                  <PolarAngleAxis
+                    dataKey="subject"
+                    tick={{ fontSize: 10.5, fill: '#334155', fontWeight: 600 }}
+                  />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#94A3B8' }} />
                   <Radar
-                    name="Target Perkin"
+                    name="Target Standar / Perkin"
                     dataKey="target"
                     stroke="#94A3B8"
                     fill="#94A3B8"
-                    fillOpacity={0.25}
+                    fillOpacity={0.2}
                   />
                   <Radar
-                    name="Realisasi 2025"
+                    name="Realisasi Capaian"
                     dataKey="realisasi"
                     stroke="#0284C7"
                     fill="#0284C7"
-                    fillOpacity={0.5}
+                    fillOpacity={0.45}
                   />
-                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                  <Tooltip
+                    formatter={(value: any, name: any) => [`${value}% Skala 100`, name]}
+                    contentStyle={{ fontSize: '11px', borderRadius: '8px', border: '1px solid #CBD5E1' }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
+
+            <div className="text-[10.5px] text-slate-500 pt-2 border-t border-slate-100 font-mono flex flex-wrap items-center justify-between gap-2">
+              <span>Pengampu Utama: Biro OKMR, didukung Biro SDM &amp; Biro Keuangan</span>
+              <span className="text-emerald-700 font-bold flex items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                6 Indeks Seluruhnya Melampaui Target
+              </span>
+            </div>
           </div>
 
-          {/* 4 Governance Quadrants */}
-          <div className="lg:col-span-6 space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Nilai SAKIP BP Batam
-                </span>
-                <span className="text-xl font-black text-slate-900 font-mono block">
-                  82.68
-                </span>
-                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block">
-                  Predikat A (Memuaskan)
-                </span>
+          {/* Bottom Section: KONSOLIDASI LENGKAP INDEKS-INDEKS TATA KELOLA & AKUNTABILITAS */}
+          <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-3">
+            <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
+                  <Scale className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
+                    KONSOLIDASI INDEKS TATA KELOLA &amp; AKUNTABILITAS UNIT (BIRO OKMR, SDM, KEUANGAN)
+                  </h4>
+                  <p className="text-[10.5px] text-slate-500">
+                    Rincian parameter, target perkin, capaian riil, serta predikat akuntabilitas di bawah koordinasi Deputi Bidang Administrasi dan Keuangan
+                  </p>
+                </div>
               </div>
-
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Maturitas SPIP
-                </span>
-                <span className="text-xl font-black text-slate-900 font-mono block">
-                  3.42
-                </span>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
-                  Level 3 Berkembang
-                </span>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Indeks Layanan (PEKPPP)
-                </span>
-                <span className="text-xl font-black text-slate-900 font-mono block">
-                  4.38
-                </span>
-                <span className="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 inline-block">
-                  Sangat Baik (Skala 1-5)
-                </span>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Manajemen Risiko (MRI)
-                </span>
-                <span className="text-xl font-black text-slate-900 font-mono block">
-                  3.65
-                </span>
-                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 inline-block">
-                  Managed (24 Satker)
-                </span>
-              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-bold">
+                9 INDEKS KONSOLIDASI
+              </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-800">
-                  Penyelesaian Pengaduan Layanan Badan Usaha:
-                </span>
-                <span className="font-mono font-bold text-emerald-700">96.15% Tuntas</span>
-              </div>
-              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '96.15%' }} />
-              </div>
-              <p className="text-[10.5px] text-slate-500 leading-snug">
-                125 dari 130 aduan masyarakat diselesaikan tepat waktu dengan SLA &lt; 48 jam di bawah supervisi Biro OKMR.
-              </p>
+            {/* Grid 9 Index Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {OKMR_GOVERNANCE_INDICES.map((idx) => (
+                <div
+                  key={idx.id}
+                  className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-2xs transition-all flex flex-col justify-between space-y-2.5"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-start justify-between gap-1.5">
+                      <span className="text-[11px] font-extrabold text-slate-900 leading-snug">
+                        {idx.label}
+                      </span>
+                      <span
+                        className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${idx.badgeColor}`}
+                      >
+                        {idx.predikat}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-500 leading-snug">
+                      {idx.subtext}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 font-mono block">
+                        {idx.target}
+                      </span>
+                      <span className="text-base font-black text-slate-900 font-mono">
+                        {idx.realisasi}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[9px] text-slate-400 font-mono block">Pengampu:</span>
+                      <span className="text-[10px] font-semibold text-slate-700 font-mono">
+                        {idx.pengampu.split('(')[0].trim()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

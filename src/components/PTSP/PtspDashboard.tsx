@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import {
-  LayoutDashboard,
   Layers,
   ArrowRightLeft,
   Briefcase,
   MessageSquare,
   FileCode2,
-  ArrowLeft,
 } from 'lucide-react';
 import { PtspFilters } from './PtspFilters';
-import { PtspKpiRow } from './PtspKpiRow';
 import { PtspJenisLayananSection } from './PtspJenisLayananSection';
 import { PtspPerizinanSheetSwapSection } from './PtspPerizinanSheetSwapSection';
 import { PtspSektorBerusahaSection } from './PtspSektorBerusahaSection';
@@ -60,13 +57,15 @@ export const PtspDashboard: React.FC<PtspDashboardProps> = ({
   };
 
   const navTabs = [
-    { id: 'ikhtisar', label: '12 Poin Eksekutif PTSP', icon: LayoutDashboard },
     { id: 'jenis_layanan', label: 'Poin 7: Jenis Layanan (Dataset 14)', icon: Layers },
     { id: 'sheet_swap', label: 'Poin 8-10: Sheet Swap Perizinan & Non-Perizinan', icon: ArrowRightLeft },
     { id: 'sektor', label: 'Poin 11: Sektor Usaha (Dataset 9)', icon: Briefcase },
     { id: 'pengaduan', label: 'Poin 12: Pengaduan (Dataset 6)', icon: MessageSquare },
     { id: 'kamus_rumus', label: 'Kamus Rumus Calculated', icon: FileCode2 },
   ];
+
+  const currentSubMenu =
+    activeSubMenu === 'ikhtisar' || !activeSubMenu ? 'jenis_layanan' : activeSubMenu;
 
   return (
     <div className="space-y-4 font-sans select-none pb-8">
@@ -94,7 +93,7 @@ export const PtspDashboard: React.FC<PtspDashboardProps> = ({
       <div className="bg-white rounded-xl border border-slate-200 p-1.5 shadow-xs flex items-center gap-1.5 overflow-x-auto scrollbar-thin">
         {navTabs.map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeSubMenu === tab.id;
+          const isActive = currentSubMenu === tab.id;
 
           return (
             <button
@@ -114,106 +113,46 @@ export const PtspDashboard: React.FC<PtspDashboardProps> = ({
       </div>
 
       {/* 3. Submenu View Rendering */}
-      {activeSubMenu === 'kamus_rumus' ? (
+      {currentSubMenu === 'kamus_rumus' ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => onSelectSubMenu('ikhtisar')}
-              className="text-xs font-bold text-[#002B49] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke 12 Poin Dashboard Eksekutif PTSP</span>
-            </button>
-            <span className="text-xs text-slate-500 font-medium">Kamus Rumus &amp; Calculated Fields PTSP</span>
+            <span className="text-xs font-bold text-[#002B49]">Kamus Rumus &amp; Calculated Fields PTSP</span>
+            <span className="text-xs text-slate-500 font-medium">Standarisasi Formula Layanan</span>
           </div>
           <PtspKamusRumusView />
         </div>
-      ) : activeSubMenu === 'jenis_layanan' ? (
+      ) : currentSubMenu === 'sheet_swap' ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => onSelectSubMenu('ikhtisar')}
-              className="text-xs font-bold text-[#002B49] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke 12 Poin Dashboard Eksekutif PTSP</span>
-            </button>
-            <span className="text-xs text-slate-500 font-medium">Fokus Tampilan: Poin #7 Jenis Layanan BP Batam (Dataset 14)</span>
-          </div>
-          <PtspJenisLayananSection onExplainKpi={handleKpiCardClick} />
-        </div>
-      ) : activeSubMenu === 'sheet_swap' ? (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => onSelectSubMenu('ikhtisar')}
-              className="text-xs font-bold text-[#002B49] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke 12 Poin Dashboard Eksekutif PTSP</span>
-            </button>
-            <span className="text-xs text-slate-500 font-medium">Fokus Tampilan: Poin #8, 9, 10 Sheet Swap Perizinan &amp; Non-Perizinan</span>
+            <span className="text-xs font-bold text-[#002B49]">Poin #8, 9, 10 Sheet Swap Perizinan &amp; Non-Perizinan</span>
+            <span className="text-xs text-slate-500 font-medium">Dataset 7 &amp; 16 Buku Satu Data</span>
           </div>
           <PtspPerizinanSheetSwapSection onExplainKpi={handleKpiCardClick} />
         </div>
-      ) : activeSubMenu === 'sektor' ? (
+      ) : currentSubMenu === 'sektor' ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => onSelectSubMenu('ikhtisar')}
-              className="text-xs font-bold text-[#002B49] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke 12 Poin Dashboard Eksekutif PTSP</span>
-            </button>
-            <span className="text-xs text-slate-500 font-medium">Fokus Tampilan: Poin #11 Perizinan Sektor Berusaha (Dataset 9)</span>
+            <span className="text-xs font-bold text-[#002B49]">Poin #11 Perizinan Sektor Berusaha</span>
+            <span className="text-xs text-slate-500 font-medium">Dataset 9 OSS-RBA</span>
           </div>
           <PtspSektorBerusahaSection onExplainKpi={handleKpiCardClick} />
         </div>
-      ) : activeSubMenu === 'pengaduan' ? (
+      ) : currentSubMenu === 'pengaduan' ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-            <button
-              onClick={() => onSelectSubMenu('ikhtisar')}
-              className="text-xs font-bold text-[#002B49] hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke 12 Poin Dashboard Eksekutif PTSP</span>
-            </button>
-            <span className="text-xs text-slate-500 font-medium">Fokus Tampilan: Poin #12 Pengaduan Pelayanan PTSP (Dataset 6)</span>
+            <span className="text-xs font-bold text-[#002B49]">Poin #12 Pengaduan Pelayanan PTSP</span>
+            <span className="text-xs text-slate-500 font-medium">Dataset 6 Buku Satu Data</span>
           </div>
           <PtspPengaduanLayananSection onExplainKpi={handleKpiCardClick} />
         </div>
       ) : (
-        /* Default: 12 Poin Utama Dashboard Eksekutif PTSP BP Batam */
-        <div className="space-y-4">
-          {/* POIN 1 SAMPAI 6: 6 KPI UTAMA */}
-          <section id="ptsp-kpi-official-6" aria-label="6 KPI Eksekutif PTSP">
-            <PtspKpiRow
-              onSelectMetric={handleKpiCardClick}
-              onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
-            />
-          </section>
-
-          {/* POIN 7: JENIS LAYANAN BP BATAM (DATASET 14) */}
-          <section id="ptsp-jenis-layanan" aria-label="Poin 7: Jenis Layanan BP Batam (Dataset 14)">
-            <PtspJenisLayananSection onExplainKpi={handleKpiCardClick} />
-          </section>
-
-          {/* POIN 8, 9, 10: SHEET SWAP DAFTAR PERIZINAN (DATASET 7) & NON PERIZINAN (DATASET 16) */}
-          <section id="ptsp-sheet-swap" aria-label="Poin 8, 9, 10: Sheet Swap Perizinan & Non Perizinan">
-            <PtspPerizinanSheetSwapSection onExplainKpi={handleKpiCardClick} />
-          </section>
-
-          {/* POIN 11: PERIZINAN BERUSAHA BERDASARKAN SEKTOR (DATASET 9) */}
-          <section id="ptsp-sektor-berusaha" aria-label="Poin 11: Perizinan Berusaha Berdasarkan Sektor (Dataset 9)">
-            <PtspSektorBerusahaSection onExplainKpi={handleKpiCardClick} />
-          </section>
-
-          {/* POIN 12: PENGADUAN PELAYANAN PTSP (DATASET 6) */}
-          <section id="ptsp-pengaduan-layanan" aria-label="Poin 12: Pengaduan Pelayanan PTSP (Dataset 6)">
-            <PtspPengaduanLayananSection onExplainKpi={handleKpiCardClick} />
-          </section>
+        /* Default: Poin 7 Jenis Layanan BP Batam (Dataset 14) */
+        <div className="space-y-3">
+          <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200">
+            <span className="text-xs font-bold text-[#002B49]">Poin #7 Jenis Layanan BP Batam</span>
+            <span className="text-xs text-slate-500 font-medium">Dataset 14 Buku Satu Data</span>
+          </div>
+          <PtspJenisLayananSection onExplainKpi={handleKpiCardClick} />
         </div>
       )}
     </div>

@@ -76,6 +76,26 @@ export interface DimensiIkkItem {
   subIndikator?: SubIndikatorIkk[];
 }
 
+export interface KomponenIppnItem {
+  no: number;
+  komponen: string;
+  bobotPersen: number;
+  target: number;
+  nilai: number;
+  poin: number;
+  keterangan: string;
+  predikat: string;
+}
+
+export interface IkmLayananItem {
+  no: number;
+  layanan: string;
+  skor: number;
+  mutu: string;
+  volume: number;
+  persenPuas: number;
+}
+
 export interface TarifLayananPdfEntry {
   id: number;
   unit: string;

@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
       return [
         { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Eksekutif', icon: LayoutDashboard },
         { id: 'kpi_visual', label: 'Visualisasi 4 IKP & Kinerja', icon: Award },
-        { id: 'unit_kinerja', label: 'Kinerja Unit Pelaksana (PTSP, PHKS, PDSI)', icon: Building2 },
+        { id: 'unit_kinerja', label: 'Kinerja Unit Pelaksana (PTSP, PDSI)', icon: Building2 },
         { id: 'deep_dive', label: 'Unit Deep-Dive Center', icon: Sparkles, isSpecial: true },
         { id: 'satu_data', label: 'Katalog 45 Dataset (PDF)', icon: Database },
       ];

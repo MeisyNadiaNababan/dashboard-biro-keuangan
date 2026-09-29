@@ -5,6 +5,8 @@ import {
   DimensiIkkItem,
   MasterplanProgressItem,
   SatuDatasetItem,
+  KomponenIppnItem,
+  IkmLayananItem,
 } from './types';
 
 // ============================================================================
@@ -118,6 +120,53 @@ export const IKP_METRICS_LIST: IkpMetricItem[] = [
     statusKinerja: 'Exceeded',
     keterangan: 'Pengukuran komprehensif tingkat kepuasan masyarakat terhadap kualitas perizinan investasi dan non-perizinan pada MPP Batam berpedoman pada 9 unsur PermenPAN-RB No. 14/2017.',
     formulaRingkas: 'Skala Konversi: 3.5324-4.00 (A, Sangat Baik = 88.31-100) | 3.0644-3.532 (B, Baik = 76.61-88.30)',
+  },
+];
+
+// ============================================================================
+// 1b. TABEL KOMPONEN INDEKS PERENCANAAN PEMBANGUNAN (IPPN BAPPENAS)
+// Sesuai SE Menteri PPN/Kepala Bappenas No. 3/2023 & Renstra BP Batam
+// ============================================================================
+export const IPPN_KOMPONEN_DATA: KomponenIppnItem[] = [
+  {
+    no: 1,
+    komponen: 'Konsistensi Renstra 2025-2029 thd RPJMN',
+    bobotPersen: 30,
+    target: 90.0,
+    nilai: 95.0,
+    poin: 28.50,
+    keterangan: 'Penyelarasan sasaran makro ekonomi Batam & prioritas nasional',
+    predikat: 'Sangat Baik',
+  },
+  {
+    no: 2,
+    komponen: 'Ketepatan Alokasi RKA DIPA thd KRO Prioritas',
+    bobotPersen: 25,
+    target: 92.0,
+    nilai: 93.8,
+    poin: 23.45,
+    keterangan: 'Kesesuaian nomenklatur dan target output belanja modal',
+    predikat: 'Sangat Baik',
+  },
+  {
+    no: 3,
+    komponen: 'Kualitas Dokumen Masterplan & Renja Satker',
+    bobotPersen: 25,
+    target: 92.0,
+    nilai: 94.0,
+    poin: 23.50,
+    keterangan: 'Kelengkapan 5 masterplan strategis (drainase, jalan, bandara, dsb)',
+    predikat: 'Sangat Baik',
+  },
+  {
+    no: 4,
+    komponen: 'Kepatuhan Pelaporan Triwulan e-Monev Bappenas',
+    bobotPersen: 20,
+    target: 94.0,
+    nilai: 93.75,
+    poin: 18.75,
+    keterangan: 'Kedisiplinan input capaian fisik & serapan anggaran triwulanan',
+    predikat: 'Sangat Baik',
   },
 ];
 
@@ -392,6 +441,14 @@ export const PTSP_IKM_9_UNSUR = [
   { no: 7, unsur: 'Perilaku Pelaksana Layanan', skor: 91.2, mutu: 'A (Sangat Baik)' },
   { no: 8, unsur: 'Penanganan Pengaduan & Saran', skor: 84.8, mutu: 'B (Baik)' },
   { no: 9, unsur: 'Sarana & Prasarana MPP', skor: 90.7, mutu: 'A (Sangat Baik)' },
+];
+
+// Nilai IKM per Layanan PTSP BP Batam (Layanan Utama MPP)
+export const PTSP_IKM_PER_LAYANAN: IkmLayananItem[] = [
+  { no: 1, layanan: 'Perizinan Berusaha (OSS-RBA)', skor: 88.90, mutu: 'A', volume: 820, persenPuas: 94.2 },
+  { no: 2, layanan: 'Non-Perizinan Maritim & TUKS', skor: 87.15, mutu: 'B', volume: 410, persenPuas: 91.5 },
+  { no: 3, layanan: 'Rekomendasi Teknis Kawasan', skor: 88.60, mutu: 'A', volume: 380, persenPuas: 93.8 },
+  { no: 4, layanan: 'Konsultasi & Pengaduan MPP', skor: 89.05, mutu: 'A', volume: 232, persenPuas: 96.1 },
 ];
 
 // ============================================================================

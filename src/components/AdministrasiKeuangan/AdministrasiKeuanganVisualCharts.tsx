@@ -17,10 +17,7 @@ import {
   DollarSign,
   Building2,
   CheckCircle2,
-  Activity,
-  Building,
-  MessageSquare,
-  ShieldAlert,
+  Calculator,
 } from 'lucide-react';
 import {
   FISCAL_REVENUE_SUMMARY_DATA,
@@ -47,43 +44,75 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
-import { SakipEvaluationView } from '../BiroOrganisasi/SakipEvaluationView';
-import { PekpppChart } from '../BiroOrganisasi/PekpppChart';
-import { PengaduanMasyarakatChart } from '../BiroOrganisasi/PengaduanMasyarakatChart';
-import { PiagamRisikoChart } from '../BiroOrganisasi/PiagamRisikoChart';
 
 interface AdministrasiKeuanganVisualChartsProps {
   onOpenFormulaModal?: (kpiId: string) => void;
 }
 
+// Data Tabel 4 IKP untuk Capaian Evaluasi Detail (Persis Format DEP-A2)
+const RB_8_AREA_TABLE_DATA = [
+  { no: 1, komponen: 'Manajemen Perubahan', bobot: '10%', nilai: 8.40 },
+  { no: 2, komponen: 'Deregulasi Kebijakan', bobot: '10%', nilai: 8.15 },
+  { no: 3, komponen: 'Penataan Organisasi', bobot: '10%', nilai: 7.90 },
+  { no: 4, komponen: 'Penataan Tata Laksana (SPBE)', bobot: '15%', nilai: 12.80 },
+  { no: 5, komponen: 'Penataan Sistem Manajemen SDM', bobot: '15%', nilai: 12.65 },
+  { no: 6, komponen: 'Penguatan Akuntabilitas (SAKIP)', bobot: '15%', nilai: 12.40 },
+  { no: 7, komponen: 'Penguatan Pengawasan Intern', bobot: '10%', nilai: 8.15 },
+  { no: 8, komponen: 'Peningkatan Pelayanan Publik', bobot: '15%', nilai: 8.00 },
+];
+
+const MERIT_8_ASPEK_TABLE_DATA = [
+  { no: 1, komponen: '1. Perencanaan Kebutuhan ASN', bobot: 'Bobot 24 (6%)', nilai: 22.0 },
+  { no: 2, komponen: '2. Pengadaan ASN & Pegawai', bobot: 'Bobot 24 (6%)', nilai: 23.0 },
+  { no: 3, komponen: '3. Pengembangan Karier', bobot: 'Bobot 80 (20%)', nilai: 71.5 },
+  { no: 4, komponen: '4. Promosi dan Mutasi', bobot: 'Bobot 40 (10%)', nilai: 36.0 },
+  { no: 5, komponen: '5. Manajemen Kinerja Pegawai', bobot: 'Bobot 80 (20%)', nilai: 68.0 },
+  { no: 6, komponen: '6. Penggajian, Penghargaan, Disiplin', bobot: 'Bobot 60 (15%)', nilai: 52.0 },
+  { no: 7, komponen: '7. Perlindungan dan Pelayanan', bobot: 'Bobot 16 (4%)', nilai: 15.0 },
+  { no: 8, komponen: '8. Sistem Informasi Kepegawaian', bobot: 'Bobot 76 (19%)', nilai: 55.0 },
+];
+
+const SPIP_5_UNSUR_TABLE_DATA = [
+  { no: 1, komponen: '1. Lingkungan Pengendalian', bobot: '30%', nilai: 3.50 },
+  { no: 2, komponen: '2. Penilaian Risiko (Risk Assessment)', bobot: '20%', nilai: 3.38 },
+  { no: 3, komponen: '3. Kegiatan Pengendalian', bobot: '25%', nilai: 3.45 },
+  { no: 4, komponen: '4. Informasi dan Komunikasi', bobot: '10%', nilai: 3.40 },
+  { no: 5, komponen: '5. Pemantauan Pengendalian Intern', bobot: '15%', nilai: 3.35 },
+];
+
+const OPINI_BPK_TABLE_DATA = [
+  { no: 1, kriteria: 'Kesesuaian Standar Akuntansi (SAP)', dasar: 'PP No. 71/2010', hasil: 'Sesuai (Akrual Penuh)' },
+  { no: 2, kriteria: 'Kecukupan Pengungkapan (CaLK)', dasar: 'PSAP 04', hasil: 'Lengkap & Informatif' },
+  { no: 3, kriteria: 'Kepatuhan Regulasi Keuangan', dasar: 'UU No. 15/2004', hasil: 'Nihil Temuan Material' },
+  { no: 4, kriteria: 'Efektivitas Pengendalian Intern (SPI)', dasar: 'PP No. 60/2008', hasil: 'SPI Kas & BMN Efektif' },
+];
+
 export const AdministrasiKeuanganVisualCharts: React.FC<
   AdministrasiKeuanganVisualChartsProps
 > = ({ onOpenFormulaModal }) => {
-  // Navigation tabs
+  // Navigation tabs (Sesuai Permintaan User: Tab 1 Radar Capaian 4 IKP, Tab 2 Kinerja Fiskal, Tab 3 Kualifikasi Pendidikan)
   const [activeTab, setActiveTab] = useState<
-    'fiskal_keuangan' | 'sdm_demografi' | 'akuntabilitas_okmr'
-  >('fiskal_keuangan');
+    'akuntabilitas_okmr' | 'fiskal_keuangan' | 'sdm_demografi'
+  >('akuntabilitas_okmr');
 
   // Expense Unit Filter Mode: 'all_units' vs 'perkin_units'
   const [expenseUnitMode, setExpenseUnitMode] = useState<'all_units' | 'perkin_units'>('all_units');
 
-  // Sub-tab under Akuntabilitas & OKMR
+  // Sub-tab under Akuntabilitas & OKMR (Hanya 4 IKP & Evaluasi Detail)
   const [okmrSubTab, setOkmrSubTab] = useState<
-    'radar' | 'rb_detail' | 'merit_detail' | 'spip_detail' | 'sakip' | 'pekppp' | 'pengaduan' | 'piagam_risiko'
+    'radar' | 'rb' | 'merit' | 'spip' | 'wtp'
   >('radar');
 
   // Active view for 3 Governance Indices breakdown
   const [selectedGovernanceView, setSelectedGovernanceView] = useState<'all' | 'rb' | 'merit' | 'spip'>('all');
   const [expandedIndexRow, setExpandedIndexRow] = useState<string | null>(null);
 
-  // Radar Data for 6 Vital Indices related to Deputi Administrasi & Keuangan & Biro OKMR
-  const radarData = [
+  // Radar Data Capaian 4 IKP vs Target (Skala 100)
+  const radar4IkpData = [
     { subject: 'Indeks RB', target: 80.0, realisasi: 81.14, fullMark: 100 },
-    { subject: 'Nilai SAKIP', target: 81.5, realisasi: 82.68, fullMark: 100 },
-    { subject: 'Maturitas SPIP', target: 66.0, realisasi: 68.4, fullMark: 100 },
-    { subject: 'Sistem Merit', target: 70.0, realisasi: 85.6, fullMark: 100 },
-    { subject: 'Manajemen Risiko (MRI)', target: 64.0, realisasi: 67.0, fullMark: 100 },
-    { subject: 'Evaluasi Kelembagaan', target: 75.0, realisasi: 78.4, fullMark: 100 },
+    { subject: 'Sistem Merit', target: 70.0, realisasi: 85.63, fullMark: 100 },
+    { subject: 'Maturitas SPIP', target: 64.0, realisasi: 68.4, fullMark: 100 },
+    { subject: 'Opini BPK (WTP)', target: 100.0, realisasi: 100.0, fullMark: 100 },
   ];
 
   // Data Konsolidasi Nilai Indeks-Indeks Tata Kelola & Akuntabilitas Biro OKMR & Deputi 1
@@ -218,8 +247,20 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
           </div>
         </div>
 
-        {/* Tab Pills */}
+        {/* Tab Pills (Sesuai Permintaan User: Sheet 1 Radar Capaian 4 IKP, Sheet 2 Kinerja Fiskal, Sheet 3 Kualifikasi Pendidikan) */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100 rounded-lg">
+          <button
+            onClick={() => setActiveTab('akuntabilitas_okmr')}
+            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+              activeTab === 'akuntabilitas_okmr'
+                ? 'bg-white text-blue-700 shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Radar Capaian 4 IKP &amp; Tata Kelola</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('fiskal_keuangan')}
             className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
@@ -229,7 +270,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>Kinerja Fiskal & Belanja Unit</span>
+            <span>Kinerja Fiskal &amp; Belanja Unit</span>
           </button>
 
           <button
@@ -241,19 +282,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
             }`}
           >
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>Kualifikasi Pendidikan & Status Pegawai</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('akuntabilitas_okmr')}
-            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-              activeTab === 'akuntabilitas_okmr'
-                ? 'bg-white text-blue-700 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Radar Akuntabilitas & OKMR</span>
+            <span>Kualifikasi Pendidikan &amp; Status Pegawai</span>
           </button>
         </div>
       </div>
@@ -559,18 +588,21 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
       {/* ==================================================================== */}
       {activeTab === 'akuntabilitas_okmr' && (
         <div className="space-y-4">
-          {/* Sub-Tabs for OKMR Governance Visualizations */}
+          {/* Sub-Tabs for OKMR Governance Visualizations (4 IKP Tata Kelola) */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 bg-slate-100 rounded-xl border border-slate-200/80">
             <button
-              onClick={() => setOkmrSubTab('radar')}
+              onClick={() => {
+                setOkmrSubTab('radar');
+                setSelectedGovernanceView('all');
+              }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                okmrSubTab === 'radar'
-                  ? 'bg-white text-blue-700 shadow-2xs font-extrabold'
+                okmrSubTab === 'radar' && selectedGovernanceView === 'all'
+                  ? 'bg-white text-blue-700 shadow-2xs font-extrabold ring-1 ring-blue-200'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Radar Akuntabilitas &amp; 3 Indeks Utama</span>
+              <span>Radar Capaian 4 IKP &amp; Evaluasi Detail</span>
             </button>
 
             <button
@@ -585,7 +617,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
               }`}
             >
               <Award className="w-3.5 h-3.5" />
-              <span>Reformasi Birokrasi (8 Area)</span>
+              <span>1. Reformasi Birokrasi (8 Area)</span>
             </button>
 
             <button
@@ -600,7 +632,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
               }`}
             >
               <Users className="w-3.5 h-3.5" />
-              <span>Sistem Merit (8 Aspek)</span>
+              <span>2. Sistem Merit (8 Aspek)</span>
             </button>
 
             <button
@@ -615,115 +647,450 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Maturitas SPIP (5 Unsur)</span>
-            </button>
-
-            <button
-              onClick={() => setOkmrSubTab('sakip')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                okmrSubTab === 'sakip'
-                  ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" />
-              <span>Nilai SAKIP (82.68 - A)</span>
-            </button>
-
-            <button
-              onClick={() => setOkmrSubTab('pekppp')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                okmrSubTab === 'pekppp'
-                  ? 'bg-white text-teal-700 shadow-2xs font-extrabold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Building className="w-3.5 h-3.5" />
-              <span>Pelayanan Publik (PEKPPP 4.38)</span>
-            </button>
-
-            <button
-              onClick={() => setOkmrSubTab('pengaduan')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                okmrSubTab === 'pengaduan'
-                  ? 'bg-white text-sky-700 shadow-2xs font-extrabold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>Pengaduan Masyarakat (96.2%)</span>
-            </button>
-
-            <button
-              onClick={() => setOkmrSubTab('piagam_risiko')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                okmrSubTab === 'piagam_risiko'
-                  ? 'bg-white text-rose-700 shadow-2xs font-extrabold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>Piagam Risiko (Mitigasi 100%)</span>
+              <span>3. Maturitas SPIP (5 Unsur)</span>
             </button>
           </div>
 
-          {/* VIEW 3A: RADAR & 3 INDEKS TATA KELOLA UTAMA */}
+          {/* VIEW 3A: RADAR CAPAIAN 4 IKP & TABEL DETAIL PENILAIAN (PERSIS FORMAT DEP-A2) */}
           {okmrSubTab === 'radar' && (
             <div className="space-y-4">
-              {/* Top Radar Chart */}
-              <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-                <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-100 gap-2">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-cyan-600" />
-                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
-                      RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR (DEP A1)
-                    </h4>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold">
-                      SAKIP Predikat A (82.68) • RB Predikat A (81.14) • Merit IV (342.5) • SPIP Level 3 (3.42)
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                {/* Left: Radar Chart 4 IKP Capaian vs Target */}
+                <div className="xl:col-span-4 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-sky-600" />
+                      <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                        Radar Capaian 4 IKP vs Target
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      100% On-Target
                     </span>
                   </div>
+
+                  <div className="h-64 sm:h-72 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={radar4IkpData}>
+                        <PolarGrid stroke="#E2E8F0" />
+                        <PolarAngleAxis
+                          dataKey="subject"
+                          tick={{ fill: '#334155', fontSize: 10.5, fontWeight: 700 }}
+                        />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#94A3B8" fontSize={9} />
+                        <Radar
+                          name="Target Perkin"
+                          dataKey="target"
+                          stroke="#94A3B8"
+                          fill="#94A3B8"
+                          fillOpacity={0.2}
+                          strokeDasharray="4 4"
+                        />
+                        <Radar
+                          name="Realisasi Kinerja"
+                          dataKey="realisasi"
+                          stroke="#0284C7"
+                          fill="#0284C7"
+                          fillOpacity={0.45}
+                        />
+                        <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                        <Tooltip
+                          formatter={(val: any, name: any) => [
+                            `${Number(val).toFixed(1)}%`,
+                            name,
+                          ]}
+                          contentStyle={{ fontSize: '11px', borderRadius: '8px', border: '1px solid #CBD5E1' }}
+                        />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="space-y-1.5 pt-2 border-t border-slate-100 font-mono text-[10.5px]">
+                    <div className="flex items-center justify-between text-slate-600">
+                      <span>Rata-Rata Capaian 4 IKP:</span>
+                      <span className="font-extrabold text-emerald-700">107.7% Melampaui Target</span>
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      *Indeks SPIP (3.42) &amp; Sistem Merit (342.5) diskalakan ke 100 untuk keseragaman visual radar. Seluruh indikator telah melampaui target Perkin.
+                    </div>
+                  </div>
                 </div>
 
-                <div className="h-64 sm:h-72 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData}>
-                      <PolarGrid stroke="#E2E8F0" />
-                      <PolarAngleAxis
-                        dataKey="subject"
-                        tick={{ fontSize: 10.5, fill: '#334155', fontWeight: 600 }}
-                      />
-                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#94A3B8' }} />
-                      <Radar
-                        name="Target Standar / Perkin"
-                        dataKey="target"
-                        stroke="#94A3B8"
-                        fill="#94A3B8"
-                        fillOpacity={0.2}
-                      />
-                      <Radar
-                        name="Realisasi Capaian"
-                        dataKey="realisasi"
-                        stroke="#0284C7"
-                        fill="#0284C7"
-                        fillOpacity={0.45}
-                      />
-                      <Tooltip
-                        formatter={(value: any, name: any) => [`${value}% Skala 100`, name]}
-                        contentStyle={{ fontSize: '11px', borderRadius: '8px', border: '1px solid #CBD5E1' }}
-                      />
-                      <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
+                {/* Right: 4 Detailed IKP Performance Cards (Persis seperti Capaian Evaluasi 4 IKP DEP-A2) */}
+                <div className="xl:col-span-8 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-sky-600" />
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                          Capaian Evaluasi 4 Indikator Kinerja Program (IKP)
+                        </h4>
+                        <p className="text-[10px] sm:text-[10.5px] text-slate-500">
+                          Tabel rincian komponen 8 area perubahan RB, 8 aspek sistem merit, 5 unsur maturitas SPIP, serta kriteria evaluasi Opini BPK
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 shrink-0 self-start sm:self-auto">
+                      Perkin A1 BP Batam
+                    </span>
+                  </div>
 
-                <div className="text-[10.5px] text-slate-500 pt-2 border-t border-slate-100 font-mono flex flex-wrap items-center justify-between gap-2">
-                  <span>Pengampu Utama: Biro OKMR, didukung Biro SDM &amp; Biro Keuangan</span>
-                  <span className="text-emerald-700 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    6 Indeks Tata Kelola Seluruhnya Melampaui Target Perkin
-                  </span>
+                  {/* Grid 2 Sebaris, 2 Dibawahnya (Persis DEP-A2) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {/* CARD 1: IKP-1 INDEKS REFORMASI BIROKRASI */}
+                    <div className="p-3 sm:p-3.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition-all shadow-2xs flex flex-col justify-between space-y-2.5">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded text-[10px] border border-indigo-200">
+                          IKP-1 &bull; BIRO OKMR
+                        </span>
+                        <span className="font-mono font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          101.43% Tercapai
+                        </span>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-900 leading-snug">
+                          Indeks Reformasi Birokrasi (RB)
+                        </h5>
+                        <span className="text-[10px] text-slate-500 font-mono block">
+                          Unit: Biro Organisasi, Kepatuhan dan Manajemen Risiko (BOKMR)
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between mb-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-black font-mono text-slate-900">81.14</span>
+                            <span className="text-[10.5px] font-bold text-indigo-700">Predikat A</span>
+                          </div>
+                          <span className="text-[11px] font-mono text-slate-500">
+                            Target: <strong className="text-slate-800">80.00</strong> (Sangat Baik)
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div style={{ width: '100%' }} className="bg-indigo-600 h-full rounded-full" />
+                        </div>
+                      </div>
+
+                      {/* Tabel Komponen RB dan Nilainya (Permintaan User: Komponen 8 area & Nilai) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-slate-700">Tabel Komponen Penilaian RB (8 Area Perubahan):</span>
+                          <span className="text-[9px] font-mono text-slate-500">8 Komponen</span>
+                        </div>
+                        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50/60 max-h-[190px] overflow-y-auto">
+                          <table className="w-full text-left text-[9.5px]">
+                            <thead className="sticky top-0 bg-slate-100/95 z-10">
+                              <tr className="text-slate-600 font-bold uppercase text-[8.5px] border-b border-slate-200">
+                                <th className="py-1 px-1.5">Komponen (8 Area Perubahan)</th>
+                                <th className="py-1 px-1 text-center">Bobot</th>
+                                <th className="py-1 px-1.5 text-right">Indeks RB (Nilai)</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-200/60 text-slate-700 font-medium">
+                              {RB_8_AREA_TABLE_DATA.map((item) => (
+                                <tr key={item.no} className="hover:bg-white transition-colors">
+                                  <td className="py-1 px-1.5 font-sans truncate max-w-[150px]" title={item.komponen}>
+                                    {item.komponen}
+                                  </td>
+                                  <td className="py-1 px-1 text-center font-mono text-slate-500">
+                                    {item.bobot}
+                                  </td>
+                                  <td className="py-1 px-1.5 text-right font-mono font-black text-indigo-700">
+                                    {item.nilai.toFixed(2)}
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="bg-indigo-50/70 font-bold text-slate-900 border-t border-indigo-200 text-[9.5px]">
+                                <td className="py-1 px-1.5 font-bold text-indigo-950">
+                                  Total Indeks RB (Predikat A):
+                                </td>
+                                <td className="py-1 px-1 text-center font-mono text-indigo-900">100%</td>
+                                <td className="py-1 px-1.5 text-right font-mono font-black text-indigo-900">
+                                  81.14
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => onOpenFormulaModal?.('ikp-1-rb')}
+                        className="w-full text-center text-[10px] text-indigo-700 hover:text-indigo-900 font-bold py-1 bg-white hover:bg-indigo-50 rounded-lg border border-indigo-200 transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
+                      >
+                        <Calculator className="w-3 h-3 text-indigo-600" />
+                        <span>Lihat Panduan &amp; Formula RB</span>
+                      </button>
+                    </div>
+
+                    {/* CARD 2: IKP-2 INDEKS SISTEM MERIT */}
+                    <div className="p-3 sm:p-3.5 rounded-xl border border-slate-200 bg-white hover:border-purple-300 transition-all shadow-2xs flex flex-col justify-between space-y-2.5">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded text-[10px] border border-purple-200">
+                          IKP-2 &bull; BIRO SDM
+                        </span>
+                        <span className="font-mono font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          122.32% Tercapai
+                        </span>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-900 leading-snug">
+                          Indeks Penerapan Sistem Merit
+                        </h5>
+                        <span className="text-[10px] text-slate-500 font-mono block">
+                          Unit: Biro Sumber Daya Manusia (BSDM)
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between mb-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-black font-mono text-slate-900">342.5</span>
+                            <span className="text-[10.5px] font-bold text-purple-700">Kategori IV</span>
+                          </div>
+                          <span className="text-[11px] font-mono text-slate-500">
+                            Target: <strong className="text-slate-800">280 Poin</strong> (Baik)
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div style={{ width: '100%' }} className="bg-purple-600 h-full rounded-full" />
+                        </div>
+                      </div>
+
+                      {/* Tabel Komponen Sistem Merit dan Nilainya (Permintaan User: 8 aspek, bobot, nilai) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-slate-700">Tabel Komponen Penilaian (8 Aspek Sistem Merit):</span>
+                          <span className="text-[9px] font-mono text-slate-500">8 Aspek</span>
+                        </div>
+                        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50/60 max-h-[190px] overflow-y-auto">
+                          <table className="w-full text-left text-[9.5px]">
+                            <thead className="sticky top-0 bg-slate-100/95 z-10">
+                              <tr className="text-slate-600 font-bold uppercase text-[8.5px] border-b border-slate-200">
+                                <th className="py-1 px-1.5">Komponen Penilaian (8 Aspek)</th>
+                                <th className="py-1 px-1 text-center">Bobot</th>
+                                <th className="py-1 px-1.5 text-right">Nilai per Aspek</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-200/60 text-slate-700 font-medium">
+                              {MERIT_8_ASPEK_TABLE_DATA.map((item) => (
+                                <tr key={item.no} className="hover:bg-white transition-colors">
+                                  <td className="py-1 px-1.5 font-sans truncate max-w-[150px]" title={item.komponen}>
+                                    {item.komponen}
+                                  </td>
+                                  <td className="py-1 px-1 text-center font-mono text-slate-500">
+                                    {item.bobot}
+                                  </td>
+                                  <td className="py-1 px-1.5 text-right font-mono font-black text-purple-700">
+                                    {item.nilai.toFixed(1)}
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="bg-purple-50/70 font-bold text-slate-900 border-t border-purple-200 text-[9.5px]">
+                                <td className="py-1 px-1.5 font-bold text-purple-950">
+                                  Total Skor Merit (Sangat Baik):
+                                </td>
+                                <td className="py-1 px-1 text-center font-mono text-purple-900">400 (100%)</td>
+                                <td className="py-1 px-1.5 text-right font-mono font-black text-purple-900">
+                                  342.5 Poin
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => onOpenFormulaModal?.('ikp-2-merit')}
+                        className="w-full text-center text-[10px] text-purple-700 hover:text-purple-900 font-bold py-1 bg-white hover:bg-purple-50 rounded-lg border border-purple-200 transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
+                      >
+                        <Calculator className="w-3 h-3 text-purple-600" />
+                        <span>Lihat Panduan &amp; Formula Sistem Merit</span>
+                      </button>
+                    </div>
+
+                    {/* CARD 3: IKP-3 INDEKS MATURITAS SPIP */}
+                    <div className="p-3 sm:p-3.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-300 transition-all shadow-2xs flex flex-col justify-between space-y-2.5">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded text-[10px] border border-emerald-200">
+                          IKP-3 &bull; BIRO OKMR
+                        </span>
+                        <span className="font-mono font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          106.88% Tercapai
+                        </span>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-900 leading-snug">
+                          Indeks Maturitas SPIP Terintegrasi
+                        </h5>
+                        <span className="text-[10px] text-slate-500 font-mono block">
+                          Unit: Biro OKMR / Bagian Pengendalian Intern &amp; BPKP
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between mb-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-black font-mono text-slate-900">3.42</span>
+                            <span className="text-[10.5px] font-bold text-emerald-700">Level 3 Terdefinisi</span>
+                          </div>
+                          <span className="text-[11px] font-mono text-slate-500">
+                            Target: <strong className="text-slate-800">3.20</strong> (Level 3)
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div style={{ width: '100%' }} className="bg-emerald-600 h-full rounded-full" />
+                        </div>
+                      </div>
+
+                      {/* Tabel Komponen SPIP dan Nilainya (Permintaan User: Komponen penilaian, bobot dan nilainya) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-slate-700">Tabel Komponen Penilaian (5 Unsur Maturitas SPIP):</span>
+                          <span className="text-[9px] font-mono text-slate-500">5 Unsur</span>
+                        </div>
+                        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50/60 max-h-[190px] overflow-y-auto">
+                          <table className="w-full text-left text-[9.5px]">
+                            <thead className="sticky top-0 bg-slate-100/95 z-10">
+                              <tr className="text-slate-600 font-bold uppercase text-[8.5px] border-b border-slate-200">
+                                <th className="py-1 px-1.5">Komponen Penilaian</th>
+                                <th className="py-1 px-1 text-center">Bobot</th>
+                                <th className="py-1 px-1.5 text-right">Nilai / Skor</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-200/60 text-slate-700 font-medium">
+                              {SPIP_5_UNSUR_TABLE_DATA.map((item) => (
+                                <tr key={item.no} className="hover:bg-white transition-colors">
+                                  <td className="py-1 px-1.5 font-sans truncate max-w-[150px]" title={item.komponen}>
+                                    {item.komponen}
+                                  </td>
+                                  <td className="py-1 px-1 text-center font-mono text-slate-500">
+                                    {item.bobot}
+                                  </td>
+                                  <td className="py-1 px-1.5 text-right font-mono font-black text-emerald-700">
+                                    {item.nilai.toFixed(2)}
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="bg-emerald-50/70 font-bold text-slate-900 border-t border-emerald-200 text-[9.5px]">
+                                <td className="py-1 px-1.5 font-bold text-emerald-950">
+                                  Total Maturitas SPIP (Level 3):
+                                </td>
+                                <td className="py-1 px-1 text-center font-mono text-emerald-900">100%</td>
+                                <td className="py-1 px-1.5 text-right font-mono font-black text-emerald-900">
+                                  3.42
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => onOpenFormulaModal?.('ikp-3-spip')}
+                        className="w-full text-center text-[10px] text-emerald-700 hover:text-emerald-900 font-bold py-1 bg-white hover:bg-emerald-50 rounded-lg border border-emerald-200 transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
+                      >
+                        <Calculator className="w-3 h-3 text-emerald-600" />
+                        <span>Lihat Panduan &amp; Formula SPIP</span>
+                      </button>
+                    </div>
+
+                    {/* CARD 4: IKP-4 OPINI BPK ATAS LAPORAN KEUANGAN */}
+                    <div className="p-3 sm:p-3.5 rounded-xl border border-slate-200 bg-white hover:border-teal-300 transition-all shadow-2xs flex flex-col justify-between space-y-2.5">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded text-[10px] border border-teal-200">
+                          IKP-4 &bull; BIRO KEUANGAN
+                        </span>
+                        <span className="font-mono font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          100.0% Tercapai
+                        </span>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-900 leading-snug">
+                          Opini BPK atas Laporan Keuangan
+                        </h5>
+                        <span className="text-[10px] text-slate-500 font-mono block">
+                          Unit: Biro Keuangan BP Batam &amp; Pemeriksaan BPK RI
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between mb-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-black font-mono text-teal-800">WTP</span>
+                            <span className="text-[10.5px] font-bold text-teal-700">8x Berturut</span>
+                          </div>
+                          <span className="text-[11px] font-mono text-slate-500">
+                            Target: <strong className="text-slate-800">WTP</strong> (Unqualified)
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div style={{ width: '100%' }} className="bg-teal-600 h-full rounded-full" />
+                        </div>
+                      </div>
+
+                      {/* Tabel Kriteria Opini BPK dan Statusnya (Permintaan User: Tabel Opini BPK) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-slate-700">Tabel Kriteria Penilaian Opini BPK (4 Kriteria SAP):</span>
+                          <span className="text-[9px] font-mono text-slate-500">4 Kriteria</span>
+                        </div>
+                        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50/60 max-h-[190px] overflow-y-auto">
+                          <table className="w-full text-left text-[9.5px]">
+                            <thead className="sticky top-0 bg-slate-100/95 z-10">
+                              <tr className="text-slate-600 font-bold uppercase text-[8.5px] border-b border-slate-200">
+                                <th className="py-1 px-1.5">Kriteria Pemeriksaan BPK</th>
+                                <th className="py-1 px-1 text-center">Dasar Standar</th>
+                                <th className="py-1 px-1.5 text-right">Hasil Evaluasi</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-200/60 text-slate-700 font-medium">
+                              {OPINI_BPK_TABLE_DATA.map((item) => (
+                                <tr key={item.no} className="hover:bg-white transition-colors">
+                                  <td className="py-1 px-1.5 font-sans truncate max-w-[150px]" title={item.kriteria}>
+                                    {item.kriteria}
+                                  </td>
+                                  <td className="py-1 px-1 text-center font-mono text-slate-500">
+                                    {item.dasar}
+                                  </td>
+                                  <td className="py-1 px-1.5 text-right font-mono font-bold text-teal-800">
+                                    <span className="inline-block px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9px]">
+                                      {item.hasil}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="bg-teal-50/70 font-bold text-slate-900 border-t border-teal-200 text-[9.5px]">
+                                <td className="py-1 px-1.5 font-bold text-teal-950">
+                                  Hasil Opini Laporan Keuangan:
+                                </td>
+                                <td className="py-1 px-1 text-center font-mono text-teal-900">BPK RI</td>
+                                <td className="py-1 px-1.5 text-right font-mono font-black text-teal-900">
+                                  WTP Paripurna
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => onOpenFormulaModal?.('ikp-4-wtp')}
+                        className="w-full text-center text-[10px] text-teal-700 hover:text-teal-900 font-bold py-1 bg-white hover:bg-teal-50 rounded-lg border border-teal-200 transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
+                      >
+                        <Calculator className="w-3 h-3 text-teal-600" />
+                        <span>Lihat Panduan &amp; Regulasi Opini BPK</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1314,26 +1681,6 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
                 </div>
               </div>
             </div>
-          )}
-
-          {/* VIEW 3B: SAKIP */}
-          {okmrSubTab === 'sakip' && (
-            <SakipEvaluationView onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
-          )}
-
-          {/* VIEW 3C: PEKPPP */}
-          {okmrSubTab === 'pekppp' && (
-            <PekpppChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
-          )}
-
-          {/* VIEW 3D: PENGADUAN LAYANAN BADAN USAHA */}
-          {okmrSubTab === 'pengaduan' && (
-            <PengaduanMasyarakatChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
-          )}
-
-          {/* VIEW 3E: PIAGAM RISIKO */}
-          {okmrSubTab === 'piagam_risiko' && (
-            <PiagamRisikoChart onOpenFormula={() => onOpenFormulaModal?.('ikp-1-rb')} />
           )}
         </div>
       )}

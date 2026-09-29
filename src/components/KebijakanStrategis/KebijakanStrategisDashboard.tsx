@@ -43,10 +43,10 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
   const [selectedYear, setSelectedYear] = useState<'2025' | '2026'>('2025');
   const [selectedQuarter, setSelectedQuarter] = useState<'ALL' | 'Q1' | 'Q2' | 'Q3' | 'Q4'>('Q2');
   const [selectedSatkerFilter, setSelectedSatkerFilter] = useState<
-    'ALL' | 'ptsp' | 'pdsi' | 'pusat-harmonisasi'
+    'ALL' | 'ptsp' | 'pdsi'
   >('ALL');
 
-  // Deep-Dive Unit State (PTSP, PDSI, PHKS)
+  // Deep-Dive Unit State (PTSP, PDSI)
   const [selectedDeepDiveUnit, setSelectedDeepDiveUnit] = useState<string>('ptsp');
 
   // Internal Formula Modal State
@@ -173,19 +173,6 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
               }`}
             >
               PDSI
-            </button>
-            <button
-              onClick={() => {
-                setSelectedSatkerFilter('pusat-harmonisasi');
-                handleSelectDeepDive('pusat-harmonisasi');
-              }}
-              className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
-                selectedSatkerFilter === 'pusat-harmonisasi'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              PHKS
             </button>
           </div>
         </div>

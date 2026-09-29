@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PdsiKpiRow } from './PdsiKpiRow';
 import { PdsiSatuDataVisualSuite } from './PdsiSatuDataVisualSuite';
 import { PdsiKamusRumusView } from './PdsiKamusRumusView';
 import { KpiWordDocumentView } from '../KpiWordDocumentView';
@@ -76,17 +75,8 @@ export const PdsiDashboard: React.FC<PdsiDashboardProps> = ({
       ) : activeSubMenu === 'kamus_rumus' ? (
         <PdsiKamusRumusView />
       ) : (
-        /* Sesuai Permintaan User: Hanya Menampilkan KPI Row (Point 10) & 8 Visualisasi (Points 1 - 9) */
+        /* Sesuai Permintaan User: Menampilkan 8 Visualisasi Resmi Satu Data PDSI */
         <div className="space-y-5">
-          {/* Point 10: KPI Row Tetap Dipertahankan (JANGAN DIRUBAH) */}
-          <section id="pdsi-kpi-bans">
-            <PdsiKpiRow
-              onOpenKamusRumus={() => onSelectSubMenu('kamus_rumus')}
-              onSelectMetric={handleKpiCardClick}
-            />
-          </section>
-
-          {/* Points 1 s/d 9: 8 Visualisasi Resmi Satu Data PDSI */}
           <section id="pdsi-satu-data-visualisasi-suite">
             <PdsiSatuDataVisualSuite />
           </section>

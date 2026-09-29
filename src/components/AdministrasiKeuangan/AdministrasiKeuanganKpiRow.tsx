@@ -7,6 +7,7 @@ import {
   HelpCircle,
   BarChart3,
   ExternalLink,
+  FileCode2,
 } from 'lucide-react';
 import { PERKIN_A1_KPIS } from './administrasiKeuanganData';
 
@@ -134,21 +135,55 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
                     </div>
                   </div>
                 </div>
+
+                {/* Capaian Progress Bar */}
+                <div className="space-y-1 pt-2">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-slate-500">Capaian Kinerja</span>
+                    <span className="font-black text-emerald-700">
+                      {kpi.capaianPersen.toFixed(1)}% (Melampaui)
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500"
+                      style={{ width: `${Math.min(kpi.capaianPersen, 100)}%` }}
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Footer info: Satuan & Tombol Detail Acuan */}
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10.5px] text-slate-500 font-sans">
-                <span className="font-mono text-[10px] text-slate-400">
-                  {kpi.satuan} • {kpi.periodePelaporan}
-                </span>
-                <button
-                  onClick={() => onOpenFormulaModal(kpi.id)}
-                  className="font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer flex items-center gap-0.5 text-[10.5px]"
-                >
-                  <span>Manual Acuan</span>
-                  <ExternalLink className="w-3 h-3" />
-                </button>
+              {/* Attribution: Sumber & Unit Pelaksana (Persis seperti DEP-A2) */}
+              <div className="space-y-1.5 text-[10.5px] text-slate-600 pt-2 border-t border-slate-100 mt-2">
+                <div className="flex items-start justify-between gap-1.5">
+                  <span className="text-slate-400 font-medium shrink-0">Sumber:</span>
+                  <span className="font-mono font-bold text-sky-800 text-[10px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200 truncate">
+                    {kpi.id === 'ikp-1-rb' && 'Data BOKMR No. 1 (Satu Data)'}
+                    {kpi.id === 'ikp-2-merit' && 'Data BSDM No. 1 (Satu Data)'}
+                    {kpi.id === 'ikp-3-spip' && 'Data BOKMR No. 3 (Satu Data)'}
+                    {kpi.id === 'ikp-4-wtp' && 'Data Keuangan No. 1 (Satu Data)'}
+                  </span>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-slate-400 font-medium shrink-0">Unit Pelaksana:</span>
+                  <span className="font-mono font-bold text-slate-800 text-[10.5px]">
+                    {kpi.id === 'ikp-1-rb' && 'Biro OKMR (Tata Laksana & RB)'}
+                    {kpi.id === 'ikp-2-merit' && 'Biro Sumber Daya Manusia (BSDM)'}
+                    {kpi.id === 'ikp-3-spip' && 'Biro OKMR (Pengendalian Intern)'}
+                    {kpi.id === 'ikp-4-wtp' && 'Biro Keuangan BP Batam'}
+                  </span>
+                </div>
               </div>
+
+              {/* Footer Button: Formula Modal (Persis DEP-A2) */}
+              <button
+                onClick={() => onOpenFormulaModal(kpi.id)}
+                className="w-full mt-2 py-1.5 px-2.5 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                title="Buka rumus, regulasi acuan, dan rentang penilaian"
+              >
+                <FileCode2 className="w-3.5 h-3.5" />
+                <span>Kamus Rumus &amp; Regulasi</span>
+              </button>
             </div>
           );
         })}

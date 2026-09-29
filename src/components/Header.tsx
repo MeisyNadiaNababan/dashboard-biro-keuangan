@@ -113,10 +113,10 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (activeUnitId === 'deputi-kebijakan-strategis') {
       return [
         { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Eksekutif', icon: LayoutDashboard },
-        { id: 'kpi_visual', label: 'Visualisasi 4 IKP & Anggaran', icon: Award },
-        { id: 'unit_kinerja', label: 'Kinerja 4 Unit (PTSP, Pusren, PHKS, PDSI)', icon: Building2 },
+        { id: 'kpi_visual', label: 'Visualisasi 4 IKP & Kinerja', icon: Award },
+        { id: 'unit_kinerja', label: 'Kinerja Unit Pelaksana (PTSP, PHKS, PDSI)', icon: Building2 },
         { id: 'deep_dive', label: 'Unit Deep-Dive Center', icon: Sparkles, isSpecial: true },
-        { id: 'satu_data', label: 'Katalog 64 Dataset (PDF)', icon: Database },
+        { id: 'satu_data', label: 'Katalog 45 Dataset (PDF)', icon: Database },
       ];
     } else if (activeUnitId === 'deputi-administrasi-keuangan') {
       return [

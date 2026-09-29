@@ -676,6 +676,7 @@ export interface AspekSistemMeritDetail {
   bobotPersen: number;
   nilaiMaks: number;
   nilaiAspek: number;
+  indeksAspek: number; // Skala 0.0 - 1.0 (nilaiAspek / nilaiMaks)
   capaianPersen: number;
   predikat: 'Sangat Baik' | 'Baik' | 'Cukup';
   deskripsi: string;
@@ -691,6 +692,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 10,
     nilaiMaks: 40,
     nilaiAspek: 36.0,
+    indeksAspek: 0.90,
     capaianPersen: 90.0,
     predikat: 'Sangat Baik',
     deskripsi: 'Penyusunan peta jabatan 5 tahunan, Analisis Beban Kerja (ABK), dan proyeksi kebutuhan formasi berbasis e-Formasi SIASN BKN.',
@@ -708,6 +710,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 10,
     nilaiMaks: 40,
     nilaiAspek: 35.0,
+    indeksAspek: 0.875,
     capaianPersen: 87.5,
     predikat: 'Sangat Baik',
     deskripsi: 'Pelaksanaan seleksi CASN, PPPK, dan tenaga profesional yang transparan, kompetitif, serta bebas KKN menggunakan CAT BKN.',
@@ -725,6 +728,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 30,
     nilaiMaks: 120,
     nilaiAspek: 102.0,
+    indeksAspek: 0.85,
     capaianPersen: 85.0,
     predikat: 'Sangat Baik',
     deskripsi: 'Penerapan Manajemen Talenta berbasis 9-Box Matrix, pemetaan suksesi kepemimpinan, dan pemenuhan minimal 20 JP diklat tahunan.',
@@ -742,6 +746,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 10,
     nilaiMaks: 40,
     nilaiAspek: 34.0,
+    indeksAspek: 0.85,
     capaianPersen: 85.0,
     predikat: 'Sangat Baik',
     deskripsi: 'Pengisian Jabatan Pimpinan Tinggi (JPT) melalui seleksi terbuka dan rotasi/mutasi berbasis uji kompetensi objektif.',
@@ -759,6 +764,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 20,
     nilaiMaks: 80,
     nilaiAspek: 68.5,
+    indeksAspek: 0.856,
     capaianPersen: 85.63,
     predikat: 'Sangat Baik',
     deskripsi: 'Penyelarasan target Sasaran Kinerja Pegawai (SKP) dengan Indikator Kinerja Utama (IKU) instansi, dialog kinerja, dan evaluasi periodik.',
@@ -776,6 +782,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 10,
     nilaiMaks: 40,
     nilaiAspek: 33.5,
+    indeksAspek: 0.838,
     capaianPersen: 83.75,
     predikat: 'Baik',
     deskripsi: 'Pemberian tunjangan kinerja/remunerasi berdasarkan capaian kinerja riil, penghargaan pengabdian, dan penegakan kode etik.',
@@ -793,6 +800,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 4,
     nilaiMaks: 16,
     nilaiAspek: 14.5,
+    indeksAspek: 0.906,
     capaianPersen: 90.63,
     predikat: 'Sangat Baik',
     deskripsi: 'Penyediaan jaminan kesehatan, asuransi kecelakaan kerja/kematian, perlindungan hukum tugas dinas, dan layanan konseling psikologi.',
@@ -810,6 +818,7 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
     bobotPersen: 6,
     nilaiMaks: 24,
     nilaiAspek: 19.0,
+    indeksAspek: 0.792,
     capaianPersen: 79.17,
     predikat: 'Baik',
     deskripsi: 'Pemanfaatan SIMPEG terintegrasi SIASN & MyASN BKN, presensi biometrik digital, kenaikan pangkat otomatis, dan e-KGB.',
@@ -819,6 +828,211 @@ export const ASPEK_SISTEM_MERIT_DETAIL: AspekSistemMeritDetail[] = [
       'Digitalisasi 96% arsip naskah kepegawaian (e-Dossier paperless)',
     ],
     regulasiAcuan: 'Perpres No. 95/2018 tentang SPBE & Perka BKN No. 18/2020',
+  },
+];
+
+// REFORMASI BIROKRASI (8 AREA PERUBAHAN & INDEKS REFORMASI BIROKRASI)
+export interface ReformasiBirokrasiAreaItem {
+  no: number;
+  namaKomponen: string;
+  singkatan: string;
+  bobot: number; // %
+  target: number;
+  nilai: number; // Nilai Indeks
+  capaianPersen: number;
+  indeks: number; // 0.0 - 1.0
+  predikat: string;
+  deskripsi: string;
+  subKomponenRingkas: string;
+}
+
+export const REFORMASI_BIROKRASI_8_AREA_DETAIL: ReformasiBirokrasiAreaItem[] = [
+  {
+    no: 1,
+    namaKomponen: 'Manajemen Perubahan',
+    singkatan: 'Manajemen Perubahan',
+    bobot: 5.0,
+    target: 4.0,
+    nilai: 4.15,
+    capaianPersen: 83.0,
+    indeks: 0.83,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Pembangunan Zona Integritas (WBK/WBBM), pembentukan Tim Reformasi Birokrasi terpadu, Road Map RB BP Batam, dan internalisasi Core Values ASN BerAKHLAK.',
+    subKomponenRingkas: 'Tim RB (1.70) • Pembangunan ZI Menuju WBK (1.25) • Budaya BerAKHLAK (1.20)',
+  },
+  {
+    no: 2,
+    namaKomponen: 'Deregulasi & Simplifikasi Kebijakan',
+    singkatan: 'Deregulasi Kebijakan',
+    bobot: 5.0,
+    target: 3.8,
+    nilai: 4.10,
+    capaianPersen: 82.0,
+    indeks: 0.82,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Penataan regulasi internal, harmonisasi peraturan perundang-undangan (Perka/Kepka), debirokratisasi perizinan investasi, dan kemudahan berusaha di KPBPB Batam.',
+    subKomponenRingkas: 'Harmonisasi Perka (2.10) • Deregulasi Perizinan Investasi KEK (2.00)',
+  },
+  {
+    no: 3,
+    namaKomponen: 'Penataan dan Penguatan Organisasi (Kelembagaan)',
+    singkatan: 'Kelembagaan Organisasi',
+    bobot: 6.0,
+    target: 4.6,
+    nilai: 4.95,
+    capaianPersen: 82.5,
+    indeks: 0.825,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Evaluasi kelembagaan mandiri & MenPAN-RB, penataan struktur organisasi agile dan proporsional, serta penguatan tata kelola 4 badan usaha komersial.',
+    subKomponenRingkas: 'Kematangan Struktur (2.50) • SOTK Proporsional & Unit Bisnis BLU (2.45)',
+  },
+  {
+    no: 4,
+    namaKomponen: 'Penataan Tata Laksana (Proses Bisnis & SPBE)',
+    singkatan: 'Tata Laksana & SPBE',
+    bobot: 7.0,
+    target: 5.5,
+    nilai: 5.82,
+    capaianPersen: 83.14,
+    indeks: 0.831,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Penyusunan Peta Proses Bisnis terintegrasi, digitalisasi SOP administrasi perkantoran, dan implementasi Arsitektur Sistem Pemerintahan Berbasis Elektronik (SPBE).',
+    subKomponenRingkas: 'Peta Probis & SOP Digital (2.92) • Arsitektur SPBE & Integrasi TIK (2.90)',
+  },
+  {
+    no: 5,
+    namaKomponen: 'Penataan Sistem Manajemen SDM Aparatur',
+    singkatan: 'Manajemen SDM Merit',
+    bobot: 10.0,
+    target: 8.0,
+    nilai: 8.56,
+    capaianPersen: 85.6,
+    indeks: 0.856,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Penerapan Sistem Merit Kategori IV (342.5 Poin), manajemen talenta pegawai berbasis merit, penilaian SKP terukur, dan program pengembangan kompetensi berkelanjutan.',
+    subKomponenRingkas: 'Sistem Merit & Talent Pool (4.35) • Kinerja SKP & Diklat Pegawai (4.21)',
+  },
+  {
+    no: 6,
+    namaKomponen: 'Penguatan Akuntabilitas Kinerja',
+    singkatan: 'Akuntabilitas SAKIP',
+    bobot: 10.0,
+    target: 8.0,
+    nilai: 8.27,
+    capaianPersen: 82.7,
+    indeks: 0.827,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Penerapan SAKIP menyeluruh (Nilai SAKIP 82.68 Predikat A), cascading sasaran Perkin hingga level individu, serta efektivitas alokasi anggaran berbasis hasil.',
+    subKomponenRingkas: 'Kualitas Dokumen Renja & Perkin (4.15) • Pengukuran, Evaluasi & LAKIP (4.12)',
+  },
+  {
+    no: 7,
+    namaKomponen: 'Penguatan Pengawasan Intern',
+    singkatan: 'Pengawasan & SPIP',
+    bobot: 10.0,
+    target: 8.0,
+    nilai: 8.42,
+    capaianPersen: 84.2,
+    indeks: 0.842,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Maturitas SPIP Terintegrasi (3.42 Level 3), tingkat kepatuhan LHKPN 100%, Whistleblowing System (WBS), pengendalian gratifikasi, dan Manajemen Risiko Indeks (MRI 3.35).',
+    subKomponenRingkas: 'Maturitas SPIP & Manajemen Risiko (4.22) • Kepatuhan LHKPN & WBS (4.20)',
+  },
+  {
+    no: 8,
+    namaKomponen: 'Peningkatan Kualitas Pelayanan Publik',
+    singkatan: 'Pelayanan Publik & PEKPPP',
+    bobot: 10.0,
+    target: 8.5,
+    nilai: 8.87,
+    capaianPersen: 88.7,
+    indeks: 0.887,
+    predikat: 'Sangat Baik',
+    deskripsi: 'Pemantauan Evaluasi Kinerja Penyelenggara Pelayanan Publik (PEKPPP 4.38 Kategori A), Survei Kepuasan Masyarakat (SKM 88.94), dan tindak lanjut aduan SP4N LAPOR 96.2%.',
+    subKomponenRingkas: 'Standar Pelayanan MPP/PTSP & PEKPPP (4.50) • SKM & Penanganan Aduan (4.37)',
+  },
+];
+
+// INDEKS MATURITAS SPIP (5 UNSUR / KOMPONEN PENILAIAN BPKP)
+export interface MaturitasSpipUnsurItem {
+  no: number;
+  namaKomponen: string;
+  singkatan: string;
+  bobot: number; // %
+  target: number;
+  skor: number; // Skor langsung (1.00 - 5.00)
+  skorTerbobot: number;
+  capaianPersen: number;
+  level: string;
+  fokusArea: string;
+  subUnsurRingkas: string;
+}
+
+export const MATURITAS_SPIP_5_UNSUR_DETAIL: MaturitasSpipUnsurItem[] = [
+  {
+    no: 1,
+    namaKomponen: 'Lingkungan Pengendalian',
+    singkatan: 'Lingkungan Pengendalian',
+    bobot: 30.0,
+    target: 3.20,
+    skor: 3.48,
+    skorTerbobot: 1.04,
+    capaianPersen: 108.8,
+    level: 'Level 3 (Terdefinisi)',
+    fokusArea: 'Penegakan integritas, kode etik pegawai, komitmen kompetensi sumber daya manusia, kepemimpinan kondusif, dan struktur organisasi akuntabel.',
+    subUnsurRingkas: 'Integritas & Etika (3.52) • Komitmen Kompetensi (3.46) • Pendelegasian Wewenang (3.45)',
+  },
+  {
+    no: 2,
+    namaKomponen: 'Penilaian Risiko',
+    singkatan: 'Penilaian Risiko',
+    bobot: 20.0,
+    target: 3.20,
+    skor: 3.35,
+    skorTerbobot: 0.67,
+    capaianPersen: 104.7,
+    level: 'Level 3 (Terdefinisi)',
+    fokusArea: 'Identifikasi risiko strategis & operasional unit kerja, piagam register risiko 24 satker, serta mitigasi risiko fraud dan korupsi.',
+    subUnsurRingkas: 'Risiko Strategis Organisasi (3.38) • Analisis Fraud & Mitigasi Pengendalian (3.32)',
+  },
+  {
+    no: 3,
+    namaKomponen: 'Kegiatan Pengendalian',
+    singkatan: 'Kegiatan Pengendalian',
+    bobot: 25.0,
+    target: 3.20,
+    skor: 3.44,
+    skorTerbobot: 0.86,
+    capaianPersen: 107.5,
+    level: 'Level 3 (Terdefinisi)',
+    fokusArea: 'Reviu kinerja pimpinan, pengendalian sistem informasi & otorisasi transaksi, pemisahan fungsi tugas, dan pengamanan aset fisik BMN.',
+    subUnsurRingkas: 'Reviu Supervisi Atasan (3.46) • Pengendalian Sistem TIK (3.42) • Pemisahan Fungsi Keuangan (3.43)',
+  },
+  {
+    no: 4,
+    namaKomponen: 'Informasi dan Komunikasi',
+    singkatan: 'Informasi & Komunikasi',
+    bobot: 10.0,
+    target: 3.20,
+    skor: 3.38,
+    skorTerbobot: 0.34,
+    capaianPersen: 105.6,
+    level: 'Level 3 (Terdefinisi)',
+    fokusArea: 'Ketersediaan saluran whistleblowing system (WBS), keterbukaan informasi publik (PPID), koordinasi lintas satker, dan transparansi laporan berkala.',
+    subUnsurRingkas: 'Kanal WBS & Pengaduan (3.40) • Keterbukaan Informasi & Integrasi Lintas Satker (3.36)',
+  },
+  {
+    no: 5,
+    namaKomponen: 'Pemantauan Pengendalian Intern',
+    singkatan: 'Pemantauan Pengendalian',
+    bobot: 15.0,
+    target: 3.20,
+    skor: 3.46,
+    skorTerbobot: 0.52,
+    capaianPersen: 108.1,
+    level: 'Level 3 (Terdefinisi)',
+    fokusArea: 'Pemantauan berkelanjutan, evaluasi terpisah oleh Satuan Pengawas Intern (SPI), dan percepatan penyelesaian rekomendasi tindak lanjut temuan BPK RI.',
+    subUnsurRingkas: 'Pemantauan Berkelanjutan & Audit SPI (3.48) • Tindak Lanjut Temuan BPK/BPKP (3.44)',
   },
 ];
 

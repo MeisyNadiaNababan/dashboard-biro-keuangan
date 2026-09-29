@@ -141,7 +141,7 @@ export const KebijakanStrategisVisualHeader: React.FC<KebijakanStrategisVisualHe
               }`}
             >
               <Building2 className="w-3.5 h-3.5" />
-              <span>Kinerja 4 Unit Pelaksana</span>
+              <span>Kinerja Unit Pelaksana</span>
             </button>
 
             <button
@@ -165,19 +165,14 @@ export const KebijakanStrategisVisualHeader: React.FC<KebijakanStrategisVisualHe
               }`}
             >
               <Database className="w-3.5 h-3.5" />
-              <span>Katalog 64 Dataset PDF</span>
+              <span>Katalog Satu Data PDF</span>
             </button>
           </div>
 
           <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
-            <span>Total Pagu:</span>
-            <span className="font-extrabold text-slate-900 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
-              Rp {(PERKIN_METADATA.totalAnggaran / 1e9).toFixed(2)} M
-            </span>
-            <span>·</span>
-            <span>Realisasi:</span>
-            <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-              Rp {(PERKIN_METADATA.realisasiAnggaran / 1e9).toFixed(2)} M (37.5%)
+            <span className="flex items-center gap-1.5 text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200 font-bold">
+              <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
+              <span>Perkin A2 · BP Batam</span>
             </span>
           </div>
         </div>

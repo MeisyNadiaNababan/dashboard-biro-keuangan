@@ -54,6 +54,15 @@ export interface DomainSpbeItem {
   indikatorKunci: string[];
 }
 
+export interface SubIndikatorIkk {
+  nomor: string;
+  nama: string;
+  skor: number;
+  bobotSub: number;
+  poinSub: number;
+  keterangan: string;
+}
+
 export interface DimensiIkkItem {
   dimensi: string;
   bobot: number;
@@ -64,6 +73,7 @@ export interface DimensiIkkItem {
   formulaRumus?: string;
   indikatorKunci?: string;
   tahapan: string[];
+  subIndikator?: SubIndikatorIkk[];
 }
 
 export interface TarifLayananPdfEntry {

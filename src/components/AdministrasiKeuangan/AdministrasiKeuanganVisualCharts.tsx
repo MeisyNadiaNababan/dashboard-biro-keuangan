@@ -28,6 +28,9 @@ import {
   FISCAL_EXPENSE_PERKIN_UNITS,
   MATRIKS_STATUS_PENDIDIKAN_DATA,
   FiscalSummaryExpense,
+  REFORMASI_BIROKRASI_8_AREA_DETAIL,
+  ASPEK_SISTEM_MERIT_DETAIL,
+  MATURITAS_SPIP_5_UNSUR_DETAIL,
 } from './administrasiKeuanganData';
 import {
   RadarChart,
@@ -66,8 +69,12 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
   // Sub-tab under Akuntabilitas & OKMR
   const [okmrSubTab, setOkmrSubTab] = useState<
-    'radar' | 'sakip' | 'pekppp' | 'pengaduan' | 'piagam_risiko'
+    'radar' | 'rb_detail' | 'merit_detail' | 'spip_detail' | 'sakip' | 'pekppp' | 'pengaduan' | 'piagam_risiko'
   >('radar');
+
+  // Active view for 3 Governance Indices breakdown
+  const [selectedGovernanceView, setSelectedGovernanceView] = useState<'all' | 'rb' | 'merit' | 'spip'>('all');
+  const [expandedIndexRow, setExpandedIndexRow] = useState<string | null>(null);
 
   // Radar Data for 6 Vital Indices related to Deputi Administrasi & Keuangan & Biro OKMR
   const radarData = [
@@ -563,7 +570,52 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Radar &amp; 9 Indeks Tata Kelola</span>
+              <span>Radar Akuntabilitas &amp; 3 Indeks Utama</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setOkmrSubTab('radar');
+                setSelectedGovernanceView('rb');
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'radar' && selectedGovernanceView === 'rb'
+                  ? 'bg-white text-indigo-700 shadow-2xs font-extrabold ring-1 ring-indigo-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>Reformasi Birokrasi (8 Area)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setOkmrSubTab('radar');
+                setSelectedGovernanceView('merit');
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'radar' && selectedGovernanceView === 'merit'
+                  ? 'bg-white text-purple-700 shadow-2xs font-extrabold ring-1 ring-purple-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Sistem Merit (8 Aspek)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setOkmrSubTab('radar');
+                setSelectedGovernanceView('spip');
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                okmrSubTab === 'radar' && selectedGovernanceView === 'spip'
+                  ? 'bg-white text-emerald-700 shadow-2xs font-extrabold ring-1 ring-emerald-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Maturitas SPIP (5 Unsur)</span>
             </button>
 
             <button
@@ -615,29 +667,26 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
             </button>
           </div>
 
-          {/* VIEW 3A: RADAR & 9 INDEKS */}
+          {/* VIEW 3A: RADAR & 3 INDEKS TATA KELOLA UTAMA */}
           {okmrSubTab === 'radar' && (
             <div className="space-y-4">
-              {/* Radar Chart */}
+              {/* Top Radar Chart */}
               <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
                 <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-100 gap-2">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-cyan-600" />
                     <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900 font-mono">
-                      RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR
+                      RADAR INDEKS AKUNTABILITAS &amp; TATA KELOLA OKMR (DEP A1)
                     </h4>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold">
-                      SAKIP Predikat A (82.68) • RB Predikat A (81.14)
-                    </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold">
-                      Target vs Realisasi
+                      SAKIP Predikat A (82.68) • RB Predikat A (81.14) • Merit IV (342.5) • SPIP Level 3 (3.42)
                     </span>
                   </div>
                 </div>
 
-                <div className="h-72 w-full">
+                <div className="h-64 sm:h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={radarData}>
                       <PolarGrid stroke="#E2E8F0" />
@@ -673,12 +722,535 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
                   <span>Pengampu Utama: Biro OKMR, didukung Biro SDM &amp; Biro Keuangan</span>
                   <span className="text-emerald-700 font-bold flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    6 Indeks Seluruhnya Melampaui Target
+                    6 Indeks Tata Kelola Seluruhnya Melampaui Target Perkin
                   </span>
                 </div>
               </div>
 
-              {/* 9 Indeks Cards */}
+              {/* ========================================================================= */}
+              {/* URAIAN RINCI 3 INDEKS TATA KELOLA UTAMA: KOMPONEN PENILAIAN LALU NILAI */}
+              {/* ========================================================================= */}
+              <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4 font-sans">
+                {/* Header Section with Segmented Controller */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1 rounded bg-blue-100 text-blue-800">
+                        <Scale className="w-4 h-4" />
+                      </span>
+                      <h3 className="text-sm sm:text-base font-black uppercase text-slate-900 tracking-tight">
+                        URAIAN KOMPREHENSIF 3 INDEKS TATA KELOLA UTAMA
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-500 font-mono">
+                      Struktur Penyajian: <strong>Komponen Penilaian &rarr; Nilai Langsung &rarr; Bobot &rarr; Indeks/Skor &rarr; Status</strong>
+                    </p>
+                  </div>
+
+                  {/* Filter View Segmented Buttons */}
+                  <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto no-scrollbar text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGovernanceView('all')}
+                      className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                        selectedGovernanceView === 'all'
+                          ? 'bg-white text-slate-900 shadow-2xs font-extrabold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Semua 3 Indeks
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGovernanceView('rb')}
+                      className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                        selectedGovernanceView === 'rb'
+                          ? 'bg-indigo-600 text-white shadow-2xs font-extrabold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      1. Reformasi Birokrasi (8 Area)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGovernanceView('merit')}
+                      className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                        selectedGovernanceView === 'merit'
+                          ? 'bg-purple-600 text-white shadow-2xs font-extrabold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      2. Sistem Merit (8 Aspek)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGovernanceView('spip')}
+                      className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                        selectedGovernanceView === 'spip'
+                          ? 'bg-emerald-600 text-white shadow-2xs font-extrabold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      3. Maturitas SPIP (5 Unsur)
+                    </button>
+                  </div>
+                </div>
+
+                {/* 1. INDEKS REFORMASI BIROKRASI (8 AREA PERUBAHAN) */}
+                {(selectedGovernanceView === 'all' || selectedGovernanceView === 'rb') && (
+                  <div className="space-y-3 pt-1">
+                    {/* Header Banner for RB */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Award className="w-4 h-4 text-amber-300" />
+                          <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white">
+                            1. INDEKS REFORMASI BIROKRASI (RB) · 8 AREA PERUBAHAN
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-indigo-200 font-mono">
+                          Regulasi: <strong>PermenPAN-RB No. 3/2023</strong> &bull; Pengampu: <strong>Biro OKMR (Tata Laksana &amp; RB)</strong>
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                        <div className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">
+                          <span className="text-[10px] text-indigo-200 block">Target Perkin:</span>
+                          <span className="font-bold text-white">80.00 Poin</span>
+                        </div>
+                        <div className="bg-amber-400/20 px-3 py-1 rounded-lg border border-amber-400/40">
+                          <span className="text-[10px] text-amber-200 block">Total Nilai Indeks RB:</span>
+                          <span className="font-black text-amber-300 text-sm">81.14 (Predikat A)</span>
+                        </div>
+                        <div className="bg-emerald-500/20 px-3 py-1 rounded-lg border border-emerald-400/30">
+                          <span className="text-[10px] text-emerald-200 block">Capaian:</span>
+                          <span className="font-bold text-emerald-300">101.43%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Table for RB: Mulai dari Komponen Penilaian lalu Langsung Nilai */}
+                    <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100/90 text-slate-700 font-mono text-[11px] border-b border-slate-200">
+                            <th className="py-2.5 px-3 font-bold w-10 text-center">NO</th>
+                            <th className="py-2.5 px-3 font-black text-indigo-950 min-w-[220px]">
+                              KOMPONEN PENILAIAN (8 AREA PERUBAHAN)
+                            </th>
+                            <th className="py-2.5 px-3 font-black text-indigo-900 bg-indigo-50/80 text-right min-w-[110px]">
+                              NILAI LANGSUNG (INDEKS)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-700 text-right min-w-[80px]">
+                              BOBOT (%)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-600 text-right min-w-[80px]">
+                              TARGET
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-700 text-right min-w-[90px]">
+                              CAPAIAN (%)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-center min-w-[100px]">
+                              STATUS
+                            </th>
+                            <th className="py-2.5 px-3 font-medium text-slate-500 min-w-[260px]">
+                              SUB-KOMPONEN &amp; BUKTI PELAKSANAAN
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-sans">
+                          {REFORMASI_BIROKRASI_8_AREA_DETAIL.map((rb) => (
+                            <tr
+                              key={rb.no}
+                              className="hover:bg-indigo-50/30 transition-colors"
+                            >
+                              <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-500">
+                                {rb.no}
+                              </td>
+                              <td className="py-2.5 px-3 font-bold text-slate-900">
+                                <span className="block">{rb.namaKomponen}</span>
+                                <span className="text-[10px] text-slate-400 font-mono">Area #{rb.no} &bull; {rb.singkatan}</span>
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-black text-indigo-800 bg-indigo-50/40 text-sm">
+                                {rb.nilai.toFixed(2)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-700 font-bold">
+                                {rb.bobot.toFixed(1)}%
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-500">
+                                {rb.target.toFixed(1)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-extrabold text-emerald-700">
+                                {rb.capaianPersen.toFixed(1)}%
+                              </td>
+                              <td className="py-2.5 px-3 text-center">
+                                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200">
+                                  {rb.predikat}
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3 text-[10.5px] text-slate-600 leading-snug">
+                                <span className="font-semibold text-slate-800 block mb-0.5">{rb.subKomponenRingkas}</span>
+                                <span className="text-slate-500">{rb.deskripsi}</span>
+                              </td>
+                            </tr>
+                          ))}
+
+                          {/* Subtotal 8 Area RB General */}
+                          <tr className="bg-slate-50/90 font-mono text-[11px] font-bold border-t-2 border-slate-300">
+                            <td colSpan={2} className="py-2 px-3 text-slate-700 uppercase">
+                              Subtotal 8 Area Perubahan RB General
+                            </td>
+                            <td className="py-2 px-3 text-right font-black text-indigo-900 bg-indigo-100/50">
+                              53.14
+                            </td>
+                            <td className="py-2 px-3 text-right text-slate-700">
+                              62.0%
+                            </td>
+                            <td className="py-2 px-3 text-right text-slate-500">
+                              47.4
+                            </td>
+                            <td className="py-2 px-3 text-right text-emerald-700">
+                              85.71%
+                            </td>
+                            <td className="py-2 px-3 text-center text-emerald-700">
+                              Sangat Baik
+                            </td>
+                            <td className="py-2 px-3 text-[10px] text-slate-500 font-sans">
+                              Evaluasi 8 pilar tata kelola internal BP Batam
+                            </td>
+                          </tr>
+
+                          {/* Row for RB Tematik */}
+                          <tr className="bg-amber-50/40 font-mono text-[11px] border-t border-slate-200">
+                            <td className="py-2 px-3 text-center font-bold text-amber-800">9</td>
+                            <td className="py-2 px-3 font-bold text-slate-900">
+                              <span>RB Tematik: Digitalisasi Administrasi &amp; Percepatan Investasi</span>
+                              <span className="text-[10px] text-amber-700 block font-normal">Fokus prioritas MenPAN-RB: Perizinan OSS, Kemudahan Investasi &amp; TIK</span>
+                            </td>
+                            <td className="py-2 px-3 text-right font-black text-amber-900 bg-amber-100/60 text-sm">
+                              28.00
+                            </td>
+                            <td className="py-2 px-3 text-right text-slate-700 font-bold">
+                              38.0%
+                            </td>
+                            <td className="py-2 px-3 text-right text-slate-500">
+                              26.0
+                            </td>
+                            <td className="py-2 px-3 text-right font-bold text-emerald-700">
+                              107.69%
+                            </td>
+                            <td className="py-2 px-3 text-center">
+                              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-200">
+                                Sangat Baik
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-[10px] text-slate-600 font-sans">
+                              Penyelenggaraan MPP Batam, integrasi OSS RBA, dan 42 aplikasi TTE BSrE
+                            </td>
+                          </tr>
+
+                          {/* TOTAL KONSOLIDASI INDEKS REFORMASI BIROKRASI */}
+                          <tr className="bg-slate-900 text-white font-mono text-xs font-black border-t-2 border-slate-950">
+                            <td colSpan={2} className="py-3 px-3 uppercase tracking-wider text-amber-300">
+                              TOTAL INDEKS REFORMASI BIROKRASI (RB) BP BATAM
+                            </td>
+                            <td className="py-3 px-3 text-right text-base text-amber-300 bg-slate-800/90 font-black">
+                              81.14
+                            </td>
+                            <td className="py-3 px-3 text-right text-cyan-300">
+                              100.0%
+                            </td>
+                            <td className="py-3 px-3 text-right text-slate-300">
+                              80.00
+                            </td>
+                            <td className="py-3 px-3 text-right text-emerald-300 font-black">
+                              101.43%
+                            </td>
+                            <td className="py-3 px-3 text-center">
+                              <span className="px-2.5 py-0.5 rounded bg-emerald-500 text-white text-[10.5px]">
+                                PREDIKAT A
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-[11px] text-slate-300 font-sans font-normal">
+                              Memuaskan &bull; Ditetapkan melalui Evaluasi MenPAN-RB RI
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. INDEKS SISTEM MERIT (8 ASPEK PENILAIAN KASN) */}
+                {(selectedGovernanceView === 'all' || selectedGovernanceView === 'merit') && (
+                  <div className="space-y-3 pt-3 border-t border-slate-200">
+                    {/* Header Banner for Sistem Merit */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-cyan-300" />
+                          <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white">
+                            2. INDEKS SISTEM MERIT · 8 ASPEK PENILAIAN KASN &amp; MANAJEMEN TALENTA ASN
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-purple-200 font-mono">
+                          Regulasi: <strong>Peraturan KASN No. 9/2019 &amp; PermenPAN-RB No. 40/2018</strong> &bull; Pengampu: <strong>Biro Sumber Daya Manusia (BSDM)</strong>
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                        <div className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">
+                          <span className="text-[10px] text-purple-200 block">Target Perkin:</span>
+                          <span className="font-bold text-white">280 Poin (Baik)</span>
+                        </div>
+                        <div className="bg-cyan-400/20 px-3 py-1 rounded-lg border border-cyan-400/40">
+                          <span className="text-[10px] text-cyan-200 block">Total Nilai Merit:</span>
+                          <span className="font-black text-cyan-300 text-sm">342.5 / 400</span>
+                        </div>
+                        <div className="bg-emerald-500/20 px-3 py-1 rounded-lg border border-emerald-400/30">
+                          <span className="text-[10px] text-emerald-200 block">Indeks Sistem Merit:</span>
+                          <span className="font-black text-emerald-300 text-sm">0.8563 (Kategori IV)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Table for Sistem Merit: Mulai dari Komponen Penilaian lalu Langsung Nilai */}
+                    <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100/90 text-slate-700 font-mono text-[11px] border-b border-slate-200">
+                            <th className="py-2.5 px-3 font-bold w-10 text-center">NO</th>
+                            <th className="py-2.5 px-3 font-black text-purple-950 min-w-[220px]">
+                              KOMPONEN PENILAIAN (8 ASPEK SISTEM MERIT)
+                            </th>
+                            <th className="py-2.5 px-3 font-black text-purple-900 bg-purple-50/80 text-right min-w-[110px]">
+                              NILAI LANGSUNG (SKOR)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-700 text-right min-w-[80px]">
+                              BOBOT (%)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-600 text-right min-w-[80px]">
+                              NILAI MAKS
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-purple-900 text-right min-w-[100px]">
+                              INDEKS PER ASPEK
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-center min-w-[110px]">
+                              STATUS PEMENUHAN
+                            </th>
+                            <th className="py-2.5 px-3 font-medium text-slate-500 min-w-[260px]">
+                              INDIKATOR KUNCI &amp; REGULASI ACUAN
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-sans">
+                          {ASPEK_SISTEM_MERIT_DETAIL.map((m) => (
+                            <tr
+                              key={m.no}
+                              className="hover:bg-purple-50/30 transition-colors"
+                            >
+                              <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-500">
+                                {m.no}
+                              </td>
+                              <td className="py-2.5 px-3 font-bold text-slate-900">
+                                <span className="block">{m.namaAspek}</span>
+                                <span className="text-[10px] text-slate-400 font-mono">{m.kode}</span>
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-black text-purple-800 bg-purple-50/40 text-sm">
+                                {m.nilaiAspek.toFixed(1)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-700 font-bold">
+                                {m.bobotPersen}%
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-500">
+                                {m.nilaiMaks}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-black text-emerald-700">
+                                {m.indeksAspek.toFixed(3)}
+                              </td>
+                              <td className="py-2.5 px-3 text-center">
+                                <span
+                                  className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                    m.predikat === 'Sangat Baik'
+                                      ? 'text-emerald-800 bg-emerald-50 border border-emerald-200'
+                                      : 'text-blue-800 bg-blue-50 border border-blue-200'
+                                  }`}
+                                >
+                                  {m.predikat}
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3 text-[10.5px] text-slate-600 leading-snug">
+                                <span className="font-semibold text-slate-800 block mb-0.5">{m.deskripsi}</span>
+                                <span className="text-[10px] text-purple-700 font-mono">{m.regulasiAcuan}</span>
+                              </td>
+                            </tr>
+                          ))}
+
+                          {/* TOTAL BARIS SISTEM MERIT */}
+                          <tr className="bg-slate-900 text-white font-mono text-xs font-black border-t-2 border-slate-950">
+                            <td colSpan={2} className="py-3 px-3 uppercase tracking-wider text-cyan-300">
+                              TOTAL INDEKS SISTEM MERIT BP BATAM (8 ASPEK)
+                            </td>
+                            <td className="py-3 px-3 text-right text-base text-cyan-300 bg-slate-800/90 font-black">
+                              342.5
+                            </td>
+                            <td className="py-3 px-3 text-right text-slate-200 font-bold">
+                              100%
+                            </td>
+                            <td className="py-3 px-3 text-right text-slate-300">
+                              400
+                            </td>
+                            <td className="py-3 px-3 text-right text-emerald-300 font-black text-sm">
+                              0.8563
+                            </td>
+                            <td className="py-3 px-3 text-center">
+                              <span className="px-2 py-0.5 rounded bg-purple-500 text-white text-[10.5px]">
+                                KATEGORI IV
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-[11px] text-slate-300 font-sans font-normal">
+                              Sangat Baik (Rentang 325 - 400 Poin) &bull; SK Penetapan KASN RI
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. INDEKS MATURITAS SPIP (5 UNSUR / KOMPONEN BPKP) */}
+                {(selectedGovernanceView === 'all' || selectedGovernanceView === 'spip') && (
+                  <div className="space-y-3 pt-3 border-t border-slate-200">
+                    {/* Header Banner for SPIP */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-300" />
+                          <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white">
+                            3. INDEKS MATURITAS SPIP · 5 UNSUR / KOMPONEN PENGENDALIAN INTERN BPKP RI
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-emerald-200 font-mono">
+                          Regulasi: <strong>Peraturan BPKP No. 5/2021 &amp; PP No. 60/2008</strong> &bull; Pengampu: <strong>Biro OKMR &amp; Seluruh Satuan Kerja</strong>
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                        <div className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">
+                          <span className="text-[10px] text-emerald-200 block">Target Perkin:</span>
+                          <span className="font-bold text-white">3.20 (Level 3)</span>
+                        </div>
+                        <div className="bg-emerald-400/20 px-3 py-1 rounded-lg border border-emerald-400/40">
+                          <span className="text-[10px] text-emerald-200 block">Skor Maturitas SPIP:</span>
+                          <span className="font-black text-emerald-300 text-sm">3.42 / 5.00</span>
+                        </div>
+                        <div className="bg-cyan-500/20 px-3 py-1 rounded-lg border border-cyan-400/30">
+                          <span className="text-[10px] text-cyan-200 block">Capaian Target:</span>
+                          <span className="font-bold text-cyan-300">106.88%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Table for SPIP: Mulai dari Komponen Penilaian lalu Langsung Nilai */}
+                    <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100/90 text-slate-700 font-mono text-[11px] border-b border-slate-200">
+                            <th className="py-2.5 px-3 font-bold w-10 text-center">NO</th>
+                            <th className="py-2.5 px-3 font-black text-emerald-950 min-w-[220px]">
+                              KOMPONEN PENILAIAN (5 UNSUR MATURITAS SPIP)
+                            </th>
+                            <th className="py-2.5 px-3 font-black text-emerald-900 bg-emerald-50/80 text-right min-w-[110px]">
+                              SKOR LANGSUNG (NILAI)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-700 text-right min-w-[80px]">
+                              BOBOT (%)
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-700 text-right min-w-[90px]">
+                              SKOR TERBOBOT
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-slate-600 text-right min-w-[80px]">
+                              TARGET
+                            </th>
+                            <th className="py-2.5 px-3 font-bold text-center min-w-[110px]">
+                              LEVEL KEMATANGAN
+                            </th>
+                            <th className="py-2.5 px-3 font-medium text-slate-500 min-w-[260px]">
+                              FOKUS AREA &amp; PENGENDALIAN INTERN
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-sans">
+                          {MATURITAS_SPIP_5_UNSUR_DETAIL.map((spip) => (
+                            <tr
+                              key={spip.no}
+                              className="hover:bg-emerald-50/30 transition-colors"
+                            >
+                              <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-500">
+                                {spip.no}
+                              </td>
+                              <td className="py-2.5 px-3 font-bold text-slate-900">
+                                <span className="block">{spip.namaKomponen}</span>
+                                <span className="text-[10px] text-slate-400 font-mono">Unsur #{spip.no} &bull; {spip.singkatan}</span>
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-black text-emerald-800 bg-emerald-50/40 text-sm">
+                                {spip.skor.toFixed(2)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-700 font-bold">
+                                {spip.bobot.toFixed(1)}%
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono font-bold text-teal-800">
+                                {spip.skorTerbobot.toFixed(2)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-mono text-slate-500">
+                                {spip.target.toFixed(2)}
+                              </td>
+                              <td className="py-2.5 px-3 text-center">
+                                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200">
+                                  {spip.level}
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3 text-[10.5px] text-slate-600 leading-snug">
+                                <span className="font-semibold text-slate-800 block mb-0.5">{spip.subUnsurRingkas}</span>
+                                <span className="text-slate-500">{spip.fokusArea}</span>
+                              </td>
+                            </tr>
+                          ))}
+
+                          {/* TOTAL BARIS MATURITAS SPIP */}
+                          <tr className="bg-slate-900 text-white font-mono text-xs font-black border-t-2 border-slate-950">
+                            <td colSpan={2} className="py-3 px-3 uppercase tracking-wider text-emerald-300">
+                              TOTAL INDEKS MATURITAS SPIP BP BATAM (TERINTEGRASI)
+                            </td>
+                            <td className="py-3 px-3 text-right text-base text-emerald-300 bg-slate-800/90 font-black">
+                              3.42
+                            </td>
+                            <td className="py-3 px-3 text-right text-slate-200 font-bold">
+                              100%
+                            </td>
+                            <td className="py-3 px-3 text-right text-teal-300 font-bold">
+                              3.43
+                            </td>
+                            <td className="py-3 px-3 text-right text-slate-300">
+                              3.20
+                            </td>
+                            <td className="py-3 px-3 text-center">
+                              <span className="px-2 py-0.5 rounded bg-emerald-500 text-white text-[10.5px]">
+                                LEVEL 3 TERDEFINISI
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-[11px] text-slate-300 font-sans font-normal">
+                              Berkembang Menuju Terdefinisi &bull; Penilaian Terintegrasi BPKP RI
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 9 Indeks Cards (Ringkasan Konsolidasi) */}
               <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-3">
                 <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 gap-2">
                   <div className="flex items-center gap-2">

@@ -43,10 +43,10 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
   const [selectedYear, setSelectedYear] = useState<'2025' | '2026'>('2025');
   const [selectedQuarter, setSelectedQuarter] = useState<'ALL' | 'Q1' | 'Q2' | 'Q3' | 'Q4'>('Q2');
   const [selectedSatkerFilter, setSelectedSatkerFilter] = useState<
-    'ALL' | 'ptsp' | 'pdsi' | 'pusat-perencanaan-program' | 'pusat-harmonisasi'
+    'ALL' | 'ptsp' | 'pdsi' | 'pusat-harmonisasi'
   >('ALL');
 
-  // Deep-Dive Unit State (PTSP, PDSI, Pusren, PHKS)
+  // Deep-Dive Unit State (PTSP, PDSI, PHKS)
   const [selectedDeepDiveUnit, setSelectedDeepDiveUnit] = useState<string>('ptsp');
 
   // Internal Formula Modal State
@@ -146,7 +146,7 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Konsolidasi 4 Satker
+              Konsolidasi Satker
             </button>
             <button
               onClick={() => {
@@ -176,19 +176,6 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
             </button>
             <button
               onClick={() => {
-                setSelectedSatkerFilter('pusat-perencanaan-program');
-                handleSelectDeepDive('pusat-perencanaan-program');
-              }}
-              className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
-                selectedSatkerFilter === 'pusat-perencanaan-program'
-                  ? 'bg-white text-amber-700 shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Pusren
-            </button>
-            <button
-              onClick={() => {
                 setSelectedSatkerFilter('pusat-harmonisasi');
                 handleSelectDeepDive('pusat-harmonisasi');
               }}
@@ -207,7 +194,7 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
         <div className="flex items-center gap-2 ml-auto">
           <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold">DEP A2: 4 Satker Pelaksana</span>
+            <span className="font-bold">DEP A2: Unit Pelaksana</span>
           </div>
 
           <button

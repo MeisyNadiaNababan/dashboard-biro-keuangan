@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { PtspDashboard } from '../PTSP/PtspDashboard';
 import { PdsiDashboard } from '../PDSI/PdsiDashboard';
-import { PusrenDashboard } from '../Pusren/PusrenDashboard';
 import { HarmonisasiDashboard } from '../Harmonisasi/HarmonisasiDashboard';
 
 interface KebijakanStrategisDeepDiveCenterProps {
@@ -40,11 +39,13 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
   const [pdsiSubMenu, setPdsiSubMenu] = useState<string>('ikhtisar');
 
   const normalizedUnitId =
-    selectedUnitId === 'pusren'
-      ? 'pusat-perencanaan-program'
-      : selectedUnitId === 'phks'
+    selectedUnitId === 'phks'
       ? 'pusat-harmonisasi'
-      : selectedUnitId || 'ptsp';
+      : selectedUnitId === 'pdsi'
+      ? 'pdsi'
+      : selectedUnitId === 'pusat-harmonisasi'
+      ? 'pusat-harmonisasi'
+      : 'ptsp';
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5 space-y-5">
@@ -93,18 +94,6 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
           >
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
             <span>PDSI (21 DS)</span>
-          </button>
-
-          <button
-            onClick={() => onSelectUnit('pusat-perencanaan-program')}
-            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              normalizedUnitId === 'pusat-perencanaan-program'
-                ? 'bg-white text-amber-700 shadow-xs ring-1 ring-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Target className="w-4 h-4 text-amber-600" />
-            <span>Pusren (19 DS)</span>
           </button>
 
           <button
@@ -239,17 +228,7 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
         </div>
       )}
 
-      {/* UNIT 3: PUSAT PERENCANAAN PROGRAM STRATEGIS (PUSREN) */}
-      {normalizedUnitId === 'pusat-perencanaan-program' && (
-        <div className="space-y-4">
-          <PusrenDashboard
-            onOpenFormulaModal={onOpenFormulaModal}
-            onOpenExportModal={onOpenExportModal}
-          />
-        </div>
-      )}
-
-      {/* UNIT 4: PUSAT HARMONISASI KEBIJAKAN STRATEGIS (PHKS) */}
+      {/* UNIT 3: PUSAT HARMONISASI KEBIJAKAN STRATEGIS (PHKS) */}
       {normalizedUnitId === 'pusat-harmonisasi' && (
         <div className="space-y-4">
           <HarmonisasiDashboard

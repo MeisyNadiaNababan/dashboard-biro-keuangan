@@ -37,7 +37,6 @@ import { PengelolaanLahanPesisirDashboard } from './components/PengelolaanLahanP
 import { InvestasiPengusahaanDashboard } from './components/InvestasiPengusahaan/InvestasiPengusahaanDashboard';
 import { BandaraPelabuhanLlbDashboard } from './components/BandaraPelabuhanLlb/BandaraPelabuhanLlbDashboard';
 import { InfrastrukturPerkinA7Dashboard } from './components/InfrastrukturPerkinA7/InfrastrukturPerkinA7Dashboard';
-import { PusrenDashboard } from './components/Pusren/PusrenDashboard';
 import { HarmonisasiDashboard } from './components/Harmonisasi/HarmonisasiDashboard';
 import { OtherUnitPlaceholder } from './components/OtherUnitPlaceholder';
 import { BiroKeuanganKamusRumusView } from './components/BiroKeuanganKamusRumusView';
@@ -411,16 +410,6 @@ export default function App() {
                   setSelectedKpiFormulaId(kpiId);
                   setIsKpiFormulaModalOpen(true);
                 }}
-              />
-            ) : activeUnitId === 'pusat-perencanaan-program' ? (
-              /* --- PUSAT PERENCANAAN PROGRAM STRATEGIS (P3S) DASHBOARD (HALAMAN 51-53 PDF) --- */
-              <PusrenDashboard
-                activeSubTab={activeSheet}
-                onOpenFormulaModal={(kpiId) => {
-                  setSelectedKpiFormulaId(kpiId);
-                  setIsKpiFormulaModalOpen(true);
-                }}
-                onOpenExportModal={() => setIsExportModalOpen(true)}
               />
             ) : activeUnitId === 'pusat-harmonisasi' ? (
               /* --- PUSAT HARMONISASI KEBIJAKAN STRATEGIS (PHKS) DASHBOARD (HALAMAN 12-13 PDF) --- */

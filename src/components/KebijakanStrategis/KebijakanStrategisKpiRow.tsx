@@ -131,9 +131,9 @@ export const KebijakanStrategisKpiRow: React.FC<KebijakanStrategisKpiRowProps> =
                   </span>
                 </div>
                 <div className="flex items-start justify-between gap-2">
-                  <span className="text-slate-400 font-medium shrink-0">Alokasi Pagu:</span>
-                  <span className="font-mono font-bold text-slate-900">
-                    Rp {(ikp.paguKegiatan / 1e9).toFixed(2)} Miliar
+                  <span className="text-slate-400 font-medium shrink-0">Unit Pelaksana:</span>
+                  <span className="font-mono font-bold text-slate-800 text-[10.5px]">
+                    {ikp.unitKerja}
                   </span>
                 </div>
               </div>

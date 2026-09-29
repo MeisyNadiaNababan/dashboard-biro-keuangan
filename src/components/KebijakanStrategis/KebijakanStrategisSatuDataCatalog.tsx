@@ -70,11 +70,11 @@ export const KebijakanStrategisSatuDataCatalog: React.FC<KebijakanStrategisSatuD
               <Database className="w-4 h-4" />
             </span>
             <h3 className="text-sm sm:text-base font-black tracking-tight text-slate-900 uppercase">
-              KATALOG 64 DATASET SATU DATA · PERKIN A2 (DEP A2) (HALAMAN ATRIBUT RESMI)
+              KATALOG 45 DATASET SATU DATA · PERKIN A2 (DEP A2) (HALAMAN ATRIBUT RESMI)
             </h3>
           </div>
           <p className="text-xs text-slate-500">
-            Daftar lengkap dataset terstandarisasi dari 4 unit pelaksana (PTSP: 17, Pusren: 19, PHKS: 7, PDSI: 21).
+            Daftar lengkap dataset terstandarisasi dari 3 unit pelaksana Perkin A2 (PTSP: 17, PHKS: 7, PDSI: 21 - Total 45 Dataset).
           </p>
         </div>
 
@@ -99,9 +99,8 @@ export const KebijakanStrategisSatuDataCatalog: React.FC<KebijakanStrategisSatuD
               onChange={(e) => setSelectedUnitFilter(e.target.value)}
               className="bg-transparent font-bold text-slate-800 focus:outline-hidden cursor-pointer"
             >
-              <option value="ALL">Semua 4 Unit (64 Dataset)</option>
+              <option value="ALL">Semua 3 Unit Pelaksana (45 Dataset)</option>
               <option value="ptsp">PTSP (17 Dataset)</option>
-              <option value="pusat-perencanaan-program">Pusren (19 Dataset)</option>
               <option value="pusat-harmonisasi">PHKS (7 Dataset)</option>
               <option value="pdsi">PDSI (21 Dataset)</option>
             </select>

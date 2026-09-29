@@ -68,9 +68,8 @@ export const KebijakanStrategisFilters: React.FC<KebijakanStrategisFiltersProps>
               onChange={(e) => onFilterChange({ selectedUnit: e.target.value })}
               className="bg-transparent text-slate-800 font-bold focus:outline-hidden cursor-pointer"
             >
-              <option value="ALL">Semua 4 Unit Kerja</option>
+              <option value="ALL">Semua 3 Unit Pelaksana</option>
               <option value="ptsp">PTSP (Pelayanan Perizinan)</option>
-              <option value="pusat-perencanaan-program">Pusren (Perencanaan Strategis)</option>
               <option value="pusat-harmonisasi">PHKS (Harmonisasi Kebijakan)</option>
               <option value="pdsi">PDSI (Data Center &amp; SPBE)</option>
             </select>

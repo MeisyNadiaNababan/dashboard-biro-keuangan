@@ -220,29 +220,6 @@ export const KEBIJAKAN_STRATEGIS_UNITS: KebijakanStrategisUnitProfile[] = [
     isuStrategis: 'Percepatan rekomendasi verifikasi teknis sektor kelautan & integrasi API verifikator eksternal guna memangkas backlog.',
   },
   {
-    id: 'pusat-perencanaan-program',
-    code: 'P3S',
-    name: 'Pusat Perencanaan Program Strategis',
-    shortName: 'Pusren',
-    pimpinan: 'Kepala Pusat Perencanaan Program Strategis',
-    paguAnggaran: 13663667000,
-    realisasiAnggaran: 5210450000,
-    serapanPersen: 38.13,
-    ikpTerhubung: 'IKP-1: Indeks Perencanaan Pembangunan',
-    targetIkp: '92.00',
-    realisasiIkp: '94.20 (Sangat Baik)',
-    datasetCount: 19,
-    pdfPages: 'Halaman 51 - 53 (19 Dataset)',
-    ringkasanPeran: 'Penyusunan Rencana Strategis (Renstra) 5 tahun, RKA DIPA tahunan, KRO/RO Bappenas, masterplan infrastruktur (drainase, jalan, utilitas box), serta rencana induk bandara dan pelabuhan.',
-    keyHighlights: [
-      { label: 'Indeks Keselarasan IPPN', value: '94.20', trend: 'Evaluasi Bappenas' },
-      { label: 'Masterplan Strategis Aktif', value: '5 Dokumen', trend: '100% On Schedule' },
-      { label: 'Capaian Sasaran Renstra', value: '96.8%', trend: 'Tercapai 28 dari 29 RO' },
-      { label: 'Stakeholder Feedback Positif', value: '91.4%', trend: 'Survei 142 Asosiasi' },
-    ],
-    isuStrategis: 'Sinkronisasi revisi tata ruang KSPN Batam-Bintan-Karimun dengan pemutakhiran masterplan drainase & koridor utilitas.',
-  },
-  {
     id: 'pusat-harmonisasi',
     code: 'PHKS',
     name: 'Pusat Harmonisasi Kebijakan Strategis',
@@ -518,6 +495,32 @@ export const IKK_DIMENSI_DATA: DimensiIkkItem[] = [
     formulaRumus: '74.00 × 20% = 14.80 Poin',
     indikatorKunci: 'Urgensi masalah, keterlibatan stakeholder kawasan & riset data empiris',
     tahapan: ['Identifikasi Masalah Strategis Kawasan', 'Uji Kebutuhan Regulasi Investasi', 'Riset Data Empiris & Kajian Akademis'],
+    subIndikator: [
+      {
+        nomor: '1.1',
+        nama: 'Identifikasi Masalah Berbasis Data Bukti (Evidence-Based)',
+        skor: 76.0,
+        bobotSub: 35,
+        poinSub: 26.6,
+        keterangan: 'Pemanfaatan data Satu Data BP Batam, tren investasi KPBPB, dan aduan perizinan.',
+      },
+      {
+        nomor: '1.2',
+        nama: 'Pelibatan Pemangku Kepentingan (Stakeholders Engagement)',
+        skor: 72.0,
+        bobotSub: 35,
+        poinSub: 25.2,
+        keterangan: 'Konsultasi awal dengan Kadin, Apindo, asosiasi logistik kepelabuhanan & tenant bandara.',
+      },
+      {
+        nomor: '1.3',
+        nama: 'Penyelarasan dengan Agenda Strategis BP Batam & Nasional',
+        skor: 74.0,
+        bobotSub: 30,
+        poinSub: 22.2,
+        keterangan: 'Kesesuaian dengan RPJMN, Perkin A2, dan Masterplan Transformasi Ekonomi Batam.',
+      },
+    ],
   },
   {
     dimensi: 'Formulasi Kebijakan',
@@ -529,6 +532,32 @@ export const IKK_DIMENSI_DATA: DimensiIkkItem[] = [
     formulaRumus: '73.00 × 30% = 21.90 Poin',
     indikatorKunci: 'Regulatory Impact Assessment (RIA), harmonisasi K/L/D & konsultasi publik',
     tahapan: ['Penyusunan Naskah Urgensi Regulasi', 'Harmonisasi Antar Instansi K/L/D', 'Konsultasi Publik dengan Pelaku Usaha'],
+    subIndikator: [
+      {
+        nomor: '2.1',
+        nama: 'Analisis Opsi & Regulatory Impact Assessment (RIA)',
+        skor: 75.0,
+        bobotSub: 35,
+        poinSub: 26.25,
+        keterangan: 'Analisis cost-benefit, mitigasi dampak terhadap iklim investasi dan kepatuhan PMK tarif.',
+      },
+      {
+        nomor: '2.2',
+        nama: 'Kelengkapan Naskah Akademik & Kajian Yuridis Formal',
+        skor: 74.0,
+        bobotSub: 35,
+        poinSub: 25.9,
+        keterangan: 'Penyusunan draft naskah akademik bersama Biro Hukum dan Pusat Harmonisasi (PHKS).',
+      },
+      {
+        nomor: '2.3',
+        nama: 'Harmonisasi Regulasi & Uji Publik Terbuka',
+        skor: 70.0,
+        bobotSub: 30,
+        poinSub: 21.0,
+        keterangan: 'Sinkronisasi peraturan internal BP Batam dengan Kemenkeu, Kemenko Perekonomian & Pemda.',
+      },
+    ],
   },
   {
     dimensi: 'Implementasi Kebijakan',
@@ -540,6 +569,32 @@ export const IKK_DIMENSI_DATA: DimensiIkkItem[] = [
     formulaRumus: '71.20 × 25% = 17.80 Poin',
     indikatorKunci: 'Kesiapan juknis operasional, standardisasi SOP & sosialisasi regulasi',
     tahapan: ['Sosialisasi Perka/Kepka Terbit', 'Kesiapan Petunjuk Teknis & SOP Unit', 'Alokasi Sumber Daya Pelaksana'],
+    subIndikator: [
+      {
+        nomor: '3.1',
+        nama: 'Kesiapan Sumber Daya & Infrastruktur Pelaksana (Sistem IT)',
+        skor: 72.0,
+        bobotSub: 35,
+        poinSub: 25.2,
+        keterangan: 'Kesiapan modul OSS-RBA, SIMREK, dan portal layanan digital Badan Usaha.',
+      },
+      {
+        nomor: '3.2',
+        nama: 'Standardisasi SOP, Petunjuk Teknis & Sosialisasi Regulasi',
+        skor: 71.0,
+        bobotSub: 35,
+        poinSub: 24.85,
+        keterangan: 'Penerbitan SOP baku di MPP Batam dan sosialisasi kepada seluruh asosiasi pengguna jasa.',
+      },
+      {
+        nomor: '3.3',
+        nama: 'Manajemen Koordinasi Lintas Unit Kerja BP Batam',
+        skor: 70.5,
+        bobotSub: 30,
+        poinSub: 21.15,
+        keterangan: 'Sinergi antar Direktorat teknis (BU Pelabuhan, BU Bandara, RSBP, SPAM Fasling).',
+      },
+    ],
   },
   {
     dimensi: 'Evaluasi Kemanfaatan Kebijakan',
@@ -551,6 +606,32 @@ export const IKK_DIMENSI_DATA: DimensiIkkItem[] = [
     formulaRumus: '69.20 × 25% = 17.30 Poin',
     indikatorKunci: 'Survei dampak ekonomi, kepatuhan tarif layanan & evaluasi purna regulasi',
     tahapan: ['Survei Dampak Kebijakan Ekonomi', 'Uji Kewajaran Tarif Layanan Badan Usaha', 'Penyusunan Rekomendasi Revisi Kebijakan'],
+    subIndikator: [
+      {
+        nomor: '4.1',
+        nama: 'Pengukuran Capaian Output & Dampak Ekonomi Regulasi',
+        skor: 70.0,
+        bobotSub: 35,
+        poinSub: 24.5,
+        keterangan: 'Evaluasi realisasi investasi baru, pertumbuhan PNBP, dan efisiensi waktu layanan SLA.',
+      },
+      {
+        nomor: '4.2',
+        nama: 'Evaluasi Kepatuhan & Survei Feedback Pengguna Layanan',
+        skor: 68.0,
+        bobotSub: 35,
+        poinSub: 23.8,
+        keterangan: 'Survei berkala kepuasan masyarakat (IKM Mutu A: 88.42) dan survei kewajaran tarif.',
+      },
+      {
+        nomor: '4.3',
+        nama: 'Rekomendasi Kebijakan & Rencana Aksi Tindak Lanjut Perbaikan',
+        skor: 70.0,
+        bobotSub: 30,
+        poinSub: 21.0,
+        keterangan: 'Formulasi rekomendasi penyesuaian tarif/regulasi ke Pimpinan BP Batam & Kemenkeu.',
+      },
+    ],
   },
 ];
 
@@ -575,6 +656,16 @@ export interface TarifLayananPdfEntry {
 }
 
 export const DATA_TARIF_LAYANAN_NEW_ENTRIES: TarifLayananPdfEntry[] = [
+  // --- Pelabuhan (Pass Masuk, Dermaga, Stevedoring) ---
+  { id: 14475, unit: 'Badan Usaha Pelabuhan', l1: '2', l2: '6', l3: '5', l4: '1', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Pass Penumpang Domestik (Terminal Feri Batam Center / Sekupang)', kewajaranSurvei: 91.5, status: 'Wajar' },
+  { id: 14476, unit: 'Badan Usaha Pelabuhan', l1: '2', l2: '6', l3: '5', l4: '1', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Pass Penumpang Internasional (Terminal Feri Harbour Bay / Batam Center)', kewajaranSurvei: 89.2, status: 'Wajar' },
+  { id: 14477, unit: 'Badan Usaha Pelabuhan', l1: '1', l2: '4', l3: '2', l4: '3', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Jasa Tambat Kapal Samudera (Dermaga Beton Batu Ampar)', kewajaranSurvei: 88.6, status: 'Wajar' },
+  { id: 14478, unit: 'Badan Usaha Pelabuhan', l1: '1', l2: '4', l3: '2', l4: '5', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Bongkar Muat Petikemas 20 Feet (Container Crane STS)', kewajaranSurvei: 87.8, status: 'Wajar' },
+  // --- Bandara Hang Nadim (PJP2U, Fasilitas AC & VIP) ---
+  { id: 14479, unit: 'Badan Usaha Bandar Udara', l1: '1', l2: '2', l3: '1', l4: '1', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Pelayanan Jasa Penumpang Pesawat Udara (PJP2U Domestik Hang Nadim)', kewajaranSurvei: 92.0, status: 'Wajar' },
+  { id: 14480, unit: 'Badan Usaha Bandar Udara', l1: '1', l2: '2', l3: '1', l4: '1', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Pelayanan Jasa Penumpang Pesawat Udara (PJP2U Internasional)', kewajaranSurvei: 90.1, status: 'Wajar' },
+  { id: 14481, unit: 'Badan Usaha Bandar Udara', l1: '1', l2: '3', l3: '2', l4: '4', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Jasa Garbarata / Aviobridge Pesawat Narrow Body', kewajaranSurvei: 88.9, status: 'Wajar' },
+  { id: 14482, unit: 'Badan Usaha Fasilitas dan Lingkungan', l1: '1', l2: '2', l3: '1', l4: '1', l5: '1', l6: 'N/A', l7: 'N/A', layanan: 'Tarif Air Bersih Golongan Rumah Tangga A (0 - 10 m³)', kewajaranSurvei: 87.2, status: 'Wajar' },
   { id: 14483, unit: 'Badan Usaha Bandar Udara', l1: '2', l2: '7', l3: '4', l4: '1', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Tertutup AC (Ruang Tunggu Keberangkatan)', kewajaranSurvei: 90.5, status: 'Wajar' },
   { id: 14484, unit: 'Badan Usaha Bandar Udara', l1: '2', l2: '7', l3: '4', l4: '2', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Tertutup AC (Gate Khusus VIP/Charter)', kewajaranSurvei: 89.8, status: 'Wajar' },
   { id: 14485, unit: 'Badan Usaha Fasilitas dan Lingkungan', l1: '1', l2: '5', l3: '1', l4: '5', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Pegawai BP Batam (Sewa Rusun / Fasilitas)', kewajaranSurvei: 92.4, status: 'Wajar' },
@@ -595,24 +686,29 @@ export const DATA_TARIF_LAYANAN_NEW_ENTRIES: TarifLayananPdfEntry[] = [
   { id: 14500, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '4', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Pelepasan Subklavia)', kewajaranSurvei: 92.0, status: 'Wajar' },
   { id: 14501, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '3', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Perawatan Intensif)', kewajaranSurvei: 92.4, status: 'Wajar' },
   { id: 14502, unit: 'Badan Usaha Rumah Sakit', l1: '1', l2: '3', l3: '2', l4: '15', l5: '17', l6: 'N/A', l7: 'N/A', layanan: 'Aff CVC/ Double Lumen (Ruang Dialisis)', kewajaranSurvei: 93.1, status: 'Wajar' },
+  // --- Level 7 Deep Granular Entries (RSBP Tindakan Kompleks) ---
+  { id: 14503, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '9', l3: '8', l4: '12', l5: '4', l6: '2', l7: '1', layanan: 'Tindakan Operasi Khusus Bedah Saraf Mikro (Sub-Spesifik Kelas VVIP)', kewajaranSurvei: 94.2, status: 'Wajar' },
+  { id: 14504, unit: 'Badan Usaha Rumah Sakit', l1: '2', l2: '9', l3: '8', l4: '12', l5: '4', l6: '2', l7: '2', layanan: 'Tindakan Operasi Khusus Bedah Jantung Terbuka Bypass CABG', kewajaranSurvei: 93.8, status: 'Wajar' },
+  { id: 14505, unit: 'Badan Usaha Fasilitas dan Lingkungan', l1: '2', l2: '4', l3: '3', l4: '1', l5: '2', l6: 'N/A', l7: 'N/A', layanan: 'Pengolahan Limbah Medis B3 Insinerator KPLI Kabil per Kg', kewajaranSurvei: 89.0, status: 'Wajar' },
+  { id: 14506, unit: 'Kuningan Guest House', l1: '1', l2: '1', l3: 'N/A', l4: 'N/A', l5: 'N/A', l6: 'N/A', l7: 'N/A', layanan: 'Standard Room Single / Twin Bed (Transit Harian)', kewajaranSurvei: 92.0, status: 'Wajar' },
 ];
 
 export const TARIF_UNIT_DISTRIBUSI = [
-  { unit: 'Badan Usaha Rumah Sakit', entri: 4862, persen: 65.7, skorKewajaran: 91.2, color: '#0284C7', badge: 'RSBP' },
-  { unit: 'Badan Usaha Pelabuhan', entri: 1240, persen: 16.8, skorKewajaran: 88.4, color: '#0D9488', badge: 'Pelabuhan' },
-  { unit: 'Badan Usaha Bandar Udara', entri: 685, persen: 9.3, skorKewajaran: 89.6, color: '#6366F1', badge: 'Bandara Hang Nadim' },
-  { unit: 'Badan Usaha Fasilitas & Lingkungan', entri: 468, persen: 6.3, skorKewajaran: 86.8, color: '#D97706', badge: 'SPAM & Fasling' },
-  { unit: 'Kuningan Guest House', entri: 140, persen: 1.9, skorKewajaran: 91.5, color: '#EC4899', badge: 'Guest House' },
+  { unit: 'Badan Usaha Rumah Sakit', entri: 4862, persen: 65.7, skorKewajaran: 91.2, color: '#0284C7', badge: 'RSBP', maxLevel: 'Level 7' },
+  { unit: 'Badan Usaha Pelabuhan', entri: 1240, persen: 16.8, skorKewajaran: 88.4, color: '#0D9488', badge: 'Pelabuhan', maxLevel: 'Level 5' },
+  { unit: 'Badan Usaha Bandar Udara', entri: 685, persen: 9.3, skorKewajaran: 89.6, color: '#6366F1', badge: 'Bandara Hang Nadim', maxLevel: 'Level 5' },
+  { unit: 'Badan Usaha Fasilitas & Lingkungan', entri: 468, persen: 6.3, skorKewajaran: 86.8, color: '#D97706', badge: 'SPAM & Fasling', maxLevel: 'Level 5' },
+  { unit: 'Kuningan Guest House', entri: 140, persen: 1.9, skorKewajaran: 91.5, color: '#EC4899', badge: 'Guest House', maxLevel: 'Level 2' },
 ];
 
 export const TARIF_LEVEL_DEPTH_STAT = [
-  { level: 'LEVEL 1', nama: 'Klasifikasi Bidang Induk', jangkauan: '100% (7.395)', depth: 100 },
-  { level: 'LEVEL 2', nama: 'Sub-Kategori Operasional', jangkauan: '100% (7.395)', depth: 100 },
-  { level: 'LEVEL 3', nama: 'Kelompok Ruang & Fasilitas', jangkauan: '92.4% (6.833)', depth: 92.4 },
-  { level: 'LEVEL 4', nama: 'Jenis Tindakan / Pemakaian', jangkauan: '78.5% (5.805)', depth: 78.5 },
-  { level: 'LEVEL 5', nama: 'Spesifikasi / Kapasitas / Skala', jangkauan: '54.2% (4.008)', depth: 54.2 },
-  { level: 'LEVEL 6', nama: 'Kualifikasi Khusus / Kelas', jangkauan: '14.8% (1.095)', depth: 14.8 },
-  { level: 'LEVEL 7', nama: 'Detil Sub-Spesifik Layanan', jangkauan: '4.1% (303)', depth: 4.1 },
+  { level: 'LEVEL 1', nama: 'Klasifikasi Bidang Induk', jangkauan: '100% (7.395)', depth: 100, deskripsi: 'Pengelompokan dasar operasional per unit usaha penyedia layanan' },
+  { level: 'LEVEL 2', nama: 'Sub-Kategori Operasional', jangkauan: '100% (7.395)', depth: 100, deskripsi: 'Instalasi, jenis fasilitas, divisi pelayanan, atau pass masuk' },
+  { level: 'LEVEL 3', nama: 'Kelompok Ruang & Fasilitas', jangkauan: '92.4% (6.833)', depth: 92.4, deskripsi: 'Poli spesialis, dermaga, terminal feri, jenis kamar transit' },
+  { level: 'LEVEL 4', nama: 'Jenis Tindakan / Pemakaian', jangkauan: '78.5% (5.805)', depth: 78.5, deskripsi: 'Prosedur tindakan, alat berat bongkar muat, jenis sambungan air' },
+  { level: 'LEVEL 5', nama: 'Spesifikasi / Kapasitas / Skala', jangkauan: '54.2% (4.008)', depth: 54.2, deskripsi: 'Skala tonase, volume air, durasi pemakaian, ukuran ruangan' },
+  { level: 'LEVEL 6', nama: 'Kualifikasi Khusus / Kelas', jangkauan: '14.8% (1.095)', depth: 14.8, deskripsi: 'Kelas perawatan (I, III, V, VIP), kualifikasi dokter spesialis' },
+  { level: 'LEVEL 7', nama: 'Detil Sub-Spesifik Layanan', jangkauan: '4.1% (303)', depth: 4.1, deskripsi: 'Mikro tindakan bedah khusus, komponen tindakan terurai sangat rinci' },
 ];
 
 export const PHKS_TARIF_EVALUASI_DATA = [
@@ -625,62 +721,15 @@ export const PHKS_TARIF_EVALUASI_DATA = [
   { level: 'Level 7: Wisata & Fasilitas', totalLayanan: 19, tarifBerlakuRata: 'Rp 15.000 - Rp 250.000', kewajaranSurvei: 93.1, status: 'Valid' },
 ];
 
-// ============================================================================
-// 7. DATA PERENCANAAN STRATEGIS & MASTERPLAN (PUSREN / P3S)
-// Mengacu pada Atribut Data Halaman 51-53
-// ============================================================================
-
-export const PUSREN_MASTERPLAN_PROGRESS: MasterplanProgressItem[] = [
-  {
-    nama: 'Masterplan Drainase Utama Kota Batam',
-    kode: 'MP-DRAIN',
-    kategori: 'Infrastruktur Pengendalian Banjir',
-    progresPersen: 88.5,
-    targetTahun: 2025,
-    anggaran: 3850000000,
-    status: 'On Track',
-  },
-  {
-    nama: 'Masterplan Koridor Utilitas Box Batam',
-    kode: 'MP-UTIL',
-    kategori: 'Infrastruktur Jaringan Terpadu Bawah Tanah',
-    progresPersen: 92.0,
-    targetTahun: 2025,
-    anggaran: 2650000000,
-    status: 'On Track',
-  },
-  {
-    nama: 'Masterplan Jalan Strategis & Arterial KPBPB',
-    kode: 'MP-ROAD',
-    kategori: 'Konektivitas Logistik Industri',
-    progresPersen: 95.0,
-    targetTahun: 2025,
-    anggaran: 3400000000,
-    status: 'Selesai',
-  },
-  {
-    nama: 'Rencana Induk Bandara Internasional Hang Nadim',
-    kode: 'RI-AIRPORT',
-    kategori: 'Aerotropolis & Hub Logistik Udara',
-    progresPersen: 100.0,
-    targetTahun: 2024,
-    anggaran: 1950000000,
-    status: 'Selesai',
-  },
-  {
-    nama: 'Rencana Induk Pelabuhan Modern Batu Ampar',
-    kode: 'RI-PORT',
-    kategori: 'Hub Transshipment & Container Terminal',
-    progresPersen: 84.0,
-    targetTahun: 2025,
-    anggaran: 2800000000,
-    status: 'On Track',
-  },
+export const SURVEI_KEWAJARAN_PILARS = [
+  { pilar: '1. Biaya Pokok Produksi (HPP/Unit Cost)', skor: 91.4, status: 'Wajar', keterangan: 'Kompensasi inflasi bahan medis habis pakai, spare parts aviasi & BBM pelabuhan.' },
+  { pilar: '2. Daya Beli & Respon Pelaku Usaha', skor: 87.2, status: 'Wajar', keterangan: 'Kesesuaian dengan kemampuan bayar asosiasi logistik, tenant, dan masyarakat Batam.' },
+  { pilar: '3. Benchmark Regional Kawasan Serupa', skor: 89.8, status: 'Wajar', keterangan: 'Komparasi tarif dengan pelabuhan Tanjung Priok, Johor Port, dan fasilitas Kepri.' },
+  { pilar: '4. Standar Pelayanan Minimal (SPM) & SLA', skor: 90.1, status: 'Wajar', keterangan: 'Jaminan pemenuhan SPM dan kepastian waktu penyelesaian layanan publik.' },
 ];
 
 // ============================================================================
-// 8. REKAPITULASI 64 DATASET SATU DATA DARI PDF
-// (PTSP 17, Pusren 19, PHKS 7, PDSI 21)
+// 7. REKAPITULASI 45 DATASET SATU DATA DARI PDF (PTSP 17, PHKS 7, PDSI 21)
 // ============================================================================
 
 export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
@@ -873,220 +922,9 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 28',
   },
 
-  // --- PUSREN / P3S (19 Dataset - Hal 51-53) ---
-  {
-    no: 18,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Data Pemanfaatan Dokumen Perencanaan & Kajian Kelayakan',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Nama Kegiatan', 'Lokasi', 'Tahun Kegiatan', 'Sumber Dana', 'Status Progres'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 19,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rekapitulasi Monev Program Kerja BP Batam',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertriwulan',
-    sifatData: 'TERTUTUP',
-    atributUtama: ['Kode MA', 'Kegiatan/Output/Sub-Komponen', 'Pagu DIPA', 'Progres Paket', 'Sisa Pagu'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 20,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rekapitulasi Rencana Strategis (Renstra) 5 Tahun',
-    jenisData: 'Data Statistik',
-    periodeData: 'Per 5 Tahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Program', 'Sasaran Program Indikator', 'Satuan', 'Target 5 Tahunan'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 21,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rekapitulasi Rencana Kerja Tahunan BP Batam',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertahun',
-    sifatData: 'TERTUTUP',
-    atributUtama: ['KRO & RO Nomenklatur', 'Indikator Kinerja Alokasi', 'Unit Pelaksana'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 22,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'RKA (Rencana Kerja dan Anggaran) Tahunan',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertahun',
-    sifatData: 'TERTUTUP',
-    atributUtama: ['Kode Anggaran', 'Uraian', 'Volume', 'Alokasi Dana', 'Sumber Dana'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 23,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Masterplan Drainase Kota Batam',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Judul Bab', 'Kategori', 'Poin', 'Detail', 'Rincian Sistem Drainase'],
-    halamanPdf: 'Hal 51',
-  },
-  {
-    no: 24,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Masterplan Utilitas Box Terpadu',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Tahun Anggaran', 'Judul', 'Koridor Utilitas', 'Rincian Teknis'],
-    halamanPdf: 'Hal 51-52',
-  },
-  {
-    no: 25,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rekapitulasi Rekomendasi Perubahan Peruntukan Lahan',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERTUTUP',
-    atributUtama: ['Jumlah Permohonan', 'Status Selesai', 'Rekomendasi Tata Ruang'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 26,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rekapitulasi Perizinan Pengelolaan Lingkungan',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERTUTUP',
-    atributUtama: ['Nomor SK', 'Poin Lingkungan', 'Rencana Induk'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 27,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rencana Induk Bandara Internasional Hang Nadim',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Nomor SK', 'Rencana Induk Aerotropolis', 'Rincian Tahapan'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 28,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Rencana Induk Pelabuhan Modern Batu Ampar',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Nomor SK', 'Masterplan Pelabuhan', 'Kapasitas Dermaga'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 29,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Masterplan Jalan Strategis Kota Batam',
-    jenisData: 'Data Statistik',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Klasifikasi Jalan', 'Wilayah', 'Sub Wilayah', 'Panjang (Km)', 'Lebar (M)'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 30,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Kontur Spasial Kota Batam (Interval 1 Meter)',
-    jenisData: 'Data Spasial',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Nomor Elevasi', 'Ukuran Ketinggian', 'Koordinat Spasial', 'Lokasi'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 31,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Laporan Analisis Stakeholder Feedback',
-    jenisData: 'Dokumen Digital',
-    periodeData: 'Pertahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Sasaran Strategis', 'Indikator Kinerja Program', 'Satuan', 'Feedback Target'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 32,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Laporan Analisis Capaian Renstra Ditetapkan',
-    jenisData: 'Dokumen Digital',
-    periodeData: 'Per 5 Tahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Sasaran Strategis', 'Realisasi Target Renstra', 'Evaluasi Kinerja'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 33,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Laporan Tindak Lanjut Hasil Analisis Renstra',
-    jenisData: 'Dokumen Digital',
-    periodeData: 'Per 5 Tahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Tindak Lanjut Sasaran', 'Rekomendasi Alokasi Program'],
-    halamanPdf: 'Hal 52',
-  },
-  {
-    no: 34,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Data Pemantauan Capaian Rencana Strategis',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Sasaran Strategis', 'Indikator Kinerja', 'Realisasi Tahunan'],
-    halamanPdf: 'Hal 52-53',
-  },
-  {
-    no: 35,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Data Evaluasi Perencanaan Pembangunan Bappenas (SE PPN No. 3/2023)',
-    jenisData: 'Data Statistik',
-    periodeData: 'Pertahun',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Kode & Nomenklatur', 'Progress Pelaksanaan', 'Jumlah KRO', 'Partisipasi Pelaporan'],
-    halamanPdf: 'Hal 53',
-  },
-  {
-    no: 36,
-    unit: 'Pusat Perencanaan Program Strategis',
-    unitId: 'pusat-perencanaan-program',
-    namaData: 'Wilayah Kerja Spasial KPBPB Batam',
-    jenisData: 'Data Spasial',
-    periodeData: 'Jika Update',
-    sifatData: 'TERBUKA',
-    atributUtama: ['Batasan Delineasi', 'Luas Wilayah', 'Kewenangan Kawasan'],
-    halamanPdf: 'Hal 53',
-  },
-
   // --- PHKS (7 Dataset - Hal 12-13) ---
   {
-    no: 37,
+    no: 18,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Data Pemantauan & Evaluasi Kualitas Kebijakan BP Batam',
@@ -1097,7 +935,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 12',
   },
   {
-    no: 38,
+    no: 19,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Rekapitulasi Hasil Sinkronisasi Kebijakan Eksternal',
@@ -1108,7 +946,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 13',
   },
   {
-    no: 39,
+    no: 20,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Daftar Tarif Layanan BP Batam (Level 1 s.d Level 7)',
@@ -1119,7 +957,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 13',
   },
   {
-    no: 40,
+    no: 21,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Rekapitulasi Hasil Sinkronisasi Kebijakan Internal',
@@ -1130,7 +968,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 13',
   },
   {
-    no: 41,
+    no: 22,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Survei Kewajaran dan Evaluasi Tarif Layanan',
@@ -1141,7 +979,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 13',
   },
   {
-    no: 42,
+    no: 23,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Daftar Risalah Rapat Dengar Pendapat (RDP) Pimpinan',
@@ -1152,7 +990,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 13',
   },
   {
-    no: 43,
+    no: 24,
     unit: 'Pusat Harmonisasi Kebijakan Strategis',
     unitId: 'pusat-harmonisasi',
     namaData: 'Data Monitoring Tindak Lanjut Rapat Pimpinan',
@@ -1165,7 +1003,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
 
   // --- PDSI (21 Dataset - Hal 40-43) ---
   {
-    no: 44,
+    no: 25,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Informasi Business Intelligence (BI) BP Batam',
@@ -1176,7 +1014,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 40',
   },
   {
-    no: 45,
+    no: 26,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Jaringan Spasial Fiber Optik BP Batam',
@@ -1187,7 +1025,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 40',
   },
   {
-    no: 46,
+    no: 27,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Daftar Data Satu Data BP Batam',
@@ -1198,7 +1036,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 47,
+    no: 28,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Daftar Sistem Penghubung & Integrasi API Data',
@@ -1209,7 +1047,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 48,
+    no: 29,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Jalur Fiber Optic (FO) Wilayah',
@@ -1220,7 +1058,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 49,
+    no: 30,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Sarana dan Aset Fiber Optic Spasial',
@@ -1231,7 +1069,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 50,
+    no: 31,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Rekap Kerusakan dan Perbaikan Perangkat TI',
@@ -1242,7 +1080,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 51,
+    no: 32,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Rak Tier-3 Data Center BP Batam',
@@ -1253,7 +1091,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41',
   },
   {
-    no: 52,
+    no: 33,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Daftar Lisensi Software Resmi BP Batam',
@@ -1264,7 +1102,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 41-42',
   },
   {
-    no: 53,
+    no: 34,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Layanan Data Centre & Co-Location',
@@ -1275,7 +1113,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 54,
+    no: 35,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Kepuasan Pelanggan Data Centre',
@@ -1286,7 +1124,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 55,
+    no: 36,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Serangan Keamanan Siber IT / SOC BP Batam',
@@ -1297,7 +1135,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 56,
+    no: 37,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Rekap Infrastruktur Server dan Storage',
@@ -1308,7 +1146,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 57,
+    no: 38,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Katalog 48 Aplikasi Resmi BP Batam',
@@ -1319,7 +1157,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 58,
+    no: 39,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Rencana Bisnis dan Anggaran (RBA) PDSI',
@@ -1330,7 +1168,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 42',
   },
   {
-    no: 59,
+    no: 40,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Peta Rencana SPBE BP Batam 2025-2029',
@@ -1341,7 +1179,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 43',
   },
   {
-    no: 60,
+    no: 41,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Daftar Layanan TI & Service Level Agreement',
@@ -1352,7 +1190,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 43',
   },
   {
-    no: 61,
+    no: 42,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Laporan Pemantauan dan Evaluasi SPBE',
@@ -1363,7 +1201,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 43',
   },
   {
-    no: 62,
+    no: 43,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Monitoring Sistem Informasi Arsitektur (SIA)',
@@ -1374,7 +1212,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 43',
   },
   {
-    no: 63,
+    no: 44,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Laporan Evaluasi Penyelenggaraan Statistik Sektoral (EPSS)',
@@ -1385,7 +1223,7 @@ export const SATU_DATA_KEBIJAKAN_STRATEGIS_CATALOG: SatuDatasetItem[] = [
     halamanPdf: 'Hal 43',
   },
   {
-    no: 64,
+    no: 45,
     unit: 'Pusat Data dan Sistem Informasi',
     unitId: 'pdsi',
     namaData: 'Data Permintaan Layanan IT (Helpdesk Ticketing)',

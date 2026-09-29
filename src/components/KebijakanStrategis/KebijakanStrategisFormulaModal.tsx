@@ -237,17 +237,15 @@ export const KebijakanStrategisFormulaModal: React.FC<KebijakanStrategisFormulaM
             </div>
           )}
 
-          {/* Unit & Activity Budget attribution */}
+          {/* Unit & Activity attribution */}
           <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between text-[11px]">
             <div>
               <span className="text-slate-500">Unit Penanggung Jawab:</span>
               <span className="font-bold text-slate-900 ml-1">{currentIkp.unitKerja}</span>
             </div>
             <div>
-              <span className="text-slate-500">Pagu Anggaran Kegiatan:</span>
-              <span className="font-mono font-bold text-slate-900 ml-1">
-                Rp {(currentIkp.paguKegiatan / 1e9).toFixed(2)} Miliar
-              </span>
+              <span className="text-slate-500">Status Kinerja:</span>
+              <span className="font-bold text-emerald-700 ml-1">{currentIkp.statusKinerja}</span>
             </div>
           </div>
         </div>

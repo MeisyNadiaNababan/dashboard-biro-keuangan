@@ -13,9 +13,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { PesisirReklamasiFilters } from './PesisirReklamasiFilters';
-import { PesisirReklamasiKpis } from './PesisirReklamasiKpis';
-import { PesisirRencanaSheetSwap } from './PesisirRencanaSheetSwap';
-import { SheetSwapPesisir } from './SheetSwapPesisir';
+import { KompilasiPesisirReklamasiCard } from './KompilasiPesisirReklamasiCard';
 import { PesisirKawasanVisualizer } from './PesisirKawasanVisualizer';
 import { PesisirFormulaModal } from './PesisirFormulaModal';
 import { PesisirWordDocView } from './PesisirWordDocView';
@@ -30,6 +28,7 @@ export const PesisirReklamasiDashboard: React.FC = () => {
     searchQuery: '',
   });
 
+  const [activeTab, setActiveTab] = useState<'kompilasi' | 'detail-pengawasan'>('kompilasi');
   const [activeFormulaKpi, setActiveFormulaKpi] = useState<string | null>(null);
   const [showWordDocView, setShowWordDocView] = useState<boolean>(false);
 
@@ -99,6 +98,30 @@ export const PesisirReklamasiDashboard: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Directorate Sub-Navigation Tabs: 2 Consolidated Sheets Displaying All 4 Datasets */}
+        <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-100 overflow-x-auto text-xs pb-0.5">
+          <button
+            onClick={() => setActiveTab('kompilasi')}
+            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'kompilasi'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
+            }`}
+          >
+            Kompilasi 4 Dataset Ruang Pesisir &amp; Reklamasi
+          </button>
+          <button
+            onClick={() => setActiveTab('detail-pengawasan')}
+            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'detail-pengawasan'
+                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
+            }`}
+          >
+            Detail Pengawasan &amp; SLA Perizinan (DS #1 &amp; #3)
+          </button>
+        </div>
       </div>
 
       {/* Interactive Global Filters Bar */}
@@ -108,26 +131,20 @@ export const PesisirReklamasiDashboard: React.FC = () => {
         onResetFilters={handleResetFilters}
       />
 
-      {/* 3 Main Executive KPIs Cards */}
-      <PesisirReklamasiKpis onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)} />
+      {/* SHEET 1: KOMPILASI 4 DATASET RUANG PESISIR & REKLAMASI */}
+      {activeTab === 'kompilasi' && (
+        <KompilasiPesisirReklamasiCard
+          onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
+        />
+      )}
 
-      {/* REQ 1: Rencana Pemanfaatan Wilayah Pesisir dan Reklamasi (Sheet Swap: Wilayah & Luas vs Tabel 4 Atribut) */}
-      <PesisirRencanaSheetSwap
-        filters={filters}
-        onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
-      />
-
-      {/* REQ 2: Luas Izin Pemanfaatan Kawasan Pesisir & Izin Reklamasi untuk Investasi (Sheet Swap: Wilayah & Luas vs Tabel 4 Atribut) */}
-      <SheetSwapPesisir
-        filters={filters}
-        onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
-      />
-
-      {/* Visualisasi Terpadu Kinerja Direktorat Sesuai Dataset Resmi PDF (Dataset #2 Spasial, #3 SLA Perizinan, #1 Penyelesaian Masalah) */}
-      <PesisirKawasanVisualizer
-        filters={filters}
-        onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
-      />
+      {/* SHEET 2: DETAIL PENGAWASAN, PERMASALAHAN & SLA PERIZINAN (DATASET #1 & #3) */}
+      {activeTab === 'detail-pengawasan' && (
+        <PesisirKawasanVisualizer
+          filters={filters}
+          onOpenFormulaModal={(kpiId) => setActiveFormulaKpi(kpiId)}
+        />
+      )}
 
       {/* Tableau Formula Guide & Attribute Modal */}
       <PesisirFormulaModal

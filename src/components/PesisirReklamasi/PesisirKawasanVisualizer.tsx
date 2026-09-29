@@ -44,11 +44,13 @@ import { PesisirVisualHeader } from './PesisirVisualHeader';
 interface PesisirKawasanVisualizerProps {
   filters: PesisirReklamasiFilterState;
   onOpenFormulaModal: (kpiId: string) => void;
+  focusedDataset?: 1 | 3;
 }
 
 export const PesisirKawasanVisualizer: React.FC<PesisirKawasanVisualizerProps> = ({
   filters,
   onOpenFormulaModal,
+  focusedDataset,
 }) => {
   // SHEET SWAP STATES:
   // Dataset #1: 'grafik' (Visualisasi Grafik) vs 'tabel' (Tabel Detail 7 Atribut)
@@ -156,6 +158,7 @@ export const PesisirKawasanVisualizer: React.FC<PesisirKawasanVisualizerProps> =
       {/* ATRIBUT: NAMA PERUSAHAAN | DOKUMEN PERIZINAN | DOKUMEN PENDUKUNG |        */}
       {/*          WILAYAH | LUAS YANG DITERBITKAN | TRIWULAN | TAHUN               */}
       {/* ========================================================================= */}
+      {(!focusedDataset || focusedDataset === 1) && (
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
         {/* Standardized Visual Header with Sheet Swap Controls */}
         <PesisirVisualHeader
@@ -453,12 +456,14 @@ export const PesisirKawasanVisualizer: React.FC<PesisirKawasanVisualizerProps> =
           </div>
         )}
       </div>
+      )}
 
       {/* ========================================================================= */}
       {/* 2. DATASET #3: PERSENTASE PERIZINAN SELESAI TEPAT WAKTU (STANDAR SLA)     */}
       {/* MODEL SHEET SWAP: GRAFIK TREN vs TABEL DETAIL 3 ATRIBUT RESMI SATU DATA   */}
       {/* ATRIBUT: JUMLAH PERMOHONAN | TOTAL LUASAN | TAHUN (DATA STATISTIK PERTAHUN)*/}
       {/* ========================================================================= */}
+      {(!focusedDataset || focusedDataset === 3) && (
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
         {/* Standardized Visual Header with Sheet Swap Controls */}
         <PesisirVisualHeader
@@ -774,6 +779,7 @@ export const PesisirKawasanVisualizer: React.FC<PesisirKawasanVisualizerProps> =
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };

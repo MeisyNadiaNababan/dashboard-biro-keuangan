@@ -12,19 +12,12 @@ import {
   Search,
 } from 'lucide-react';
 import { PengelolaanLahanFilters } from './PengelolaanLahanFilters';
-import { PengelolaanLahanKpis } from './PengelolaanLahanKpis';
-import { SwpLahanTersediaCard } from './SwpLahanTersediaCard';
 import { ExecutivePnbpSlaCard } from './ExecutivePnbpSlaCard';
 import { SkptSpptSheetSwapCard } from './SkptSpptSheetSwapCard';
 import { PecahRevisiPlSheetSwapCard } from './PecahRevisiPlSheetSwapCard';
-import { HakAtasTanah3WaySheetSwapCard } from './HakAtasTanah3WaySheetSwapCard';
-import { EnamLayananLahanPieCard } from './EnamLayananLahanPieCard';
 import { LahanFormulaModal } from './LahanFormulaModal';
 import { LahanKpiWordDocView } from './LahanKpiWordDocView';
 import { LahanFilterState } from './types';
-import {
-  SWP_LAHAN_TERSEDIA_DATA,
-} from './lahanData';
 
 export const PengelolaanLahanDashboard: React.FC = () => {
   // Global Filters
@@ -40,13 +33,9 @@ export const PengelolaanLahanDashboard: React.FC = () => {
   const [activeFormulaKpi, setActiveFormulaKpi] = useState<string | null>(null);
   const [showWordDocView, setShowWordDocView] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<
-    | 'all'
-    | 'swp'
-    | 'alokasi-pnbp'
+    | 'alokasi-sla'
     | 'skpt-pl'
-    | 'hak'
-    | 'layanan'
-  >('all');
+  >('alokasi-sla');
 
   const handleFilterChange = (newFilters: Partial<LahanFilterState>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -61,14 +50,6 @@ export const PengelolaanLahanDashboard: React.FC = () => {
       searchQuery: '',
     });
   };
-
-  const swpFiltered = useMemo(() => {
-    if (filters.swp === 'ALL') return SWP_LAHAN_TERSEDIA_DATA;
-    return SWP_LAHAN_TERSEDIA_DATA.filter((s) => s.swp === filters.swp);
-  }, [filters.swp]);
-
-  const totalSwpPersil = useMemo(() => swpFiltered.reduce((acc, s) => acc + s.jumlahPersil, 0), [swpFiltered]);
-  const totalSwpHa = useMemo(() => swpFiltered.reduce((acc, s) => acc + s.luasHa, 0), [swpFiltered]);
 
   if (showWordDocView) {
     return <LahanKpiWordDocView onBack={() => setShowWordDocView(false)} />;
@@ -125,34 +106,14 @@ export const PengelolaanLahanDashboard: React.FC = () => {
         {/* Directorate Sub-Navigation Tabs */}
         <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-100 overflow-x-auto text-xs pb-0.5">
           <button
-            onClick={() => setActiveTab('all')}
+            onClick={() => setActiveTab('alokasi-sla')}
             className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'all'
+              activeTab === 'alokasi-sla'
                 ? 'bg-slate-900 text-white shadow-2xs font-semibold'
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
-            Semua Visualisasi Lahan (Overview 15 DS)
-          </button>
-          <button
-            onClick={() => setActiveTab('swp')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'swp'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Lahan Tersedia 9 SWP (#15)
-          </button>
-          <button
-            onClick={() => setActiveTab('alokasi-pnbp')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'alokasi-pnbp'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Alokasi Investasi (#14) &amp; Target PNBP (#12)
+            Alokasi Investasi (#14) &amp; Kecepatan Izin (SLA)
           </button>
           <button
             onClick={() => setActiveTab('skpt-pl')}
@@ -164,26 +125,6 @@ export const PengelolaanLahanDashboard: React.FC = () => {
           >
             SKPT &amp; PL (#1-#4)
           </button>
-          <button
-            onClick={() => setActiveTab('hak')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'hak'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            Peralihan &amp; Perpanjangan Hak (#5, #9, #13)
-          </button>
-          <button
-            onClick={() => setActiveTab('layanan')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'layanan'
-                ? 'bg-slate-900 text-white shadow-2xs font-semibold'
-                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
-            }`}
-          >
-            6 Layanan Pengelolaan Lahan (#6, #7, #8, #10, #11)
-          </button>
         </div>
       </div>
 
@@ -194,61 +135,31 @@ export const PengelolaanLahanDashboard: React.FC = () => {
         onResetFilters={handleResetFilters}
       />
 
-      {/* Primary KPI Row: Luas Alokasi, Lahan Tersedia SWP & Realisasi PNBP */}
-      <PengelolaanLahanKpis
-        totalSwpPersil={totalSwpPersil}
-        totalSwpHa={totalSwpHa}
-        onExplainKpi={(kpiId) => setActiveFormulaKpi(kpiId)}
-      />
-
-      {/* SECTION 1: MONITORING EKSEKUTIF ALOKASI INVESTASI & PNBP UWT LAHAN (DATASET #12 & #14) */}
-      {(activeTab === 'all' || activeTab === 'alokasi-pnbp') && (
+      {/* TAB 1: MONITORING ALOKASI INVESTASI (#14) & KECEPATAN IZIN SLA */}
+      {activeTab === 'alokasi-sla' && (
         <ExecutivePnbpSlaCard onOpenFormulaModal={(id) => setActiveFormulaKpi(id)} />
       )}
 
-      {/* SECTION 2: VISUALISASI LAHAN TERSEDIA AREA SUB WILAYAH PENGEMBANG (SWP - DATASET #15) */}
-      {(activeTab === 'all' || activeTab === 'swp') && (
-        <SwpLahanTersediaCard
-          selectedSwpFilter={filters.swp}
-          onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
-        />
-      )}
-
-      {/* SECTION 3: MAIN ANALYTICAL LAND VISUALIZATIONS */}
-      <div className="space-y-4">
-        {/* Module 1: SKPT & SPPT + Pecah/Revisi PL (DATASET #1, #2, #3, #4) */}
-        {(activeTab === 'all' || activeTab === 'skpt-pl') && (
-          <div className="space-y-4">
-            {/* Req 1: Rekapitulasi SKPT & SPPT Baru vs Perubahan */}
+      {/* TAB 3: REKAPITULASI SKPT (#1-#2) DAN PECAH/REVISI PL (#3-#4) SATU BARIS BERDAMPINGAN */}
+      {activeTab === 'skpt-pl' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+          {/* Req 1: Rekapitulasi SKPT & SPPT Baru vs Perubahan */}
+          <div className="w-full">
             <SkptSpptSheetSwapCard
               filters={filters}
               onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
             />
+          </div>
 
-            {/* Req 2: Rekapitulasi Pecah PL & Revisi PL */}
+          {/* Req 2: Rekapitulasi Pecah PL & Revisi PL */}
+          <div className="w-full">
             <PecahRevisiPlSheetSwapCard
               filters={filters}
               onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
             />
           </div>
-        )}
-
-        {/* Module 2: Pembaharuan Hak, Peralihan Hak & Perpanjangan Hak (DATASET #5, #9, #13) */}
-        {(activeTab === 'all' || activeTab === 'hak') && (
-          <HakAtasTanah3WaySheetSwapCard
-            filters={filters}
-            onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
-          />
-        )}
-
-        {/* Module 3: 6 Layanan Pengelolaan Lahan (DATASET #6, #7, #8, #10, #11) */}
-        {(activeTab === 'all' || activeTab === 'layanan') && (
-          <EnamLayananLahanPieCard
-            filters={filters}
-            onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
-          />
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Formula and Tableau Shelves Modal */}
       <LahanFormulaModal

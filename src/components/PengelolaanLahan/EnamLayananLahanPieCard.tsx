@@ -30,6 +30,10 @@ import {
 } from 'recharts';
 import {
   ENAM_LAYANAN_LAHAN_DATA,
+  REKAP_PENERBITAN_BARU_DATA,
+  REKAP_PENERBITAN_PERUBAHAN_DATA,
+  REKAP_PECAH_PL_DATA,
+  REKAP_REVISI_PL_DATA,
   REKAP_PEMBAHARUAN_HAK_DATA,
   REKAP_FAKTUR_PERUNTUKAN_DATA,
   REKAP_HAK_TANGGUNGAN_DATA,
@@ -45,13 +49,13 @@ interface EnamLayananLahanPieCardProps {
   onOpenFormulaModal?: (kpiId: string) => void;
 }
 
-type ActiveSheet = 'pie' | 'ds5' | 'ds6' | 'ds7' | 'ds8' | 'ds10' | 'ds11';
+type ActiveSheet = 'pie' | 'ds1' | 'ds2' | 'ds3' | 'ds4' | 'ds5' | 'ds6' | 'ds7' | 'ds8' | 'ds10' | 'ds11';
 
 const SHEET_CONFIG = {
   pie: {
-    datasetNumber: '5, 6, 7, 8, 10, 11',
-    pdfPages: 'Hal. 7',
-    title: 'REKAPITULASI 6 LAYANAN PERTANAHAN & PENGELOLAAN LAHAN BP BATAM',
+    datasetNumber: '1, 2, 3, 4, 5, 6, 7, 8, 10, 11',
+    pdfPages: 'Hal. 6-7',
+    title: 'REKAPITULASI LAYANAN PERTANAHAN & PENGELOLAAN LAHAN BP BATAM (10 DATASET REKAPITULASI)',
     visualName: 'Pie / Donut Chart Proporsi Jumlah Semua Rekapitulasi & Sheet Swap Rincian Layanan',
     attributes: [
       'NAMA LAYANAN',
@@ -62,9 +66,49 @@ const SHEET_CONFIG = {
       'PANGSA PROPORSI',
     ],
   },
+  ds1: {
+    datasetNumber: 1,
+    pdfPages: 'Hal. 6',
+    title: 'REKAPITULASI PENERBITAN SURAT PERJANJIAN PENGELOLAAN TANAH (SKPT) DAN SURAT KEPUTUSAN PENGELOLAAN TANAH (BARU)',
+    visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (SKPT Baru) & Tabel Detail',
+    attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
+    data: REKAP_PENERBITAN_BARU_DATA,
+    color: '#2563EB',
+    shortName: 'SKPT Baru (#1)',
+  },
+  ds2: {
+    datasetNumber: 2,
+    pdfPages: 'Hal. 6',
+    title: 'REKAPITULASI PENERBITAN SURAT PERJANJIAN PENGELOLAAN TANAH (SKPT) DAN SURAT KEPUTUSAN PENGELOLAAN TANAH (PERUBAHAN)',
+    visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (SKPT Perubahan) & Tabel Detail',
+    attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
+    data: REKAP_PENERBITAN_PERUBAHAN_DATA,
+    color: '#7C3AED',
+    shortName: 'SKPT Perubahan (#2)',
+  },
+  ds3: {
+    datasetNumber: 3,
+    pdfPages: 'Hal. 6',
+    title: 'REKAPITULASI PECAH PENETAPAN LOKASI (PL)',
+    visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Pecah PL) & Tabel Detail',
+    attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
+    data: REKAP_PECAH_PL_DATA,
+    color: '#059669',
+    shortName: 'Pecah PL (#3)',
+  },
+  ds4: {
+    datasetNumber: 4,
+    pdfPages: 'Hal. 6',
+    title: 'REKAPITULASI REVISI PENETAPAN LOKASI (PL)',
+    visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Revisi PL) & Tabel Detail',
+    attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
+    data: REKAP_REVISI_PL_DATA,
+    color: '#D97706',
+    shortName: 'Revisi PL (#4)',
+  },
   ds5: {
     datasetNumber: 5,
-    pdfPages: 'Hal. 7',
+    pdfPages: 'Hal. 6',
     title: 'REKAPITULASI PEMBAHARUAN HAK ATAS TANAH',
     visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Pembaharuan Hak) & Tabel Detail',
     attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
@@ -74,7 +118,7 @@ const SHEET_CONFIG = {
   },
   ds6: {
     datasetNumber: 6,
-    pdfPages: 'Hal. 7',
+    pdfPages: 'Hal. 6',
     title: 'REKAPITULASI PELAYANAN PENERBITAN FAKTUR PERUBAHAN PERUNTUKAN',
     visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Faktur Peruntukan) & Tabel Detail',
     attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
@@ -99,7 +143,7 @@ const SHEET_CONFIG = {
     visualName: 'Grafik Batang Disetujui vs Ditolak per Jenis Pemohon (Dokumen Pengganti) & Tabel Detail',
     attributes: ['JENIS PEMOHON', 'DISETUJUI', 'DITOLAK', 'JUMLAH', 'TANGGAL REKAP AWAL', 'TANGGAL REKAP AKHIR'],
     data: REKAP_DOKUMEN_PENGGANTI_DATA,
-    color: '#F59E0B',
+    color: '#F43F5E',
     shortName: 'Dokumen Pengganti (#8)',
   },
   ds10: {
@@ -160,7 +204,15 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
       ditolak: item.ditolak,
       rasio: item.rasioDisetujui,
       sheetKey:
-        item.noDataset === 5
+        item.noDataset === 1
+          ? ('ds1' as ActiveSheet)
+          : item.noDataset === 2
+          ? ('ds2' as ActiveSheet)
+          : item.noDataset === 3
+          ? ('ds3' as ActiveSheet)
+          : item.noDataset === 4
+          ? ('ds4' as ActiveSheet)
+          : item.noDataset === 5
           ? ('ds5' as ActiveSheet)
           : item.noDataset === 6
           ? ('ds6' as ActiveSheet)
@@ -306,6 +358,46 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
                   <span>Semua (Pie)</span>
                 </button>
                 <button
+                  onClick={() => setActiveSheet('ds1')}
+                  className={`px-2 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    activeSheet === 'ds1'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #1: SKPT Baru
+                </button>
+                <button
+                  onClick={() => setActiveSheet('ds2')}
+                  className={`px-2 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    activeSheet === 'ds2'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #2: SKPT Ubah
+                </button>
+                <button
+                  onClick={() => setActiveSheet('ds3')}
+                  className={`px-2 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    activeSheet === 'ds3'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #3: Pecah PL
+                </button>
+                <button
+                  onClick={() => setActiveSheet('ds4')}
+                  className={`px-2 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                    activeSheet === 'ds4'
+                      ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  DS #4: Revisi PL
+                </button>
+                <button
                   onClick={() => setActiveSheet('ds5')}
                   className={`px-2 py-1 rounded-md text-xs transition-all cursor-pointer ${
                     activeSheet === 'ds5'
@@ -413,7 +505,7 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 bg-slate-50/70 border-b border-slate-100 text-xs">
         <div className="bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
           <div className="text-[10px] text-slate-500">
-            {activeSheet === 'pie' ? 'Total 6 Layanan' : 'Total Permohonan'}
+            {activeSheet === 'pie' ? 'Total 10 Rekapitulasi' : 'Total Permohonan'}
           </div>
           <div className="text-base font-bold text-slate-900">
             {activeSheet === 'pie'
@@ -470,7 +562,7 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
           {/* Donut Chart View (5 cols) */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center bg-slate-50/70 border border-slate-200 rounded-xl p-3 relative">
             <div className="text-xs font-semibold text-slate-700 mb-1 text-center">
-              Distribusi Volume 6 Rekapitulasi Layanan Pertanahan
+              Distribusi Volume 10 Rekapitulasi Layanan Pertanahan
             </div>
             <div className="h-[230px] w-full flex items-center justify-center relative">
               <ResponsiveContainer width="100%" height="100%">
@@ -520,7 +612,7 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
 
               {/* Centered Donut Stat */}
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-xs text-slate-500 font-medium">Total 6 Layanan</span>
+                <span className="text-xs text-slate-500 font-medium">Total 10 Layanan</span>
                 <span className="text-base font-black text-slate-900">
                   {totalAllPermohonan.toLocaleString('id-ID')}
                 </span>
@@ -594,7 +686,15 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
               <button
                 onClick={() => {
                   const targetSheet =
-                    activeLayananInPie.noDataset === 5
+                    activeLayananInPie.noDataset === 1
+                      ? 'ds1'
+                      : activeLayananInPie.noDataset === 2
+                      ? 'ds2'
+                      : activeLayananInPie.noDataset === 3
+                      ? 'ds3'
+                      : activeLayananInPie.noDataset === 4
+                      ? 'ds4'
+                      : activeLayananInPie.noDataset === 5
                       ? 'ds5'
                       : activeLayananInPie.noDataset === 6
                       ? 'ds6'
@@ -650,6 +750,140 @@ export const EnamLayananLahanPieCard: React.FC<EnamLayananLahanPieCardProps> = (
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* REQUIREMENT 2: REKAPITULASI LENGKAP 10 LAYANAN (JUMLAH PEMOHON, DISETUJUI, DITOLAK) */}
+          <div className="lg:col-span-12 mt-2 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs">
+            <div className="p-3 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-blue-600" />
+                <h4 className="text-xs font-bold text-slate-900">
+                  Tabel Kompilasi 10 Rekapitulasi Layanan Pertanahan &amp; Pengelolaan Lahan BP Batam
+                </h4>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-200 font-bold">
+                  Buku Satu Data Hal. 6-7
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-500 font-medium">
+                Kompilasi Seluruh Permohonan Masuk, ACC, Ditolak &amp; Rasio
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-slate-100/70 border-b border-slate-200 text-[10.5px] font-bold text-slate-700 uppercase font-mono tracking-wider">
+                    <th className="py-2.5 px-3">No. Dataset &amp; Kode</th>
+                    <th className="py-2.5 px-3">Nama Layanan Pertanahan</th>
+                    <th className="py-2.5 px-3 text-right">Permohonan Masuk</th>
+                    <th className="py-2.5 px-3 text-right text-emerald-700">Disetujui (ACC)</th>
+                    <th className="py-2.5 px-3 text-right text-rose-700">Ditolak / Dikembalikan</th>
+                    <th className="py-2.5 px-3 text-right text-indigo-700">Rasio ACC</th>
+                    <th className="py-2.5 px-3 text-center">Aksi Lembar Sheet</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-[11px]">
+                  {ENAM_LAYANAN_LAHAN_DATA.map((item) => {
+                    const targetSheet =
+                      item.noDataset === 1
+                        ? 'ds1'
+                        : item.noDataset === 2
+                        ? 'ds2'
+                        : item.noDataset === 3
+                        ? 'ds3'
+                        : item.noDataset === 4
+                        ? 'ds4'
+                        : item.noDataset === 5
+                        ? 'ds5'
+                        : item.noDataset === 6
+                        ? 'ds6'
+                        : item.noDataset === 7
+                        ? 'ds7'
+                        : item.noDataset === 8
+                        ? 'ds8'
+                        : item.noDataset === 10
+                        ? 'ds10'
+                        : 'ds11';
+                    const isSelected = item.kodeTag === selectedKodeInPie;
+
+                    return (
+                      <tr
+                        key={item.kodeTag}
+                        className={`hover:bg-slate-50 transition-colors ${
+                          isSelected ? 'bg-blue-50/40 font-medium' : ''
+                        }`}
+                      >
+                        <td className="py-2 px-3 whitespace-nowrap">
+                          <div className="flex items-center gap-1.5">
+                            <span
+                              className="w-2.5 h-2.5 rounded-full shrink-0"
+                              style={{ backgroundColor: item.color }}
+                            />
+                            <span className="font-mono font-bold text-slate-800">
+                              #{item.noDataset}
+                            </span>
+                            <span className="font-mono text-[10px] text-slate-500">
+                              ({item.kodeTag})
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-2 px-3 font-semibold text-slate-900">
+                          {item.namaLayanan}
+                        </td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-slate-900">
+                          {item.jumlahPermohonan.toLocaleString('id-ID')}
+                        </td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-emerald-700">
+                          {item.disetujui.toLocaleString('id-ID')}
+                        </td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-rose-700">
+                          {item.ditolak.toLocaleString('id-ID')}
+                        </td>
+                        <td className="py-2 px-3 text-right">
+                          <span className="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] bg-slate-100 text-slate-800 border border-slate-200">
+                            {item.rasioDisetujui.toFixed(1)}%
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 text-center">
+                          <button
+                            onClick={() => {
+                              setSelectedKodeInPie(item.kodeTag);
+                              setActiveSheet(targetSheet as ActiveSheet);
+                            }}
+                            className="px-2.5 py-1 rounded-md text-[10.5px] font-semibold bg-slate-900 hover:bg-slate-800 text-white transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs"
+                          >
+                            <span>Rincian</span>
+                            <span className="text-[9px] opacity-75">→</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-slate-100/90 font-bold border-t border-slate-200 text-slate-900 text-[11px]">
+                    <td colSpan={2} className="py-2.5 px-3 font-mono uppercase">
+                      Total 10 Rekapitulasi Layanan Pertanahan
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono text-base font-black text-slate-900">
+                      {totalAllPermohonan.toLocaleString('id-ID')}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono text-base font-black text-emerald-700">
+                      {totalAllDisetujui.toLocaleString('id-ID')}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono text-base font-black text-rose-700">
+                      {totalAllDitolak.toLocaleString('id-ID')}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono text-base font-black text-indigo-700">
+                      {((totalAllDisetujui / totalAllPermohonan) * 100).toFixed(1)}%
+                    </td>
+                    <td className="py-2.5 px-3 text-center text-[10px] text-slate-500 font-normal">
+                      100% Berkas Masuk
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </div>
         </div>

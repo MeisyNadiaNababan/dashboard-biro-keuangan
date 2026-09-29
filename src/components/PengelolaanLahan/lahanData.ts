@@ -365,6 +365,54 @@ export const REKAP_LAYANAN_REKOMENDASI_DATA: RekapPermohonanItem[] = [
 
 export const ENAM_LAYANAN_LAHAN_DATA: LayananPertanahanSummary[] = [
   {
+    noDataset: 1,
+    namaLayanan: 'Penerbitan SKPT & SK Baru',
+    kodeTag: 'DPL-01',
+    jumlahPermohonan: 4887,
+    disetujui: 4195,
+    ditolak: 692,
+    rasioDisetujui: 85.84,
+    color: '#2563EB', // Blue
+    iconName: 'FileCheck2',
+    deskripsi: 'Penerbitan Surat Perjanjian Pengelolaan Tanah (SKPT) dan SK Pengelolaan Tanah Baru.',
+  },
+  {
+    noDataset: 2,
+    namaLayanan: 'Penerbitan SKPT & SK Perubahan',
+    kodeTag: 'DPL-02',
+    jumlahPermohonan: 5753,
+    disetujui: 4908,
+    ditolak: 845,
+    rasioDisetujui: 85.31,
+    color: '#7C3AED', // Purple
+    iconName: 'FileCheck2',
+    deskripsi: 'Penerbitan Surat Perjanjian dan SK Pengelolaan Tanah Perubahan data alokasi.',
+  },
+  {
+    noDataset: 3,
+    namaLayanan: 'Pecah Penetapan Lokasi (PL)',
+    kodeTag: 'DPL-03',
+    jumlahPermohonan: 1157,
+    disetujui: 978,
+    ditolak: 179,
+    rasioDisetujui: 84.53,
+    color: '#059669', // Emerald
+    iconName: 'Scissors',
+    deskripsi: 'Pelayanan pemecahan persil Penetapan Lokasi (PL) tanah untuk pengembangan.',
+  },
+  {
+    noDataset: 4,
+    namaLayanan: 'Revisi Penetapan Lokasi (PL)',
+    kodeTag: 'DPL-04',
+    jumlahPermohonan: 1040,
+    disetujui: 890,
+    ditolak: 150,
+    rasioDisetujui: 85.58,
+    color: '#D97706', // Amber
+    iconName: 'Edit3',
+    deskripsi: 'Pelayanan revisi batasan persil Penetapan Lokasi (PL) dan koordinat batas lahan.',
+  },
+  {
     noDataset: 5,
     namaLayanan: 'Pembaharuan Hak Atas Tanah',
     kodeTag: 'DPL-05',
@@ -384,7 +432,7 @@ export const ENAM_LAYANAN_LAHAN_DATA: LayananPertanahanSummary[] = [
     disetujui: 486,
     ditolak: 56,
     rasioDisetujui: 89.67,
-    color: '#10B981', // Emerald
+    color: '#10B981', // Teal
     iconName: 'RefreshCw',
     deskripsi: 'Penerbitan faktur tagihan UWT akibat perubahan rencana pemanfaatan lahan.',
   },
@@ -408,7 +456,7 @@ export const ENAM_LAYANAN_LAHAN_DATA: LayananPertanahanSummary[] = [
     disetujui: 318,
     ditolak: 47,
     rasioDisetujui: 87.12,
-    color: '#F59E0B', // Amber
+    color: '#F43F5E', // Rose
     iconName: 'FileText',
     deskripsi: 'Penerbitan salinan pengganti dokumen PL, SKPT, atau SPPT hilang/rusak.',
   },
@@ -432,7 +480,7 @@ export const ENAM_LAYANAN_LAHAN_DATA: LayananPertanahanSummary[] = [
     disetujui: 814,
     ditolak: 76,
     rasioDisetujui: 91.46,
-    color: '#14B8A6', // Teal
+    color: '#14B8A6', // Cyan
     iconName: 'Award',
     deskripsi: 'Penerbitan surat rekomendasi pendaftaran pertama kali, BPN, dan konsolidasi.',
   },

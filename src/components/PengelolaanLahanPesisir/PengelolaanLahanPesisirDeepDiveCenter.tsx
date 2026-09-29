@@ -119,7 +119,7 @@ export const PengelolaanLahanPesisirDeepDiveCenter: React.FC<
                 Direktorat Pengelolaan Lahan (Halaman 6-8 Buku Satu Data)
               </span>
               <span className="text-slate-500 hidden sm:inline">
-                • SKPT, SPPT, Pecah/Revisi PL, Hak Atas Tanah &amp; Lahan 9 SWP
+                • SKPT, SPPT, Pecah/Revisi PL, Alokasi Investasi (#14) &amp; Kecepatan Izin (SLA)
               </span>
             </div>
 
@@ -161,47 +161,14 @@ export const PengelolaanLahanPesisirDeepDiveCenter: React.FC<
       {normalizedUnitId === 'dit-pengendalian-lahan' && (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-emerald-50/60 rounded-xl border border-emerald-200/70">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-              <button
-                onClick={() => setPengendalianSubTab('ikhtisar')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pengendalianSubTab === 'ikhtisar'
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Ikhtisar &amp; 4 KPI Pengendalian
-              </button>
-              <button
-                onClick={() => setPengendalianSubTab('penertiban')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pengendalianSubTab === 'penertiban'
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Pipeline Penertiban &amp; Rekuperasi (DS #2)
-              </button>
-              <button
-                onClick={() => setPengendalianSubTab('spasial')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pengendalianSubTab === 'spasial'
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Pengawasan 5 SWP &amp; Pesisir (DS #1)
-              </button>
-              <button
-                onClick={() => setPengendalianSubTab('rekomendasi')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  pengendalianSubTab === 'rekomendasi'
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Rekomendasi &amp; Dokumen (DS #3 &amp; #4)
-              </button>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+              <span className="font-bold text-slate-800">
+                Direktorat Pengendalian Pengelolaan Lahan, Pesisir dan Reklamasi (Halaman 11)
+              </span>
+              <span className="text-slate-500 hidden sm:inline">
+                • Penertiban Lahan Terlantar, Pengawasan SWP &amp; Rekomendasi Teknis
+              </span>
             </div>
 
             <div className="flex items-center gap-2 text-[11px] text-slate-600 font-mono">
@@ -210,7 +177,7 @@ export const PengelolaanLahanPesisirDeepDiveCenter: React.FC<
             </div>
           </div>
 
-          <PengendalianLahanDashboard activeSubTab={pengendalianSubTab} />
+          <PengendalianLahanDashboard />
         </div>
       )}
     </div>

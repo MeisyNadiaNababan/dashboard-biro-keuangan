@@ -12,10 +12,10 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { PengendalianLahanFilters } from './PengendalianLahanFilters';
-import { PengendalianLahanKpis } from './PengendalianLahanKpis';
 import { PenertibanPipelineCard } from './PenertibanPipelineCard';
 import { PengawasanSpasialPesisirCard } from './PengawasanSpasialPesisirCard';
 import { RekomendasiDokumenCard } from './RekomendasiDokumenCard';
+import { PengendalianEmpatPersentaseCard } from './PengendalianEmpatPersentaseCard';
 import { PengendalianFormulaModal } from './PengendalianFormulaModal';
 import { PengendalianWordDocView } from './PengendalianWordDocView';
 import { PengendalianFilterState } from './types';
@@ -37,7 +37,7 @@ export const PengendalianLahanDashboard: React.FC<PengendalianLahanDashboardProp
 
   const [activeFormulaKpi, setActiveFormulaKpi] = useState<string | null>(null);
   const [showWordDocView, setShowWordDocView] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'all' | 'penertiban' | 'spasial' | 'rekomendasi'>('all');
+  const [activeTab, setActiveTab] = useState<'penertiban' | 'spasial' | 'rekomendasi'>('penertiban');
 
   useEffect(() => {
     if (!activeSubTab) return;
@@ -56,7 +56,7 @@ export const PengendalianLahanDashboard: React.FC<PengendalianLahanDashboardProp
       setActiveTab('rekomendasi');
       setShowWordDocView(false);
     } else if (activeSubTab === 'ikhtisar') {
-      setActiveTab('all');
+      setActiveTab('penertiban');
       setShowWordDocView(false);
     }
   }, [activeSubTab]);
@@ -136,16 +136,6 @@ export const PengendalianLahanDashboard: React.FC<PengendalianLahanDashboardProp
         <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-3 border-t border-slate-100 text-xs">
           <span className="text-slate-500 font-medium mr-1 hidden sm:inline">Tampilan Fokus:</span>
           <button
-            onClick={() => setActiveTab('all')}
-            className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
-              activeTab === 'all'
-                ? 'bg-slate-900 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-            }`}
-          >
-            Semua Modul &amp; Visualisasi
-          </button>
-          <button
             onClick={() => setActiveTab('penertiban')}
             className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
               activeTab === 'penertiban'
@@ -198,29 +188,29 @@ export const PengendalianLahanDashboard: React.FC<PengendalianLahanDashboardProp
         onResetFilters={handleResetFilters}
       />
 
-      {/* 4 KPI Cards (Poin 1, 2, 3, 4) */}
-      <PengendalianLahanKpis
+      {/* REQUIREMENT 9: 4 PERSENTASE DAFTAR ATRIBUT DATA (PIE CHART & RINCIAN PERSENTASE) */}
+      <PengendalianEmpatPersentaseCard
         onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
       />
 
       {/* Executive Visualizations Designed for Leadership (Poin 5) */}
       <div className="space-y-4">
         {/* Module 1: Pipeline Penertiban Lahan Terlantar & Rekuperasi Aset */}
-        {(activeTab === 'all' || activeTab === 'penertiban') && (
+        {activeTab === 'penertiban' && (
           <PenertibanPipelineCard
             onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
           />
         )}
 
         {/* Module 2: Pengawasan Spasial 5 SWP & Kepatuhan Pesisir-Reklamasi */}
-        {(activeTab === 'all' || activeTab === 'spasial') && (
+        {activeTab === 'spasial' && (
           <PengawasanSpasialPesisirCard
             onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
           />
         )}
 
         {/* Module 3: Rekomendasi Perpanjangan & Pelaksanaan Dokumen Teknis */}
-        {(activeTab === 'all' || activeTab === 'rekomendasi') && (
+        {activeTab === 'rekomendasi' && (
           <RekomendasiDokumenCard
             onOpenFormulaModal={(id) => setActiveFormulaKpi(id)}
           />

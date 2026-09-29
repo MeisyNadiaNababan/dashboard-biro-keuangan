@@ -158,33 +158,14 @@ export const PengelolaanLahanPesisirKpiRow: React.FC<
                     />
                   </div>
                 </div>
-
-                {/* Quarterly Progression Breakdown */}
-                <div className="mt-3 pt-2.5 border-t border-slate-100 grid grid-cols-4 gap-1 text-center font-mono">
-                  <div className="bg-slate-50 p-1 rounded">
-                    <span className="text-[9px] text-slate-400 block">Q1</span>
-                    <span className="text-[11px] font-bold text-slate-700">
-                      {kpi.qBreakdown.q1}
-                    </span>
-                  </div>
-                  <div className="bg-blue-50/70 p-1 rounded border border-blue-200/50">
-                    <span className="text-[9px] text-blue-600 font-bold block">Q2</span>
-                    <span className="text-[11px] font-bold text-blue-700">
-                      {kpi.qBreakdown.q2}
-                    </span>
-                  </div>
-                  <div className="bg-slate-50 p-1 rounded">
-                    <span className="text-[9px] text-slate-400 block">Q3 (Tgt)</span>
-                    <span className="text-[11px] font-medium text-slate-500">
-                      {kpi.qBreakdown.q3Target}
-                    </span>
-                  </div>
-                  <div className="bg-slate-50 p-1 rounded">
-                    <span className="text-[9px] text-slate-400 block">Q4 (Tgt)</span>
-                    <span className="text-[11px] font-medium text-slate-500">
-                      {kpi.qBreakdown.q4Target}
-                    </span>
-                  </div>
+                {/* Trend Note / Satker Info */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                  <span className="font-medium text-slate-600 truncate max-w-[210px]">
+                    {kpi.highlightTrend}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200 shrink-0">
+                    Akumulasi Tahunan
+                  </span>
                 </div>
               </div>
 

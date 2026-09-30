@@ -27,7 +27,6 @@ import {
 } from './bandaraPelabuhanLlbData';
 import { BandaraPelabuhanLlbKpiRow } from './BandaraPelabuhanLlbKpiRow';
 import { BandaraPelabuhanLlbVisualCharts } from './BandaraPelabuhanLlbVisualCharts';
-import { BandaraPelabuhanLlbUnitCards } from './BandaraPelabuhanLlbUnitCards';
 import { BandaraPelabuhanLlbDeepDiveCenter } from './BandaraPelabuhanLlbDeepDiveCenter';
 import { BandaraPelabuhanLlbFormulaModal } from './BandaraPelabuhanLlbFormulaModal';
 
@@ -288,15 +287,16 @@ export const BandaraPelabuhanLlbDashboard: React.FC<
       </div>
 
       {/* ============================================================== */}
-      {/* 3. 3 INDIKATOR KINERJA PROGRAM (PERKIN A.5 TAHUN 2025)         */}
+      {/* 3. 2 INDIKATOR KINERJA PROGRAM UTAMA & 3 KINERJA SATKER        */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedQuarter={selectedQuarter}
+        onNavigateToUnit={handleSelectDeepDive}
       />
 
       {/* ============================================================== */}
-      {/* 4. VISUALISASI ANALITIK SETELAH KPI (RINGKASAN & DETAIL)       */}
+      {/* 4. CAPAIAN EVALUASI 3 INDIKATOR KINERJA PROGRAM (IKP)          */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbVisualCharts
         onOpenFormulaModal={handleOpenFormula}
@@ -304,15 +304,7 @@ export const BandaraPelabuhanLlbDashboard: React.FC<
       />
 
       {/* ============================================================== */}
-      {/* 5. 3 UNIT KERJA PENGAMPU PERKIN A.5                            */}
-      {/* ============================================================== */}
-      <BandaraPelabuhanLlbUnitCards
-        onAnalyzeUnit={handleSelectDeepDive}
-        onNavigateToUnit={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
-      />
-
-      {/* ============================================================== */}
-      {/* 6. UNIT DEEP-DIVE CENTER (3 UNIT KERJA TERKAIT)                */}
+      {/* 5. UNIT DEEP-DIVE CENTER (3 UNIT KERJA TERKAIT)                */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbDeepDiveCenter
         selectedUnitId={selectedDeepDiveUnit}

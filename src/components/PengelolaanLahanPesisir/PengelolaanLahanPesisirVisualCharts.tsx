@@ -14,7 +14,6 @@ import { LAHAN_KAWASAN_SUMMARY } from './pengelolaanLahanPesisirData';
 import { LahanPesisirIkeEvaluationSection } from './LahanPesisirIkeEvaluationSection';
 import { SwpLahanTersediaCard } from '../PengelolaanLahan/SwpLahanTersediaCard';
 import { EnamLayananLahanPieCard } from '../PengelolaanLahan/EnamLayananLahanPieCard';
-import { ExecutiveUnifiedKpiCenter } from './ExecutiveUnifiedKpiCenter';
 
 interface PengelolaanLahanPesisirVisualChartsProps {
   onOpenFormulaModal?: (kpiId: string) => void;
@@ -31,10 +30,7 @@ export const PengelolaanLahanPesisirVisualCharts: React.FC<
 
   return (
     <div className="space-y-4">
-      {/* 1. TOP EXECUTIVE UNIFIED KPI CENTER (Konsolidasi Seluruh IKU/KPI Makro & Unit Deep-Dive) */}
-      <ExecutiveUnifiedKpiCenter onOpenFormulaModal={onOpenFormulaModal} />
-
-      {/* 2. REQUIREMENT 1: SHEET SWAP KONSOLIDASI DEP-A3 (3 VISUALISASI UTAMA) */}
+      {/* REQUIREMENT: SHEET SWAP KONSOLIDASI DEP-A3 (3 VISUALISASI UTAMA) */}
       <div className="bg-white rounded-xl border border-slate-200/90 p-3 sm:p-3.5 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 shadow-2xs shrink-0">

@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   MapPin,
-  CheckCircle2,
-  Layers,
-  AlertTriangle,
-  TrendingUp,
-  ShieldAlert,
-  ShieldCheck,
+  Building2,
   Waves,
+  ShieldCheck,
+  CheckCircle2,
+  ArrowUpRight,
+  TrendingUp,
+  AlertTriangle,
+  HelpCircle,
   Clock,
-  AlertCircle,
+  Layers,
+  Sparkles,
   FileCheck2,
   FileText,
   DollarSign,
-  Info,
-  Building2,
-  Anchor,
-  Sparkles,
   ChevronRight,
+  Filter,
 } from 'lucide-react';
-import { LAHAN_KAWASAN_SUMMARY } from './pengelolaanLahanPesisirData';
+import { PERKIN_A3_KPIS } from './pengelolaanLahanPesisirData';
 import {
   ALOKASI_LAHAN_INVESTASI_DATA,
   TARGET_PENERIMAAN_PNBP_LAHAN,
@@ -35,15 +34,14 @@ import {
 
 interface ExecutiveUnifiedKpiCenterProps {
   onOpenFormulaModal?: (kpiId: string) => void;
+  onSelectDirectorate?: (directorateId: string) => void;
 }
-
-type KpiCategory = 'all' | 'makro' | 'lahan' | 'pesisir' | 'pengendalian';
 
 export const ExecutiveUnifiedKpiCenter: React.FC<ExecutiveUnifiedKpiCenterProps> = ({
   onOpenFormulaModal,
+  onSelectDirectorate,
 }) => {
-  const [activeCategory, setActiveCategory] = useState<KpiCategory>('all');
-
+  // Datasets
   const alokasi = ALOKASI_LAHAN_INVESTASI_DATA;
   const pnbp = TARGET_PENERIMAAN_PNBP_LAHAN;
   const pesisir = KPI_PESISIR_REKLAMASI_DATA;
@@ -55,680 +53,477 @@ export const ExecutiveUnifiedKpiCenter: React.FC<ExecutiveUnifiedKpiCenterProps>
   const totalSwpHa = SWP_LAHAN_TERSEDIA_DATA.reduce((sum, item) => sum + item.luasHa, 0);
   const totalSwpPersil = SWP_LAHAN_TERSEDIA_DATA.reduce((sum, item) => sum + item.jumlahPersil, 0);
 
+  // 3 Perkin A3 IKPs
+  const ikpLahan = PERKIN_A3_KPIS[0];
+  const ikpPesisir = PERKIN_A3_KPIS[1];
+  const ikpPengendalian = PERKIN_A3_KPIS[2];
+
   return (
     <div className="space-y-3 font-sans">
-      {/* Category Navigation Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-2 bg-slate-50/80 rounded-xl border border-slate-200">
-        <div className="flex items-center gap-2 px-1">
-          <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-          <span className="text-xs font-bold text-slate-800 tracking-tight">
-            Konsolidasi Seluruh Indikator Kinerja Utama (IKU / KPI) Deputi III
-          </span>
-          <span className="text-[10px] text-slate-500 font-mono hidden md:inline">
-            (16 Metrik Terintegrasi)
-          </span>
-        </div>
+      {/* THE 3 CONSOLIDATED DIRECTORATE KPI CARDS */}
+      <div className="grid gap-3.5 grid-cols-1 lg:grid-cols-3">
+        {/* ========================================================================= */}
+        {/* DIREKTORAT 1: PENGELOLAAN LAHAN */}
+        {/* ========================================================================= */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition-all p-4 flex flex-col justify-between relative overflow-hidden">
+            {/* Top Badge & Directorate Header */}
+            <div>
+              <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 shrink-0">
+                    <Building2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200 uppercase">
+                      DIREKTORAT 1
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug">
+                      Direktorat Pengelolaan Lahan
+                    </h3>
+                  </div>
+                </div>
 
-        {/* Category Tabs */}
-        <div className="flex items-center gap-1 overflow-x-auto text-[11px] no-scrollbar">
-          <button
-            type="button"
-            onClick={() => setActiveCategory('all')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'all'
-                ? 'bg-slate-900 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-            }`}
-          >
-            Semua KPI (16)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory('makro')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'makro'
-                ? 'bg-blue-700 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50'
-            }`}
-          >
-            Makro Wilayah (6)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory('lahan')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'lahan'
-                ? 'bg-indigo-700 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
-            }`}
-          >
-            Pengelolaan Lahan (3)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory('pesisir')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'pesisir'
-                ? 'bg-cyan-700 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-cyan-700 hover:bg-cyan-50'
-            }`}
-          >
-            Pesisir &amp; Reklamasi (4)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory('pengendalian')}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'pengendalian'
-                ? 'bg-emerald-700 text-white shadow-2xs'
-                : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
-            }`}
-          >
-            Pengendalian &amp; Pengawasan (4)
-          </button>
-        </div>
-      </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    {ikpLahan.capaianPersen.toFixed(1)}%
+                  </span>
+                  {onOpenFormulaModal && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenFormulaModal('ikp-1-lahan-investasi')}
+                      className="p-1 rounded-md text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors cursor-pointer"
+                      title="Formula & Manual Teknis IKP 1 Dit. Lahan"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
 
-      {/* CLUSTER 1: MAKRO KAWASAN & WILAYAH (6 INDIKATOR UTAMA) */}
-      {(activeCategory === 'all' || activeCategory === 'makro') && (
-        <div className="space-y-1.5">
-          {activeCategory === 'all' && (
-            <div className="flex items-center gap-1.5 px-1 pt-1">
-              <span className="w-1.5 h-3.5 rounded-full bg-blue-600" />
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                Portofolio Makro Kawasan &amp; Utilisasi Lahan
-              </span>
-            </div>
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-            {/* 1. Total Luas Lahan */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">TOTAL LUAS LAHAN</span>
-                <MapPin className="w-3.5 h-3.5 text-blue-500" />
-              </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-slate-900">
-                {LAHAN_KAWASAN_SUMMARY.totalLuasLahanHa.toLocaleString('id-ID')}{' '}
-                <span className="text-xs font-semibold text-slate-500">Ha</span>
-              </div>
-              <span className="text-[10px] text-slate-400 mt-0.5 block truncate">
-                Delineasi KPBPB Batam
-              </span>
-            </div>
+              {/* Primary IKP Card Block */}
+              <div className="bg-gradient-to-br from-indigo-50/70 to-slate-50/90 rounded-lg p-3 border border-indigo-100/80 my-3">
+                <div className="text-[10.5px] font-bold text-indigo-950 flex items-center justify-between">
+                  <span>IKP #1: Luas Lahan Dialokasikan Investasi</span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    MELAMPAUI TARGET
+                  </span>
+                </div>
+                
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      {ikpLahan.realisasi}
+                    </span>
+                    <span className="text-xs font-bold text-indigo-700">Hektar</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">{ikpLahan.target2025} Ha</span>
+                  </div>
+                </div>
 
-            {/* 2. Lahan Tersedia */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">LAHAN TERSEDIA</span>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600"
+                    style={{ width: `${Math.min(100, ikpLahan.capaianPersen)}%` }}
+                  />
+                </div>
               </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-emerald-600">
-                {LAHAN_KAWASAN_SUMMARY.lahanTersediaHa.toLocaleString('id-ID')}{' '}
-                <span className="text-xs font-semibold text-slate-500">Ha</span>
-              </div>
-              <span className="text-[10px] text-emerald-600 font-medium mt-0.5 block truncate">
-                22.2% Siap Alokasi
-              </span>
-            </div>
 
-            {/* 3. Lahan Alokasi */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">LAHAN ALOKASI</span>
-                <Layers className="w-3.5 h-3.5 text-blue-600" />
-              </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-blue-700">
-                {LAHAN_KAWASAN_SUMMARY.lahanAlokasiHa.toLocaleString('id-ID')}{' '}
-                <span className="text-xs font-semibold text-slate-500">Ha</span>
-              </div>
-              <span className="text-[10px] text-slate-400 mt-0.5 block truncate">
-                59.8% Hak SKPT Terbit
-              </span>
-            </div>
+              {/* Essential Directorate Overall Metrics (Direct & Compact) */}
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-wider">
+                  Ringkasan Kinerja Keseluruhan:
+                </div>
 
-            {/* 4. Idle Land Ratio */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">IDLE LAND RATIO</span>
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
-              </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-amber-600">
-                {LAHAN_KAWASAN_SUMMARY.idleLandRatio}%
-              </div>
-              <span className="text-[10px] text-slate-400 mt-0.5 block truncate">
-                Target Pengendalian &lt; 10%
-              </span>
-            </div>
-
-            {/* 5. Utilisasi Kawasan */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">UTILISASI KAWASAN</span>
-                <TrendingUp className="w-3.5 h-3.5 text-indigo-500" />
-              </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-indigo-600">
-                {LAHAN_KAWASAN_SUMMARY.utilisasiKawasanPersen}%
-              </div>
-              <span className="text-[10px] text-slate-400 mt-0.5 block truncate">
-                Target Optimal &gt; 80%
-              </span>
-            </div>
-
-            {/* 6. Pengendalian / Isu */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-[9.5px] font-mono uppercase font-bold">PENGENDALIAN / ISU</span>
-                <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
-              </div>
-              <div className="text-lg sm:text-xl font-black font-mono text-rose-600">
-                {LAHAN_KAWASAN_SUMMARY.kasusAktifKonflik}{' '}
-                <span className="text-xs font-semibold text-slate-500">Kasus</span>
-              </div>
-              <span className="text-[10px] text-emerald-600 font-medium mt-0.5 block truncate">
-                {LAHAN_KAWASAN_SUMMARY.kasusSelesaiKonflik} Kasus Tersolusi
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CLUSTER 2: DIREKTORAT PENGELOLAAN LAHAN (3 KPI) */}
-      {(activeCategory === 'all' || activeCategory === 'lahan') && (
-        <div className="space-y-1.5">
-          {activeCategory === 'all' && (
-            <div className="flex items-center gap-1.5 px-1 pt-1">
-              <span className="w-1.5 h-3.5 rounded-full bg-indigo-600" />
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                Kinerja Direktorat Pengelolaan Lahan
-              </span>
-            </div>
-          )}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            {/* PNBP Lahan (DS #12) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+                {/* Metric 1: PNBP Lahan */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                       <DollarSign className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DATASET #12
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium">UWT &amp; Faktur</span>
+                    <div>
+                      <div className="font-bold text-slate-800">Realisasi PNBP Lahan</div>
+                      <div className="text-[10px] text-slate-500">Target Rp 850 M (SLA: {pnbp.rataRataSlaHari} Hari)</div>
+                    </div>
                   </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('lahan_pnbp')}
-                      className="p-1 rounded text-slate-400 hover:text-emerald-700 transition-colors cursor-pointer"
-                      title="Formula PNBP Lahan"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+                  <div className="text-right">
+                    <div className="font-black font-mono text-emerald-700">Rp {(pnbp.realisasiPnbpRp / 1000000000).toFixed(1)} M</div>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      {pnbp.capaianPersen.toFixed(1)}%
+                    </span>
+                  </div>
                 </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Realisasi PNBP Pengelolaan Tanah
-                </div>
-                <div className="flex items-baseline gap-1.5 my-1">
-                  <span className="text-xl font-bold font-mono text-emerald-700">
-                    Rp {(pnbp.realisasiPnbpRp / 1000000000).toFixed(1)} M
-                  </span>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
-                    {pnbp.capaianPersen.toFixed(1)}%
-                  </span>
-                </div>
-              </div>
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Target: Rp {(pnbp.targetPnbpRp / 1000000000).toFixed(0)} M</span>
-                <span className="text-emerald-700 font-medium">SLA: {pnbp.rataRataSlaHari} Hari</span>
-              </div>
-            </div>
-
-            {/* Alokasi Lahan Investasi (DS #14) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700">
+                {/* Metric 2: Komitmen Investasi & SKPT */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
                       <MapPin className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DATASET #14
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium">Investasi</span>
+                    <div>
+                      <div className="font-bold text-slate-800">Alokasi SKPT Investasi</div>
+                      <div className="text-[10px] text-slate-500">Estimasi Nilai Rp {alokasi.potensiNilaiInvestasiRpTriliun} T ({alokasi.rasioDisetujuiPersen}% ACC)</div>
+                    </div>
                   </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('lahan_luas_alokasi')}
-                      className="p-1 rounded text-slate-400 hover:text-sky-700 transition-colors cursor-pointer"
-                      title="Formula Alokasi Investasi"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+                  <div className="text-right">
+                    <div className="font-black font-mono text-slate-900">{alokasi.totalLuasAlokasiHa} Ha</div>
+                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-1 py-0.2 rounded border border-sky-200">
+                      {alokasi.permohonanDisetujui} SKPT
+                    </span>
+                  </div>
                 </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Luas Lahan Dialokasikan Investasi
-                </div>
-                <div className="flex items-baseline gap-1.5 my-1">
-                  <span className="text-xl font-bold font-mono text-slate-900">
-                    {alokasi.totalLuasAlokasiHa.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-sky-700">Ha</span>
-                  <span className="text-[10px] font-bold text-sky-800 bg-sky-50 px-1.5 py-0.2 rounded border border-sky-200">
-                    {alokasi.permohonanDisetujui} SKPT
-                  </span>
-                </div>
-              </div>
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Nilai Investasi: <strong className="text-slate-800">Rp 34,85 T</strong></span>
-                <span className="text-emerald-700 font-medium">81.3% ACC</span>
-              </div>
-            </div>
-
-            {/* Lahan Tersedia SWP (DS #15) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
+                {/* Metric 3: Kesiapan SWP */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
                       <Layers className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DATASET #15
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium">Kesiapan SWP</span>
+                    <div>
+                      <div className="font-bold text-slate-800">Lahan Tersedia di 8 SWP</div>
+                      <div className="text-[10px] text-slate-500">{totalSwpPersil} Persil Siap Bangun</div>
+                    </div>
                   </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('lahan_swp_tersedia')}
-                      className="p-1 rounded text-slate-400 hover:text-indigo-700 transition-colors cursor-pointer"
-                      title="Formula Lahan Tersedia SWP"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+                  <div className="text-right">
+                    <div className="font-black font-mono text-indigo-700">{totalSwpHa.toLocaleString('id-ID')} Ha</div>
+                    <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1 py-0.2 rounded">
+                      Kesiapan Tinggi
+                    </span>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Lahan Tersedia di 8 SWP Batam
-                </div>
-                <div className="flex items-baseline gap-1.5 my-1">
-                  <span className="text-xl font-bold font-mono text-slate-900">
-                    {totalSwpHa.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-indigo-700">Ha</span>
-                  <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200">
-                    {totalSwpPersil} Persil
-                  </span>
-                </div>
-              </div>
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Siap Bangun: Industri &amp; Bisnis</span>
-                <span className="text-emerald-700 font-medium">Tingkat Siap Tinggi</span>
-              </div>
+            {/* Bottom Card Footer */}
+            <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                Status: Optimal &amp; Melampaui
+              </span>
+              {onOpenFormulaModal && (
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-1-lahan-investasi')}
+                  className="font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer"
+                >
+                  <span>Manual Naskah</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
             </div>
           </div>
-        </div>
-      )}
 
-      {/* CLUSTER 3: DIREKTORAT PENGELOLAAN KAWASAN PESISIR DAN REKLAMASI (4 KPI) */}
-      {(activeCategory === 'all' || activeCategory === 'pesisir') && (
-        <div className="space-y-1.5">
-          {activeCategory === 'all' && (
-            <div className="flex items-center gap-1.5 px-1 pt-1">
-              <span className="w-1.5 h-3.5 rounded-full bg-cyan-600" />
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                Kinerja Direktorat Pengelolaan Kawasan Pesisir &amp; Reklamasi
-              </span>
-            </div>
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            {/* Luas Izin Pesisir & Reklamasi (DS #4) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700">
-                      <Waves className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #4
-                    </span>
+        {/* ========================================================================= */}
+        {/* DIREKTORAT 2: PENGELOLAAN KAWASAN PESISIR & REKLAMASI */}
+        {/* ========================================================================= */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition-all p-4 flex flex-col justify-between relative overflow-hidden">
+            {/* Top Badge & Directorate Header */}
+            <div>
+              <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-700 shrink-0">
+                    <Waves className="w-4 h-4" />
                   </div>
+                  <div>
+                    <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 uppercase">
+                      DIREKTORAT 2
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug">
+                      Dit. Kawasan Pesisir &amp; Reklamasi
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    {ikpPesisir.capaianPersen.toFixed(1)}%
+                  </span>
                   {onOpenFormulaModal && (
                     <button
                       type="button"
-                      onClick={() => onOpenFormulaModal('kpi_luas_izin')}
-                      className="p-1 rounded text-slate-400 hover:text-sky-700 transition-colors cursor-pointer"
-                      title="Formula Luas Izin Pesisir"
+                      onClick={() => onOpenFormulaModal('ikp-2-pesisir-reklamasi')}
+                      className="p-1 rounded-md text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 transition-colors cursor-pointer"
+                      title="Formula & Manual Teknis IKP 2 Dit. Pesisir"
                     >
-                      <Info className="w-3.5 h-3.5" />
+                      <HelpCircle className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
+              </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Luas Izin Pesisir &amp; Reklamasi
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-slate-900">
-                    {pesisir.kpi1_luasIzinInvestasiHa.toLocaleString('id-ID')}
+              {/* Primary IKP Card Block */}
+              <div className="bg-gradient-to-br from-cyan-50/70 to-slate-50/90 rounded-lg p-3 border border-cyan-100/80 my-3">
+                <div className="text-[10.5px] font-bold text-cyan-950 flex items-center justify-between">
+                  <span>IKP #2: Luas Izin Pesisir &amp; Reklamasi</span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    MELAMPAUI TARGET
                   </span>
-                  <span className="text-xs font-bold text-sky-700">Ha</span>
+                </div>
+                
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      {ikpPesisir.realisasi}
+                    </span>
+                    <span className="text-xs font-bold text-cyan-700">Hektar</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">{ikpPesisir.target2025} Ha</span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-cyan-600 to-teal-600"
+                    style={{ width: `${Math.min(100, ikpPesisir.capaianPersen)}%` }}
+                  />
                 </div>
               </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{pesisir.kpi1_totalIzinTerbit} PKKPRL</span>
-                <span className="text-sky-700 font-medium">{pesisir.kpi1_rataRataLuasHa} Ha/Izin</span>
-              </div>
-            </div>
 
-            {/* Izin Tepat Waktu (DS #3) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+              {/* Essential Directorate Overall Metrics (Direct & Compact) */}
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-wider">
+                  Ringkasan Kinerja Keseluruhan:
+                </div>
+
+                {/* Metric 1: Ketepatan SLA Izin */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                       <Clock className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #3
-                    </span>
-                  </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_tepat_waktu')}
-                      className="p-1 rounded text-slate-400 hover:text-emerald-700 transition-colors cursor-pointer"
-                      title="Formula Kepatuhan Tepat Waktu"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Perizinan Selesai Tepat Waktu
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-emerald-700">
-                    {pesisir.kpi2_persenTepatWaktu.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-emerald-600 font-medium">SLA</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{pesisir.kpi2_totalTepatWaktu}/{pesisir.kpi2_totalPerizinanSelesai} Berkas</span>
-                <span className="text-emerald-700 font-medium">{pesisir.kpi2_rataRataSlaHari} Hari</span>
-              </div>
-            </div>
-
-            {/* Penyelesaian Isu Pesisir (DS #1) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-                      <AlertCircle className="w-3.5 h-3.5" />
+                    <div>
+                      <div className="font-bold text-slate-800">Ketepatan SLA Perizinan</div>
+                      <div className="text-[10px] text-slate-500">{pesisir.kpi2_totalTepatWaktu}/{pesisir.kpi2_totalPerizinanSelesai} Berkas (SLA: {pesisir.kpi2_rataRataSlaHari} Hari)</div>
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #1
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-emerald-700">{pesisir.kpi2_persenTepatWaktu.toFixed(1)}%</div>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      SLA Terpenuhi
                     </span>
                   </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_masalah')}
-                      className="p-1 rounded text-slate-400 hover:text-amber-700 transition-colors cursor-pointer"
-                      title="Formula Penyelesaian Masalah Pesisir"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
                 </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Penyelesaian Masalah Pesisir
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-amber-700">
-                    {pesisir.kpi3_persenPenyelesaianMasalah.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-amber-800 font-medium">Tuntas</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{pesisir.kpi3_kasusSelesai}/{pesisir.kpi3_totalKasus} Kasus</span>
-                <span className="text-slate-700 font-medium">{pesisir.kpi3_totalLuasTerdampakHa} Ha</span>
-              </div>
-            </div>
-
-            {/* Rencana Spasial Pesisir (DS #2) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
-                      <Anchor className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #2
-                    </span>
-                  </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_spasial_rencana')}
-                      className="p-1 rounded text-slate-400 hover:text-indigo-700 transition-colors cursor-pointer"
-                      title="Formula Rencana Spasial Pesisir"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Rencana Spasial Ruang Laut
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-slate-900">
-                    {pesisir.kpi4_totalRencanaLuasHa.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-indigo-700">Ha</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{pesisir.kpi4_totalRencanaTitik} Titik Zonasi</span>
-                <span className="text-indigo-700 font-medium">RTRW Laut</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CLUSTER 4: DIREKTORAT PENGENDALIAN PENGELOLAAN LAHAN, PESISIR DAN REKLAMASI (4 KPI) */}
-      {(activeCategory === 'all' || activeCategory === 'pengendalian') && (
-        <div className="space-y-1.5">
-          {activeCategory === 'all' && (
-            <div className="flex items-center gap-1.5 px-1 pt-1">
-              <span className="w-1.5 h-3.5 rounded-full bg-emerald-600" />
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                Kinerja Direktorat Pengendalian Pengelolaan Lahan, Pesisir &amp; Reklamasi
-              </span>
-            </div>
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            {/* Pengawasan Lahan & Pesisir (DS #1) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #1
-                    </span>
-                  </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_pengawasan')}
-                      className="p-1 rounded text-slate-400 hover:text-sky-700 transition-colors cursor-pointer"
-                      title="Formula Pengawasan Lahan"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Pengawasan Objek Lahan &amp; Pesisir
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-emerald-700">
-                    {kpiPengawasan.persentase.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-emerald-700 font-medium">Realisasi</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{kpiPengawasan.realisasiObjek}/{kpiPengawasan.targetObjek} Objek</span>
-                <span className="text-sky-700 font-medium">3 Zona SWP</span>
-              </div>
-            </div>
-
-            {/* Evaluasi & Rekuperasi Lahan Terlantar (DS #2) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #2
-                    </span>
-                  </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_evaluasi_pembatalan')}
-                      className="p-1 rounded text-slate-400 hover:text-amber-700 transition-colors cursor-pointer"
-                      title="Formula Rekuperasi Lahan"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Evaluasi &amp; Rekuperasi Lahan
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-amber-700">
-                    {kpiEvaluasi.persentase.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-amber-800 font-medium">Tuntas</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{kpiEvaluasi.realisasiKasus}/{kpiEvaluasi.targetKasus} Kasus</span>
-                <span className="text-emerald-700 font-bold font-mono">
-                  {kpiEvaluasi.luasLahanDiselamatkanHa} Ha Rekuperasi
-                </span>
-              </div>
-            </div>
-
-            {/* Dokumen Lahan & BAPL (DS #3) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
+                {/* Metric 2: Luas Izin & PKKPRL */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
                       <FileCheck2 className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #3
+                    <div>
+                      <div className="font-bold text-slate-800">Penerbitan Izin Pesisir</div>
+                      <div className="text-[10px] text-slate-500">Rata-rata {pesisir.kpi1_rataRataLuasHa} Ha per Izin</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-slate-900">{pesisir.kpi1_luasIzinInvestasiHa.toLocaleString('id-ID')} Ha</div>
+                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-1 py-0.2 rounded border border-sky-200">
+                      {pesisir.kpi1_totalIzinTerbit} PKKPRL
                     </span>
                   </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_dokumen')}
-                      className="p-1 rounded text-slate-400 hover:text-indigo-700 transition-colors cursor-pointer"
-                      title="Formula Dokumen Lahan"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
                 </div>
 
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Kegiatan Dokumen Lahan &amp; BAPL
+                {/* Metric 3: Penanganan Kasus & Spasial */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-800">Penyelesaian Isu &amp; Masalah</div>
+                      <div className="text-[10px] text-slate-500">{pesisir.kpi3_kasusSelesai}/{pesisir.kpi3_totalKasus} Kasus ({pesisir.kpi3_totalLuasTerdampakHa} Ha)</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-amber-700">{pesisir.kpi3_persenPenyelesaianMasalah.toFixed(1)}%</div>
+                    <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1 py-0.2 rounded">
+                      2.150 Ha RTRW Laut
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-indigo-700">
-                    {kpiDokumen.persentase.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-indigo-700 font-medium">Sah</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{kpiDokumen.realisasiDokumen}/{kpiDokumen.targetDokumen} Dok</span>
-                <span className="text-indigo-700 font-medium">SLA: {kpiDokumen.rataRataSlaHari} Hari</span>
               </div>
             </div>
 
-            {/* Rekomendasi Hak & Peralihan (DS #4) */}
-            <div className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
-                      <FileText className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                      DS #4
-                    </span>
-                  </div>
-                  {onOpenFormulaModal && (
-                    <button
-                      type="button"
-                      onClick={() => onOpenFormulaModal('kpi_rekomendasi')}
-                      className="p-1 rounded text-slate-400 hover:text-emerald-700 transition-colors cursor-pointer"
-                      title="Formula Rekomendasi Hak"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="text-xs font-bold text-slate-900 truncate">
-                  Rekomendasi Hak &amp; Peralihan
-                </div>
-                <div className="flex items-baseline gap-1 my-1">
-                  <span className="text-lg font-bold font-mono text-emerald-700">
-                    {kpiRekomendasi.persentase.toFixed(1)}%
-                  </span>
-                  <span className="text-[10px] text-emerald-700 font-medium">Selesai</span>
-                </div>
-              </div>
-              <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{kpiRekomendasi.totalRekomendasiSelesai}/{kpiRekomendasi.totalPermohonanMasuk}</span>
-                <span className="text-emerald-700 font-medium">SOP: {kpiRekomendasi.rataRataSlaHari} Hari</span>
-              </div>
+            {/* Bottom Card Footer */}
+            <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span className="text-cyan-700 font-semibold flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-cyan-600" />
+                Status: Tertib &amp; Berkelanjutan
+              </span>
+              {onOpenFormulaModal && (
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-2-pesisir-reklamasi')}
+                  className="font-bold text-cyan-700 hover:text-cyan-900 flex items-center gap-0.5 cursor-pointer"
+                >
+                  <span>Manual Naskah</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
             </div>
           </div>
-        </div>
-      )}
+
+        {/* ========================================================================= */}
+        {/* DIREKTORAT 3: PENGENDALIAN PENGELOLAAN LAHAN, PESISIR & REKLAMASI */}
+        {/* ========================================================================= */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition-all p-4 flex flex-col justify-between relative overflow-hidden">
+            {/* Top Badge & Directorate Header */}
+            <div>
+              <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase">
+                      DIREKTORAT 3
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug">
+                      Dit. Pengendalian Lahan &amp; Pesisir
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    {ikpPengendalian.capaianPersen.toFixed(1)}%
+                  </span>
+                  {onOpenFormulaModal && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenFormulaModal('ikp-3-pengawasan-pengendalian')}
+                      className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                      title="Formula & Manual Teknis IKP 3 Dit. Pengendalian"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Primary IKP Card Block */}
+              <div className="bg-gradient-to-br from-emerald-50/70 to-slate-50/90 rounded-lg p-3 border border-emerald-100/80 my-3">
+                <div className="text-[10.5px] font-bold text-emerald-950 flex items-center justify-between">
+                  <span>IKP #3: Keberhasilan Pengawasan &amp; Pengendalian</span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    KEPATUHAN TINGGI
+                  </span>
+                </div>
+                
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      {ikpPengendalian.realisasi}
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">% Target</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">{ikpPengendalian.target2025}%</span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-600"
+                    style={{ width: `${Math.min(100, ikpPengendalian.capaianPersen)}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Essential Directorate Overall Metrics (Direct & Compact) */}
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-wider">
+                  Ringkasan Kinerja Keseluruhan:
+                </div>
+
+                {/* Metric 1: Pengawasan Lapangan */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-800">Pengawasan Objek Lahan</div>
+                      <div className="text-[10px] text-slate-500">Cakupan 3 Zona SWP Aktif</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-emerald-700">{kpiPengawasan.persentase.toFixed(1)}%</div>
+                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-1 py-0.2 rounded border border-sky-200">
+                      {kpiPengawasan.realisasiObjek}/{kpiPengawasan.targetObjek} Objek
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 2: Rekuperasi Lahan Mangkrak */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-800">Evaluasi &amp; Rekuperasi Lahan</div>
+                      <div className="text-[10px] text-slate-500">{kpiEvaluasi.realisasiKasus}/{kpiEvaluasi.targetKasus} Kasus Ditertibkan</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-amber-700">{kpiEvaluasi.persentase.toFixed(1)}%</div>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      {kpiEvaluasi.luasLahanDiselamatkanHa} Ha Diselamatkan
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 3: Legalitas Dokumen & Rekomendasi */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <FileText className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-800">Dokumen Sah &amp; Rekomendasi</div>
+                      <div className="text-[10px] text-slate-500">BAPL ({kpiDokumen.rataRataSlaHari} Hari) &amp; Hak ({kpiRekomendasi.rataRataSlaHari} Hari)</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-black font-mono text-emerald-700">95.0%</div>
+                    <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1 py-0.2 rounded">
+                      {kpiDokumen.realisasiDokumen} BAPL / {kpiRekomendasi.totalRekomendasiSelesai} Hak
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Card Footer */}
+            <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                Status: Pengawasan Efektif
+              </span>
+              {onOpenFormulaModal && (
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-3-pengawasan-pengendalian')}
+                  className="font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-0.5 cursor-pointer"
+                >
+                  <span>Manual Naskah</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </div>
+      </div>
     </div>
   );
 };

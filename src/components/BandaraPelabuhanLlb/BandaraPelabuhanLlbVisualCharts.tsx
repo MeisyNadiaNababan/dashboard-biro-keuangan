@@ -24,6 +24,9 @@ import {
   ExternalLink,
   ChevronRight,
   Package,
+  Smile,
+  FileCheck2,
+  Award,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -47,8 +50,6 @@ import {
   MONTHLY_OPERATIONAL_DATA,
   IKM_UNSUR_DETAILS,
   OPERATIONAL_ALERTS_A5,
-  OPERATIONAL_STRATEGY_INSIGHTS,
-  SATKER_A5_LIST,
 } from './bandaraPelabuhanLlbData';
 
 interface BandaraPelabuhanLlbVisualChartsProps {
@@ -59,81 +60,146 @@ interface BandaraPelabuhanLlbVisualChartsProps {
 export const BandaraPelabuhanLlbVisualCharts: React.FC<
   BandaraPelabuhanLlbVisualChartsProps
 > = ({ onOpenFormulaModal, onNavigateToUnit }) => {
-  const [activeTab, setActiveTab] = useState<
-    'throughput' | 'revenue' | 'ikm_unsur' | 'monitoring'
-  >('throughput');
+  const [activeTab, setActiveTab] = useState<'ikm_konsolidasi' | 'pnbp_konsolidasi'>('ikm_konsolidasi');
 
-  const [viewMode, setViewMode] = useState<'chart' | 'detail'>('chart');
-  const [cargoFilter, setCargoFilter] = useState<'ALL' | 'teus' | 'kargo_udara' | 'penumpang'>('ALL');
+  const [selectedLokusNo, setSelectedLokusNo] = useState<number>(1);
 
-  // Colors
-  const COLORS_PNBP = ['#0284C7', '#0D9488', '#F59E0B'];
-
-  const pnbpDonutData = [
-    { name: 'Dit. Pengelolaan Kepelabuhanan', value: 438.35, target: 401.89, pct: '77.5%', color: '#0284C7' },
-    { name: 'Dit. Pengelolaan Kawasan Bandara', value: 124.50, target: 116.32, pct: '22.0%', color: '#0D9488' },
-    { name: 'Dit. Lalu Lintas Barang', value: 2.48, target: 2.20, pct: '0.5%', color: '#F59E0B' },
+  // DATA KONSOLIDASI 3 LOKUS IKM (HANYA BANDARA, PELABUHAN, LALU LINTAS BARANG SESUAI INSTRUKSI USER)
+  const LOKUS_IKM_A5 = [
+    {
+      no: 1,
+      id: 'dit-bandara',
+      namaLokus: 'Kawasan Bandar Udara Internasional Hang Nadim',
+      satker: 'Direktorat Pengelolaan Kawasan Bandara',
+      skorIkm: 88.50,
+      target: 86.30,
+      mutuPelayanan: 'A',
+      predikat: 'Sangat Baik',
+      jumlahResponden: 1250,
+      layananUnggulan: 'Terminal Penumpang, Aviobridge & Fasilitas Sisi Udara',
+      unsurTertinggi: 'Kualitas Sarana & Prasarana (92,4)',
+      unsurPrioritas: 'Kecepatan Penanganan Bagasi (85,2)',
+      icon: <Plane className="w-5 h-5 text-emerald-600" />,
+      color: '#059669',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    },
+    {
+      no: 2,
+      id: 'dit-pelabuhan',
+      namaLokus: 'Kawasan Kepelabuhanan Domestik & Internasional Batam',
+      satker: 'Direktorat Pengelolaan Kepelabuhanan',
+      skorIkm: 88.40,
+      target: 86.30,
+      mutuPelayanan: 'A',
+      predikat: 'Sangat Baik',
+      jumlahResponden: 1480,
+      layananUnggulan: 'Terminal Penumpang Internasional, Dermaga Peti Kemas & Kargo',
+      unsurTertinggi: 'Kemudahan Prosedur Sandar & Bongkar Muat (90,1)',
+      unsurPrioritas: 'Fasilitas Ruang Tunggu Dermaga (86,0)',
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      color: '#2563EB',
+      badgeColor: 'bg-blue-50 text-blue-800 border-blue-200',
+    },
+    {
+      no: 3,
+      id: 'dit-lalu-lintas-barang',
+      namaLokus: 'Pelayanan Perizinan Lalu Lintas Barang & Logistik',
+      satker: 'Direktorat Lalu Lintas Barang',
+      skorIkm: 88.45,
+      target: 86.30,
+      mutuPelayanan: 'A',
+      predikat: 'Sangat Baik',
+      jumlahResponden: 860,
+      layananUnggulan: 'Pemasukan/Pengeluaran Barang, Kuota Konsumsi & SLA 96,8%',
+      unsurTertinggi: 'Kesesuaian Persyaratan & Keterbukaan Tarif (91,5)',
+      unsurPrioritas: 'Waktu Verifikasi Dokumen Masuk (87,0)',
+      icon: <Truck className="w-5 h-5 text-amber-600" />,
+      color: '#D97706',
+      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+    },
   ];
 
-  // Quarterly aggregated PNBP
-  const quarterlyPnbpData = [
+  const selectedLokus = LOKUS_IKM_A5.find((l) => l.no === selectedLokusNo) || LOKUS_IKM_A5[0];
+
+  // DATA TABEL & DONUT PNBP KONSOLIDASI (3 SATKER)
+  const PNBP_SATKER_DETAIL = [
     {
-      quarter: 'Q1 (Jan-Mar)',
-      bandara: 29.7,
-      pelabuhan: 105.1,
-      llb: 0.58,
-      total: 135.38,
-      target: 125.0,
+      no: 1,
+      id: 'dit-bandara',
+      namaSatker: 'Dit. Pengelolaan Kawasan Bandara (Hang Nadim)',
+      kategori: 'Bandara',
+      targetMiliar: 285.00,
+      realisasiMiliar: 312.45,
+      capaianPersen: 109.63,
+      kontribusiPersen: 55.27,
+      color: '#059669', // Emerald
+      layananUtama: 'PJP4U, Aviobridge, Pas Bandara, Konsesi & Sewa Ruang Komersial',
+      status: 'Melampaui Target (+Rp 27,45 M)',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
     },
     {
-      quarter: 'Q2 (Apr-Jun)',
-      bandara: 32.6,
-      pelabuhan: 112.3,
-      llb: 0.65,
-      total: 145.55,
-      target: 130.0,
+      no: 2,
+      id: 'dit-pelabuhan',
+      namaSatker: 'Dit. Pengelolaan Kepelabuhanan',
+      kategori: 'Pelabuhan',
+      targetMiliar: 233.21,
+      realisasiMiliar: 250.40,
+      capaianPersen: 107.37,
+      kontribusiPersen: 44.29,
+      color: '#2563EB', // Blue
+      layananUtama: 'Jasa Labuh Tambat, Dermaga Peti Kemas Batu Ampar, Pass Pelabuhan',
+      status: 'Melampaui Target (+Rp 17,19 M)',
+      badgeColor: 'bg-blue-50 text-blue-800 border-blue-200',
     },
     {
-      quarter: 'Q3 (Jul-Sep)',
-      bandara: 31.7,
-      pelabuhan: 113.1,
-      llb: 0.63,
-      total: 145.43,
-      target: 130.0,
-    },
-    {
-      quarter: 'Q4 (Okt-Des)',
-      bandara: 34.5,
-      pelabuhan: 122.6,
-      llb: 0.75,
-      total: 157.85,
-      target: 133.21,
+      no: 3,
+      id: 'dit-lalu-lintas-barang',
+      namaSatker: 'Dit. Lalu Lintas Barang',
+      kategori: 'Lalu Lintas Barang',
+      targetMiliar: 2.20,
+      realisasiMiliar: 2.48,
+      capaianPersen: 112.73,
+      kontribusiPersen: 0.44,
+      color: '#F59E0B', // Amber
+      layananUtama: 'Izin Usaha Kawasan, Izin Pemasukan & Pengeluaran Barang Konsumsi',
+      status: 'Melampaui Target (+Rp 0,28 M)',
+      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
     },
   ];
 
-  // Export CSV Helper
+  const totalTargetPnbp = PNBP_SATKER_DETAIL.reduce((acc, cur) => acc + cur.targetMiliar, 0);
+  const totalRealisasiPnbp = PNBP_SATKER_DETAIL.reduce((acc, cur) => acc + cur.realisasiMiliar, 0);
+  const totalCapaianPnbp = ((totalRealisasiPnbp / totalTargetPnbp) * 100).toFixed(2);
+  const totalSurplusPnbp = (totalRealisasiPnbp - totalTargetPnbp).toFixed(2);
+
+  // Donut chart data
+  const pnbpDonutData = PNBP_SATKER_DETAIL.map((item) => ({
+    name: item.kategori,
+    fullName: item.namaSatker,
+    value: item.realisasiMiliar,
+    percentage: item.kontribusiPersen,
+    color: item.color,
+  }));
+
   const handleExportCsv = () => {
-    let csv = 'data:text/csv;charset=utf-8,';
-    if (activeTab === 'throughput') {
-      csv += 'Bulan,Kuartal,Peti Kemas (TEUs),Kargo Udara (Ton),Penumpang Bandara (Pax),Penumpang Pelabuhan (Pax),Kunjungan Kapal (Call)\n';
-      MONTHLY_OPERATIONAL_DATA.forEach((r) => {
-        csv += `${r.bulan},${r.kuartal},${r.petiKemasTeus},${r.kargoUdaraTon},${r.penumpangBandaraPax},${r.penumpangPelabuhanPax},${r.kapalCall}\n`;
-      });
-    } else if (activeTab === 'revenue') {
-      csv += 'Kuartal,PNBP Bandara (M),PNBP Pelabuhan (M),PNBP Lalu Lintas Barang (M),Total Realisasi (M),Target Perkin (M)\n';
-      quarterlyPnbpData.forEach((r) => {
-        csv += `${r.quarter},${r.bandara},${r.pelabuhan},${r.llb},${r.total},${r.target}\n`;
+    let csv = 'CAPAIAN EVALUASI 3 INDIKATOR KINERJA PROGRAM PERKIN A5\n';
+    if (activeTab === 'ikm_konsolidasi') {
+      csv += 'KONSOLIDASI IKM 3 LOKUS LAYANAN (BANDARA, PELABUHAN, LALU LINTAS BARANG)\n';
+      csv += 'No,Nama Lokus,Satker Pengampu,Target,Skor Realisasi,Mutu,Responden\n';
+      LOKUS_IKM_A5.forEach((l) => {
+        csv += `${l.no},"${l.namaLokus}","${l.satker}",${l.target},${l.skorIkm},"${l.mutuPelayanan}",${l.jumlahResponden}\n`;
       });
     } else {
-      csv += 'Unsur Layanan,Deskripsi,Bobot,Nilai Bandara,Nilai Pelabuhan,Nilai LLB,Nilai Rata-rata,Predikat\n';
-      IKM_UNSUR_DETAILS.forEach((r) => {
-        csv += `"${r.unsur}","${r.deskripsi}",${r.bobot},${r.nilaiBandara},${r.nilaiPelabuhan},${r.nilaiLlb},${r.nilaiRataRata},"${r.predikat}"\n`;
+      csv += 'REALISASI & KONTRIBUSI PNBP PER SATKER PENGAMPU PERKIN A5\n';
+      csv += 'No,Nama Satker,Target (Rp M),Realisasi (Rp M),Capaian (%),Kontribusi (%)\n';
+      PNBP_SATKER_DETAIL.forEach((p) => {
+        csv += `${p.no},"${p.namaSatker}",${p.targetMiliar},${p.realisasiMiliar},${p.capaianPersen}%,${p.kontribusiPersen}%\n`;
       });
     }
     const encoded = encodeURI(csv);
     const link = document.createElement('a');
     link.setAttribute('href', encoded);
-    link.setAttribute('download', `data_visual_${activeTab}_perkin_a5.csv`);
+    link.setAttribute('download', `evaluasi_3_ikp_${activeTab}_perkin_a5.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -141,24 +207,24 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
-      {/* 1. TOP METRICS HEADER BAR (Terinspirasi layout gambar namun diperkaya standar BP Batam) */}
+      {/* 1. TOP METRICS HEADER BAR - Diubah Menjadi "Capaian Evaluasi 3 Indikator Kinerja Program (IKP)" */}
       <div className="p-4 bg-gradient-to-r from-slate-900 via-[#0B2545] to-[#13315C] text-white">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-700/70">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 text-cyan-300 flex items-center justify-center shrink-0 shadow-xs">
-              <Activity className="w-5 h-5" />
+              <Award className="w-5 h-5 text-cyan-300" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 uppercase">
-                  OPERATIONAL &amp; REVENUE ANALYTICS
+                  EVALUASI PROGRAM TERPADU
                 </span>
                 <span className="text-xs text-slate-300 font-mono hidden sm:inline">
-                  Perkin A.5 Deputi Bandara, Pelabuhan &amp; LLB
+                  DEP-A5 BP Batam &bull; Perkin TA 2025
                 </span>
               </div>
               <h2 className="text-sm sm:text-base font-black text-white tracking-tight">
-                Detail Operasional, Throughput &amp; Layanan Strategis
+                Capaian Evaluasi 3 Indikator Kinerja Program (IKP)
               </h2>
             </div>
           </div>
@@ -167,48 +233,27 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center p-1 bg-slate-800/80 rounded-xl border border-slate-700/80 text-xs">
               <button
-                onClick={() => setActiveTab('throughput')}
+                onClick={() => setActiveTab('ikm_konsolidasi')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'throughput'
+                  activeTab === 'ikm_konsolidasi'
                     ? 'bg-blue-600 text-white shadow-xs'
                     : 'text-slate-300 hover:text-white'
                 }`}
               >
-                <TrendingUp className="w-3.5 h-3.5" />
-                <span>Throughput &amp; Cargo</span>
+                <Smile className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Konsolidasi IKM</span>
               </button>
+
               <button
-                onClick={() => setActiveTab('revenue')}
+                onClick={() => setActiveTab('pnbp_konsolidasi')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'revenue'
+                  activeTab === 'pnbp_konsolidasi'
                     ? 'bg-blue-600 text-white shadow-xs'
                     : 'text-slate-300 hover:text-white'
                 }`}
               >
-                <DollarSign className="w-3.5 h-3.5" />
-                <span>PNBP &amp; Revenue</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('ikm_unsur')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'ikm_unsur'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>9 Unsur IKM</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('monitoring')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'monitoring'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Monitoring &amp; Alert</span>
+                <DollarSign className="w-3.5 h-3.5 text-amber-300" />
+                <span>PNBP</span>
               </button>
             </div>
 
@@ -218,725 +263,458 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
               title="Unduh Data CSV"
             >
               <Download className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Ekspor CSV</span>
+              <span className="hidden sm:inline">CSV</span>
             </button>
-          </div>
-        </div>
-
-        {/* 6 KEY EXECUTIVE STATS ROW (Sesuai Konsep Banner Gambar Referensi) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3">
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">TOTAL PNBP SERVICES</div>
-            <div className="text-base sm:text-lg font-black font-mono text-cyan-300 mt-0.5">
-              Rp 565,33 M
-            </div>
-            <div className="text-[10px] text-emerald-400 font-mono font-bold">108,63% dari Target</div>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">RATA-RATA IKM</div>
-            <div className="text-base sm:text-lg font-black font-mono text-amber-300 mt-0.5">
-              88,45
-            </div>
-            <div className="text-[10px] text-emerald-400 font-mono font-bold">Mutu A (Sangat Baik)</div>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">AVG UTILISASI</div>
-            <div className="text-base sm:text-lg font-black font-mono text-white mt-0.5">
-              85,57%
-            </div>
-            <div className="text-[10px] text-cyan-300 font-mono font-bold">Dermaga &amp; Runway</div>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">TOP PERFORMER</div>
-            <div className="text-base sm:text-lg font-black text-emerald-400 mt-0.5 truncate">
-              Pelabuhan
-            </div>
-            <div className="text-[10px] text-slate-300 font-mono">Rp 438,35 M (109%)</div>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">HIGHEST SLA</div>
-            <div className="text-base sm:text-lg font-black text-sky-400 mt-0.5 truncate">
-              Lalu Lintas Brg
-            </div>
-            <div className="text-[10px] text-emerald-400 font-mono font-bold">96,8% Tepat Waktu</div>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/60">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">OVERALL STATUS</div>
-            <div className="text-base sm:text-lg font-black text-emerald-400 mt-0.5">
-              Melampaui
-            </div>
-            <div className="text-[10px] text-emerald-400 font-mono font-bold">100% HIJAU</div>
           </div>
         </div>
       </div>
 
-      {/* 2. SUB-BAR TOGGLE (RINGKASAN GRAFIK VS RINCIAN TABEL) */}
-      <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-slate-700">Tampilan Data:</span>
-          <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200">
-            <button
-              onClick={() => setViewMode('chart')}
-              className={`px-2.5 py-1 rounded font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                viewMode === 'chart'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
-              <span>Grafik Analitik</span>
-            </button>
-            <button
-              onClick={() => setViewMode('detail')}
-              className={`px-2.5 py-1 rounded font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                viewMode === 'detail'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <TableIcon className="w-3.5 h-3.5" />
-              <span>Matriks Rincian</span>
-            </button>
-          </div>
-        </div>
+      {/* 2. BODY CONTENT SESUAI TAB YANG DIPILIH */}
+      <div className="p-4 sm:p-5 space-y-5">
+        {/* ==================================================================== */}
+        {/* SHEET 1: KONSOLIDASI IKM (BANDARA, PELABUHAN, LALU LINTAS BARANG)    */}
+        {/* MODEL TAMPILAN SEPERTI KONSOLIDASI IKM DI DASHBOARD KEPALA BP        */}
+        {/* ==================================================================== */}
+        {activeTab === 'ikm_konsolidasi' && (
+          <div className="space-y-5">
+            {/* Header Callout IKM */}
+            <div className="p-4 rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50/70 via-white to-emerald-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shrink-0">
+                  <Smile className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase">
+                      IKP-1 PERKIN A.5 &bull; IKM KONSOLIDASI
+                    </span>
+                    <span className="text-xs text-slate-500 font-mono hidden sm:inline">
+                      Mempedomani PermenPAN-RB No. 14 Tahun 2017
+                    </span>
+                  </div>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
+                    Indeks Kepuasan Masyarakat (IKM) 3 Lokus Layanan Utama DEP-A5
+                  </h3>
+                </div>
+              </div>
 
-        {activeTab === 'throughput' && (
-          <div className="flex items-center gap-1 text-[11px]">
-            <span className="text-slate-500 font-mono">Fokus Metrik:</span>
-            {(['ALL', 'teus', 'kargo_udara', 'penumpang'] as const).map((f) => (
-              <button
-                key={f}
-                onClick={() => setCargoFilter(f)}
-                className={`px-2 py-0.5 rounded font-mono font-bold transition-colors cursor-pointer ${
-                  cargoFilter === f
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-                }`}
-              >
-                {f === 'ALL'
-                  ? 'Semua'
-                  : f === 'teus'
-                  ? 'Peti Kemas'
-                  : f === 'kargo_udara'
-                  ? 'Kargo Udara'
-                  : 'Penumpang'}
-              </button>
-            ))}
+              <div className="flex items-center gap-3 self-end sm:self-auto">
+                <div className="text-right">
+                  <span className="text-[10px] uppercase font-bold text-slate-500 block font-mono">
+                    Target: 86,30 | Realisasi Rata-Rata
+                  </span>
+                  <div className="flex items-baseline justify-end gap-1.5">
+                    <span className="text-2xl font-black font-mono text-emerald-800">
+                      88,45
+                    </span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                      Mutu A (Sangat Baik)
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => onOpenFormulaModal('ikp-1-ikm-gabungan')}
+                  className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg text-xs font-semibold border border-emerald-200 transition-colors flex items-center gap-1 cursor-pointer"
+                  title="Formula PermenPAN-RB"
+                >
+                  <Info className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Manual Rumus</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 3 Lokus Survey Cards (Grid 3 Kolom) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <h4 className="font-bold text-slate-900 flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Skor IKM 3 Lokus Pelayanan Publik (Klik kartu untuk melihat 9 unsur detail):</span>
+                </h4>
+                <span className="text-slate-500 font-mono text-[11px]">
+                  Target Seluruh Lokus: <strong>86,30</strong>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                {LOKUS_IKM_A5.map((lokus) => {
+                  const isSelected = lokus.no === selectedLokusNo;
+                  return (
+                    <div
+                      key={lokus.no}
+                      onClick={() => setSelectedLokusNo(lokus.no)}
+                      className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
+                        isSelected
+                          ? 'border-emerald-500 bg-emerald-50/40 shadow-sm ring-2 ring-emerald-400/30'
+                          : 'border-slate-200 hover:border-slate-300 bg-white shadow-2xs'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between text-[11px] mb-1.5">
+                          <span className="font-bold text-slate-500 font-mono flex items-center gap-1">
+                            {lokus.icon}
+                            <span>LOKUS #{lokus.no}</span>
+                          </span>
+                          <span
+                            className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] ${
+                              lokus.mutuPelayanan === 'A'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                : 'bg-blue-100 text-blue-800'
+                            }`}
+                          >
+                            Mutu {lokus.mutuPelayanan} ({lokus.predikat})
+                          </span>
+                        </div>
+
+                        <h5 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug line-clamp-2 min-h-[38px]">
+                          {lokus.namaLokus}
+                        </h5>
+                        <p className="text-[10.5px] text-slate-500 mt-0.5">
+                          {lokus.satker}
+                        </p>
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between mb-1.5">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-2xl font-black font-mono text-slate-900">
+                              {lokus.skorIkm.toFixed(2)}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">/ 100</span>
+                          </div>
+                          <span className="text-[11px] font-mono font-bold text-emerald-700">
+                            +{(lokus.skorIkm - lokus.target).toFixed(2)} di atas target
+                          </span>
+                        </div>
+
+                        <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-emerald-600 h-full rounded-full transition-all duration-500"
+                            style={{ width: `${(lokus.skorIkm / 100) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-100 space-y-1 text-[11px]">
+                        <div className="flex items-center justify-between text-slate-600">
+                          <span>Responden:</span>
+                          <span className="font-mono font-bold text-slate-800">
+                            {lokus.jumlahResponden.toLocaleString('id-ID')} Pengguna Jasa
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 truncate" title={lokus.unsurTertinggi}>
+                          ⭐ Tertinggi: <strong className="text-slate-800">{lokus.unsurTertinggi}</strong>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono">
+                        <span className="text-slate-400">Klik untuk unsur detail</span>
+                        <span className="text-emerald-700 font-bold">
+                          {isSelected ? '✓ Terpilih' : 'Pilih Lokus →'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Drilldown 9 Unsur Pelayanan PermenPAN-RB untuk Lokus Terpilih */}
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    Rincian 9 Unsur Penilaian IKM: {selectedLokus.namaLokus}
+                  </h4>
+                </div>
+                <span className="text-[10.5px] font-mono text-slate-500">
+                  Responden: <strong>{selectedLokus.jumlahResponden} Pengguna</strong> &bull; Rata-rata Skor: <strong>{selectedLokus.skorIkm}</strong>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                {IKM_UNSUR_DETAILS.map((unsur, idx) => {
+                  const nilai =
+                    selectedLokus.no === 1
+                      ? unsur.nilaiBandara
+                      : selectedLokus.no === 2
+                      ? unsur.nilaiPelabuhan
+                      : unsur.nilaiLlb;
+
+                  const isHigh = nilai >= 88.0;
+
+                  return (
+                    <div
+                      key={idx}
+                      className="p-2.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs space-y-1.5"
+                    >
+                      <div className="flex items-start justify-between gap-1">
+                        <span className="text-[10.5px] font-bold text-slate-800 line-clamp-1" title={unsur.unsur}>
+                          {idx + 1}. {unsur.unsur}
+                        </span>
+                        <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded ${
+                          isHigh ? 'bg-emerald-50 text-emerald-800' : 'bg-blue-50 text-blue-800'
+                        }`}>
+                          {isHigh ? 'Mutu A' : 'Mutu B'}
+                        </span>
+                      </div>
+
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-base font-black font-mono text-slate-900">
+                          {nilai.toFixed(2)}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          Bobot: {(unsur.bobot * 100).toFixed(0)}%
+                        </span>
+                      </div>
+
+                      <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="bg-emerald-500 h-full rounded-full"
+                          style={{ width: `${(nilai / 100) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      {/* 3. TAB CONTENT */}
-      <div className="p-4 sm:p-5">
-        {/* ============================================================== */}
-        {/* TAB 1: THROUGHPUT & CARGO FLOW                                 */}
-        {/* ============================================================== */}
-        {activeTab === 'throughput' && (
+        {/* ==================================================================== */}
+        {/* SHEET 2: REALISASI & KONTRIBUSI PNBP (3 SATKER GABUNGAN)             */}
+        {/* KIRI: KONTRIBUSI PNBP PER SATKER | KANAN: TABEL DETAIL SEPERTI KEPALA BP */}
+        {/* ==================================================================== */}
+        {activeTab === 'pnbp_konsolidasi' && (
           <div className="space-y-4">
-            {viewMode === 'chart' ? (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {/* Left 2 Cols: Main Flow Composed Chart */}
-                <div className="lg:col-span-2 bg-slate-50/50 rounded-2xl border border-slate-200 p-4 space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                        <TrendingUp className="w-4 h-4 text-blue-600" />
-                        <span>Tren Throughput Peti Kemas (TEUs) &amp; Penumpang (Pax) Per Bulan</span>
+            {/* Header Ringkasan Keuangan PNBP */}
+            <div className="p-4 rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50/70 via-white to-blue-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shrink-0">
+                  <DollarSign className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 border border-indigo-200 uppercase">
+                      IKP-2 PERKIN A.5 &bull; PNBP KONSOLIDASI
+                    </span>
+                    <span className="text-xs text-slate-500 font-mono hidden sm:inline">
+                      Penggabungan Bandara, Pelabuhan &amp; Lalu Lintas Barang
+                    </span>
+                  </div>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
+                    Realisasi &amp; Kontribusi PNBP 3 Satker Pengampu (Target Rp 520,41 M)
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 self-end sm:self-auto">
+                <div className="text-right">
+                  <span className="text-[10px] uppercase font-bold text-slate-500 block font-mono">
+                    Target: Rp 520,41 M | Realisasi YTD
+                  </span>
+                  <div className="flex items-baseline justify-end gap-1.5">
+                    <span className="text-2xl font-black font-mono text-emerald-800">
+                      Rp {totalRealisasiPnbp.toFixed(2)} M
+                    </span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                      {totalCapaianPnbp}%
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+                  className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 rounded-lg text-xs font-semibold border border-indigo-200 transition-colors flex items-center gap-1 cursor-pointer"
+                  title="Formula PNBP"
+                >
+                  <Info className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Manual Rumus</span>
+                </button>
+              </div>
+            </div>
+
+            {/* GRID SIDE-BY-SIDE: KIRI (DONUT KONTRIBUSI) & KANAN (TABEL DETAIL SEPERTI KEPALA BP) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+              {/* SISI KIRI (5 KOLOM): KONTRIBUSI PNBP PER SATKER PENGAMPU */}
+              <div className="lg:col-span-5 p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                    <div className="flex items-center gap-1.5">
+                      <PieIcon className="w-4 h-4 text-indigo-600" />
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                        Kontribusi PNBP per Satker Pengampu
                       </h4>
-                      <p className="text-xs text-slate-500">
-                        Konsolidasi Arus Logistik Batu Ampar &amp; Trafik Bandara Hang Nadim
-                      </p>
                     </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold border border-blue-200">
-                      TA 2025 BULANAN
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">
+                      3 Satker
                     </span>
                   </div>
 
-                  <div className="h-72 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ComposedChart data={MONTHLY_OPERATIONAL_DATA}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                        <XAxis dataKey="bulanShort" tick={{ fontSize: 11 }} />
-                        <YAxis
-                          yAxisId="left"
-                          tick={{ fontSize: 11 }}
-                          tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                          label={{ value: 'Peti Kemas (TEUs)', angle: -90, position: 'insideLeft', fontSize: 10, fill: '#64748B' }}
-                        />
-                        <YAxis
-                          yAxisId="right"
-                          orientation="right"
-                          tick={{ fontSize: 11 }}
-                          tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                          label={{ value: 'Pax Penumpang', angle: 90, position: 'insideRight', fontSize: 10, fill: '#64748B' }}
-                        />
-                        <Tooltip
-                          formatter={(value: any, name: any) => [
-                            Number(value).toLocaleString('id-ID'),
-                            name === 'petiKemasTeus'
-                              ? 'Throughput Peti Kemas (TEUs)'
-                              : name === 'penumpangBandaraPax'
-                              ? 'Penumpang Bandara (Pax)'
-                              : name === 'penumpangPelabuhanPax'
-                              ? 'Penumpang Pelabuhan (Pax)'
-                              : name === 'kargoUdaraTon'
-                              ? 'Kargo Udara (Ton)'
-                              : name,
-                          ]}
-                        />
-                        <Legend wrapperStyle={{ fontSize: 11 }} />
-                        {(cargoFilter === 'ALL' || cargoFilter === 'teus') && (
-                          <Bar
-                            yAxisId="left"
-                            dataKey="petiKemasTeus"
-                            name="Peti Kemas (TEUs)"
-                            fill="#0284C7"
-                            radius={[4, 4, 0, 0]}
-                          />
-                        )}
-                        {(cargoFilter === 'ALL' || cargoFilter === 'penumpang') && (
-                          <Line
-                            yAxisId="right"
-                            type="monotone"
-                            dataKey="penumpangBandaraPax"
-                            name="Pax Bandara"
-                            stroke="#10B981"
-                            strokeWidth={2.5}
-                            dot={{ r: 3 }}
-                          />
-                        )}
-                        {(cargoFilter === 'ALL' || cargoFilter === 'penumpang') && (
-                          <Line
-                            yAxisId="right"
-                            type="monotone"
-                            dataKey="penumpangPelabuhanPax"
-                            name="Pax Pelabuhan"
-                            stroke="#8B5CF6"
-                            strokeWidth={2}
-                            strokeDasharray="4 4"
-                          />
-                        )}
-                        {(cargoFilter === 'ALL' || cargoFilter === 'kargo_udara') && (
-                          <Line
-                            yAxisId="left"
-                            type="monotone"
-                            dataKey="kargoUdaraTon"
-                            name="Kargo Udara (Ton)"
-                            stroke="#F59E0B"
-                            strokeWidth={2}
-                          />
-                        )}
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Right 1 Col: Highlights Summary & Capacity Utilization */}
-                <div className="bg-slate-50/50 rounded-2xl border border-slate-200 p-4 space-y-3 flex flex-col justify-between">
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                      <Package className="w-4 h-4 text-emerald-600" />
-                      <span>Kapasitas &amp; Utilisasi Strategis</span>
-                    </h4>
-                    <p className="text-xs text-slate-500">
-                      Rasio Keterpakaian Aset Logistik &amp; Transportasi
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    {/* Pelabuhan Container Yard */}
-                    <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                          <Anchor className="w-3.5 h-3.5 text-blue-600" />
-                          <span>Berth &amp; Yard Batu Ampar</span>
-                        </span>
-                        <span className="font-mono font-bold text-blue-700">86,4%</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-blue-600 rounded-full" style={{ width: '86.4%' }} />
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono flex justify-between">
-                        <span>Total 612.400 TEUs</span>
-                        <span>Dwell: 2,1 Hari</span>
-                      </div>
-                    </div>
-
-                    {/* Bandara Runway & Apron */}
-                    <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                          <Plane className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Runway &amp; Slot Hang Nadim</span>
-                        </span>
-                        <span className="font-mono font-bold text-emerald-700">79,1%</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-600 rounded-full" style={{ width: '79.1%' }} />
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono flex justify-between">
-                        <span>34.250 Pergerakan</span>
-                        <span>4,12 Juta Pax</span>
-                      </div>
-                    </div>
-
-                    {/* LLB SLA Perizinan */}
-                    <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                          <Truck className="w-3.5 h-3.5 text-amber-600" />
-                          <span>SLA Ketepatan Waktu LLB</span>
-                        </span>
-                        <span className="font-mono font-bold text-amber-700">96,8%</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 rounded-full" style={{ width: '96.8%' }} />
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono flex justify-between">
-                        <span>14.850 SK Terbit</span>
-                        <span>&lt; 24 Jam Kerja</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-blue-50/80 border border-blue-100 text-[11px] text-blue-900 leading-relaxed">
-                    <span className="font-bold">Catatan Pimpinan:</span> Seluruh aset transportasi utama beroperasi di zona sehat tanpa terjadi bottleneck kritis, didukung sistem STS crane dan otomasi IBOSS.
-                  </div>
-                </div>
-              </div>
-            ) : (
-              /* Detail Table View */
-              <div className="border border-slate-200 rounded-xl overflow-x-auto">
-                <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-100 text-slate-700 font-mono uppercase text-[10px]">
-                    <tr>
-                      <th className="p-2.5">Bulan</th>
-                      <th className="p-2.5">Kuartal</th>
-                      <th className="p-2.5 text-right">Peti Kemas (TEUs)</th>
-                      <th className="p-2.5 text-right">Kargo Udara (Ton)</th>
-                      <th className="p-2.5 text-right">Penumpang Bandara (Pax)</th>
-                      <th className="p-2.5 text-right">Penumpang Laut (Pax)</th>
-                      <th className="p-2.5 text-right">Kunjungan Kapal (Call)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
-                    {MONTHLY_OPERATIONAL_DATA.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="p-2.5 font-sans font-bold text-slate-800">{row.bulan}</td>
-                        <td className="p-2.5 text-slate-500">{row.kuartal}</td>
-                        <td className="p-2.5 text-right font-bold text-blue-700">
-                          {row.petiKemasTeus.toLocaleString('id-ID')}
-                        </td>
-                        <td className="p-2.5 text-right text-amber-700">
-                          {row.kargoUdaraTon.toLocaleString('id-ID')}
-                        </td>
-                        <td className="p-2.5 text-right text-emerald-700">
-                          {row.penumpangBandaraPax.toLocaleString('id-ID')}
-                        </td>
-                        <td className="p-2.5 text-right text-purple-700">
-                          {row.penumpangPelabuhanPax.toLocaleString('id-ID')}
-                        </td>
-                        <td className="p-2.5 text-right font-bold text-slate-800">
-                          {row.kapalCall.toLocaleString('id-ID')}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ============================================================== */}
-        {/* TAB 2: PNBP & REVENUE CONTRIBUTION                             */}
-        {/* ============================================================== */}
-        {activeTab === 'revenue' && (
-          <div className="space-y-4">
-            {viewMode === 'chart' ? (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {/* Donut Chart: Komposisi PNBP per Satker */}
-                <div className="bg-slate-50/50 rounded-2xl border border-slate-200 p-4 space-y-3">
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                      <PieIcon className="w-4 h-4 text-sky-600" />
-                      <span>Kontribusi PNBP per Satker Pengampu</span>
-                    </h4>
-                    <p className="text-xs text-slate-500">
-                      Total Realisasi: Rp 565,33 Miliar (108,63%)
-                    </p>
-                  </div>
-
-                  <div className="h-56 w-full flex items-center justify-center">
+                  {/* Donut Chart */}
+                  <div className="h-56 relative flex items-center justify-center mt-2">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
                           data={pnbpDonutData}
-                          dataKey="value"
-                          nameKey="name"
                           cx="50%"
                           cy="50%"
                           innerRadius={55}
                           outerRadius={80}
                           paddingAngle={3}
+                          dataKey="value"
                         >
                           {pnbpDonutData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
                         <Tooltip
-                          formatter={(v: any) => [`Rp ${Number(v).toFixed(2)} Miliar`, 'Realisasi PNBP']}
+                          formatter={(val: any, name: any, item: any) => [
+                            `Rp ${val} Miliar (${item.payload.percentage.toFixed(1)}%)`,
+                            item.payload.fullName,
+                          ]}
+                          contentStyle={{
+                            backgroundColor: '#0F1E36',
+                            border: '1px solid #1E293B',
+                            borderRadius: '8px',
+                            color: '#fff',
+                            fontSize: '11px',
+                          }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
+
+                    {/* Donut Center Display */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                      <span className="text-[9.5px] text-slate-500 font-bold uppercase font-mono">
+                        TOTAL PNBP
+                      </span>
+                      <span className="text-xl font-black font-mono text-slate-900 leading-tight">
+                        Rp {totalRealisasiPnbp.toFixed(1)}M
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-700 font-mono">
+                        {totalCapaianPnbp}%
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="space-y-2 text-xs">
+                  {/* Legend breakdown list */}
+                  <div className="space-y-1.5 text-xs pt-2 border-t border-slate-200">
                     {pnbpDonutData.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200"
-                      >
-                        <div className="flex items-center gap-2 truncate">
+                      <div key={idx} className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-2">
                           <span
-                            className="w-3 h-3 rounded-full shrink-0"
+                            className="w-2.5 h-2.5 rounded-full shrink-0"
                             style={{ backgroundColor: item.color }}
                           />
-                          <span className="font-bold text-slate-800 truncate">{item.name}</span>
+                          <span className="text-slate-700 font-medium truncate max-w-[170px]" title={item.fullName}>
+                            {item.fullName}
+                          </span>
                         </div>
-                        <div className="text-right shrink-0 font-mono">
-                          <span className="font-bold text-slate-900">Rp {item.value.toFixed(1)} M</span>
-                          <span className="text-[10px] text-slate-400 ml-1">({item.pct})</span>
-                        </div>
+                        <span className="font-mono font-bold text-slate-900 shrink-0">
+                          Rp {item.value.toFixed(2)} M ({item.percentage.toFixed(1)}%)
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Bar Chart: Target vs Realisasi Kuartalan */}
-                <div className="lg:col-span-2 bg-slate-50/50 rounded-2xl border border-slate-200 p-4 space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                        <BarChart3 className="w-4 h-4 text-blue-600" />
-                        <span>Kinerja Realisasi vs Target PNBP Kuartalan (Q1 - Q4)</span>
-                      </h4>
-                      <p className="text-xs text-slate-500">
-                        Perbandingan Akumulasi Penerimaan terhadap Target Perkin
-                      </p>
-                    </div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
-                      100% DI ATAS TARGET
-                    </span>
-                  </div>
-
-                  <div className="h-72 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={quarterlyPnbpData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                        <XAxis dataKey="quarter" tick={{ fontSize: 11 }} />
-                        <YAxis
-                          tick={{ fontSize: 11 }}
-                          tickFormatter={(v) => `Rp ${v} M`}
-                          label={{ value: 'Nilai (Miliar IDR)', angle: -90, position: 'insideLeft', fontSize: 10, fill: '#64748B' }}
-                        />
-                        <Tooltip
-                          formatter={(v: any, name: any) => [
-                            `Rp ${Number(v).toFixed(2)} Miliar`,
-                            name === 'target'
-                              ? 'Target Kuartal'
-                              : name === 'total'
-                              ? 'Total Realisasi'
-                              : name === 'pelabuhan'
-                              ? 'Dit. Kepelabuhanan'
-                              : name === 'bandara'
-                              ? 'Dit. Kawasan Bandara'
-                              : 'Dit. Lalu Lintas Barang',
-                          ]}
-                        />
-                        <Legend wrapperStyle={{ fontSize: 11 }} />
-                        <Bar dataKey="pelabuhan" name="Pelabuhan (Rp M)" stackId="a" fill="#0284C7" />
-                        <Bar dataKey="bandara" name="Bandara (Rp M)" stackId="a" fill="#0D9488" />
-                        <Bar dataKey="llb" name="LLB (Rp M)" stackId="a" fill="#F59E0B" />
-                        <Line type="monotone" dataKey="target" name="Target Perkin (Rp M)" stroke="#EF4444" strokeWidth={2.5} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
+                {/* Surplus Badge Box */}
+                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs font-mono">
+                  <span className="text-emerald-900 font-bold">Surplus Realisasi PNBP:</span>
+                  <span className="font-black text-emerald-800 text-sm">
+                    +Rp {totalSurplusPnbp} Miliar
+                  </span>
                 </div>
               </div>
-            ) : (
-              <div className="border border-slate-200 rounded-xl overflow-x-auto">
-                <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-100 text-slate-700 font-mono uppercase text-[10px]">
-                    <tr>
-                      <th className="p-2.5">Kuartal</th>
-                      <th className="p-2.5 text-right">Dit. Bandara (M)</th>
-                      <th className="p-2.5 text-right">Dit. Pelabuhan (M)</th>
-                      <th className="p-2.5 text-right">Dit. LLB (M)</th>
-                      <th className="p-2.5 text-right">Total Realisasi (M)</th>
-                      <th className="p-2.5 text-right">Target Kuartal (M)</th>
-                      <th className="p-2.5 text-right">Capaian (%)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono">
-                    {quarterlyPnbpData.map((r, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="p-2.5 font-sans font-bold text-slate-800">{r.quarter}</td>
-                        <td className="p-2.5 text-right text-teal-700">Rp {r.bandara.toFixed(2)} M</td>
-                        <td className="p-2.5 text-right text-blue-700">Rp {r.pelabuhan.toFixed(2)} M</td>
-                        <td className="p-2.5 text-right text-amber-700">Rp {r.llb.toFixed(2)} M</td>
-                        <td className="p-2.5 text-right font-bold text-slate-900">Rp {r.total.toFixed(2)} M</td>
-                        <td className="p-2.5 text-right text-slate-500">Rp {r.target.toFixed(2)} M</td>
-                        <td className="p-2.5 text-right font-bold text-emerald-600">
-                          {((r.total / r.target) * 100).toFixed(1)}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
 
-        {/* ============================================================== */}
-        {/* TAB 3: 9 UNSUR INDEKS KEPUASAN MASYARAKAT (IKM)               */}
-        {/* ============================================================== */}
-        {activeTab === 'ikm_unsur' && (
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-blue-50/70 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-bold text-blue-900 font-mono">
-                  IKP-1: Rata-rata IKM Pengguna Layanan = 88,45 (Target: 86,30)
-                </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
-                  MUTU A &bull; SANGAT BAIK
-                </span>
-              </div>
-              <span className="text-[11px] text-slate-500 font-mono">
-                Regulasi: PermenPAN-RB No. 14 Tahun 2017 (9 Unsur Standar)
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Unsur Table */}
-              <div className="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-                <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-100 text-slate-700 font-mono uppercase text-[10px]">
-                    <tr>
-                      <th className="p-2.5">Unsur Pelayanan</th>
-                      <th className="p-2.5 text-right">Bandara</th>
-                      <th className="p-2.5 text-right">Pelabuhan</th>
-                      <th className="p-2.5 text-right">LLB</th>
-                      <th className="p-2.5 text-right">Rata-rata</th>
-                      <th className="p-2.5">Predikat</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 font-mono text-[11px]">
-                    {IKM_UNSUR_DETAILS.map((u, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="p-2 font-sans font-bold text-slate-800">
-                          {u.unsur}
-                          <div className="text-[10px] text-slate-400 font-normal">{u.deskripsi}</div>
-                        </td>
-                        <td className="p-2 text-right text-slate-700">{u.nilaiBandara.toFixed(1)}</td>
-                        <td className="p-2 text-right text-slate-700">{u.nilaiPelabuhan.toFixed(1)}</td>
-                        <td className="p-2 text-right text-slate-700">{u.nilaiLlb.toFixed(1)}</td>
-                        <td className="p-2 text-right font-bold text-blue-700">{u.nilaiRataRata.toFixed(2)}</td>
-                        <td className="p-2 font-sans">
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                            u.predikat.includes('A') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-blue-50 text-blue-700 border border-blue-200'
-                          }`}>
-                            {u.predikat}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Horizontal Bar Chart for IKM Unsur */}
-              <div className="bg-slate-50/50 rounded-2xl border border-slate-200 p-4 space-y-3">
-                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>Komparasi Skor 9 Unsur IKM antar Satker</span>
-                </h4>
-                <div className="h-80 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={IKM_UNSUR_DETAILS}
-                      layout="vertical"
-                      margin={{ top: 5, right: 10, left: 70, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                      <XAxis type="number" domain={[80, 95]} tick={{ fontSize: 10 }} />
-                      <YAxis
-                        type="category"
-                        dataKey="unsur"
-                        tick={{ fontSize: 9 }}
-                        tickFormatter={(v) => v.split('.')[0]}
-                      />
-                      <Tooltip
-                        formatter={(val: any, name: any) => [
-                          `${Number(val).toFixed(1)} / 100`,
-                          name === 'nilaiBandara'
-                            ? 'Bandara Hang Nadim'
-                            : name === 'nilaiPelabuhan'
-                            ? 'Pelabuhan Batu Ampar'
-                            : 'Lalu Lintas Barang',
-                        ]}
-                      />
-                      <Legend wrapperStyle={{ fontSize: 10 }} />
-                      <Bar dataKey="nilaiPelabuhan" name="Pelabuhan" fill="#0284C7" radius={[0, 3, 3, 0]} />
-                      <Bar dataKey="nilaiBandara" name="Bandara" fill="#10B981" radius={[0, 3, 3, 0]} />
-                      <Bar dataKey="nilaiLlb" name="LLB" fill="#F59E0B" radius={[0, 3, 3, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ============================================================== */}
-        {/* TAB 4: OPERATIONAL MONITORING & STRATEGY (GAMBAR ACUAN)        */}
-        {/* ============================================================== */}
-        {activeTab === 'monitoring' && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {/* Left 2 Cols: Operational Monitoring Alerts */}
-              <div className="lg:col-span-2 space-y-3">
-                <div className="flex items-center justify-between pb-1 border-b border-slate-200">
-                  <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-rose-600" />
-                    <span>Operational Monitoring &amp; Status Mitigasi</span>
-                  </h4>
-                  <span className="text-xs text-slate-500 font-mono">
-                    {OPERATIONAL_ALERTS_A5.length} Catatan Operasional
+              {/* SISI KANAN (7 KOLOM): TABEL DETAIL SEPERTI RINGKASAN KEUANGAN KEPALA BP */}
+              <div className="lg:col-span-7 p-4 rounded-xl border border-slate-200 bg-white space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-slate-100">
+                  <div className="flex items-center gap-1.5">
+                    <TableIcon className="w-4 h-4 text-blue-600" />
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                      Tabel Rincian Realisasi PNBP 3 Satker (Model Ringkasan Keuangan)
+                    </h4>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Buku Satu Data &amp; SIMP BP Batam
                   </span>
                 </div>
 
-                <div className="space-y-2.5">
-                  {OPERATIONAL_ALERTS_A5.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className={`p-3.5 rounded-xl border transition-all ${
-                        alert.severity === 'high'
-                          ? 'bg-rose-50/70 border-rose-200 text-rose-950'
-                          : alert.severity === 'medium'
-                          ? 'bg-amber-50/70 border-amber-200 text-amber-950'
-                          : 'bg-blue-50/70 border-blue-200 text-blue-950'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${
-                                alert.severity === 'high'
-                                  ? 'bg-rose-600 text-white'
-                                  : alert.severity === 'medium'
-                                  ? 'bg-amber-600 text-white'
-                                  : 'bg-blue-600 text-white'
-                              }`}
-                            >
-                              {alert.category}
+                {/* Table */}
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="bg-slate-100/90 text-slate-700 font-bold uppercase text-[10px] border-b border-slate-200 font-mono">
+                        <th className="py-2 px-2.5 text-center">No</th>
+                        <th className="py-2 px-3">Satker &amp; Layanan PNBP</th>
+                        <th className="py-2 px-2 text-right">Target (Rp M)</th>
+                        <th className="py-2 px-2 text-right">Realisasi (Rp M)</th>
+                        <th className="py-2 px-2 text-right">Capaian</th>
+                        <th className="py-2 px-2 text-right">Porsi</th>
+                        <th className="py-2 px-2.5 text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                      {PNBP_SATKER_DETAIL.map((row) => (
+                        <tr key={row.no} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-2.5 px-2.5 text-center font-mono font-bold text-slate-500">{row.no}</td>
+                          <td className="py-2.5 px-3">
+                            <div className="font-bold text-slate-900">{row.namaSatker}</div>
+                            <div className="text-[10px] text-slate-500 line-clamp-1 font-sans">{row.layananUtama}</div>
+                          </td>
+                          <td className="py-2.5 px-2 text-right font-mono text-slate-600">{row.targetMiliar.toFixed(2)}</td>
+                          <td className="py-2.5 px-2 text-right font-mono font-black text-slate-900">{row.realisasiMiliar.toFixed(2)}</td>
+                          <td className="py-2.5 px-2 text-right font-mono font-bold text-emerald-700">
+                            {row.capaianPersen.toFixed(1)}%
+                          </td>
+                          <td className="py-2.5 px-2 text-right font-mono text-slate-600">
+                            {row.kontribusiPersen.toFixed(1)}%
+                          </td>
+                          <td className="py-2.5 px-2.5 text-center font-mono">
+                            <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded border ${row.badgeColor}`}>
+                              Melampaui
                             </span>
-                            <span className="text-xs font-bold text-slate-900">
-                              {alert.title}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-slate-600 font-mono">
-                            Lokasi: {alert.location} &bull; Metrik: {alert.metric}
-                          </p>
-                        </div>
-
-                        <span
-                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full shrink-0 ${
-                            alert.severity === 'high'
-                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                              : alert.severity === 'medium'
-                              ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                              : 'bg-blue-100 text-blue-800 border border-blue-300'
-                          }`}
-                        >
-                          {alert.status}
-                        </span>
-                      </div>
-
-                      <div className="mt-2 pt-2 border-t border-slate-200/60 text-xs text-slate-700 flex items-start gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>
-                          <strong className="text-slate-900">Tindakan Mitigasi:</strong> {alert.actionRequired}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right 1 Col: Operational Strategy Insights */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between pb-1 border-b border-slate-200">
-                  <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-600" />
-                    <span>Operational Strategy Insights</span>
-                  </h4>
-                  <span className="text-xs text-slate-500 font-mono">3 Pilar A.5</span>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr className="bg-slate-100/90 font-bold text-slate-900 border-t border-slate-200">
+                        <td colSpan={2} className="py-2.5 px-3 font-bold text-slate-950 text-right uppercase font-mono text-[10.5px]">
+                          Total Konsolidasi DEP-A5:
+                        </td>
+                        <td className="py-2.5 px-2 text-right font-mono font-bold text-slate-700">{totalTargetPnbp.toFixed(2)}</td>
+                        <td className="py-2.5 px-2 text-right font-mono font-black text-emerald-800 text-sm">{totalRealisasiPnbp.toFixed(2)}</td>
+                        <td className="py-2.5 px-2 text-right font-mono font-black text-emerald-800">{totalCapaianPnbp}%</td>
+                        <td className="py-2.5 px-2 text-right font-mono font-bold text-slate-700">100.0%</td>
+                        <td className="py-2.5 px-2.5 text-center">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                            Surplus
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
-                <div className="space-y-3">
-                  {OPERATIONAL_STRATEGY_INSIGHTS.map((item) => (
-                    <div
-                      key={item.id}
-                      className="bg-slate-900 text-white p-3.5 rounded-xl border border-slate-800 space-y-1.5 shadow-sm"
-                    >
-                      <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300">
-                        <span className="w-4 h-4 rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center text-[10px]">
-                          {item.id}
-                        </span>
-                        <span>{item.unit}</span>
-                      </div>
-                      <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                        &ldquo;{item.insight}&rdquo;
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Executive Linkage Buttons */}
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                  <div className="text-[11px] font-mono font-bold text-slate-700 uppercase">
-                    Executive Quick Linkage:
+                {/* 3 Mini Summary Tiles */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-xs">
+                  <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 space-y-0.5">
+                    <span className="text-[9.5px] text-emerald-900 font-bold uppercase">1. PNBP Bandara</span>
+                    <div className="text-sm font-black text-emerald-950">Rp 312,45 M</div>
+                    <div className="text-[9.5px] text-emerald-700 font-semibold">+Rp 27,45 M dari target</div>
                   </div>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    <button
-                      onClick={() => onNavigateToUnit && onNavigateToUnit('dit-bandara')}
-                      className="p-2 rounded-lg bg-white border border-slate-200 text-center hover:bg-blue-50 hover:border-blue-300 transition-all cursor-pointer text-xs"
-                    >
-                      <Plane className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
-                      <span className="font-bold text-[10px] text-slate-800 block">Bandara</span>
-                    </button>
-                    <button
-                      onClick={() => onNavigateToUnit && onNavigateToUnit('dit-pelabuhan')}
-                      className="p-2 rounded-lg bg-white border border-slate-200 text-center hover:bg-blue-50 hover:border-blue-300 transition-all cursor-pointer text-xs"
-                    >
-                      <Anchor className="w-4 h-4 text-blue-600 mx-auto mb-1" />
-                      <span className="font-bold text-[10px] text-slate-800 block">Pelabuhan</span>
-                    </button>
-                    <button
-                      onClick={() => onNavigateToUnit && onNavigateToUnit('dit-lalu-lintas-barang')}
-                      className="p-2 rounded-lg bg-white border border-slate-200 text-center hover:bg-blue-50 hover:border-blue-300 transition-all cursor-pointer text-xs"
-                    >
-                      <Truck className="w-4 h-4 text-amber-600 mx-auto mb-1" />
-                      <span className="font-bold text-[10px] text-slate-800 block">LLB</span>
-                    </button>
+
+                  <div className="p-2 rounded-lg bg-blue-50 border border-blue-100 space-y-0.5">
+                    <span className="text-[9.5px] text-blue-900 font-bold uppercase">2. PNBP Pelabuhan</span>
+                    <div className="text-sm font-black text-blue-950">Rp 250,40 M</div>
+                    <div className="text-[9.5px] text-blue-700 font-semibold">+Rp 17,19 M dari target</div>
+                  </div>
+
+                  <div className="p-2 rounded-lg bg-amber-50 border border-amber-100 space-y-0.5">
+                    <span className="text-[9.5px] text-amber-900 font-bold uppercase">3. PNBP Lalu Lintas Barang</span>
+                    <div className="text-sm font-black text-amber-950">Rp 2,48 M</div>
+                    <div className="text-[9.5px] text-amber-700 font-semibold">+Rp 0,28 M dari target</div>
                   </div>
                 </div>
               </div>

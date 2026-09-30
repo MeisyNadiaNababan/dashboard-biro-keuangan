@@ -3,44 +3,18 @@ import {
   TrendingUp,
   Building2,
   ShieldCheck,
-  Truck,
   Sparkles,
-  ChevronRight,
-  Database,
-  Layers,
-  ArrowUpRight,
-  FileCode2,
-  Filter,
-  CheckCircle2,
   ExternalLink,
-  DollarSign,
-  PieChart as PieIcon,
-  Globe,
-  Briefcase,
-  FileText,
-  Activity,
-  Calendar,
 } from 'lucide-react';
-import { InvestasiRealisasiCard } from '../Investasi/InvestasiRealisasiCard';
 import { InvestasiSektorMinatCard } from '../Investasi/InvestasiSektorMinatCard';
 import { InvestasiWebsiteTrafficCard } from '../Investasi/InvestasiWebsiteTrafficCard';
 import { InvestasiInfrastrukturCard } from '../Investasi/InvestasiInfrastrukturCard';
-import { InvestasiPromosiCard } from '../Investasi/InvestasiPromosiCard';
 import { MINAT_INVESTASI_DATA } from '../../data/investasiData';
 
 import { KekProfilCard } from '../KEK/KekProfilCard';
-import { KekInvestasiJenisCard } from '../KEK/KekInvestasiJenisCard';
 import { KekPerizinanSheetSwap } from '../KEK/KekPerizinanSheetSwap';
-import { KekKajianCard } from '../KEK/KekKajianCard';
-import { KEK_INVESTASI_RAW } from '../../data/kekData';
 
-import { RekomendasiPengendalianVisualizer } from '../PengendalianPengusahaan/RekomendasiPengendalianVisualizer';
-import { DaftarKerjasamaCards } from '../PengendalianPengusahaan/DaftarKerjasamaCards';
-import { DAFTAR_MITRA_PENGUSAHAAN } from '../PengendalianPengusahaan/pengendalianData';
-
-import { LlbPerizinanConsolidatedCard } from '../LaluLintasBarang/LlbPerizinanConsolidatedCard';
-import { LlbSlaLayananCard } from '../LaluLintasBarang/LlbSlaLayananCard';
-import { LlbPenerbitanBulananSheetSwap } from '../LaluLintasBarang/LlbPenerbitanBulananSheetSwap';
+import { EvaluasiTindakLanjutVisualizer } from '../PengendalianPengusahaan/EvaluasiTindakLanjutVisualizer';
 
 interface InvestasiPengusahaanDeepDiveCenterProps {
   selectedUnitId: string;
@@ -57,26 +31,21 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
   onOpenFormulaModal = (_kpiId?: string) => {},
   onNavigateToFullDashboard,
 }) => {
-  // Sub-tabs for Direktorat Investasi view
+  // Sub-tabs for Direktorat Investasi view (Sesuai instruksi: Hapus Sheet Realisasi DS 13 & Sheet Agenda Promosi)
   const [investasiSubTab, setInvestasiSubTab] = useState<
-    'all' | 'realisasi' | 'pipeline' | 'traffic' | 'infrastruktur' | 'promosi'
-  >('all');
+    'pipeline' | 'traffic' | 'infrastruktur'
+  >('pipeline');
 
-  // Sub-tabs for Direktorat Pengembangan KEK view
-  const [kekSubTab, setKekSubTab] = useState<
-    'all' | 'profil' | 'realisasi' | 'perizinan' | 'kajian'
-  >('all');
+  // Sub-tabs for Direktorat Pengembangan KEK view (Sesuai instruksi: Hapus Sheet Realisasi PMA/PMDN & Sheet Kajian Perkin)
+  const [kekSubTab, setKekSubTab] = useState<'profil' | 'perizinan'>('profil');
   const [selectedKekName, setSelectedKekName] = useState<string>('ALL');
 
-  // Sub-tabs for Direktorat Pengendalian Pengusahaan view
-  const [pengendalianSubTab, setPengendalianSubTab] = useState<
-    'all' | 'rekomendasi' | 'kemitraan'
-  >('all');
-
-  // Sub-tabs for Direktorat Lalu Lintas Barang view
-  const [llbSubTab, setLlbSubTab] = useState<
-    'all' | 'perizinan' | 'bulanan' | 'sla'
-  >('all');
+  // Normalize selectedUnitId so if it's invalid or dit-lalu-lintas-barang, fallback to dit-investasi
+  const activeUnit =
+    selectedUnitId === 'dit-pengembangan-kek' ||
+    selectedUnitId === 'dit-pengendalian-usaha'
+      ? selectedUnitId
+      : 'dit-investasi';
 
   return (
     <div
@@ -86,7 +55,7 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
       {/* 1. Header with Tab Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#002B49] to-[#1F3864] text-white flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[#002B49] to-[#1F3864] text-white flex items-center justify-center shadow-md">
             <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
           </div>
           <div>
@@ -95,7 +64,7 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
                 EXECUTIVE DEEP-DIVE
               </span>
               <span className="text-xs text-slate-500 font-mono">
-                Buku Satu Data BP Batam (39 Dataset)
+                Buku Satu Data BP Batam (3 Unit Pengampu A4)
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
@@ -104,54 +73,42 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
           </div>
         </div>
 
-        {/* 4 Unit Selection Tabs */}
+        {/* 3 Unit Selection Tabs (Sesuai Instruksi: Hapus Sheet Lalu Lintas Barang) */}
         <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl overflow-x-auto no-scrollbar">
           <button
             onClick={() => onSelectUnit('dit-investasi')}
             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              selectedUnitId === 'dit-investasi'
+              activeUnit === 'dit-investasi'
                 ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <TrendingUp className="w-4 h-4 text-blue-600" />
-            <span>Dit. Investasi (14 DS)</span>
+            <span>Dit. Investasi</span>
           </button>
 
           <button
             onClick={() => onSelectUnit('dit-pengembangan-kek')}
             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              selectedUnitId === 'dit-pengembangan-kek'
+              activeUnit === 'dit-pengembangan-kek'
                 ? 'bg-white text-emerald-700 shadow-xs ring-1 ring-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Building2 className="w-4 h-4 text-emerald-600" />
-            <span>Pengembangan KEK (12 DS)</span>
+            <span>Pengembangan KEK</span>
           </button>
 
           <button
             onClick={() => onSelectUnit('dit-pengendalian-usaha')}
             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              selectedUnitId === 'dit-pengendalian-usaha'
+              activeUnit === 'dit-pengendalian-usaha'
                 ? 'bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <ShieldCheck className="w-4 h-4 text-indigo-600" />
-            <span>Pengendalian Pengusahaan (4 DS)</span>
-          </button>
-
-          <button
-            onClick={() => onSelectUnit('dit-lalu-lintas-barang')}
-            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              selectedUnitId === 'dit-lalu-lintas-barang'
-                ? 'bg-white text-cyan-800 shadow-xs ring-1 ring-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Truck className="w-4 h-4 text-cyan-600" />
-            <span>Lalu Lintas Barang (9 DS)</span>
+            <span>Pengendalian Pengusahaan</span>
           </button>
         </div>
       </div>
@@ -159,30 +116,30 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
       {/* 2. SUB-SECTION CONTENT FOR CHOSEN UNIT */}
 
       {/* ================================================================ */}
-      {/* UNIT 1: DIREKTORAT INVESTASI (14 DATASET)                        */}
+      {/* UNIT 1: DIREKTORAT INVESTASI                                     */}
+      {/* (Sheet Realisasi DS 13 & Sheet Agenda Promosi Dihapus)           */}
       {/* ================================================================ */}
-      {selectedUnitId === 'dit-investasi' && (
+      {activeUnit === 'dit-investasi' && (
         <div className="space-y-4">
-          {/* Sub-bar Filter */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-bold text-blue-900 font-mono">Modul Analisis Dit. Investasi:</span>
-              <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-blue-200">
+          {/* Sub-bar Filter - Clean Model DEP-A2 */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <span className="text-xs font-mono font-bold text-slate-500 uppercase px-1">
+                Pilih Sheet:
+              </span>
+              <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200">
                 {[
-                  { id: 'all', label: 'Semua Modul' },
-                  { id: 'realisasi', label: 'Realisasi Investasi (DS 13)' },
                   { id: 'pipeline', label: 'Minat & Pipeline (DS 14)' },
                   { id: 'traffic', label: 'Trafik Web (DS 10)' },
                   { id: 'infrastruktur', label: 'Infrastruktur (DS 6)' },
-                  { id: 'promosi', label: 'Agenda Promosi (DS 11)' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setInvestasiSubTab(tab.id as any)}
-                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                       investasiSubTab === tab.id
                         ? 'bg-blue-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
                     {tab.label}
@@ -202,58 +159,50 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
             )}
           </div>
 
-          {/* Components Grid */}
+          {/* Active Sheet Display */}
           <div className="space-y-4">
-            {(investasiSubTab === 'all' || investasiSubTab === 'realisasi') && (
-              <InvestasiRealisasiCard onOpenFormulaModal={onOpenFormulaModal} />
-            )}
-
-            {(investasiSubTab === 'all' || investasiSubTab === 'pipeline') && (
+            {investasiSubTab === 'pipeline' && (
               <InvestasiSektorMinatCard
                 minatList={MINAT_INVESTASI_DATA}
                 onOpenFormulaModal={onOpenFormulaModal}
               />
             )}
 
-            {(investasiSubTab === 'all' || investasiSubTab === 'traffic') && (
+            {investasiSubTab === 'traffic' && (
               <InvestasiWebsiteTrafficCard onOpenFormulaModal={onOpenFormulaModal} />
             )}
 
-            {(investasiSubTab === 'all' || investasiSubTab === 'infrastruktur') && (
+            {investasiSubTab === 'infrastruktur' && (
               <InvestasiInfrastrukturCard onOpenFormulaModal={onOpenFormulaModal} />
-            )}
-
-            {(investasiSubTab === 'all' || investasiSubTab === 'promosi') && (
-              <InvestasiPromosiCard onOpenFormulaModal={onOpenFormulaModal} />
             )}
           </div>
         </div>
       )}
 
       {/* ================================================================ */}
-      {/* UNIT 2: DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK (12 DATASET)      */}
+      {/* UNIT 2: DIREKTORAT PENGEMBANGAN KPBPBB DAN KEK                   */}
+      {/* (Sheet Realisasi PMA/PMDN & Sheet Kajian Perkin Dihapus)         */}
       {/* ================================================================ */}
-      {selectedUnitId === 'dit-pengembangan-kek' && (
+      {activeUnit === 'dit-pengembangan-kek' && (
         <div className="space-y-4">
           {/* Sub-bar Filter */}
           <div className="flex flex-wrap items-center justify-between gap-3 bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-bold text-emerald-900 font-mono">Modul Analisis KEK:</span>
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <span className="text-xs font-mono font-bold text-emerald-800 uppercase px-1">
+                Pilih Sheet:
+              </span>
               <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-emerald-200">
                 {[
-                  { id: 'all', label: 'Semua Modul' },
-                  { id: 'profil', label: 'Profil 3 KEK' },
-                  { id: 'realisasi', label: 'Realisasi PMA/PMDN' },
-                  { id: 'perizinan', label: 'Perizinan Administrator' },
-                  { id: 'kajian', label: 'Kajian Perkin' },
+                  { id: 'profil', label: 'Profil 3 KEK (DS 2)' },
+                  { id: 'perizinan', label: 'Perizinan Administrator (DS 3 & 4)' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setKekSubTab(tab.id as any)}
-                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                       kekSubTab === tab.id
                         ? 'bg-emerald-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
                     {tab.label}
@@ -273,9 +222,9 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
             )}
           </div>
 
-          {/* Components Grid */}
+          {/* Active Sheet Display */}
           <div className="space-y-4">
-            {(kekSubTab === 'all' || kekSubTab === 'profil') && (
+            {kekSubTab === 'profil' && (
               <KekProfilCard
                 selectedKek={selectedKekName}
                 onSelectKek={setSelectedKekName}
@@ -283,143 +232,22 @@ export const InvestasiPengusahaanDeepDiveCenter: React.FC<
               />
             )}
 
-            {(kekSubTab === 'all' || kekSubTab === 'realisasi') && (
-              <KekInvestasiJenisCard
-                investasiList={KEK_INVESTASI_RAW}
-                onOpenFormulaModal={onOpenFormulaModal}
-              />
-            )}
-
-            {(kekSubTab === 'all' || kekSubTab === 'perizinan') && (
+            {kekSubTab === 'perizinan' && (
               <KekPerizinanSheetSwap onOpenFormulaModal={onOpenFormulaModal} />
             )}
-
-            {(kekSubTab === 'all' || kekSubTab === 'kajian') && (
-              <KekKajianCard onOpenFormulaModal={onOpenFormulaModal} />
-            )}
           </div>
         </div>
       )}
 
       {/* ================================================================ */}
-      {/* UNIT 3: DIREKTORAT PENGENDALIAN PENGUSAHAAN (4 DATASET)          */}
+      {/* UNIT 3: DIREKTORAT PENGENDALIAN PENGUSAHAAN                      */}
+      {/* (Hapus Semua Modul Lama, Ganti Visualisasi 2 Indikator Hal. 14)  */}
       {/* ================================================================ */}
-      {selectedUnitId === 'dit-pengendalian-usaha' && (
+      {activeUnit === 'dit-pengendalian-usaha' && (
         <div className="space-y-4">
-          {/* Sub-bar Filter */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-bold text-indigo-900 font-mono">Modul Pengendalian Pengusahaan:</span>
-              <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-indigo-200">
-                {[
-                  { id: 'all', label: 'Semua Evaluasi & PKS' },
-                  { id: 'rekomendasi', label: 'Rekomendasi Evaluasi (DS 1 & 3)' },
-                  { id: 'kemitraan', label: 'Daftar Mitra PKS (DS 2 & 4)' },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setPengendalianSubTab(tab.id as any)}
-                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
-                      pengendalianSubTab === tab.id
-                        ? 'bg-indigo-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {onNavigateToFullDashboard && (
-              <button
-                onClick={() => onNavigateToFullDashboard('dit-pengendalian-usaha')}
-                className="text-xs font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-indigo-200"
-              >
-                <span>Dashboard Penuh Unit</span>
-                <ExternalLink className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-
-          {/* Components Grid */}
-          <div className="space-y-4">
-            {(pengendalianSubTab === 'all' || pengendalianSubTab === 'rekomendasi') && (
-              <RekomendasiPengendalianVisualizer />
-            )}
-
-            {(pengendalianSubTab === 'all' || pengendalianSubTab === 'kemitraan') && (
-              <DaftarKerjasamaCards
-                mitraList={DAFTAR_MITRA_PENGUSAHAAN}
-                onSelectMitra={() => {}}
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ================================================================ */}
-      {/* UNIT 4: DIREKTORAT LALU LINTAS BARANG (9 DATASET)                */}
-      {/* ================================================================ */}
-      {selectedUnitId === 'dit-lalu-lintas-barang' && (
-        <div className="space-y-4">
-          {/* Sub-bar Filter */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-cyan-50/50 p-2.5 rounded-xl border border-cyan-100">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-bold text-cyan-900 font-mono">Modul Lalu Lintas Barang:</span>
-              <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-cyan-200">
-                {[
-                  { id: 'all', label: 'Semua Modul LLB' },
-                  { id: 'perizinan', label: 'Perizinan Industri & Dagang (DS 3)' },
-                  { id: 'bulanan', label: 'Arus Inbound & Outbound (DS 6 & 7)' },
-                  { id: 'sla', label: 'Kinerja SLA Layanan (DS 8 & 9)' },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setLlbSubTab(tab.id as any)}
-                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
-                      llbSubTab === tab.id
-                        ? 'bg-cyan-700 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {onNavigateToFullDashboard && (
-              <button
-                onClick={() => onNavigateToFullDashboard('dit-lalu-lintas-barang')}
-                className="text-xs font-bold text-cyan-800 hover:text-cyan-950 flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-cyan-200"
-              >
-                <span>Dashboard Penuh Unit</span>
-                <ExternalLink className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-
-          {/* Components Grid */}
-          <div className="space-y-4">
-            {(llbSubTab === 'all' || llbSubTab === 'perizinan') && (
-              <LlbPerizinanConsolidatedCard
-                onOpenFormulaModal={onOpenFormulaModal}
-              />
-            )}
-
-            {(llbSubTab === 'all' || llbSubTab === 'bulanan') && (
-              <LlbPenerbitanBulananSheetSwap
-                onOpenFormulaModal={onOpenFormulaModal}
-              />
-            )}
-
-            {(llbSubTab === 'all' || llbSubTab === 'sla') && (
-              <LlbSlaLayananCard
-                onOpenFormulaModal={onOpenFormulaModal}
-              />
-            )}
-          </div>
+          <EvaluasiTindakLanjutVisualizer
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
         </div>
       )}
     </div>

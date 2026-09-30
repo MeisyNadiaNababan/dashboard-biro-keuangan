@@ -87,38 +87,38 @@ export const InvestasiPengusahaanVisualCharts: React.FC<
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
-      {/* 1. SECTION TOP BAR & TAB SELECTOR */}
-      <div className="p-3.5 sm:p-4 bg-gradient-to-r from-slate-900 via-slate-800 to-[#002B49] text-white flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* 1. SECTION TOP BAR & TAB SELECTOR - POLOS PUTIH */}
+      <div className="p-3.5 sm:p-4 bg-white text-slate-900 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 text-cyan-300 flex items-center justify-center shrink-0">
-            <BarChart3 className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
+            <BarChart3 className="w-4 h-4 text-blue-600" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 uppercase">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 uppercase">
                 EXECUTIVE ANALYTICS
               </span>
-              <span className="text-xs text-slate-300 font-mono hidden sm:inline">
+              <span className="text-xs text-slate-500 font-mono hidden sm:inline">
                 Perkin A.4 Tahun 2025
               </span>
             </div>
-            <h2 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
               Visualisasi Analitik Investasi &amp; Pengusahaan BP Batam
             </h2>
           </div>
         </div>
 
         {/* 4 Interactive Visual Tabs */}
-        <div className="flex items-center gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-700/60 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveVisualTab('realisasi_kpbpb')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeVisualTab === 'realisasi_kpbpb'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-300 hover:text-white hover:bg-white/10'
+                ? 'bg-white text-blue-700 shadow-2xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
-            <TrendingUp className="w-3.5 h-3.5 text-cyan-300" />
+            <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
             <span>Realisasi KPBPB</span>
           </button>
 
@@ -126,11 +126,11 @@ export const InvestasiPengusahaanVisualCharts: React.FC<
             onClick={() => setActiveVisualTab('kek_matrix')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeVisualTab === 'kek_matrix'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-300 hover:text-white hover:bg-white/10'
+                ? 'bg-white text-emerald-700 shadow-2xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
-            <Building2 className="w-3.5 h-3.5 text-emerald-300" />
+            <Building2 className="w-3.5 h-3.5 text-emerald-600" />
             <span>Kawasan KEK (3 KEK)</span>
           </button>
 
@@ -138,11 +138,11 @@ export const InvestasiPengusahaanVisualCharts: React.FC<
             onClick={() => setActiveVisualTab('pengendalian_kerjasama')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeVisualTab === 'pengendalian_kerjasama'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-300 hover:text-white hover:bg-white/10'
+                ? 'bg-white text-indigo-700 shadow-2xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-indigo-300" />
+            <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
             <span>Pengendalian Pengusahaan</span>
           </button>
 
@@ -150,11 +150,11 @@ export const InvestasiPengusahaanVisualCharts: React.FC<
             onClick={() => setActiveVisualTab('investor_pipeline')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeVisualTab === 'investor_pipeline'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-300 hover:text-white hover:bg-white/10'
+                ? 'bg-white text-amber-700 shadow-2xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
             <span>Investor Pipeline &amp; Web</span>
           </button>
         </div>

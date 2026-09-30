@@ -138,11 +138,17 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (activeUnitId === 'deputi-investasi') {
       return [
         { id: 'ikhtisar', label: 'Ikhtisar 4 IKP & Realisasi', icon: LayoutDashboard },
-        { id: 'kpi_visual', label: 'Visualisasi Realisasi, KEK & Pipeline', icon: TrendingUp },
-        { id: 'unit_kinerja', label: 'Kinerja 4 Unit Kerja Pengampu', icon: Building2 },
-        { id: 'deep_dive', label: 'Unit Deep-Dive Center (4 Unit)', icon: Sparkles, isSpecial: true },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center (3 Unit)', icon: Sparkles, isSpecial: true },
         { id: 'kamus_rumus', label: 'Manual 4 IKP (PDF)', icon: FileCode2 },
-        { id: 'satu_data', label: 'Katalog 39 Dataset (PDF)', icon: Database },
+        { id: 'satu_data', label: 'Katalog 30 Dataset (PDF)', icon: Database },
+      ];
+    } else if (activeUnitId === 'deputi-bandara-pelabuhan') {
+      return [
+        { id: 'ikhtisar', label: 'Ikhtisar 2 IKP & Realisasi', icon: LayoutDashboard },
+        { id: 'evaluasi_ikp', label: 'Capaian Evaluasi 3 IKP', icon: Award },
+        { id: 'deep_dive', label: 'Unit Deep-Dive Center (3 Unit)', icon: Sparkles, isSpecial: true },
+        { id: 'kamus_rumus', label: 'Kamus Rumus Perkin A5', icon: FileCode2 },
+        { id: 'satu_data', label: 'Katalog 46 Dataset (PDF)', icon: Database },
       ];
     } else if (activeUnitId === 'deputi-pelayanan-umum') {
       return [

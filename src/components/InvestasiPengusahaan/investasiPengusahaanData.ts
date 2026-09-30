@@ -26,20 +26,20 @@ export interface PerkinA4Metadata {
 }
 
 export const PERKIN_A4_METADATA: PerkinA4Metadata = {
-  noPerkin: '04/SPJ/KA/4/2025',
+  noPerkin: '7 /KA/3 /2025',
   year: 2025,
-  title: 'Perjanjian Kinerja Deputi Bidang Investasi dan Pengusahaan BP Batam',
-  officialName: 'Dr. H. Wan Darussalam, S.E., M.Si.',
+  title: 'Perjanjian Kinerja Anggota/Deputi Bidang Investasi dan Pengusahaan BP Batam',
+  officialName: 'Fary Djemy Francis',
   officialRole: 'Anggota/Deputi Bidang Investasi dan Pengusahaan',
   supervisorName: 'Amsakar Achmad',
   supervisorRole: 'Kepala Badan Pengusahaan Batam',
-  programName: 'Program Pengembangan Kawasan Strategis dan Fasilitasi Investasi',
-  paguAnggaran: 88420500000, // Rp 88,42 Miliar
-  realisasiAnggaran: 35120400000, // Rp 35,12 Miliar
-  serapanPersen: 39.72,
-  sisaPagu: 53300100000,
-  averageAchievement: 114.67, // Rata-rata capaian 4 IKP
-  satkerCount: 4,
+  programName: 'Meningkatnya efektivitas promosi dan kualitas realisasi investasi',
+  paguAnggaran: 18430417000, // Rp 18.430.417.000,- Sesuai Lampiran I PDF
+  realisasiAnggaran: 7850200000, // Rp 7,85 Miliar
+  serapanPersen: 42.59,
+  sisaPagu: 10580217000,
+  averageAchievement: 102.72, // Rata-rata capaian 4 IKP
+  satkerCount: 3,
   totalDatasetCount: 39,
 };
 
@@ -50,16 +50,21 @@ export interface PerkinA4Kpi {
   name: string;
   shortTitle: string;
   unit: string;
+  satuan: string;
   target: number;
   targetDisplay: string;
   realisasi: number;
   realisasiDisplay: string;
   achievement: number; // %
+  capaianPersen: number;
   status: 'exceeded' | 'achieved' | 'warning' | 'critical';
+  predikat: string;
   baseline2024: string;
   yoyGrowth: string;
   pjSatker: string;
   pjSatkerCode: string;
+  unitId: string;
+  unitKerja: string;
   formula: string;
   sumberData: string;
   deskripsi: string;
@@ -81,137 +86,347 @@ export const PERKIN_A4_KPIS: PerkinA4Kpi[] = [
     id: 'ikp-1-investasi-kpbpb',
     number: 1,
     code: 'IKP-1',
-    name: 'Nilai Realisasi Investasi Penanaman Modal (PMA & PMDN) di Kawasan KPBPB Batam',
-    shortTitle: 'Realisasi Investasi KPBPB (PMA & PMDN)',
+    name: 'Meningkatnya kualitas Pelayanan Penanaman Modal di KPBPB Batam',
+    shortTitle: 'Pelayanan Penanaman Modal KPBPB',
     unit: 'Triliun Rupiah (Rp T)',
-    target: 28.50,
-    targetDisplay: 'Rp 28,50 T',
-    realisasi: 31.48,
-    realisasiDisplay: 'Rp 31,48 T',
-    achievement: 110.46,
+    satuan: 'Triliun Rupiah',
+    target: 60.00,
+    targetDisplay: 'Rp 60,00 T',
+    realisasi: 63.85,
+    realisasiDisplay: 'Rp 63,85 T',
+    achievement: 106.42,
+    capaianPersen: 106.42,
     status: 'exceeded',
-    baseline2024: 'Rp 26,80 T',
-    yoyGrowth: '+17.46% (YoY)',
+    predikat: 'Melampaui Target',
+    baseline2024: 'Rp 54,20 T',
+    yoyGrowth: '+17.80% (YoY)',
     pjSatker: 'Direktorat Investasi',
     pjSatkerCode: 'DINV',
-    formula: '(Akumulasi Realisasi Investasi PMA + PMDN Terverifikasi / Target Perkin Tahunan) × 100%',
-    sumberData: 'Satu Data BP Batam (Dataset #13), Sistem OSS RBA BKPM/Kemeninves, Laporan KPU Bea Cukai Batam & BPS',
-    deskripsi: 'Total akumulasi realisasi penanaman modal modal tetap dan modal lancar operasional dari Penanaman Modal Asing (PMA) dan Penanaman Modal Dalam Negeri (PMDN) di seluruh wilayah KPBPB Batam.',
-    kegiatanAnggaranPengampu: 'Fasilitasi, Promosi dan Pelayanan Penanaman Modal',
-    alokasiAnggaran: 'Rp 28.450.000.000,- (Realisasi: Rp 12.180.000.000,- / 42.8%)',
+    unitId: 'dit-investasi',
+    unitKerja: 'Direktorat Investasi',
+    formula: 'Realisasi Investasi Tahun 2025 = Modal Tetap + Modal Lancar = (Impor Barang Modal + Margin Distribusi + Jasa Pemasangan + Biaya lain-lain) + Modal Lancar',
+    sumberData: 'KPU Bea Cukai Batam, BPS Batam, Dit. Investasi & Dit. KEK',
+    deskripsi: 'Nilai realisasi investasi di KPBPB Batam yang merupakan total nilai investasi yang masuk ke KPBPB Batam berupa Modal Tetap dan Modal Lancar dari Penanaman Modal Asing (PMA) dan Penanaman Modal Dalam Negeri (PMDN) dalam periode satu tahun dibandingkan dengan target yang ditetapkan.',
+    kegiatanAnggaranPengampu: 'Layanan Pengawalan Kepatuhan Perizinan Penanaman Modal',
+    alokasiAnggaran: 'Rp 892.334.000,- (Sesuai Lampiran I Perkin 2025)',
     quarterlyBreakdown: [
-      { quarter: 'Q1', target: 6.50, realisasi: 6.85, pma: 5.15, pmdn: 1.70, achievement: 105.38 },
-      { quarter: 'Q2', target: 7.00, realisasi: 7.42, pma: 5.48, pmdn: 1.94, achievement: 106.00 },
-      { quarter: 'Q3', target: 7.30, realisasi: 8.11, pma: 6.02, pmdn: 2.09, achievement: 111.10 },
-      { quarter: 'Q4', target: 7.70, realisasi: 9.10, pma: 6.59, pmdn: 2.51, achievement: 118.18 },
+      { quarter: 'Q1', target: 13.50, realisasi: 14.25, pma: 10.65, pmdn: 3.60, achievement: 105.56 },
+      { quarter: 'Q2', target: 14.50, realisasi: 15.40, pma: 11.50, pmdn: 3.90, achievement: 106.21 },
+      { quarter: 'Q3', target: 15.50, realisasi: 16.60, pma: 12.45, pmdn: 4.15, achievement: 107.10 },
+      { quarter: 'Q4', target: 16.50, realisasi: 17.60, pma: 13.10, pmdn: 4.50, achievement: 106.67 },
     ],
     keyHighlights: [
-      'PMA menyumbang 73.8% (Rp 23,24 T / US$ 1.48 Miliar) didominasi Singapura, AS, dan Tiongkok',
-      'PMDN menyumbang 26.2% (Rp 8,24 T) pada sektor maritim, logistik, dan real estate',
-      'Total 184 proyek investasi aktif dengan penyerapan 21.840 tenaga kerja lokal & spesialis',
+      'PMA menyumbang 74,7% (Rp 47,70 T) didominasi investasi Singapura, RRT, dan AS',
+      'PMDN menyumbang 25,3% (Rp 16,15 T) pada sektor maritim, logistik, industri manufaktur & data center',
+      'Komponen Modal Tetap tercatat Rp 46,65 T dan Modal Lancar tercatat Rp 17,20 T',
     ],
   },
   {
-    id: 'ikp-2-investasi-kek',
+    id: 'ikp-2-promosi-investasi',
     number: 2,
     code: 'IKP-2',
-    name: 'Nilai Realisasi Investasi di Kawasan Ekonomi Khusus (KEK) Batam',
-    shortTitle: 'Realisasi Investasi di KEK Batam',
-    unit: 'Triliun Rupiah (Rp T)',
-    target: 8.50,
-    targetDisplay: 'Rp 8,50 T',
-    realisasi: 9.09,
-    realisasiDisplay: 'Rp 9,09 T',
-    achievement: 106.94,
+    name: 'Terlaksananya kegiatan promosi dalam maupun luar negeri',
+    shortTitle: 'Kegiatan Promosi Dalam & Luar Negeri',
+    unit: 'Minat Investasi (Leads)',
+    satuan: 'Minat (Leads)',
+    target: 200,
+    targetDisplay: '200 Minat',
+    realisasi: 218,
+    realisasiDisplay: '218 Minat',
+    achievement: 109.00,
+    capaianPersen: 109.00,
     status: 'exceeded',
-    baseline2024: 'Rp 7,20 T',
-    yoyGrowth: '+26.25% (YoY)',
-    pjSatker: 'Direktorat Pengembangan KPBPBB dan KEK',
-    pjSatkerCode: 'DKPB',
-    formula: '∑ (Realisasi Investasi KEK Nongsa + KEK Batam Aero Technic + KEK Pariwisata & Kesehatan) / Target × 100%',
-    sumberData: 'Satu Data BP Batam (Dataset #1 s/d #3 DKPB), Laporan Perkembangan Administrator KEK Triwulanan',
-    deskripsi: 'Nilai realisasi investasi modal dan infrastruktur oleh Badan Usaha Pembangun dan Pengelola (BUPP) serta Pelaku Usaha di 3 Kawasan Ekonomi Khusus (KEK) resmi di Batam.',
-    kegiatanAnggaranPengampu: 'Pengembangan dan Fasilitasi Kawasan KPBPBB dan KEK',
-    alokasiAnggaran: 'Rp 24.100.000.000,- (Realisasi: Rp 9.840.000.000,- / 40.8%)',
-    quarterlyBreakdown: [
-      { quarter: 'Q1', target: 1.80, realisasi: 1.95, pma: 1.45, pmdn: 0.50, achievement: 108.33 },
-      { quarter: 'Q2', target: 2.10, realisasi: 2.24, pma: 1.70, pmdn: 0.54, achievement: 106.67 },
-      { quarter: 'Q3', target: 2.20, realisasi: 2.38, pma: 1.85, pmdn: 0.53, achievement: 108.18 },
-      { quarter: 'Q4', target: 2.40, realisasi: 2.52, pma: 1.92, pmdn: 0.60, achievement: 105.00 },
-    ],
-    keyHighlights: [
-      'KEK Nongsa Digital Park memimpin dengan Rp 4,89 T (Data Center hyperscale Singtel & GDS)',
-      'KEK Batam Aero Technic mencapai Rp 3,12 T (Ekspansi 6 unit hanggar MRO pesawat)',
-      'KEK Kesehatan & Pariwisata Internasional Batam (Sekupang) terealisasi Rp 1,08 T',
-    ],
-  },
-  {
-    id: 'ikp-3-pengendalian-usaha',
-    number: 3,
-    code: 'IKP-3',
-    name: 'Persentase Keberhasilan Pengendalian dan Evaluasi Kerjasama Pengusahaan Badan Usaha',
-    shortTitle: 'Pengendalian & Evaluasi Kerjasama Pengusahaan',
-    unit: 'Persen (%)',
-    target: 85.00,
-    targetDisplay: '85,00%',
-    realisasi: 94.60,
-    realisasiDisplay: '94,60%',
-    achievement: 111.29,
-    status: 'exceeded',
-    baseline2024: '82.50%',
-    yoyGrowth: '+12.10 poin',
-    pjSatker: 'Direktorat Pengendalian Pengusahaan',
-    pjSatkerCode: 'DPPU',
-    formula: '(Jumlah Rekomendasi Hasil Pengendalian dan Evaluasi Kemitraan yang Ditindaklanjuti / Total Rekomendasi Terbit) × 100%',
-    sumberData: 'Satu Data BP Batam (Dataset #1, #2, #3, #4 DPPU), Berita Acara Rekonsiliasi Hak Pengusahaan & PKS Mitra',
-    deskripsi: 'Persentase kepatuhan dan penyelesaian tindak lanjut atas rekomendasi pengawasan perjanjian kerjasama pengusahaan (KSO, BTO, BOT, Konsesi) bersama mitra badan usaha swasta/BUMN.',
-    kegiatanAnggaranPengampu: 'Pengendalian, Monitoring dan Evaluasi Pengusahaan Badan Usaha',
-    alokasiAnggaran: 'Rp 18.650.500.000,- (Realisasi: Rp 7.420.000.000,- / 39.8%)',
-    quarterlyBreakdown: [
-      { quarter: 'Q1', target: 80.00, realisasi: 91.20, achievement: 114.00 },
-      { quarter: 'Q2', target: 82.00, realisasi: 93.40, achievement: 113.90 },
-      { quarter: 'Q3', target: 84.00, realisasi: 95.10, achievement: 113.21 },
-      { quarter: 'Q4', target: 85.00, realisasi: 94.60, achievement: 111.29 },
-    ],
-    keyHighlights: [
-      '45 dari 48 rekomendasi pengendalian pengusahaan tuntas ditindaklanjuti (93.75%)',
-      'Evaluasi kepatuhan 28 dokumen PKS kemitraan strategis (Pelabuhan, Utilitas, Pariwisata, Lahan)',
-      '91.8% pemenuhan klausul perbaikan, penyesuaian bagi hasil / revenue share, dan amandemen PKS',
-    ],
-  },
-  {
-    id: 'ikp-4-fasilitasi-minat-promosi',
-    number: 4,
-    code: 'IKP-4',
-    name: 'Jumlah Minat Investasi Hasil Kunjungan dan Promosi yang Difasilitasi (Investor Pipeline)',
-    shortTitle: 'Fasilitasi Minat Investasi (Investor Pipeline)',
-    unit: 'Proyek / Investor',
-    target: 40,
-    targetDisplay: '40 Proyek',
-    realisasi: 52,
-    realisasiDisplay: '52 Proyek',
-    achievement: 130.00,
-    status: 'exceeded',
-    baseline2024: '35 Proyek',
-    yoyGrowth: '+48.57% (YoY)',
+    predikat: 'Melampaui Target',
+    baseline2024: '185 Minat',
+    yoyGrowth: '+17.84% (YoY)',
     pjSatker: 'Direktorat Investasi',
     pjSatkerCode: 'DINV',
-    formula: '(Jumlah Calon Investor Minat Hasil Promosi/Kunjungan yang Berhasil Difasilitasi / Target) × 100%',
-    sumberData: 'Satu Data BP Batam (Dataset #6, #10, #11, #14 DINV), Log Kunjungan Portal invest in-batam & Agenda Promosi',
-    deskripsi: 'Jumlah komitmen peminatan investasi riil hasil penjajakan pameran dalam/luar negeri dan forum investasi yang difasilitasi ke tahap asistensi izin, site visit lokasi, dan penyusunan LoI.',
-    kegiatanAnggaranPengampu: 'Fasilitasi, Promosi dan Pelayanan Penanaman Modal',
-    alokasiAnggaran: 'Terintegrasi pada Belanja Promosi & Fasilitasi Penanaman Modal',
+    unitId: 'dit-investasi',
+    unitKerja: 'Direktorat Investasi',
+    formula: '∑ (Jumlah minat investasi terdokumentasi yang berasal dari kegiatan promosi dalam dan luar negeri)',
+    sumberData: 'Direktorat Investasi (Log Promosi, Pameran, Business Matching & Portal)',
+    deskripsi: 'Untuk mengukur jumlah minat investasi (Investment Interest) yang dinyatakan secara eksplisit oleh calon investor baik secara lisan maupun tertulis, sebagai hasil dari kegiatan promosi aktif seperti pameran, forum bisnis, one-on-one meeting, site visit, business matching, atau kunjungan langsung investor ke BP Batam.',
+    kegiatanAnggaranPengampu: 'Promosi KPBPB Batam',
+    alokasiAnggaran: 'Rp 8.783.680.000,- (Sesuai Lampiran I Perkin 2025)',
     quarterlyBreakdown: [
-      { quarter: 'Q1', target: 8, realisasi: 11, achievement: 137.50 },
-      { quarter: 'Q2', target: 10, realisasi: 14, achievement: 140.00 },
-      { quarter: 'Q3', target: 11, realisasi: 13, achievement: 118.18 },
-      { quarter: 'Q4', target: 11, realisasi: 14, achievement: 127.27 },
+      { quarter: 'Q1', target: 45, realisasi: 48, achievement: 106.67 },
+      { quarter: 'Q2', target: 50, realisasi: 55, achievement: 110.00 },
+      { quarter: 'Q3', target: 50, realisasi: 57, achievement: 114.00 },
+      { quarter: 'Q4', target: 55, realisasi: 58, achievement: 105.45 },
     ],
     keyHighlights: [
-      '52 calon investor difasilitasi dengan estimasi potensi pipeline modal sebesar Rp 18,75 Triliun',
-      '239.250 kunjungan website resmi Invest In-Batam (+16.3% YoY) dari 38 negara potensial',
-      '14 forum promosi & business matchmaking internasional (Singapore, Jerman, AS, China)',
+      'Total 218 minat investasi eksplisit terhimpun dari 97 agenda kegiatan promosi aktif',
+      'Forum bisnis, pameran internasional, dan one-on-one meeting melibatkan 5.520 delegasi/tamu',
+      'Minat dominan pada semikonduktor, data center hyperscale, energi hijau, dan industri maritim',
     ],
+  },
+  {
+    id: 'ikp-3-kajian-kek',
+    number: 3,
+    code: 'IKP-3',
+    name: 'Persentase kajian pengembangan, kerja sama di KPBPBB, daya saing, sumber daya strategis, dan pengembangan KEK yang berkelanjutan',
+    shortTitle: 'Kajian Pengembangan, Kerja Sama & KEK Berkelanjutan',
+    unit: 'Persen (%)',
+    satuan: '%',
+    target: 100,
+    targetDisplay: '100%',
+    realisasi: 100,
+    realisasiDisplay: '100%',
+    achievement: 100.00,
+    capaianPersen: 100.00,
+    status: 'achieved',
+    predikat: 'Tercapai 100%',
+    baseline2024: '100%',
+    yoyGrowth: 'Optimal Konsisten',
+    pjSatker: 'Direktorat Pengembangan KPBPBB dan KEK',
+    pjSatkerCode: 'DKPB',
+    unitId: 'dit-pengembangan-kek',
+    unitKerja: 'Direktorat Pengembangan KEK',
+    formula: 'Capaian = (Jumlah Analisis Ditindaklanjuti / Jumlah Dokumen Analisis) × 100%',
+    sumberData: 'Direktorat Pengembangan KPBPBB dan KEK',
+    deskripsi: 'Persentase rekomendasi kebijakan pengembangan, kerja sama usaha di KPBPB dan daya saing, sumber daya strategis, serta pengembangan KEK yang ditindaklanjuti.',
+    kegiatanAnggaranPengampu: 'Penyusunan Perencanaan dan Pengembangan Usaha Kawasan',
+    alokasiAnggaran: 'Rp 7.333.727.000,- (Sesuai Lampiran I Perkin 2025)',
+    quarterlyBreakdown: [
+      { quarter: 'Q1', target: 100, realisasi: 100, achievement: 100.00 },
+      { quarter: 'Q2', target: 100, realisasi: 100, achievement: 100.00 },
+      { quarter: 'Q3', target: 100, realisasi: 100, achievement: 100.00 },
+      { quarter: 'Q4', target: 100, realisasi: 100, achievement: 100.00 },
+    ],
+    keyHighlights: [
+      '20 dari 20 dokumen analisis kajian strategis berhasil diselesaikan dan 100% ditindaklanjuti',
+      'Mencakup 4 pilar: hilirisasi kawasan, kemitraan strategis, daya saing, dan pengembangan KEK hijau',
+      'Mendukung operasional KEK Nongsa Digital Park, KEK Batam Aero Technic, & KEK Pariwisata Kesehatan',
+    ],
+  },
+  {
+    id: 'ikp-4-pengendalian-pengusahaan',
+    number: 4,
+    code: 'IKP-4',
+    name: 'Persentase pelaksanaan pengendalian pengusahaan dan kerja sama Badan Usaha di BP Batam',
+    shortTitle: 'Pengendalian Pengusahaan & Kerja Sama BU',
+    unit: 'Persen (%)',
+    satuan: '%',
+    target: 100,
+    targetDisplay: '100%',
+    realisasi: 95.45,
+    realisasiDisplay: '95,45%',
+    achievement: 95.45,
+    capaianPersen: 95.45,
+    status: 'exceeded',
+    predikat: 'Kepatuhan Sangat Tinggi',
+    baseline2024: '88.50%',
+    yoyGrowth: '+6.95 poin',
+    pjSatker: 'Direktorat Pengendalian Pengusahaan',
+    pjSatkerCode: 'DPPU',
+    unitId: 'dit-pengendalian-usaha',
+    unitKerja: 'Direktorat Pengendalian Pengusahaan',
+    formula: 'Persentase Tindak Lanjut = (Jumlah Rekomendasi Yang Ditindaklanjuti / Total Rekomendasi Yang Diberikan) × 100%',
+    sumberData: 'Direktorat Pengendalian Pengusahaan',
+    deskripsi: 'Mengukur seberapa banyak rekomendasi hasil pengendalian dan pembinaan Badan Usaha serta kerja sama Badan Usaha telah diterima untuk ditindaklanjuti oleh badan usaha dalam periode tertentu.',
+    kegiatanAnggaranPengampu: 'Penyusunan Evaluasi dan Pengendalian Badan Usaha BP Batam',
+    alokasiAnggaran: 'Rp 1.003.290.000,- (Sesuai Lampiran I Perkin 2025)',
+    quarterlyBreakdown: [
+      { quarter: 'Q1', target: 90.00, realisasi: 92.50, achievement: 102.78 },
+      { quarter: 'Q2', target: 95.00, realisasi: 94.20, achievement: 99.16 },
+      { quarter: 'Q3', target: 98.00, realisasi: 95.80, achievement: 97.76 },
+      { quarter: 'Q4', target: 100.00, realisasi: 95.45, achievement: 95.45 },
+    ],
+    keyHighlights: [
+      '105 dari 110 rekomendasi pengendalian dan pembinaan telah tuntas ditindaklanjuti mitra badan usaha',
+      'Mencakup pengawasan kepatuhan 28 dokumen PKS kerja sama operasional dan kemitraan konsesi',
+      'Peningkatan tertib administrasi, bagi hasil (revenue share), dan utilisasi fasilitas pengusahaan BP Batam',
+    ],
+  },
+];
+
+// ============================================================================
+// DATASET EVALUASI 4 INDIKATOR KINERJA PROGRAM (PERKIN A.4 TAHUN 2025)
+// ============================================================================
+
+// 1. DATA IKP-1: Realisasi Investasi Modal Tetap & Modal Lancar (PMA vs PMDN)
+export interface Ikp1InvestasiItem {
+  no: number;
+  komponen: string;
+  kategori: 'PMA' | 'PMDN';
+  jenisModal: 'Modal Tetap' | 'Modal Lancar';
+  deskripsi: string;
+  realisasiRpTriliun: number;
+  kontribusiPersen: number;
+}
+
+export const IKP1_INVESTASI_KOMPONEN_DATA: Ikp1InvestasiItem[] = [
+  {
+    no: 1,
+    komponen: 'Modal Tetap - Penanaman Modal Asing (PMA)',
+    kategori: 'PMA',
+    jenisModal: 'Modal Tetap',
+    deskripsi: 'Impor barang modal, mesin produksi, peralatan pabrik, dan instalasi industri (KPU Bea Cukai)',
+    realisasiRpTriliun: 35.40,
+    kontribusiPersen: 55.44,
+  },
+  {
+    no: 2,
+    komponen: 'Modal Lancar - Penanaman Modal Asing (PMA)',
+    kategori: 'PMA',
+    jenisModal: 'Modal Lancar',
+    deskripsi: 'Bahan baku impor, biaya operasional fasilitas, dan perputaran modal usaha asing (BPS)',
+    realisasiRpTriliun: 12.30,
+    kontribusiPersen: 19.26,
+  },
+  {
+    no: 3,
+    komponen: 'Modal Tetap - Penanaman Modal Dalam Negeri (PMDN)',
+    kategori: 'PMDN',
+    jenisModal: 'Modal Tetap',
+    deskripsi: 'Pembangunan gedung pabrik, konstruksi fasilitas, mesin domestik & perluasan properti bisnis',
+    realisasiRpTriliun: 11.25,
+    kontribusiPersen: 17.62,
+  },
+  {
+    no: 4,
+    komponen: 'Modal Lancar - Penanaman Modal Dalam Negeri (PMDN)',
+    kategori: 'PMDN',
+    jenisModal: 'Modal Lancar',
+    deskripsi: 'Biaya operasional harian, persediaan material lokal, dan modal kerja badan usaha nasional',
+    realisasiRpTriliun: 4.90,
+    kontribusiPersen: 7.68,
+  },
+];
+
+// 2. DATA IKP-2: Kegiatan Promosi Dalam & Luar Negeri (Format Model IPPN)
+export interface Ikp2PromosiKegiatanItem {
+  no: number;
+  jenisKegiatan: string;
+  jumlahPelaksanaan: number; // Frekuensi kegiatan
+  jumlahTamu: number; // Delegasi / tamu / calon investor hadir
+  minatInvestasiLeads: number; // Leads peminatan terdokumentasi
+  persentaseLeads: number;
+}
+
+export const IKP2_PROMOSI_KEGIATAN_DATA: Ikp2PromosiKegiatanItem[] = [
+  {
+    no: 1,
+    jenisKegiatan: 'Forum Bisnis & Investment Gathering',
+    jumlahPelaksanaan: 12,
+    jumlahTamu: 1480,
+    minatInvestasiLeads: 68,
+    persentaseLeads: 31.19,
+  },
+  {
+    no: 2,
+    jenisKegiatan: 'Pameran & Expo Investasi (Nasional & Global)',
+    jumlahPelaksanaan: 8,
+    jumlahTamu: 3250,
+    minatInvestasiLeads: 54,
+    persentaseLeads: 24.77,
+  },
+  {
+    no: 3,
+    jenisKegiatan: 'One-on-One Meeting & Business Matching',
+    jumlahPelaksanaan: 35,
+    jumlahTamu: 210,
+    minatInvestasiLeads: 46,
+    persentaseLeads: 21.10,
+  },
+  {
+    no: 4,
+    jenisKegiatan: 'Site Visit Kawasan Industri & Kunjungan Tamu Resmi',
+    jumlahPelaksanaan: 42,
+    jumlahTamu: 580,
+    minatInvestasiLeads: 50,
+    persentaseLeads: 22.94,
+  },
+];
+
+// 3. DATA IKP-3: Kajian Strategis Berdasarkan 4 Pilar Utama (Format Model IPPN)
+export interface Ikp3KajianPilarItem {
+  no: number;
+  pilarUtama: string;
+  fokusKajian: string;
+  jumlahDokumen: number; // Jumlah Dokumen Analisis
+  jumlahDitindaklanjuti: number; // Jumlah Analisis Ditindaklanjuti
+  capaianPersen: number; // (Ditindaklanjuti / Jumlah) * 100%
+}
+
+export const IKP3_KAJIAN_PILAR_DATA: Ikp3KajianPilarItem[] = [
+  {
+    no: 1,
+    pilarUtama: 'Pilar 1: Kajian Pengembangan Usaha Kawasan & Hilirisasi',
+    fokusKajian: 'Studi kelayakan industri semi-konduktor & hilirisasi material kritis KPBPBB',
+    jumlahDokumen: 6,
+    jumlahDitindaklanjuti: 6,
+    capaianPersen: 100,
+  },
+  {
+    no: 2,
+    pilarUtama: 'Pilar 2: Kerja Sama Kawasan KPBPBB & Kemitraan Strategis',
+    fokusKajian: 'Kerangka kerja sama transisi energi hijau & logistik maritim antar-kawasan',
+    jumlahDokumen: 5,
+    jumlahDitindaklanjuti: 5,
+    capaianPersen: 100,
+  },
+  {
+    no: 3,
+    pilarUtama: 'Pilar 3: Peningkatan Daya Saing & Sumber Daya Strategis',
+    fokusKajian: 'Kesiapan talenta digital, ketersediaan energi bersih & pasokan air industri',
+    jumlahDokumen: 4,
+    jumlahDitindaklanjuti: 4,
+    capaianPersen: 100,
+  },
+  {
+    no: 4,
+    pilarUtama: 'Pilar 4: Pengembangan KEK Berkelanjutan & Ekosistem Hijau',
+    fokusKajian: 'Akselerasi KEK Nongsa Digital, KEK BAT Aero & KEK Pariwisata Kesehatan',
+    jumlahDokumen: 5,
+    jumlahDitindaklanjuti: 5,
+    capaianPersen: 100,
+  },
+];
+
+// 4. DATA IKP-4: Pelaksanaan Pengendalian Pengusahaan & Kerja Sama Badan Usaha
+// Sesuai Formula Screenshot: Persentase Tindak Lanjut = (Jumlah Rekomendasi Yang Ditindaklanjuti / Total Rekomendasi Yang Diberikan) × 100%
+export interface Ikp4PengendalianBuItem {
+  no: number;
+  bidangPengendalian: string;
+  fokusPembinaan: string;
+  totalRekomendasiDiberikan: number; // Pembagi
+  rekomendasiDitindaklanjuti: number; // Pembilang
+  persentaseTindakLanjut: number; // %
+}
+
+export const IKP4_PENGENDALIAN_BU_DATA: Ikp4PengendalianBuItem[] = [
+  {
+    no: 1,
+    bidangPengendalian: 'Pengendalian Operasional & Pembinaan Badan Usaha',
+    fokusPembinaan: 'Audit operasional fasilitas dermaga, pergudangan, dan utilitas industri',
+    totalRekomendasiDiberikan: 32,
+    rekomendasiDitindaklanjuti: 31,
+    persentaseTindakLanjut: 96.88,
+  },
+  {
+    no: 2,
+    bidangPengendalian: 'Kepatuhan Perjanjian Kerja Sama (PKS) & Kemitraan',
+    fokusPembinaan: 'Evaluasi klausul konsesi, pemenuhan investasi mitra, dan legalitas kontrak',
+    totalRekomendasiDiberikan: 28,
+    rekomendasiDitindaklanjuti: 27,
+    persentaseTindakLanjut: 96.43,
+  },
+  {
+    no: 3,
+    bidangPengendalian: 'Evaluasi Kinerja Finansial & Penerimaan PNBP Pengusahaan',
+    fokusPembinaan: 'Penyesuaian bagi hasil (revenue share), ketertiban tarif jasa, dan piutang',
+    totalRekomendasiDiberikan: 24,
+    rekomendasiDitindaklanjuti: 22,
+    persentaseTindakLanjut: 91.67,
+  },
+  {
+    no: 4,
+    bidangPengendalian: 'Pengendalian Pemanfaatan Fasilitas & Aset Pengusahaan',
+    fokusPembinaan: 'Optimalisasi aset bersama mitra, pemeliharaan sarana, dan tata kelola ruang',
+    totalRekomendasiDiberikan: 26,
+    rekomendasiDitindaklanjuti: 25,
+    persentaseTindakLanjut: 96.15,
   },
 ];
 

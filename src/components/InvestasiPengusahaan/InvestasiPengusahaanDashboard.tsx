@@ -24,8 +24,7 @@ import {
   PERKIN_A4_KPIS,
 } from './investasiPengusahaanData';
 import { InvestasiPengusahaanKpiRow } from './InvestasiPengusahaanKpiRow';
-import { InvestasiPengusahaanVisualCharts } from './InvestasiPengusahaanVisualCharts';
-import { InvestasiPengusahaanUnitCards } from './InvestasiPengusahaanUnitCards';
+import { InvestasiPengusahaanEvaluasiIkeSection } from './InvestasiPengusahaanEvaluasiIkeSection';
 import { InvestasiPengusahaanDeepDiveCenter } from './InvestasiPengusahaanDeepDiveCenter';
 import { InvestasiPengusahaanFormulaModal } from './InvestasiPengusahaanFormulaModal';
 
@@ -47,7 +46,7 @@ export const InvestasiPengusahaanDashboard: React.FC<
   const [selectedYear, setSelectedYear] = useState<'2025' | '2026'>('2025');
   const [selectedQuarter, setSelectedQuarter] = useState<'ALL' | 'Q1' | 'Q2' | 'Q3' | 'Q4'>('ALL');
   const [selectedSatkerFilter, setSelectedSatkerFilter] = useState<
-    'ALL' | 'dit-investasi' | 'dit-pengembangan-kek' | 'dit-pengendalian-usaha' | 'dit-lalu-lintas-barang'
+    'ALL' | 'dit-investasi' | 'dit-pengembangan-kek' | 'dit-pengendalian-usaha'
   >('ALL');
 
   // Deep-Dive Unit State (Default: dit-investasi)
@@ -126,7 +125,7 @@ export const InvestasiPengusahaanDashboard: React.FC<
             ))}
           </div>
 
-          {/* Filter Satker */}
+          {/* Filter Satker (3 Unit Pengampu A4) */}
           <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
             <button
               onClick={() => setSelectedSatkerFilter('ALL')}
@@ -136,7 +135,7 @@ export const InvestasiPengusahaanDashboard: React.FC<
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Konsolidasi 4 Satker
+              Konsolidasi 3 Satker
             </button>
             <button
               onClick={() => {
@@ -177,19 +176,6 @@ export const InvestasiPengusahaanDashboard: React.FC<
             >
               Pengendalian Usaha
             </button>
-            <button
-              onClick={() => {
-                setSelectedSatkerFilter('dit-lalu-lintas-barang');
-                handleSelectDeepDive('dit-lalu-lintas-barang');
-              }}
-              className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
-                selectedSatkerFilter === 'dit-lalu-lintas-barang'
-                  ? 'bg-white text-cyan-800 shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Lalu Lintas Barang
-            </button>
           </div>
         </div>
 
@@ -217,93 +203,23 @@ export const InvestasiPengusahaanDashboard: React.FC<
       </div>
 
       {/* ============================================================== */}
-      {/* 2. EXECUTIVE BANNER - PERKIN A.4 TAHUN 2025                    */}
-      {/* ============================================================== */}
-      <div className="bg-gradient-to-r from-[#002B49] via-[#0B1E38] to-[#122A4E] text-white rounded-2xl p-4 sm:p-5 border border-slate-700/80 shadow-sm relative overflow-hidden">
-        {/* Glow Accent */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-3xl">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 uppercase tracking-wider">
-                PERJANJIAN KINERJA DEPUTI &bull; PERKIN A.4
-              </span>
-              <span className="text-xs text-slate-300 font-mono">
-                No: {PERKIN_A4_METADATA.noPerkin}
-              </span>
-            </div>
-
-            <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white">
-              Pusat Komando Eksekutif Investasi &amp; Pengusahaan BP Batam
-            </h1>
-
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
-              Monitoring 4 Indikator Kinerja Program utama (Realisasi Investasi KPBPB Rp 31,48 T, KEK Rp 9,09 T, Pengendalian Pengusahaan 94,60%, dan Fasilitasi 52 Investor Pipeline) serta pengendalian 4 Unit Kerja strategis di lingkungan BP Batam.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-slate-300 font-mono">
-              <span>Pejabat: <strong className="text-white">{PERKIN_A4_METADATA.officialName}</strong></span>
-              <span className="text-slate-600">|</span>
-              <span>Kepala BP Batam: <strong className="text-white">{PERKIN_A4_METADATA.supervisorName}</strong></span>
-            </div>
-          </div>
-
-          {/* Quick Metrics Badges */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 shrink-0 lg:max-w-md w-full">
-            <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">PAGU PROGRAM</div>
-              <div className="text-sm sm:text-base font-black font-mono text-cyan-300">
-                Rp 88,42 M
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono">4 Kegiatan Utama</div>
-            </div>
-
-            <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">REALISASI ANGGARAN</div>
-              <div className="text-sm sm:text-base font-black font-mono text-emerald-400">
-                Rp 35,12 M
-              </div>
-              <div className="text-[10px] text-emerald-400 font-mono font-bold">39,72% Serapan</div>
-            </div>
-
-            <div className="col-span-2 sm:col-span-1 bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">RATA-RATA IKP</div>
-              <div className="text-sm sm:text-base font-black font-mono text-amber-300">
-                114,67%
-              </div>
-              <div className="text-[10px] text-emerald-400 font-mono font-bold">100% Melampaui</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ============================================================== */}
-      {/* 3. 4 INDIKATOR KINERJA PROGRAM (PERKIN A.4 TAHUN 2025)         */}
+      {/* 2. 4 INDIKATOR KINERJA PROGRAM (PERKIN A.4 TAHUN 2025)         */}
       {/* ============================================================== */}
       <InvestasiPengusahaanKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedQuarter={selectedQuarter}
+        selectedSatker={selectedSatkerFilter}
       />
 
       {/* ============================================================== */}
-      {/* 4. VISUALISASI ANALITIK SETELAH KPI (RINGKASAN & DETAIL)       */}
+      {/* 3. CAPAIAN EVALUASI 4 INDIKATOR KINERJA PROGRAM (IKP)          */}
       {/* ============================================================== */}
-      <InvestasiPengusahaanVisualCharts
+      <InvestasiPengusahaanEvaluasiIkeSection
         onOpenFormulaModal={handleOpenFormula}
-        onNavigateToUnit={handleSelectDeepDive}
       />
 
       {/* ============================================================== */}
-      {/* 5. 4 UNIT KERJA PENGAMPU INVESTASI & PENGUSAHAAN               */}
-      {/* ============================================================== */}
-      <InvestasiPengusahaanUnitCards
-        onAnalyzeUnit={handleSelectDeepDive}
-        onNavigateToUnit={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
-      />
-
-      {/* ============================================================== */}
-      {/* 6. UNIT DEEP-DIVE CENTER (4 UNIT KERJA TERKAIT)                */}
+      {/* 4. UNIT DEEP-DIVE CENTER (3 UNIT KERJA TERKAIT)                */}
       {/* ============================================================== */}
       <InvestasiPengusahaanDeepDiveCenter
         selectedUnitId={selectedDeepDiveUnit}
@@ -313,7 +229,7 @@ export const InvestasiPengusahaanDashboard: React.FC<
       />
 
       {/* ============================================================== */}
-      {/* 7. FORMULA & DEFINISI MODAL                                    */}
+      {/* 6. FORMULA & DEFINISI MODAL                                    */}
       {/* ============================================================== */}
       <InvestasiPengusahaanFormulaModal
         isOpen={isFormulaModalOpen}

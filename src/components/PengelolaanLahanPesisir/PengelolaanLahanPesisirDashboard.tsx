@@ -21,7 +21,7 @@ import {
 import {
   PERKIN_A3_KPIS,
 } from './pengelolaanLahanPesisirData';
-import { PengelolaanLahanPesisirKpiRow } from './PengelolaanLahanPesisirKpiRow';
+import { ExecutiveUnifiedKpiCenter } from './ExecutiveUnifiedKpiCenter';
 import { PengelolaanLahanPesisirVisualCharts } from './PengelolaanLahanPesisirVisualCharts';
 import { PengelolaanLahanPesisirDeepDiveCenter } from './PengelolaanLahanPesisirDeepDiveCenter';
 import { PengelolaanLahanPesisirFormulaModal } from './PengelolaanLahanPesisirFormulaModal';
@@ -180,10 +180,10 @@ export const PengelolaanLahanPesisirDashboard: React.FC<
         </div>
       </div>
 
-      {/* 2. SECTION 1: 3 KPI UTAMA INDIKATOR KINERJA PROGRAM */}
-      <PengelolaanLahanPesisirKpiRow
+      {/* 2. SECTION 1: KONSOLIDASI KPI 3 DIREKTORAT DEP-A3 */}
+      <ExecutiveUnifiedKpiCenter
         onOpenFormulaModal={handleOpenFormula}
-        selectedKpiId={modalKpiId}
+        onSelectDirectorate={handleSelectDeepDive}
       />
 
       {/* 3. SECTION 2: CAPAIAN EVALUASI & MATRIKS SPASIAL LAHAN-PESISIR */}

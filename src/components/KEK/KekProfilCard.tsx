@@ -14,7 +14,18 @@ import {
   Download,
   ExternalLink,
   Coins,
+  Sparkles,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  Legend,
+} from 'recharts';
 import { KEK_PROFIL_DATA, KekProfil } from '../../data/kekData';
 import { KekVisualHeader } from './KekVisualHeader';
 
@@ -251,19 +262,106 @@ export const KekProfilCard: React.FC<KekProfilCardProps> = ({
       {/* SHEET 1: VISUAL KOMPARASI NILAI INVESTASI & LOKASI KEK */}
       {activeSheet === 'komparasi_lokasi_investasi' && (
         <div className="space-y-4">
-          <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  Distribusi Nilai Investasi Komitmen Berdasarkan Lokasi KEK
+                  Visualisasi Komparasi Profil 3 Kawasan Ekonomi Khusus (KEK)
                 </h3>
                 <p className="text-[11px] text-slate-500">
-                  Menampilkan perbandingan nilai komitmen investasi, luas wilayah, dan lokasi strategis setiap kawasan
+                  Menampilkan perbandingan Nama Kawasan, Luas Area (Ha) dan Nilai Investasi Komitmen (Rp Triliun)
                 </p>
               </div>
               <span className="text-xs text-slate-600 font-medium">
-                Klik kartu untuk memfilter dashboard
+                Klik kartu KEK di bawah untuk memfilter analisis detail
               </span>
+            </div>
+
+            {/* Visualisasi Grafis Komparasi Dual-Bar: Nilai Investasi Komitmen vs Luas Area */}
+            <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white space-y-3 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4 text-emerald-600" />
+                  <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">
+                    Grafik Komparasi: Nilai Investasi Komitmen (Rp Triliun) vs Luas Area (Ha)
+                  </h4>
+                </div>
+                <span className="text-[10px] font-mono text-slate-500">
+                  3 KEK BP Batam • Atribut Resmi Hal. 10
+                </span>
+              </div>
+
+              <div className="h-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={KEK_PROFIL_DATA.map((k) => ({
+                      name: k.shortName,
+                      fullName: k.kawasan,
+                      lokasi: k.lokasi,
+                      nilaiKomitmenTriliun: Number((k.nilaiInvestasiKomitmen / 1e12).toFixed(2)),
+                      luasAreaHa: k.luasArea,
+                      densitasMiliarPerHa: Number((k.nilaiInvestasiKomitmen / k.luasArea / 1e9).toFixed(1)),
+                    }))}
+                    margin={{ top: 10, right: 15, left: -10, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                    <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 'bold', fill: '#1E293B' }} />
+                    <YAxis yAxisId="left" orientation="left" stroke="#059669" tick={{ fontSize: 10, fill: '#059669' }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#0284C7" tick={{ fontSize: 10, fill: '#0284C7' }} />
+                    <RechartsTooltip
+                      formatter={(value: any, name: any, item: any) => [
+                        name === 'Nilai Investasi Komitmen (Rp T)'
+                          ? `Rp ${value} Triliun`
+                          : `${value} Ha (Densitas: Rp ${item.payload.densitasMiliarPerHa} M/Ha)`,
+                        name,
+                      ]}
+                      contentStyle={{
+                        backgroundColor: '#0F1E36',
+                        border: '1px solid #1E293B',
+                        borderRadius: '8px',
+                        color: '#fff',
+                        fontSize: '11px',
+                      }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} iconType="circle" />
+                    <Bar
+                      yAxisId="left"
+                      dataKey="nilaiKomitmenTriliun"
+                      name="Nilai Investasi Komitmen (Rp T)"
+                      fill="#059669"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      yAxisId="right"
+                      dataKey="luasAreaHa"
+                      name="Luas Area Kawasan (Ha)"
+                      fill="#0284C7"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Rangkuman Komparasi 3 Indikator Utama */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-slate-100 text-xs font-mono">
+                {KEK_PROFIL_DATA.map((k) => (
+                  <div key={k.id} className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/90 space-y-1">
+                    <span className="font-sans font-bold text-slate-900 block truncate">{k.shortName}</span>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-500 font-sans">Nilai Komitmen:</span>
+                      <strong className="text-emerald-700">Rp {(k.nilaiInvestasiKomitmen / 1e12).toFixed(2)} T</strong>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-500 font-sans">Luas Area:</span>
+                      <strong className="text-sky-700">{k.luasArea.toFixed(2)} Ha</strong>
+                    </div>
+                    <div className="flex items-center justify-between text-[10.5px] text-slate-600 pt-1 border-t border-slate-200">
+                      <span className="font-sans text-[10px]">Densitas:</span>
+                      <span className="font-bold text-slate-900">Rp {(k.nilaiInvestasiKomitmen / k.luasArea / 1e9).toFixed(1)} M/Ha</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

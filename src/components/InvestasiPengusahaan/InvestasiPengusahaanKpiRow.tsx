@@ -1,191 +1,140 @@
 import React from 'react';
 import {
-  TrendingUp,
-  Sparkles,
   Award,
-  ChevronRight,
-  Info,
+  FileCode2,
   CheckCircle2,
-  ArrowUpRight,
-  DollarSign,
-  PieChart as PieIcon,
-  ShieldCheck,
-  Building2,
-  Users,
-  Compass,
+  TrendingUp,
 } from 'lucide-react';
-import { PERKIN_A4_KPIS, PerkinA4Kpi } from './investasiPengusahaanData';
+import { PERKIN_A4_KPIS } from './investasiPengusahaanData';
 
 interface InvestasiPengusahaanKpiRowProps {
   onOpenFormulaModal: (kpiId: string) => void;
   selectedQuarter?: string;
+  selectedSatker?: string;
 }
 
 export const InvestasiPengusahaanKpiRow: React.FC<InvestasiPengusahaanKpiRowProps> = ({
   onOpenFormulaModal,
-  selectedQuarter = 'ALL',
+  selectedSatker = 'ALL',
 }) => {
   return (
-    <div className="space-y-2.5">
-      {/* Section Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-2.5 font-sans">
+      {/* Section Sub-heading */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 px-1">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-md bg-[#002B49] text-white flex items-center justify-center text-xs shadow-2xs font-mono font-bold">
-            4
-          </div>
-          <div>
-            <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900 font-mono flex items-center gap-1.5">
-              <span>4 INDIKATOR KINERJA PROGRAM (PERKIN A.4 TAHUN 2025)</span>
-              <span className="text-[10px] font-sans font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
-                100% HIJAU &bull; RATA-RATA 114,67%
-              </span>
-            </h2>
-          </div>
+          <Award className="w-4 h-4 text-blue-700" />
+          <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+            4 INDIKATOR KINERJA PROGRAM (IKP) &bull; PERKIN A.4 TAHUN 2025
+          </h2>
+          <span className="text-[11px] text-slate-500 font-medium hidden md:inline">
+            Sasaran: Meningkatnya efektivitas promosi dan kualitas realisasi investasi
+          </span>
         </div>
-
-        <span className="text-[11px] text-slate-500 hidden sm:inline font-sans">
-          Klik tombol formula <Info className="w-3 h-3 inline text-blue-600" /> untuk detail perhitungan &amp; dasar hukum
+        <span className="text-[10px] font-mono text-slate-500">
+          Sumber: Perjanjian Kinerja No. 7 /KA/3 /2025
         </span>
       </div>
 
-      {/* Grid 4 KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-        {PERKIN_A4_KPIS.map((kpi) => {
-          // Dynamic accent color
-          const isExceeded = kpi.achievement >= 100;
-          const accentGradient =
-            kpi.number === 1
-              ? 'from-blue-600 to-cyan-600'
-              : kpi.number === 2
-              ? 'from-emerald-600 to-teal-600'
-              : kpi.number === 3
-              ? 'from-indigo-600 to-blue-700'
-              : 'from-amber-500 to-orange-600';
-
-          const bgHeader =
-            kpi.number === 1
-              ? 'bg-blue-50/70 border-b border-blue-100'
-              : kpi.number === 2
-              ? 'bg-emerald-50/70 border-b border-emerald-100'
-              : kpi.number === 3
-              ? 'bg-indigo-50/70 border-b border-indigo-100'
-              : 'bg-amber-50/70 border-b border-amber-100';
+      {/* 4 Cards Grid - Model DEP-A2 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {PERKIN_A4_KPIS.map((ikp) => {
+          const isHighlighted = selectedSatker === 'ALL' || selectedSatker === ikp.unitId;
 
           return (
             <div
-              key={kpi.id}
-              className="bg-white rounded-xl border border-slate-200/90 hover:border-slate-300 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between overflow-hidden group"
+              key={ikp.id}
+              className={`rounded-xl border p-4 transition-all flex flex-col justify-between space-y-3 bg-white shadow-xs ${
+                isHighlighted
+                  ? 'border-slate-200/90 hover:border-blue-300 hover:shadow-md'
+                  : 'opacity-60 border-slate-100'
+              }`}
             >
-              {/* Card Header Top */}
-              <div>
-                <div className={`p-3 ${bgHeader} flex items-start justify-between gap-2`}>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-slate-900 text-white font-mono text-[11px] font-bold shadow-2xs">
-                      {kpi.code}
-                    </span>
-                    <span className="text-[10px] font-mono font-semibold text-slate-600 bg-white/80 px-2 py-0.5 rounded border border-slate-200">
-                      {kpi.pjSatkerCode}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => onOpenFormulaModal(kpi.id)}
-                      title="Lihat Rumus & Definisi Operasional"
-                      className="p-1 rounded-md text-slate-500 hover:text-blue-700 hover:bg-white/80 transition-colors cursor-pointer"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                    </button>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
-                      Melampaui
-                    </span>
-                  </div>
+              {/* Header: Code & Predicate */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="px-2 py-0.5 rounded-md font-mono text-[10px] font-black tracking-wider uppercase bg-slate-100 text-slate-700">
+                    {ikp.code} &bull; BUTIR #{ikp.number}
+                  </span>
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded border bg-emerald-50 text-emerald-700 border-emerald-200">
+                    {ikp.predikat}
+                  </span>
                 </div>
 
-                {/* KPI Title & Target */}
-                <div className="p-3 pb-2 space-y-2">
-                  <h3 className="text-xs font-bold text-slate-800 leading-snug line-clamp-2" title={kpi.name}>
-                    {kpi.name}
-                  </h3>
-
-                  {/* Big Realization Number */}
-                  <div className="flex items-baseline justify-between pt-1">
-                    <div>
-                      <div className="text-[11px] text-slate-500 font-medium">Realisasi Capaian:</div>
-                      <div className="text-2xl sm:text-2xl font-black text-slate-900 tracking-tight font-mono flex items-baseline gap-1">
-                        <span>{kpi.realisasiDisplay}</span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <div className="text-[10px] text-slate-400 font-mono">Target: {kpi.targetDisplay}</div>
-                      <div className="text-xs font-mono font-black text-emerald-700 flex items-center justify-end gap-0.5">
-                        <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>{kpi.achievement.toFixed(1)}%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="space-y-1">
-                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full bg-gradient-to-r ${accentGradient} transition-all duration-700`}
-                        style={{ width: `${Math.min(100, (kpi.realisasi / kpi.target) * 100)}%` }}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
-                      <span>Baseline: {kpi.baseline2024}</span>
-                      <span className="text-emerald-700 font-bold">{kpi.yoyGrowth}</span>
-                    </div>
-                  </div>
-
-                  {/* Quarterly Mini Bars */}
-                  <div className="pt-2 border-t border-slate-100">
-                    <div className="text-[10px] font-mono text-slate-500 mb-1 flex justify-between items-center">
-                      <span>Tren Kuartalan Q1-Q4:</span>
-                      <span className="text-slate-400">Target vs Real</span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-1">
-                      {kpi.quarterlyBreakdown.map((q) => {
-                        const isQSelected = selectedQuarter === 'ALL' || selectedQuarter === q.quarter;
-                        const barPct = Math.min(100, (q.realisasi / q.target) * 100);
-                        return (
-                          <div
-                            key={q.quarter}
-                            className={`p-1 rounded text-center transition-all ${
-                              isQSelected ? 'bg-slate-50 border border-slate-200' : 'opacity-40'
-                            }`}
-                          >
-                            <div className="text-[9px] font-mono font-bold text-slate-600">{q.quarter}</div>
-                            <div className="h-1 w-full bg-slate-200 rounded-full my-1 overflow-hidden">
-                              <div
-                                className="h-full bg-blue-600 rounded-full"
-                                style={{ width: `${barPct}%` }}
-                              />
-                            </div>
-                            <div className="text-[9px] font-mono text-slate-800 font-extrabold truncate">
-                              {q.realisasi >= 1000 ? `${(q.realisasi / 1000).toFixed(1)}k` : q.realisasi.toFixed(1)}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card Footer Note */}
-              <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-600 flex items-center justify-between">
-                <span className="truncate pr-1">Pengampu: <strong className="text-slate-800">{kpi.pjSatker}</strong></span>
-                <button
-                  onClick={() => onOpenFormulaModal(kpi.id)}
-                  className="text-blue-600 hover:text-blue-800 font-bold hover:underline shrink-0 flex items-center gap-0.5 cursor-pointer"
+                <h3
+                  className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug line-clamp-2"
+                  title={ikp.name}
                 >
-                  <span>Detail</span>
-                  <ChevronRight className="w-3 h-3" />
-                </button>
+                  {ikp.name}
+                </h3>
               </div>
+
+              {/* Main Numbers: Realisasi vs Target */}
+              <div className="p-3 rounded-lg bg-slate-50/80 border border-slate-100 space-y-1.5">
+                <div className="flex items-baseline justify-between">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      {typeof ikp.realisasi === 'number' && ikp.realisasi % 1 !== 0
+                        ? ikp.realisasi.toFixed(2)
+                        : ikp.realisasi}
+                    </span>
+                    <span className="text-xs font-mono text-slate-500 font-semibold">
+                      {ikp.satuan}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
+                      Target 2025
+                    </span>
+                    <span className="text-xs font-mono font-black text-slate-700">
+                      {ikp.targetDisplay}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Capaian Progress Bar */}
+                <div className="space-y-1 pt-1">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-slate-500">Capaian Kinerja</span>
+                    <span className="font-black text-emerald-700">
+                      {ikp.capaianPersen.toFixed(1)}% (
+                      {ikp.capaianPersen >= 100 ? 'Melampaui' : 'Tercapai Baik'})
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-linear-to-r from-blue-500 to-emerald-500"
+                      style={{ width: `${Math.min(ikp.capaianPersen, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Attribution & Activities: Sumber & Unit Pelaksana (Sesuai DEP-A2) */}
+              <div className="space-y-1.5 text-[10.5px] text-slate-600 pt-1 border-t border-slate-100">
+                <div className="flex items-start justify-between gap-1.5">
+                  <span className="text-slate-400 font-medium shrink-0">Sumber:</span>
+                  <span className="font-mono font-bold text-blue-800 text-[10px] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 truncate max-w-[200px]" title={ikp.sumberData}>
+                    {ikp.sumberData}
+                  </span>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-slate-400 font-medium shrink-0">Unit Pelaksana:</span>
+                  <span className="font-mono font-bold text-slate-800 text-[10.5px]">
+                    {ikp.unitKerja}
+                  </span>
+                </div>
+              </div>
+
+              {/* Footer Button: Formula Modal */}
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal(ikp.id)}
+                className="w-full py-1.5 px-2.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                title="Buka rumus, regulasi acuan, dan rentang penilaian"
+              >
+                <FileCode2 className="w-3.5 h-3.5" />
+                <span>Kamus Rumus &amp; Regulasi</span>
+              </button>
             </div>
           );
         })}

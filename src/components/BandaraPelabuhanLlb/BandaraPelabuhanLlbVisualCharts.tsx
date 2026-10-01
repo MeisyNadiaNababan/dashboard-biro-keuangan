@@ -207,23 +207,23 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
-      {/* 1. TOP METRICS HEADER BAR - Diubah Menjadi "Capaian Evaluasi 3 Indikator Kinerja Program (IKP)" */}
-      <div className="p-4 bg-gradient-to-r from-slate-900 via-[#0B2545] to-[#13315C] text-white">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-700/70">
+      {/* 1. TOP METRICS HEADER BAR - Capaian Evaluasi 3 Indikator Kinerja Program (IKP) Card Putih */}
+      <div className="p-4 bg-white border-b border-slate-200 text-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 text-cyan-300 flex items-center justify-center shrink-0 shadow-xs">
-              <Award className="w-5 h-5 text-cyan-300" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs">
+              <Award className="w-4 h-4 text-blue-600" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 uppercase">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 uppercase">
                   EVALUASI PROGRAM TERPADU
                 </span>
-                <span className="text-xs text-slate-300 font-mono hidden sm:inline">
+                <span className="text-xs text-slate-500 font-mono hidden sm:inline">
                   DEP-A5 BP Batam &bull; Perkin TA 2025
                 </span>
               </div>
-              <h2 className="text-sm sm:text-base font-black text-white tracking-tight">
+              <h2 className="text-sm sm:text-base font-black text-slate-900 tracking-tight">
                 Capaian Evaluasi 3 Indikator Kinerja Program (IKP)
               </h2>
             </div>
@@ -231,16 +231,16 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
 
           {/* Action Tabs & Toggle */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center p-1 bg-slate-800/80 rounded-xl border border-slate-700/80 text-xs">
+            <div className="flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs">
               <button
                 onClick={() => setActiveTab('ikm_konsolidasi')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'ikm_konsolidasi'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-300 hover:text-white'
+                    ? 'bg-white text-blue-700 shadow-2xs font-extrabold'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Smile className="w-3.5 h-3.5 text-emerald-400" />
+                <Smile className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Konsolidasi IKM</span>
               </button>
 
@@ -248,21 +248,21 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
                 onClick={() => setActiveTab('pnbp_konsolidasi')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'pnbp_konsolidasi'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-300 hover:text-white'
+                    ? 'bg-white text-blue-700 shadow-2xs font-extrabold'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <DollarSign className="w-3.5 h-3.5 text-amber-300" />
+                <DollarSign className="w-3.5 h-3.5 text-amber-600" />
                 <span>PNBP</span>
               </button>
             </div>
 
             <button
               onClick={handleExportCsv}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer text-xs flex items-center gap-1 font-mono"
+              className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 transition-colors cursor-pointer text-xs flex items-center gap-1 font-mono"
               title="Unduh Data CSV"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5 text-slate-600" />
               <span className="hidden sm:inline">CSV</span>
             </button>
           </div>
@@ -273,14 +273,14 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
       <div className="p-4 sm:p-5 space-y-5">
         {/* ==================================================================== */}
         {/* SHEET 1: KONSOLIDASI IKM (BANDARA, PELABUHAN, LALU LINTAS BARANG)    */}
-        {/* MODEL TAMPILAN SEPERTI KONSOLIDASI IKM DI DASHBOARD KEPALA BP        */}
+        {/* MODEL TAMPILAN TABEL SEPERTI IKM PENGGUNA LAYANAN PTSP DEP-A2        */}
         {/* ==================================================================== */}
         {activeTab === 'ikm_konsolidasi' && (
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* Header Callout IKM */}
-            <div className="p-4 rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50/70 via-white to-emerald-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-3.5 sm:p-4 rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50/70 via-white to-emerald-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
                   <Smile className="w-5 h-5" />
                 </div>
                 <div>
@@ -289,18 +289,18 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
                       IKP-1 PERKIN A.5 &bull; IKM KONSOLIDASI
                     </span>
                     <span className="text-xs text-slate-500 font-mono hidden sm:inline">
-                      Mempedomani PermenPAN-RB No. 14 Tahun 2017
+                      PermenPAN-RB No. 14 Tahun 2017 (9 Unsur Standar Pelayanan)
                     </span>
                   </div>
                   <h3 className="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
-                    Indeks Kepuasan Masyarakat (IKM) 3 Lokus Layanan Utama DEP-A5
+                    Indeks Kepuasan Masyarakat (IKM) Pelayanan Bandara, Pelabuhan &amp; LLB
                   </h3>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 self-end sm:self-auto">
                 <div className="text-right">
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block font-mono">
+                  <span className="text-[9.5px] uppercase font-bold text-slate-500 block font-mono">
                     Target: 86,30 | Realisasi Rata-Rata
                   </span>
                   <div className="flex items-baseline justify-end gap-1.5">
@@ -323,161 +323,145 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
               </div>
             </div>
 
-            {/* 3 Lokus Survey Cards (Grid 3 Kolom) */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <h4 className="font-bold text-slate-900 flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Skor IKM 3 Lokus Pelayanan Publik (Klik kartu untuk melihat 9 unsur detail):</span>
-                </h4>
-                <span className="text-slate-500 font-mono text-[11px]">
-                  Target Seluruh Lokus: <strong>86,30</strong>
-                </span>
-              </div>
+            {/* 3 KARTU RINCIAN 9 UNSUR IKM SEPERTI TAMPILAN SCREENSHOT */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {LOKUS_IKM_A5.map((lokus) => {
+                const isBandara = lokus.no === 1;
+                const isPelabuhan = lokus.no === 2;
+                const formulaKpiId = isBandara ? 'ikp-1-ikm-gabungan' : isPelabuhan ? 'ikp-1-ikm-gabungan' : 'ikp-1-ikm-gabungan';
+                const achievementPct = ((lokus.skorIkm / lokus.target) * 100).toFixed(2);
+                const surplusDiff = (lokus.skorIkm - lokus.target).toFixed(2);
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-                {LOKUS_IKM_A5.map((lokus) => {
-                  const isSelected = lokus.no === selectedLokusNo;
-                  return (
-                    <div
-                      key={lokus.no}
-                      onClick={() => setSelectedLokusNo(lokus.no)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
-                        isSelected
-                          ? 'border-emerald-500 bg-emerald-50/40 shadow-sm ring-2 ring-emerald-400/30'
-                          : 'border-slate-200 hover:border-slate-300 bg-white shadow-2xs'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between text-[11px] mb-1.5">
-                          <span className="font-bold text-slate-500 font-mono flex items-center gap-1">
-                            {lokus.icon}
-                            <span>LOKUS #{lokus.no}</span>
-                          </span>
-                          <span
-                            className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] ${
-                              lokus.mutuPelayanan === 'A'
-                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                : 'bg-blue-100 text-blue-800'
-                            }`}
-                          >
-                            Mutu {lokus.mutuPelayanan} ({lokus.predikat})
-                          </span>
-                        </div>
-
-                        <h5 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug line-clamp-2 min-h-[38px]">
-                          {lokus.namaLokus}
-                        </h5>
-                        <p className="text-[10.5px] text-slate-500 mt-0.5">
-                          {lokus.satker}
-                        </p>
-                      </div>
-
-                      <div>
-                        <div className="flex items-baseline justify-between mb-1.5">
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-2xl font-black font-mono text-slate-900">
-                              {lokus.skorIkm.toFixed(2)}
-                            </span>
-                            <span className="text-[10px] font-mono text-slate-400">/ 100</span>
-                          </div>
-                          <span className="text-[11px] font-mono font-bold text-emerald-700">
-                            +{(lokus.skorIkm - lokus.target).toFixed(2)} di atas target
-                          </span>
-                        </div>
-
-                        <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                          <div
-                            className="bg-emerald-600 h-full rounded-full transition-all duration-500"
-                            style={{ width: `${(lokus.skorIkm / 100) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="pt-2 border-t border-slate-100 space-y-1 text-[11px]">
-                        <div className="flex items-center justify-between text-slate-600">
-                          <span>Responden:</span>
-                          <span className="font-mono font-bold text-slate-800">
-                            {lokus.jumlahResponden.toLocaleString('id-ID')} Pengguna Jasa
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-slate-500 truncate" title={lokus.unsurTertinggi}>
-                          ⭐ Tertinggi: <strong className="text-slate-800">{lokus.unsurTertinggi}</strong>
-                        </div>
-                      </div>
-
-                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono">
-                        <span className="text-slate-400">Klik untuk unsur detail</span>
-                        <span className="text-emerald-700 font-bold">
-                          {isSelected ? '✓ Terpilih' : 'Pilih Lokus →'}
-                        </span>
-                      </div>
+                return (
+                  <div
+                    key={lokus.no}
+                    className="p-4 sm:p-5 rounded-2xl border border-slate-200/90 bg-white shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between space-y-3.5"
+                  >
+                    {/* 1. Header Badges */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded text-[10px] border border-sky-200 flex items-center gap-1">
+                        {lokus.icon}
+                        <span>IKM &bull; {lokus.satker.toUpperCase().replace('DIREKTORAT ', 'DIT. ')}</span>
+                      </span>
+                      <span className="font-mono font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        {achievementPct}% Melampaui Target
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
 
-            {/* Drilldown 9 Unsur Pelayanan PermenPAN-RB untuk Lokus Terpilih */}
-            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2 border-b border-slate-200">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                    Rincian 9 Unsur Penilaian IKM: {selectedLokus.namaLokus}
-                  </h4>
-                </div>
-                <span className="text-[10.5px] font-mono text-slate-500">
-                  Responden: <strong>{selectedLokus.jumlahResponden} Pengguna</strong> &bull; Rata-rata Skor: <strong>{selectedLokus.skorIkm}</strong>
-                </span>
-              </div>
+                    {/* 2. Title & Subtitle */}
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug line-clamp-1" title={lokus.namaLokus}>
+                        IKM {lokus.namaLokus}
+                      </h4>
+                      <span className="text-[10.5px] text-slate-500 font-mono block mt-0.5">
+                        Unit: {lokus.satker} (PermenPAN-RB No. 14/2017)
+                      </span>
+                    </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                {IKM_UNSUR_DETAILS.map((unsur, idx) => {
-                  const nilai =
-                    selectedLokus.no === 1
-                      ? unsur.nilaiBandara
-                      : selectedLokus.no === 2
-                      ? unsur.nilaiPelabuhan
-                      : unsur.nilaiLlb;
-
-                  const isHigh = nilai >= 88.0;
-
-                  return (
-                    <div
-                      key={idx}
-                      className="p-2.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs space-y-1.5"
-                    >
-                      <div className="flex items-start justify-between gap-1">
-                        <span className="text-[10.5px] font-bold text-slate-800 line-clamp-1" title={unsur.unsur}>
-                          {idx + 1}. {unsur.unsur}
-                        </span>
-                        <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                          isHigh ? 'bg-emerald-50 text-emerald-800' : 'bg-blue-50 text-blue-800'
-                        }`}>
-                          {isHigh ? 'Mutu A' : 'Mutu B'}
+                    {/* 3. Main Metric & Target */}
+                    <div>
+                      <div className="flex items-baseline justify-between mb-1">
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-2xl sm:text-3xl font-black font-mono text-slate-900">
+                            {lokus.skorIkm.toFixed(2)}
+                          </span>
+                          <span className="text-xs font-bold text-slate-500 font-mono">Indeks</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-600">
+                          Target: <strong className="text-slate-800">{lokus.target.toFixed(2)}</strong> (+{surplusDiff})
                         </span>
                       </div>
-
-                      <div className="flex items-baseline justify-between">
-                        <span className="text-base font-black font-mono text-slate-900">
-                          {nilai.toFixed(2)}
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          Bobot: {(unsur.bobot * 100).toFixed(0)}%
-                        </span>
-                      </div>
-
-                      <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-emerald-500 h-full rounded-full"
-                          style={{ width: `${(nilai / 100) * 100}%` }}
+                          style={{ width: `${Math.min((lokus.skorIkm / 100) * 100, 100)}%` }}
+                          className="bg-emerald-600 h-full rounded-full transition-all duration-500"
                         />
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+
+                    {/* 4. Table 9 Unsur */}
+                    <div className="space-y-1.5 flex-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-bold text-slate-800">Rincian 9 Unsur Penilaian IKM:</span>
+                        <span className="text-slate-400 font-mono text-[10px]">9 Unsur PermenPAN-RB</span>
+                      </div>
+
+                      <div className="overflow-x-auto rounded-xl border border-slate-200">
+                        <table className="w-full text-left text-[11px]">
+                          <thead className="bg-slate-100/90 text-slate-700 font-bold uppercase text-[9px] border-b border-slate-200 font-mono">
+                            <tr>
+                              <th className="py-1.5 px-2">9 Unsur Pelayanan</th>
+                              <th className="py-1.5 px-1 text-center w-12">Bobot</th>
+                              <th className="py-1.5 px-1.5 text-right w-14">Skor</th>
+                              <th className="py-1.5 px-1.5 text-center w-16">Mutu</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
+                            {IKM_UNSUR_DETAILS.map((unsur, idx) => {
+                              const skorVal =
+                                isBandara
+                                  ? unsur.nilaiBandara
+                                  : isPelabuhan
+                                  ? unsur.nilaiPelabuhan
+                                  : unsur.nilaiLlb;
+                              const isHigh = skorVal >= 88.31;
+
+                              return (
+                                <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
+                                  <td className="py-1 px-2 font-sans truncate max-w-[130px]" title={unsur.deskripsi}>
+                                    {unsur.unsur}
+                                  </td>
+                                  <td className="py-1 px-1 text-center font-mono text-[10px] text-slate-500">
+                                    {(unsur.bobot * 100).toFixed(0)}%
+                                  </td>
+                                  <td className="py-1 px-1.5 text-right font-mono font-bold text-slate-900">
+                                    {skorVal.toFixed(1)}
+                                  </td>
+                                  <td className="py-1 px-1.5 text-center font-mono">
+                                    <span
+                                      className={`px-1 py-0.2 rounded text-[9px] font-bold ${
+                                        isHigh
+                                          ? 'bg-emerald-100 text-emerald-800'
+                                          : 'bg-blue-100 text-blue-800'
+                                      }`}
+                                    >
+                                      {isHigh ? 'Mutu A' : 'Mutu B'}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                            <tr className="bg-slate-100/90 font-bold text-slate-900 border-t border-slate-200">
+                              <td className="py-1.5 px-2 font-mono text-[10px] uppercase font-bold text-slate-950">
+                                Total Konversi IKM
+                              </td>
+                              <td className="py-1.5 px-1 text-center font-mono text-[10px] text-slate-600 font-bold">100%</td>
+                              <td className="py-1.5 px-1.5 text-right font-mono font-black text-emerald-800 text-xs">
+                                {lokus.skorIkm.toFixed(2)}
+                              </td>
+                              <td className="py-1.5 px-1.5 text-center font-mono">
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-600 text-white">
+                                  Mutu A
+                                </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* 5. Bottom Action Button */}
+                    <button
+                      onClick={() => onOpenFormulaModal(formulaKpiId)}
+                      className="w-full py-2 px-3 rounded-xl border border-sky-200 bg-sky-50/50 hover:bg-sky-100 text-sky-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      title="Lihat Manual & Formula IKM"
+                    >
+                      <Info className="w-3.5 h-3.5 text-sky-600" />
+                      <span>Lihat Manual &amp; Formula IKM ({lokus.no === 1 ? 'Bandara' : lokus.no === 2 ? 'Pelabuhan' : 'Lalu Lintas Barang'})</span>
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -695,27 +679,6 @@ export const BandaraPelabuhanLlbVisualCharts: React.FC<
                       </tr>
                     </tbody>
                   </table>
-                </div>
-
-                {/* 3 Mini Summary Tiles */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-xs">
-                  <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 space-y-0.5">
-                    <span className="text-[9.5px] text-emerald-900 font-bold uppercase">1. PNBP Bandara</span>
-                    <div className="text-sm font-black text-emerald-950">Rp 312,45 M</div>
-                    <div className="text-[9.5px] text-emerald-700 font-semibold">+Rp 27,45 M dari target</div>
-                  </div>
-
-                  <div className="p-2 rounded-lg bg-blue-50 border border-blue-100 space-y-0.5">
-                    <span className="text-[9.5px] text-blue-900 font-bold uppercase">2. PNBP Pelabuhan</span>
-                    <div className="text-sm font-black text-blue-950">Rp 250,40 M</div>
-                    <div className="text-[9.5px] text-blue-700 font-semibold">+Rp 17,19 M dari target</div>
-                  </div>
-
-                  <div className="p-2 rounded-lg bg-amber-50 border border-amber-100 space-y-0.5">
-                    <span className="text-[9.5px] text-amber-900 font-bold uppercase">3. PNBP Lalu Lintas Barang</span>
-                    <div className="text-sm font-black text-amber-950">Rp 2,48 M</div>
-                    <div className="text-[9.5px] text-amber-700 font-semibold">+Rp 0,28 M dari target</div>
-                  </div>
                 </div>
               </div>
             </div>

@@ -26,8 +26,6 @@ import { PelabuhanPenumpangCard } from '../Kepelabuhanan/PelabuhanPenumpangCard'
 import { LlbPerizinanConsolidatedCard } from '../LaluLintasBarang/LlbPerizinanConsolidatedCard';
 import { LlbPenerbitanBulananSheetSwap } from '../LaluLintasBarang/LlbPenerbitanBulananSheetSwap';
 import { LlbSlaLayananCard } from '../LaluLintasBarang/LlbSlaLayananCard';
-import { LlbKuotaBarangKonsumsiCard } from '../LaluLintasBarang/LlbKuotaBarangKonsumsiCard';
-import { LlbKbliKawasanCard } from '../LaluLintasBarang/LlbKbliKawasanCard';
 
 interface BandaraPelabuhanLlbDeepDiveCenterProps {
   selectedUnitId: string;
@@ -56,7 +54,7 @@ export const BandaraPelabuhanLlbDeepDiveCenter: React.FC<
 
   // Sub-tabs for Lalu Lintas Barang (Default: 'perizinan', tanpa opsi 'all')
   const [llbSubTab, setLlbSubTab] = useState<
-    'perizinan' | 'bulanan' | 'sla' | 'kuota' | 'kbli'
+    'perizinan' | 'bulanan' | 'sla'
   >('perizinan');
 
   // Default filters for Bandara Dataset 2
@@ -320,8 +318,6 @@ export const BandaraPelabuhanLlbDeepDiveCenter: React.FC<
                   { id: 'perizinan', label: 'Perizinan Konsolidasian (DS 3)' },
                   { id: 'bulanan', label: 'Arus Inbound & Outbound (DS 6 & 7)' },
                   { id: 'sla', label: 'Kinerja SLA Layanan (DS 8 & 9)' },
-                  { id: 'kuota', label: 'Kuota Konsumsi (DS 2)' },
-                  { id: 'kbli', label: 'Izin Usaha Kawasan (DS 4 & 5)' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -366,18 +362,6 @@ export const BandaraPelabuhanLlbDeepDiveCenter: React.FC<
             {llbSubTab === 'sla' && (
               <LlbSlaLayananCard
                 onOpenFormulaModal={() => onOpenFormulaModal('ikp-1-ikm-gabungan')}
-              />
-            )}
-
-            {llbSubTab === 'kuota' && (
-              <LlbKuotaBarangKonsumsiCard
-                onOpenFormulaModal={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
-              />
-            )}
-
-            {llbSubTab === 'kbli' && (
-              <LlbKbliKawasanCard
-                onOpenFormulaModal={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
               />
             )}
           </div>

@@ -1,24 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  Timer,
   BarChart3,
   Table as TableIcon,
-  HelpCircle,
-  TrendingUp,
-  ArrowRightLeft,
   Factory,
   ShoppingBag,
   Download,
-  ShieldCheck,
 } from 'lucide-react';
 import {
   DATA_SLA_INDUSTRI,
   DATA_SLA_PERDAGANGAN,
-  SlaIndustriItem,
-  SlaPerdaganganItem,
 } from '../../data/laluLintasBarangData';
 import { LlbVisualHeader } from './LlbVisualHeader';
 
@@ -29,8 +19,8 @@ interface LlbSlaLayananCardProps {
 export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  // Sheet: 'komparasi' | 'industri' | 'perdagangan' | 'tabel'
-  const [activeSheet, setActiveSheet] = useState<'komparasi' | 'industri' | 'perdagangan' | 'tabel'>('komparasi');
+  // Sheet: 'komparasi' | 'tabel'
+  const [activeSheet, setActiveSheet] = useState<'komparasi' | 'tabel'>('komparasi');
 
   // Aggregations Industri (Dataset 9)
   const totalDokumenIndustri = useMemo(
@@ -89,16 +79,6 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
     []
   );
 
-  const currentDatasetNumber =
-    activeSheet === 'perdagangan' ? 8 : activeSheet === 'industri' ? 9 : 8;
-
-  const currentTitle =
-    activeSheet === 'perdagangan'
-      ? 'PERSENTASE PELAYANAN LALU LINTAS BARANG PERDAGANGAN YANG SELESAI TEPAT WAKTU'
-      : activeSheet === 'industri'
-      ? 'PERSENTASE PELAYANAN LALU LINTAS BARANG INDUSTRI YANG SELESAI TEPAT WAKTU'
-      : 'KINERJA KETEPATAN WAKTU & SLA LAYANAN LALU LINTAS BARANG (INDUSTRI & PERDAGANGAN)';
-
   const exportCsv = () => {
     let csv = 'No,Sektor,Uraian Izin,Persentase Layanan Tepat Waktu (%),Rata-rata Waktu Penyelesaian (Jam),Target SLA (Jam),Jumlah Dokumen\n';
     DATA_SLA_INDUSTRI.forEach((r) => {
@@ -118,14 +98,14 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
   };
 
   return (
-    <div className="bg-white border border-slate-200/90 rounded-xl p-4 mb-4 shadow-2xs">
+    <div className="bg-white border border-slate-200/90 rounded-xl p-4 mb-4 shadow-2xs font-sans">
       {/* 1. Standardized Visual Header */}
       <LlbVisualHeader
-        datasetNumber={currentDatasetNumber}
+        datasetNumber={8}
         pdfPages="Hal. 9 (DS 8 & 9)"
         classification="TERBUKA"
         periode="PERBULAN"
-        title={currentTitle}
+        title="KINERJA KETEPATAN WAKTU & SLA LAYANAN LALU LINTAS BARANG (INDUSTRI & PERDAGANGAN)"
         visualName="Visual Gauge & Dual-Metric: Persentase Tepat Waktu (%) vs Waktu Penyelesaian (Jam)"
         attributes={[
           'NO',
@@ -136,7 +116,7 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
         onOpenFormula={() => onOpenFormulaModal?.('llb-sla')}
         rightControls={
           <div className="flex items-center gap-1.5 flex-wrap">
-            {/* Sheet Swap Controller */}
+            {/* Sheet Swap Controller (Hanya Komparasi dan Tabel) */}
             <div className="flex items-center bg-slate-100 border border-slate-200 rounded-lg p-0.5">
               <button
                 onClick={() => setActiveSheet('komparasi')}
@@ -148,28 +128,6 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
               >
                 <BarChart3 className="w-3 h-3" />
                 <span>Komparasi Sektor</span>
-              </button>
-              <button
-                onClick={() => setActiveSheet('industri')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                  activeSheet === 'industri'
-                    ? 'bg-[#1F4E79] text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Factory className="w-3 h-3" />
-                <span>Industri (DS 9)</span>
-              </button>
-              <button
-                onClick={() => setActiveSheet('perdagangan')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                  activeSheet === 'perdagangan'
-                    ? 'bg-[#1F4E79] text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <ShoppingBag className="w-3 h-3" />
-                <span>Perdagangan (DS 8)</span>
               </button>
               <button
                 onClick={() => setActiveSheet('tabel')}
@@ -197,7 +155,7 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
       />
 
       {/* 2. DUAL EXECUTIVE KPI BADGES (Industri vs Perdagangan Selesai Tepat Waktu) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
         {/* Industri SLA Highlight (Dataset 9) */}
         <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/40 relative overflow-hidden">
           <div className="flex items-center justify-between">
@@ -230,7 +188,7 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
           </div>
 
           <div className="mt-2 text-[10.5px] text-blue-800 font-medium flex items-center justify-between">
-            <span>✅ Memenuhi standar SLA Kemenpan-RB &amp; ISO 9001</span>
+            <span>&bull; Standar SLA Kemenpan-RB &amp; ISO 9001</span>
             <span className="font-mono text-slate-500">6 Jenis Layanan</span>
           </div>
         </div>
@@ -267,13 +225,13 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
           </div>
 
           <div className="mt-2 text-[10.5px] text-amber-800 font-medium flex items-center justify-between">
-            <span>✅ Verifikasi alokasi kuota &amp; port clearance</span>
+            <span>&bull; Verifikasi kuota pangan &amp; port clearance</span>
             <span className="font-mono text-slate-500">5 Jenis Layanan</span>
           </div>
         </div>
       </div>
 
-      {/* 3. SHEET 1: KOMPARASI KINERJA INDUSTRI VS PERDAGANGAN */}
+      {/* 3. VIEW 1: KOMPARASI KINERJA INDUSTRI VS PERDAGANGAN */}
       {activeSheet === 'komparasi' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Sektor Industri Summary List */}
@@ -348,115 +306,7 @@ export const LlbSlaLayananCard: React.FC<LlbSlaLayananCardProps> = ({
         </div>
       )}
 
-      {/* 4. SHEET 2: RINCIAN INDUSTRI (Dataset 9) */}
-      {activeSheet === 'industri' && (
-        <div className="space-y-2.5">
-          <div className="text-[11px] text-slate-500 pb-1 border-b border-slate-100 flex items-center justify-between">
-            <span>
-              6 Uraian Izin Industri • Target SLA: <strong>Maks 4.0 - 6.0 Jam</strong>
-            </span>
-            <span className="font-mono text-emerald-700 font-bold">
-              ✅ Rata-rata Kinerja: {avgSlaIndustri}% ({avgJamIndustri} Jam)
-            </span>
-          </div>
-
-          <div className="space-y-2">
-            {DATA_SLA_INDUSTRI.map((item) => (
-              <div
-                key={item.no}
-                className="p-3 rounded-lg border border-slate-200/90 bg-white hover:border-blue-300 transition-all"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold font-mono flex items-center justify-center">
-                      {item.no}
-                    </span>
-                    <span className="text-xs font-bold text-slate-900">
-                      {item.uraianIzin}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 font-mono shrink-0 text-xs">
-                    <span className="text-slate-500">
-                      ⏱️ Rata-rata: <strong>{item.rataRataWaktuPenyelesaianDokumenJam} Jam</strong> (Target: {item.targetSlaJam} Jam)
-                    </span>
-                    <span className="text-sm font-black text-blue-900">
-                      {item.persentaseLayananTepatWaktu}%
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-blue-700 rounded-full"
-                    style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1 pt-1 font-mono">
-                  <span>Volume Penerbitan: {item.jumlahDokumen} Dokumen SK</span>
-                  <span className="text-emerald-700 font-semibold">Tingkat Kepatuhan: Sangat Tinggi</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 5. SHEET 3: RINCIAN PERDAGANGAN (Dataset 8) */}
-      {activeSheet === 'perdagangan' && (
-        <div className="space-y-2.5">
-          <div className="text-[11px] text-slate-500 pb-1 border-b border-slate-100 flex items-center justify-between">
-            <span>
-              5 Uraian Izin Perdagangan • Target SLA: <strong>Maks 6.0 - 8.0 Jam</strong>
-            </span>
-            <span className="font-mono text-amber-800 font-bold">
-              ✅ Rata-rata Kinerja: {avgSlaPerdagangan}% ({avgJamPerdagangan} Jam)
-            </span>
-          </div>
-
-          <div className="space-y-2">
-            {DATA_SLA_PERDAGANGAN.map((item) => (
-              <div
-                key={item.no}
-                className="p-3 rounded-lg border border-slate-200/90 bg-white hover:border-amber-300 transition-all"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold font-mono flex items-center justify-center">
-                      {item.no}
-                    </span>
-                    <span className="text-xs font-bold text-slate-900">
-                      {item.uraianIzin}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 font-mono shrink-0 text-xs">
-                    <span className="text-slate-500">
-                      ⏱️ Rata-rata: <strong>{item.rataRataWaktuPenyelesaianDokumenJam} Jam</strong> (Target: {item.targetSlaJam} Jam)
-                    </span>
-                    <span className="text-sm font-black text-amber-900">
-                      {item.persentaseLayananTepatWaktu}%
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-amber-600 rounded-full"
-                    style={{ width: `${item.persentaseLayananTepatWaktu}%` }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1 pt-1 font-mono">
-                  <span>Volume Permohonan Impor: {item.jumlahDokumen} Dokumen</span>
-                  <span className="text-emerald-700 font-semibold">Tingkat Kepatuhan: Sangat Tinggi</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 6. SHEET 4: TABEL MATRIKS KEPATUHAN LENGKAP */}
+      {/* 4. VIEW 2: TABEL MATRIKS KEPATUHAN LENGKAP */}
       {activeSheet === 'tabel' && (
         <div className="overflow-x-auto rounded-lg border border-slate-200">
           <table className="w-full text-left text-[11px]">

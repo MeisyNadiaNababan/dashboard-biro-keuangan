@@ -230,64 +230,7 @@ export const BandaraPelabuhanLlbDashboard: React.FC<
       </div>
 
       {/* ============================================================== */}
-      {/* 2. EXECUTIVE SUMMARY HEADER BANNER                              */}
-      {/* ============================================================== */}
-      <div className="bg-gradient-to-r from-[#002B49] via-[#0A3D62] to-[#13315C] text-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-700/60 relative overflow-hidden">
-        {/* Background Decorative Rings */}
-        <div className="absolute right-0 top-0 w-80 h-80 bg-cyan-400/5 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute right-32 bottom-0 w-64 h-64 bg-blue-400/5 rounded-full blur-xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-3xl">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2 py-0.5 rounded-md bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono font-bold uppercase tracking-wider">
-                PERKIN A.5 &bull; DEPUTI BIDANG PENGELOLAAN BANDARA, PELABUHAN &amp; LLB
-              </span>
-              <span className="text-[11px] text-slate-300 font-mono">
-                No. {PERKIN_A5_METADATA.nomorPerkin} &bull; Batam, {PERKIN_A5_METADATA.tanggalPenetapan}
-              </span>
-            </div>
-
-            <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white">
-              Command Center Perkin A.5: Bandara, Pelabuhan &amp; Lalu Lintas Barang
-            </h1>
-
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-              Sasaran Program: <strong>&ldquo;{PERKIN_A5_METADATA.sasaranProgram}&rdquo;</strong> di bawah kepemimpinan <strong>{PERKIN_A5_METADATA.pihakPertama.nama}</strong>. Mengintegrasikan 46 dataset resmi dari 3 unit kerja pengampu untuk memonitor throughput logistik, konektivitas udara &amp; maritim, mutu pelayanan publik, serta realisasi PNBP BLU.
-            </p>
-          </div>
-
-          {/* Quick Metrics Capsule */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 shrink-0">
-            <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">TOTAL PAGU PERKIN</div>
-              <div className="text-sm sm:text-base font-black font-mono text-cyan-300">
-                Rp 59,51 M
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono">3 Kegiatan Program</div>
-            </div>
-
-            <div className="bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">REALISASI PNBP TOTAL</div>
-              <div className="text-sm sm:text-base font-black font-mono text-emerald-400">
-                Rp 565,33 M
-              </div>
-              <div className="text-[10px] text-emerald-400 font-mono font-bold">108,63% Capaian</div>
-            </div>
-
-            <div className="col-span-2 sm:col-span-1 bg-slate-900/60 backdrop-blur-xs p-2.5 rounded-xl border border-slate-700/60">
-              <div className="text-[10px] font-mono text-slate-400">RATA-RATA IKP</div>
-              <div className="text-sm sm:text-base font-black font-mono text-amber-300">
-                107,94%
-              </div>
-              <div className="text-[10px] text-emerald-400 font-mono font-bold">100% Melampaui</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ============================================================== */}
-      {/* 3. 2 INDIKATOR KINERJA PROGRAM UTAMA & 3 KINERJA SATKER        */}
+      {/* 2. 2 INDIKATOR KINERJA PROGRAM UTAMA & 3 KINERJA SATKER        */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbKpiRow
         onOpenFormulaModal={handleOpenFormula}

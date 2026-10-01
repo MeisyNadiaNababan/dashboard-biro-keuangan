@@ -2,20 +2,16 @@ import React, { useState } from 'react';
 import {
   Ship,
   Anchor,
-  Globe2,
-  TrendingUp,
-  BarChart3,
-  PieChart as PieChartIcon,
-  Table as TableIcon,
   HelpCircle,
   Lightbulb,
-  CheckCircle2,
+  MapPin,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
 import {
   KUNJUNGAN_KAPAL_SUMMARY,
   TREN_KUNJUNGAN_BULANAN,
+  PENUMPANG_PER_TERMINAL_DATA,
 } from '../../data/kepelabuhananData';
 import { PelabuhanDatasetBadge } from './PelabuhanDatasetBadge';
 import { TableauShelvesBadge } from '../TableauShelvesBadge';
@@ -27,7 +23,6 @@ interface PelabuhanKunjunganKapalCardProps {
 export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  const [viewMode, setViewMode] = useState<'komposisi' | 'tren' | 'matriks'>('komposisi');
   const [showFormula, setShowFormula] = useState(false);
 
   const { totalCallSeluruh, totalGtSeluruhJuta, kapalBarang, kapalPenumpang } = KUNJUNGAN_KAPAL_SUMMARY;
@@ -46,12 +41,12 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
                 <Ship className="w-3.5 h-3.5" />
               </div>
               <h3 className="text-xs sm:text-sm font-bold text-slate-900">
-                Trafik Kunjungan Kapal (Call &amp; GT): Kapal Barang vs Penumpang
+                Trafik Kunjungan Kapal (Call &amp; GT) &amp; Arus Terminal Penumpang
               </h3>
               <TableauShelvesBadge
-                showMe="#14 Side-by-Side Bars"
-                rows="[Tipe Kapal], SUM([Call]), SUM([GT])"
-                columns="[Bulan], [Trayek Dalam/Luar]"
+                showMe="#14 Side-by-Side Bars & Gantt"
+                rows="[Tipe Kapal], SUM([Call]), SUM([Penumpang])"
+                columns="[Bulan], [Trayek], [Nama Terminal]"
               />
             </div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -72,47 +67,19 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
                 pdfPages="Hal. 15"
                 tableId="kunjungan_kapal_penumpang"
               />
+              <span className="text-slate-300">|</span>
+              <PelabuhanDatasetBadge
+                datasetNumber={25}
+                datasetName="Jumlah Penumpang Terminal Feri"
+                classification="TERTUTUP"
+                period="Per Bulan"
+                pdfPages="Hal. 17"
+                tableId="penumpang_pelabuhan"
+              />
             </div>
           </div>
 
           <div className="flex items-center gap-1.5">
-            {/* View Switcher */}
-            <div className="inline-flex bg-slate-200/80 p-0.5 rounded-lg text-xs font-semibold">
-              <button
-                onClick={() => setViewMode('komposisi')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all cursor-pointer ${
-                  viewMode === 'komposisi'
-                    ? 'bg-white text-[#1F4E79] shadow-2xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <PieChartIcon className="w-3.5 h-3.5" />
-                <span>Komposisi Trayek</span>
-              </button>
-              <button
-                onClick={() => setViewMode('tren')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all cursor-pointer ${
-                  viewMode === 'tren'
-                    ? 'bg-white text-[#1F4E79] shadow-2xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <BarChart3 className="w-3.5 h-3.5" />
-                <span>Tren Bulanan</span>
-              </button>
-              <button
-                onClick={() => setViewMode('matriks')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all cursor-pointer ${
-                  viewMode === 'matriks'
-                    ? 'bg-white text-[#1F4E79] shadow-2xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <TableIcon className="w-3.5 h-3.5" />
-                <span>Detail Call/GT</span>
-              </button>
-            </div>
-
             {/* Formula Toggle */}
             <button
               onClick={() => setShowFormula(!showFormula)}
@@ -135,10 +102,10 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
             <div className="flex items-start justify-between gap-2">
               <div>
                 <span className="font-bold text-[#1F4E79] block">
-                  Rumus Tableau: Kunjungan Kapal (Call) &amp; Tonase Kapal (Gross Tonnage - GT)
+                  Rumus Tableau: Kunjungan Kapal (Call) &amp; Arus Terminal Penumpang
                 </span>
                 <p className="text-slate-600 text-[10.5px] mt-0.5">
-                  Satu Data Item #5 (Kapal Barang) &amp; Item #7 (Kapal Penumpang): Mengagregasikan seluruh panggilan labuh kapal dalam dan luar negeri.
+                  Satu Data Item #5 (Kapal Barang), #7 (Kapal Penumpang) &amp; #25 (Penumpang): Mengagregasikan panggilan kapal dan mobilitas penumpang antarpulau &amp; internasional.
                 </p>
               </div>
               <button
@@ -168,9 +135,9 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
       </div>
 
       {/* CARD BODY */}
-      <div className="p-3.5">
+      <div className="p-3.5 space-y-4">
         {/* Metric Overview Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-3 p-2.5 bg-slate-50 rounded-lg border border-slate-200/80">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-2.5 bg-slate-50 rounded-lg border border-slate-200/80">
           <div>
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
               Total Panggilan (Call)
@@ -207,7 +174,7 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
               </span>
               <span className="text-[10.5px] font-bold text-amber-700">({persenBarangCall}%)</span>
             </div>
-            <span className="text-[9.5px] text-slate-500">{kapalBarang.totalGtJuta} Juta GT • Kargo &amp; Peti Kemas</span>
+            <span className="text-[9.5px] text-slate-500">{kapalBarang.totalGtJuta} Juta GT &bull; Kargo &amp; Peti Kemas</span>
           </div>
 
           <div>
@@ -220,227 +187,258 @@ export const PelabuhanKunjunganKapalCard: React.FC<PelabuhanKunjunganKapalCardPr
               </span>
               <span className="text-[10.5px] font-bold text-sky-700">({persenPenumpangCall}%)</span>
             </div>
-            <span className="text-[9.5px] text-slate-500">{kapalPenumpang.totalGtJuta} Juta GT • Feri &amp; Roro</span>
+            <span className="text-[9.5px] text-slate-500">{kapalPenumpang.totalGtJuta} Juta GT &bull; Feri &amp; Roro</span>
           </div>
         </div>
 
-        {/* VIEW 1: KOMPOSISI TRAYEK */}
-        {viewMode === 'komposisi' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Kapal Barang Breakdown */}
-            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                  <Anchor className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Kapal Barang (Dataset #5 - 16.240 Call)</span>
+        {/* COMBINED SECTION: TREN BULANAN (KIRI) & KOMPOSISI TRAYEK (KANAN) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {/* KOLOM KIRI: TREN BULANAN */}
+          <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-xs text-slate-600 mb-2 pb-1 border-b border-slate-200">
+                <span className="font-bold text-slate-800">
+                  Tren Kunjungan Kapal Bulanan (Call Barang vs Penumpang)
                 </span>
-                <span className="text-[10.5px] font-mono text-slate-500">42,8 Juta GT</span>
+                <span className="font-mono text-[10.5px] text-slate-500">Panggilan (Call)</span>
               </div>
 
-              <div className="space-y-2">
+              <div className="h-44 w-full relative">
+                <svg viewBox="0 0 600 130" className="w-full h-full">
+                  <line x1="40" y1="20" x2="580" y2="20" stroke="#E2E8F0" strokeDasharray="2 2" />
+                  <line x1="40" y1="65" x2="580" y2="65" stroke="#E2E8F0" strokeDasharray="2 2" />
+                  <line x1="40" y1="110" x2="580" y2="110" stroke="#CBD5E1" />
+
+                  <text x="32" y="24" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">10k</text>
+                  <text x="32" y="69" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">5k</text>
+                  <text x="32" y="114" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">0</text>
+
+                  {TREN_KUNJUNGAN_BULANAN.map((item, idx) => {
+                    const xBase = 65 + idx * 88;
+                    const barangHeight = (item.callBarang / 10000) * 90;
+                    const penumpangHeight = (item.callPenumpang / 10000) * 90;
+
+                    return (
+                      <g key={item.bulan}>
+                        {/* Kapal Barang Bar */}
+                        <rect
+                          x={xBase}
+                          y={110 - barangHeight}
+                          width="22"
+                          height={barangHeight}
+                          rx="2.5"
+                          className="fill-amber-500"
+                        />
+                        {/* Kapal Penumpang Bar */}
+                        <rect
+                          x={xBase + 24}
+                          y={110 - penumpangHeight}
+                          width="22"
+                          height={penumpangHeight}
+                          rx="2.5"
+                          className="fill-sky-600"
+                        />
+
+                        <text
+                          x={xBase + 11}
+                          y={105 - barangHeight}
+                          textAnchor="middle"
+                          className="text-[8px] font-mono font-bold fill-amber-800"
+                        >
+                          {item.callBarang}
+                        </text>
+                        <text
+                          x={xBase + 35}
+                          y={105 - penumpangHeight}
+                          textAnchor="middle"
+                          className="text-[8px] font-mono font-bold fill-sky-800"
+                        >
+                          {item.callPenumpang}
+                        </text>
+
+                        <text
+                          x={xBase + 23}
+                          y="124"
+                          textAnchor="middle"
+                          className="text-[9.5px] fill-slate-600 font-medium"
+                        >
+                          {item.bulan}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-5 text-[10.5px] text-slate-600 pt-1 border-t border-slate-200 mt-1">
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded bg-amber-500" />
+                <span className="font-medium">Call Barang (DS-5)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded bg-sky-600" />
+                <span className="font-medium">Call Penumpang (DS-7)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* KOLOM KANAN: KOMPOSISI TRAYEK */}
+          <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200 space-y-3">
+            <div className="flex items-center justify-between text-xs text-slate-600 pb-1 border-b border-slate-200">
+              <span className="font-bold text-slate-800">
+                Komposisi Trayek Kapal: Domestik vs Luar Negeri
+              </span>
+              <span className="font-mono text-[10.5px] text-slate-500">Call &amp; Tonase GT</span>
+            </div>
+
+            {/* Kapal Barang Breakdown */}
+            <div className="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <Anchor className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Kapal Barang (16.240 Call)</span>
+                </span>
+                <span className="text-[10.5px] font-mono font-bold text-amber-800">42,8 Juta GT</span>
+              </div>
+
+              <div className="space-y-1.5">
                 <div>
-                  <div className="flex items-center justify-between text-xs mb-0.5">
-                    <span className="font-semibold text-slate-700">Call Dalam Negeri (Domestik)</span>
+                  <div className="flex items-center justify-between text-[11px] mb-0.5">
+                    <span className="font-medium text-slate-700">Call Domestik (Antarpulau)</span>
                     <span className="font-mono font-bold text-slate-900">
                       {kapalBarang.callDalam.toLocaleString('id-ID')} Call (67,0%)
                     </span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                    <div className="bg-amber-500 h-2 rounded-full" style={{ width: '67.0%' }} />
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: '67.0%' }} />
                   </div>
-                  <span className="text-[9.5px] text-slate-500">Antar pulau/pelabuhan nasional (22,4 Juta GT)</span>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between text-xs mb-0.5">
-                    <span className="font-semibold text-slate-700">Call Luar Negeri (Ocean-Going / Ekspor-Impor)</span>
+                  <div className="flex items-center justify-between text-[11px] mb-0.5">
+                    <span className="font-medium text-slate-700">Call Luar Negeri (Ocean-Going)</span>
                     <span className="font-mono font-bold text-slate-900">
                       {kapalBarang.callLuar.toLocaleString('id-ID')} Call (33,0%)
                     </span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                    <div className="bg-amber-700 h-2 rounded-full" style={{ width: '33.0%' }} />
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-amber-700 h-1.5 rounded-full" style={{ width: '33.0%' }} />
                   </div>
-                  <span className="text-[9.5px] text-slate-500">Direct call Singapura, Malaysia, East Asia (20,4 Juta GT)</span>
                 </div>
               </div>
             </div>
 
             {/* Kapal Penumpang Breakdown */}
-            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <div className="flex items-center justify-between mb-2">
+            <div className="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+              <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                   <Ship className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Kapal Penumpang (Dataset #7 - 32.410 Call)</span>
+                  <span>Kapal Penumpang (32.410 Call)</span>
                 </span>
-                <span className="text-[10.5px] font-mono text-slate-500">18,6 Juta GT</span>
+                <span className="text-[10.5px] font-mono font-bold text-sky-800">18,6 Juta GT</span>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div>
-                  <div className="flex items-center justify-between text-xs mb-0.5">
-                    <span className="font-semibold text-slate-700">Call Dalam Negeri (Domestik Antarpulau)</span>
+                  <div className="flex items-center justify-between text-[11px] mb-0.5">
+                    <span className="font-medium text-slate-700">Call Domestik (Feri Domestik)</span>
                     <span className="font-mono font-bold text-slate-900">
                       {kapalPenumpang.callDalam.toLocaleString('id-ID')} Call (58,4%)
                     </span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                    <div className="bg-sky-500 h-2 rounded-full" style={{ width: '58.4%' }} />
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-sky-500 h-1.5 rounded-full" style={{ width: '58.4%' }} />
                   </div>
-                  <span className="text-[9.5px] text-slate-500">Feri Sekupang - Tanjungpinang - Dumai (8,8 Juta GT)</span>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between text-xs mb-0.5">
-                    <span className="font-semibold text-slate-700">Call Luar Negeri (Internasional Ferry)</span>
+                  <div className="flex items-center justify-between text-[11px] mb-0.5">
+                    <span className="font-medium text-slate-700">Call Luar Negeri (Feri Internasional)</span>
                     <span className="font-mono font-bold text-slate-900">
                       {kapalPenumpang.callLuar.toLocaleString('id-ID')} Call (41,6%)
                     </span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                    <div className="bg-sky-700 h-2 rounded-full" style={{ width: '41.6%' }} />
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-sky-700 h-1.5 rounded-full" style={{ width: '41.6%' }} />
                   </div>
-                  <span className="text-[9.5px] text-slate-500">Batam Centre/Harbour Bay - Singapura/Stulang Laut (9,8 Juta GT)</span>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* VIEW 2: TREN BULANAN */}
-        {viewMode === 'tren' && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
-              <span className="font-semibold text-slate-700">
-                Tren Kunjungan Kapal Bulanan (Call Barang vs Penumpang)
+        {/* PENGGANTI DETAIL CALL/GT: SHEET ARUS PENUMPANG (SHEET ARUS TERMINAL) */}
+        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200 space-y-2.5">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
+            <div>
+              <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Arus Penumpang Berdasarkan Terminal Feri &amp; Pelabuhan (Dataset #25)</span>
               </span>
-              <span className="font-mono text-[10.5px] text-slate-500">Satuan: Panggilan Kapal (Call)</span>
+              <p className="text-[10.5px] text-slate-500 mt-0.5">
+                Distribusi kedatangan dan keberangkatan penumpang di 5 terminal feri utama Batam
+              </p>
             </div>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200">
+              Total 7,41 Juta Pax
+            </span>
+          </div>
 
-            <div className="h-36 w-full relative">
-              <svg viewBox="0 0 600 130" className="w-full h-full">
-                <line x1="40" y1="20" x2="580" y2="20" stroke="#E2E8F0" strokeDasharray="2 2" />
-                <line x1="40" y1="65" x2="580" y2="65" stroke="#E2E8F0" strokeDasharray="2 2" />
-                <line x1="40" y1="110" x2="580" y2="110" stroke="#CBD5E1" />
+          <div className="space-y-2">
+            {PENUMPANG_PER_TERMINAL_DATA.map((t) => (
+              <div key={t.terminal} className="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                <div className="flex items-center justify-between text-xs mb-1">
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                    <span className="font-bold text-slate-900">{t.terminal}</span>
+                    <span className="px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono text-[9px]">
+                      {t.jenis}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 font-mono">
+                    <span className="text-slate-500 text-[10.5px]">
+                      Datang: {(t.datang / 1000).toFixed(1)}k | Berangkat: {(t.berangkat / 1000).toFixed(1)}k
+                    </span>
+                    <span className="font-bold text-slate-900 text-xs">
+                      {(t.total / 1000).toFixed(1)}k ({t.porsi}%)
+                    </span>
+                  </div>
+                </div>
 
-                <text x="32" y="24" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">10k</text>
-                <text x="32" y="69" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">5k</text>
-                <text x="32" y="114" textAnchor="end" className="text-[9px] fill-slate-400 font-mono">0</text>
+                <div className="w-full bg-slate-200 rounded-full h-2 flex overflow-hidden">
+                  <div
+                    className="bg-blue-600 h-2"
+                    style={{ width: `${(t.datang / t.total) * 100}%` }}
+                    title={`Kedatangan: ${t.datang.toLocaleString('id-ID')}`}
+                  />
+                  <div
+                    className="bg-indigo-600 h-2"
+                    style={{ width: `${(t.berangkat / t.total) * 100}%` }}
+                    title={`Keberangkatan: ${t.berangkat.toLocaleString('id-ID')}`}
+                  />
+                </div>
+                <span className="text-[9.5px] text-slate-500 block mt-1">
+                  Rute Utama: {t.negaraTujuanUtama}
+                </span>
+              </div>
+            ))}
+          </div>
 
-                {TREN_KUNJUNGAN_BULANAN.map((item, idx) => {
-                  const xBase = 65 + idx * 88;
-                  const barangHeight = (item.callBarang / 10000) * 90;
-                  const penumpangHeight = (item.callPenumpang / 10000) * 90;
-
-                  return (
-                    <g key={item.bulan}>
-                      {/* Kapal Barang Bar */}
-                      <rect
-                        x={xBase}
-                        y={110 - barangHeight}
-                        width="22"
-                        height={barangHeight}
-                        rx="2.5"
-                        className="fill-amber-500"
-                      />
-                      {/* Kapal Penumpang Bar */}
-                      <rect
-                        x={xBase + 24}
-                        y={110 - penumpangHeight}
-                        width="22"
-                        height={penumpangHeight}
-                        rx="2.5"
-                        className="fill-sky-600"
-                      />
-
-                      <text
-                        x={xBase + 11}
-                        y={105 - barangHeight}
-                        textAnchor="middle"
-                        className="text-[8px] font-mono font-bold fill-amber-800"
-                      >
-                        {item.callBarang}
-                      </text>
-                      <text
-                        x={xBase + 35}
-                        y={105 - penumpangHeight}
-                        textAnchor="middle"
-                        className="text-[8px] font-mono font-bold fill-sky-800"
-                      >
-                        {item.callPenumpang}
-                      </text>
-
-                      <text
-                        x={xBase + 23}
-                        y="124"
-                        textAnchor="middle"
-                        className="text-[9.5px] fill-slate-600 font-medium"
-                      >
-                        {item.bulan}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
+          <div className="flex items-center justify-center gap-6 text-[10.5px] text-slate-600 pt-1 border-t border-slate-200">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded bg-blue-600" />
+              <span>Kedatangan Penumpang (Arrival)</span>
             </div>
-
-            <div className="flex items-center justify-center gap-5 text-[10.5px] text-slate-600 pt-0.5">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded bg-amber-500" />
-                <span>Call Kapal Barang (DS-5)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded bg-sky-600" />
-                <span>Call Kapal Penumpang (DS-7)</span>
-              </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded bg-indigo-600" />
+              <span>Keberangkatan Penumpang (Departure)</span>
             </div>
           </div>
-        )}
-
-        {/* VIEW 3: MATRIKS DETAIL */}
-        {viewMode === 'matriks' && (
-          <div className="border border-slate-200 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto max-h-[200px]">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead className="bg-[#0B1728] text-white text-[10.5px] font-semibold sticky top-0 z-10">
-                  <tr>
-                    <th className="py-2 px-2.5">Bulan</th>
-                    <th className="py-2 px-2.5 text-right">Call Barang</th>
-                    <th className="py-2 px-2.5 text-right">Call Penumpang</th>
-                    <th className="py-2 px-2.5 text-right">Call Luar Negeri</th>
-                    <th className="py-2 px-2.5 text-right">Call Dalam Negeri</th>
-                    <th className="py-2 px-2.5 text-right">Gross Tonnage (GT)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 bg-white text-[11px]">
-                  {TREN_KUNJUNGAN_BULANAN.map((row) => (
-                    <tr key={row.bulan} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-1.5 px-2.5 font-bold text-slate-900">{row.bulan}</td>
-                      <td className="py-1.5 px-2.5 text-right font-mono font-semibold text-amber-700">
-                        {row.callBarang.toLocaleString('id-ID')}
-                      </td>
-                      <td className="py-1.5 px-2.5 text-right font-mono font-semibold text-sky-700">
-                        {row.callPenumpang.toLocaleString('id-ID')}
-                      </td>
-                      <td className="py-1.5 px-2.5 text-right font-mono text-slate-600">
-                        {row.callLuar.toLocaleString('id-ID')}
-                      </td>
-                      <td className="py-1.5 px-2.5 text-right font-mono text-slate-600">
-                        {row.callDalam.toLocaleString('id-ID')}
-                      </td>
-                      <td className="py-1.5 px-2.5 text-right font-mono font-bold text-[#1F4E79]">
-                        {row.gtTotalJuta} Juta GT
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* STRATEGIC EXECUTIVE INSIGHT */}
-        <div className="mt-3 p-2.5 rounded-lg bg-sky-50/70 border-l-4 border-sky-600 border border-sky-200/80">
+        <div className="p-2.5 rounded-lg bg-sky-50/70 border-l-4 border-sky-600 border border-sky-200/80">
           <div className="flex items-start gap-2">
             <Lightbulb className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
             <div className="text-[11px] leading-relaxed text-slate-800">

@@ -168,35 +168,35 @@ export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps>
           </span>
         </div>
 
-        {/* 2 Big KPI Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* 2 Compact KPI Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-7xl">
           {DUA_KPI_UTAMA.map((kpi) => (
             <div
               key={kpi.id}
-              className={`bg-white rounded-2xl border ${kpi.borderAccent} shadow-2xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden relative group`}
+              className={`bg-white rounded-xl border ${kpi.borderAccent} shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between overflow-hidden relative group`}
             >
               {/* Top Accent Strip */}
-              <div className={`h-1.5 w-full bg-linear-to-r ${kpi.accentGradient}`} />
+              <div className={`h-1 w-full bg-linear-to-r ${kpi.accentGradient}`} />
 
-              <div className="p-4 sm:p-5 space-y-4 flex-1 flex flex-col justify-between">
+              <div className="p-3 sm:p-3.5 space-y-2.5 flex-1 flex flex-col justify-between">
                 {/* Badge Header & Info Button */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2">
                     <div
-                      className={`w-9 h-9 rounded-xl bg-linear-to-br ${kpi.accentGradient} flex items-center justify-center shadow-xs shrink-0`}
+                      className={`w-7 h-7 rounded-lg bg-linear-to-br ${kpi.accentGradient} flex items-center justify-center shadow-2xs shrink-0`}
                     >
-                      {kpi.icon}
+                      {React.cloneElement(kpi.icon as React.ReactElement<{ className?: string }>, { className: 'w-4 h-4 text-white' })}
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[10.5px] font-mono font-black px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
+                        <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded bg-slate-100 text-slate-800 border border-slate-200">
                           {kpi.code}
                         </span>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
                           {kpi.status}
                         </span>
                       </div>
-                      <span className="text-[10.5px] text-slate-400 font-mono block mt-0.5">
+                      <span className="text-[9.5px] text-slate-400 font-mono block mt-0.5 truncate max-w-[280px]">
                         {kpi.responsibleUnit}
                       </span>
                     </div>
@@ -204,53 +204,55 @@ export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps>
 
                   <button
                     onClick={() => onOpenFormulaModal(kpi.id)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                    className="p-1 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
                     title="Buka Kamus Rumus & Definisi Operasional"
                   >
-                    <Info className="w-4 h-4" />
+                    <Info className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
                 {/* KPI Title */}
                 <div>
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                  <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-snug line-clamp-1" title={kpi.name}>
                     {kpi.name}
                   </h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[10px] text-slate-400 truncate mt-0.5">
                     Sumber: {kpi.dataSource}
                   </p>
                 </div>
 
                 {/* Realization & Target Display */}
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                  <div className="flex items-baseline justify-between mb-2">
+                <div className="p-2 sm:p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                  <div className="flex items-baseline justify-between mb-1.5">
                     <div>
-                      <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">
+                      <div className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold">
                         Realisasi 2025
                       </div>
-                      <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
-                        {kpi.realization}
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-xl sm:text-2xl font-black font-mono tracking-tight text-slate-900">
+                          {kpi.realization}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {kpi.unit}
+                        </span>
                       </div>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        {kpi.unit}
-                      </span>
                     </div>
 
                     <div className="text-right">
-                      <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">
+                      <div className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold">
                         Target Penetapan
                       </div>
-                      <div className="text-base sm:text-lg font-bold font-mono text-slate-700">
+                      <div className="text-xs sm:text-sm font-bold font-mono text-slate-700">
                         {kpi.programTarget}
                       </div>
-                      <span className="text-[10.5px] text-emerald-700 font-bold font-mono block">
+                      <span className="text-[9.5px] text-emerald-700 font-bold font-mono block">
                         Capaian: {kpi.achievement.toFixed(2)}%
                       </span>
                     </div>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-700 bg-linear-to-r ${kpi.accentGradient}`}
                       style={{ width: `${Math.min(kpi.achievement, 100)}%` }}
@@ -259,26 +261,26 @@ export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps>
                 </div>
 
                 {/* Breakdown 3 Satker Layanan */}
-                <div className="space-y-1.5 pt-1">
-                  <div className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <div className="space-y-1">
+                  <div className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
                     <span>Breakdown 3 Satker Pengampu:</span>
                     <span className="text-emerald-700 font-semibold">{kpi.predikat}</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-1.5">
                     {kpi.breakdown.map((item, idx) => (
                       <div
                         key={idx}
-                        className="p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs flex flex-col justify-between"
+                        className="p-1.5 rounded-md bg-white border border-slate-200/80 shadow-2xs flex flex-col justify-between"
                       >
-                        <span className="text-[10px] font-bold text-slate-800 truncate" title={item.entity}>
-                          {item.entity}
+                        <span className="text-[9px] font-bold text-slate-800 truncate" title={item.entity}>
+                          {item.entity.replace('Direktorat ', 'Dit. ').replace('Pengelolaan ', '')}
                         </span>
-                        <div className="flex items-baseline justify-between mt-1">
-                          <span className="text-xs font-black font-mono text-slate-900">
+                        <div className="flex items-baseline justify-between mt-0.5">
+                          <span className="text-[11px] font-black font-mono text-slate-900 truncate">
                             {item.realization}
                           </span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-700">
+                          <span className="text-[9px] font-mono font-bold text-emerald-700 ml-1">
                             {item.percentage.toFixed(1)}%
                           </span>
                         </div>
@@ -287,48 +289,40 @@ export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps>
                   </div>
                 </div>
 
-                {/* ============================================================== */}
-                {/* SUB-KPI 3 SATKER PENGAMPU DITARUH DI BAWAH 2 KPI UTAMA        */}
-                {/* (CONTOH SEPERTI MODEL DASHBOARD KEPALA BP BATAM)             */}
-                {/* ============================================================== */}
-                <div className="pt-2 border-t border-slate-100 space-y-2">
-                  <div className="text-[10px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Indikator Operasional &amp; Kinerja 3 Satker Terkait:</span>
+                {/* Sub-KPI 3 Satker Pengampu (Compact Single Row Strip) */}
+                <div className="pt-1.5 border-t border-slate-100 space-y-1">
+                  <div className="text-[9px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <Layers className="w-3 h-3 text-blue-600" />
+                      <span>Kinerja Operasional 3 Satker Terkait:</span>
                     </span>
-                    <span className="text-[9.5px] font-sans text-slate-400">
-                      Buku Satu Data BP Batam
+                    <span className="text-[8.5px] font-sans text-slate-400">
+                      Satu Data BP Batam
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-1.5">
                     {kpi.satkerMetrics.map((sat, sIdx) => (
                       <div
                         key={sIdx}
-                        className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5"
+                        className="p-1.5 rounded-lg bg-slate-50 border border-slate-200/70 space-y-0.5"
                       >
-                        <div className="flex items-center gap-1.5 pb-1 border-b border-slate-200/60">
+                        <div className="flex items-center gap-1 pb-0.5 border-b border-slate-200/50">
                           {sat.icon}
-                          <span className="text-[10.5px] font-bold text-slate-900 truncate">
-                            {sat.unit}
+                          <span className="text-[9.5px] font-bold text-slate-900 truncate">
+                            {sat.unit.replace('Dit. Pengelolaan ', 'Dit. ').replace('Dit. Kawasan ', 'Dit. ')}
                           </span>
                         </div>
 
-                        <div className="space-y-1">
-                          {sat.items.map((m, mIdx) => (
-                            <div key={mIdx} className="text-[10px] leading-tight">
-                              <div className="text-slate-500 truncate" title={m.label}>
+                        <div className="space-y-0.5">
+                          {sat.items.slice(0, 2).map((m, mIdx) => (
+                            <div key={mIdx} className="text-[8.5px] flex items-baseline justify-between font-mono leading-tight">
+                              <span className="text-slate-500 truncate max-w-[70px]" title={m.label}>
                                 {m.label}:
-                              </div>
-                              <div className="flex items-baseline justify-between font-mono">
-                                <span className="font-extrabold text-slate-900">
-                                  {m.val}
-                                </span>
-                                <span className="text-[9px] text-emerald-700 font-semibold truncate ml-1">
-                                  {m.note}
-                                </span>
-                              </div>
+                              </span>
+                              <span className="font-extrabold text-slate-900 ml-1">
+                                {m.val}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -339,11 +333,11 @@ export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps>
               </div>
 
               {/* Bottom Footer */}
-              <div className="px-4 sm:px-5 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[10.5px] font-mono text-slate-500">
+              <div className="px-3 py-1.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[9.5px] font-mono text-slate-500">
                 <span>Baseline 2024: <strong>{kpi.baseline}</strong></span>
                 <span className="text-emerald-700 font-bold uppercase flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  100% TUNTAS MELAMPAUI
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  100% MELAMPAUI
                 </span>
               </div>
             </div>

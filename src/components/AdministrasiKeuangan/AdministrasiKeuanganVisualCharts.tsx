@@ -105,7 +105,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
     { subject: 'Indeks RB', target: 80.0, realisasi: 81.14, fullMark: 100 },
     { subject: 'Sistem Merit', target: 70.0, realisasi: 85.63, fullMark: 100 },
     { subject: 'Maturitas SPIP', target: 64.0, realisasi: 68.4, fullMark: 100 },
-    { subject: 'Opini BPK (WTP)', target: 100.0, realisasi: 100.0, fullMark: 100 },
+    { subject: 'Opini BPK', target: 100.0, realisasi: 100.0, fullMark: 100 },
   ];
 
   const activeExpenseList: FiscalSummaryExpense[] =
@@ -606,7 +606,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
                       <div>
                         <h5 className="text-xs font-bold text-slate-900 leading-snug">
-                          Indeks Reformasi Birokrasi (RB)
+                          Indeks Reformasi Birokrasi
                         </h5>
                         <span className="text-[10px] text-slate-500 font-mono block">
                           Unit: Biro Organisasi, Kepatuhan dan Manajemen Risiko (BOKMR)
@@ -782,7 +782,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
                       <div>
                         <h5 className="text-xs font-bold text-slate-900 leading-snug">
-                          Indeks Maturitas SPIP Terintegrasi
+                          Indeks Maturitas SPIP
                         </h5>
                         <span className="text-[10px] text-slate-500 font-mono block">
                           Unit: Biro OKMR / Bagian Pengendalian Intern &amp; BPKP
@@ -870,7 +870,7 @@ export const AdministrasiKeuanganVisualCharts: React.FC<
 
                       <div>
                         <h5 className="text-xs font-bold text-slate-900 leading-snug">
-                          Opini BPK atas Laporan Keuangan
+                          Opini BPK
                         </h5>
                         <span className="text-[10px] text-slate-500 font-mono block">
                           Unit: Biro Keuangan BP Batam &amp; Pemeriksaan BPK RI

@@ -163,7 +163,7 @@ export const PERKIN_A1_KPIS: PerkinA1Kpi[] = [
   {
     id: 'ikp-4-wtp',
     no: 4,
-    namaIndikator: 'Opini BPK atas Laporan Keuangan',
+    namaIndikator: 'Opini BPK',
     sasaranProgram: 'Meningkatkan kualitas pengelolaan internal BP Batam',
     target2025: 'WTP',
     realisasi2025: 'WTP (8x Berturut-turut)',

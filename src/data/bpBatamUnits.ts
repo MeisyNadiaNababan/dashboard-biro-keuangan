@@ -82,7 +82,7 @@ export const BP_BATAM_24_UNITS: BpBatamUnit[] = [
       'IKP-1: Indeks Reformasi Birokrasi (Target BB / Realisasi 78.45)',
       'IKP-2: Indeks Sistem Merit (Target 280 / Realisasi 342.5)',
       'IKP-3: Indeks Maturitas SPIP (Target 3,2 / Realisasi 3.42)',
-      'IKP-4: Opini BPK atas Laporan Keuangan (WTP 8x Berturut-turut)',
+      'IKP-4: Opini BPK (Target WTP / Realisasi 8x Berturut-turut)',
       'Total Pagu 5 Kegiatan Program (Rp 725.148.975.000,-)',
       'Realisasi Belanja Administrasi & Keuangan (Rp 241,65 M / 33,3%)',
     ],

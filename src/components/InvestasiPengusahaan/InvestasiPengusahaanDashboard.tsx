@@ -203,12 +203,13 @@ export const InvestasiPengusahaanDashboard: React.FC<
       </div>
 
       {/* ============================================================== */}
-      {/* 2. 4 INDIKATOR KINERJA PROGRAM (PERKIN A.4 TAHUN 2025)         */}
+      {/* 2. 4 INDIKATOR KINERJA PROGRAM & OPERASIONAL SATKER (PERKIN A4)*/}
       {/* ============================================================== */}
       <InvestasiPengusahaanKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedQuarter={selectedQuarter}
         selectedSatker={selectedSatkerFilter}
+        onSelectUnit={handleSelectDeepDive}
       />
 
       {/* ============================================================== */}

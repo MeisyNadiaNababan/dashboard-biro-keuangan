@@ -102,7 +102,7 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
             {/* Primary IKP Card Block: IKP #4 Opini BPK (KPI Utama Perkin) */}
             <div className="bg-gradient-to-br from-blue-50/70 to-slate-50/90 rounded-lg p-3 border border-blue-100/80 my-3">
               <div className="text-[10.5px] font-bold text-blue-950 flex items-center justify-between">
-                <span>IKP #4: Opini BPK atas Laporan Keuangan</span>
+                <span>IKP #4: Opini BPK</span>
                 <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
                   TERCAPAI OPTIMAL
                 </span>
@@ -297,10 +297,10 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
               </div>
             </div>
 
-            {/* Primary IKP Card Block: IKP #2 Sistem Merit (KPI Utama Perkin) */}
+            {/* Primary IKP Card Block: IKP #2 Indeks Sistem Merit (KPI Utama Perkin) */}
             <div className="bg-gradient-to-br from-indigo-50/70 to-slate-50/90 rounded-lg p-3 border border-indigo-100/80 my-3">
               <div className="text-[10.5px] font-bold text-indigo-950 flex items-center justify-between">
-                <span>IKP #2: Indeks Sistem Merit ASN/BP Batam</span>
+                <span>IKP #2: Indeks Sistem Merit</span>
                 <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
                   MELAMPAUI TARGET
                 </span>
@@ -495,10 +495,10 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
               </div>
             </div>
 
-            {/* Primary IKP Card Block: IKP #1 Reformasi Birokrasi (KPI Utama Perkin) */}
+            {/* Primary IKP Card Block: IKP #1 Indeks Reformasi Birokrasi (KPI Utama Perkin) */}
             <div className="bg-gradient-to-br from-cyan-50/70 to-slate-50/90 rounded-lg p-3 border border-cyan-100/80 my-3">
               <div className="text-[10.5px] font-bold text-cyan-950 flex items-center justify-between">
-                <span>IKP #1: Indeks Reformasi Birokrasi (RB)</span>
+                <span>IKP #1: Indeks Reformasi Birokrasi</span>
                 <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
                   MELAMPAUI TARGET
                 </span>
@@ -539,8 +539,8 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
                     <ShieldAlert className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-slate-800 truncate">Maturitas SPIP (IKP #3 Perkin)</div>
-                    <div className="text-[10px] text-slate-500 truncate">Target: 3,20 (Level 3 Terdefinisi - Hal. 40)</div>
+                    <div className="font-bold text-slate-800 truncate">IKP #3: Indeks Maturitas SPIP</div>
+                    <div className="text-[10px] text-slate-500 truncate">Target: 3,2 (Level 3 Berkembang - Hal. 5 Perkin)</div>
                   </div>
                 </div>
                 <div className="text-right shrink-0">

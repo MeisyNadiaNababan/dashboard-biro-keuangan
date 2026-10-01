@@ -59,7 +59,7 @@ export const IKP_METRICS_LIST: IkpMetricItem[] = [
     id: 'ikp-2-kebijakan',
     number: 2,
     code: 'IKP-2',
-    title: 'Indeks Kualitas Kebijakan (IKK)',
+    title: 'Indeks Kualitas Kebijakan',
     target: 65.0,
     realisasi: 71.8,
     satuan: 'Indeks',

@@ -205,10 +205,11 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
         </div>
       </div>
 
-      {/* 2. SECTION 1: 4 KPI UTAMA INDIKATOR KINERJA PROGRAM (LANGSUNG TAMPIL ATAS PERMINTAAN USER) */}
+      {/* 2. SECTION 1: 4 KPI UTAMA INDIKATOR KINERJA PROGRAM & OPERASIONAL SATKER */}
       <KebijakanStrategisKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedUnit={selectedSatkerFilter}
+        onSelectUnit={handleSelectDeepDive}
       />
 
       {/* 4. SECTION 2: VISUALISASI PERFORMA & INFORMASI PENTING (RINGKASAN KESELURUHAN 4 UNIT) */}

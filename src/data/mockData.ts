@@ -659,7 +659,7 @@ export const PERKIN_INDICATORS_DATA: PerkinIndicator[] = [
     id: 'perkin_opini_bpk',
     kodeIku: 'IKP-04',
     sasaran: 'Meningkatkan Kualitas Pengelolaan Internal BP Batam',
-    indikator: 'Opini BPK atas Laporan Keuangan',
+    indikator: 'Opini BPK',
     targetDisplay: 'WTP (Wajar Tanpa Pengecualian)',
     realisasiDisplay: 'WTP Terpenuhi',
     capaian: 100.0,

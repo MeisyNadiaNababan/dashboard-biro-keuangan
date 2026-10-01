@@ -31,6 +31,9 @@ export interface PerkinA7KpiItem {
   code: string;
   name: string;
   fullName: string;
+  sasaranProgram?: string;
+  statusKinerja?: string;
+  satkerShort?: string;
   programTarget: number;
   programTargetLabel: string;
   realization: number;

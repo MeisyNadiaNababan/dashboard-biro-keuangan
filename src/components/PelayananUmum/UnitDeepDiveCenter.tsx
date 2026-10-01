@@ -318,7 +318,19 @@ export const UnitDeepDiveCenter: React.FC<UnitDeepDiveCenterProps> = ({
           {/* Dynamic Content RSBP */}
           {rsbpSubTab === 'ikhtisar' && (
             <div className="space-y-4">
-              <RumahSakitKpiRow filters={rsbpFilters} onOpenFormulaModal={onOpenFormulaModal} />
+              <RumahSakitKpiRow
+                filters={rsbpFilters}
+                realisasiPnbpMiliar={RS_KEUANGAN_SUMMARY.totalRealisasiPnbpMiliar}
+                targetPnbpMiliar={RS_KEUANGAN_SUMMARY.totalTargetPnbpMiliar}
+                realisasiBelanjaMiliar={RS_KEUANGAN_SUMMARY.totalRealisasiBelanjaMiliar}
+                paguBelanjaMiliar={RS_KEUANGAN_SUMMARY.totalPaguBelanjaMiliar}
+                nilaiIkm={RS_IKM_TOTAL}
+                totalKunjunganPasien={RS_KUNJUNGAN_TOTAL}
+                nilaiBor={74.2}
+                jumlahTenant={RS_TENANT_SEWA.length}
+                onExplainKpi={onOpenFormulaModal}
+                onOpenFormulaModal={onOpenFormulaModal}
+              />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <RumahSakitPnbpBelanjaCard onOpenFormulaModal={onOpenFormulaModal} />
                 <RumahSakitKunjunganLayananCard onOpenFormulaModal={onOpenFormulaModal} />

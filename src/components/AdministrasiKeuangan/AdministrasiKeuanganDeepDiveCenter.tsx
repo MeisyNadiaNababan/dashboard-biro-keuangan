@@ -30,11 +30,9 @@ import { SurplusDefisitUnitCard } from '../BiroKeuangan/SurplusDefisitUnitCard';
 import { SistemMeritCard } from '../BiroSDM/SistemMeritCard';
 import { StatusKepegawaianCard } from '../BiroSDM/StatusKepegawaianCard';
 import { PendidikanPegawaiCard } from '../BiroSDM/PendidikanPegawaiCard';
-import { SdmKpiCards } from '../BiroSDM/SdmKpiCards';
 import { SDM_DATA_BY_YEAR, DEFAULT_SDM_FILTERS } from '../BiroSDM/sdmData';
 
 import { OkmrTableauDashboard } from '../BiroOrganisasi/OkmrTableauDashboard';
-import { SpipMaturitasCard } from '../BiroOrganisasi/SpipMaturitasCard';
 import { DEFAULT_BOKMR_FILTERS } from '../BiroOrganisasi/bokmrData';
 
 interface AdministrasiKeuanganDeepDiveCenterProps {
@@ -53,7 +51,7 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
 
   // Sub-tabs for Biro SDM view
   const [sdmSubTab, setSdmSubTab] = useState<
-    'merit' | 'status' | 'pendidikan' | 'spip'
+    'merit' | 'status' | 'pendidikan'
   >('merit');
 
   // Data for SDM components
@@ -261,17 +259,6 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
               >
                 Kualifikasi Pendidikan
               </button>
-              <button
-                onClick={() => setSdmSubTab('spip')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                  sdmSubTab === 'spip'
-                    ? 'bg-emerald-700 text-white shadow-2xs'
-                    : 'bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-200'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Indeks Maturitas SPIP</span>
-              </button>
             </div>
 
             <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
@@ -279,12 +266,6 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
               <span>Total: 2.978 Pegawai (Pria 60.3% | Wanita 39.7%)</span>
             </div>
           </div>
-
-          {/* SDM KPI Cards */}
-          <SdmKpiCards
-            data={sdmYearData}
-            onOpenFormulaModal={() => onOpenFormulaModal?.('ikp-2-merit')}
-          />
 
           {/* Render ONLY the selected component */}
           {sdmSubTab === 'merit' && (
@@ -309,22 +290,17 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
               totalPegawai={sdmYearData?.totalPegawai || 2978}
             />
           )}
-
-          {sdmSubTab === 'spip' && (
-            <SpipMaturitasCard
-              onOpenFormulaModal={() => onOpenFormulaModal?.('ikp-3-spip')}
-            />
-          )}
         </div>
       )}
 
       {/* UNIT 3: BIRO ORGANISASI, KEPATUHAN DAN MANAJEMEN RISIKO */}
       {selectedUnitId === 'biro-organisasi' && (
         <div className="space-y-4">
-          {/* Embedded Tableau Dashboard Suite: KPI Cards di atas, Indeks Reformasi Birokrasi tepat di bawah KPI, diikuti Indeks Maturitas SPIP */}
+          {/* Embedded Tableau Dashboard Suite: Langsung menampilkan visualisasi tanpa KPI duplikat */}
           <OkmrTableauDashboard
             filters={DEFAULT_BOKMR_FILTERS}
             onOpenFormulaModal={(idx) => onOpenFormulaModal?.(idx === 17 ? 'ikp-3-spip' : 'ikp-1-rb')}
+            hideKpis={true}
           />
         </div>
       )}

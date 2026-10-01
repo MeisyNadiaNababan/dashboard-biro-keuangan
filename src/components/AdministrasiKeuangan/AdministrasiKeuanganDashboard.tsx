@@ -195,10 +195,11 @@ export const AdministrasiKeuanganDashboard: React.FC<
         </div>
       </div>
 
-      {/* 2. SECTION 1: 4 KPI UTAMA INDIKATOR KINERJA PROGRAM */}
+      {/* 2. SECTION 1: KPI TIAP UNIT KERJA (PERKIN & INDIKATOR UTAMA UNIT SESUAI MODEL DEP-A3) */}
       <AdministrasiKeuanganKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedKpiId={modalKpiId}
+        onSelectUnit={handleSelectDeepDive}
       />
 
       {/* 4. SECTION 2: VISUALISASI PERFORMA & INFORMASI PENTING */}

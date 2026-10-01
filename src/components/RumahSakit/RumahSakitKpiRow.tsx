@@ -12,33 +12,54 @@ import {
   Building2,
   CheckCircle2,
 } from 'lucide-react';
+import {
+  RS_KEUANGAN_SUMMARY,
+  RS_IKM_TOTAL,
+  RS_KUNJUNGAN_TOTAL,
+  RS_TENANT_SEWA,
+} from '../../data/rumahSakitData';
 
-interface RumahSakitKpiRowProps {
-  realisasiPnbpMiliar: number;
-  targetPnbpMiliar: number;
-  realisasiBelanjaMiliar: number;
-  paguBelanjaMiliar: number;
-  nilaiIkm: number;
-  totalKunjunganPasien: number;
-  nilaiBor: number;
-  jumlahTenant: number;
+export interface RumahSakitKpiRowProps {
+  realisasiPnbpMiliar?: number;
+  targetPnbpMiliar?: number;
+  realisasiBelanjaMiliar?: number;
+  paguBelanjaMiliar?: number;
+  nilaiIkm?: number;
+  totalKunjunganPasien?: number;
+  nilaiBor?: number;
+  jumlahTenant?: number;
+  filters?: any;
   onExplainKpi?: (kpiId: string) => void;
+  onOpenFormulaModal?: (kpiId: string) => void;
 }
 
 export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
-  realisasiPnbpMiliar,
-  targetPnbpMiliar,
-  realisasiBelanjaMiliar,
-  paguBelanjaMiliar,
-  nilaiIkm,
-  totalKunjunganPasien,
-  nilaiBor,
-  jumlahTenant,
+  realisasiPnbpMiliar = RS_KEUANGAN_SUMMARY.totalRealisasiPnbpMiliar,
+  targetPnbpMiliar = RS_KEUANGAN_SUMMARY.totalTargetPnbpMiliar,
+  realisasiBelanjaMiliar = RS_KEUANGAN_SUMMARY.totalRealisasiBelanjaMiliar,
+  paguBelanjaMiliar = RS_KEUANGAN_SUMMARY.totalPaguBelanjaMiliar,
+  nilaiIkm = RS_IKM_TOTAL,
+  totalKunjunganPasien = RS_KUNJUNGAN_TOTAL,
+  nilaiBor = 74.2,
+  jumlahTenant = RS_TENANT_SEWA.length,
+  filters,
   onExplainKpi,
+  onOpenFormulaModal,
 }) => {
-  const pnbpPersen = (realisasiPnbpMiliar / targetPnbpMiliar) * 100;
-  const belanjaPersen = (realisasiBelanjaMiliar / paguBelanjaMiliar) * 100;
-  const sisaPaguMiliar = paguBelanjaMiliar - realisasiBelanjaMiliar;
+  const handleExplain = onExplainKpi || onOpenFormulaModal;
+
+  const safeRealisasiPnbp = realisasiPnbpMiliar ?? RS_KEUANGAN_SUMMARY.totalRealisasiPnbpMiliar ?? 0;
+  const safeTargetPnbp = targetPnbpMiliar ?? RS_KEUANGAN_SUMMARY.totalTargetPnbpMiliar ?? 1;
+  const safeRealisasiBelanja = realisasiBelanjaMiliar ?? RS_KEUANGAN_SUMMARY.totalRealisasiBelanjaMiliar ?? 0;
+  const safePaguBelanja = paguBelanjaMiliar ?? RS_KEUANGAN_SUMMARY.totalPaguBelanjaMiliar ?? 1;
+  const safeNilaiIkm = nilaiIkm ?? RS_IKM_TOTAL ?? 0;
+  const safeTotalKunjungan = totalKunjunganPasien ?? RS_KUNJUNGAN_TOTAL ?? 0;
+  const safeNilaiBor = nilaiBor ?? 74.2;
+  const safeJumlahTenant = jumlahTenant ?? RS_TENANT_SEWA.length ?? 0;
+
+  const pnbpPersen = safeTargetPnbp > 0 ? (safeRealisasiPnbp / safeTargetPnbp) * 100 : 0;
+  const belanjaPersen = safePaguBelanja > 0 ? (safeRealisasiBelanja / safePaguBelanja) * 100 : 0;
+  const sisaPaguMiliar = Math.max(0, safePaguBelanja - safeRealisasiBelanja);
 
   return (
     <div className="space-y-2 font-sans">
@@ -81,7 +102,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1 tracking-tight">
-              Rp {realisasiPnbpMiliar.toFixed(2)}{' '}
+              Rp {safeRealisasiPnbp.toFixed(2)}{' '}
               <span className="text-xs font-semibold text-slate-500">M</span>
             </h3>
           </div>
@@ -91,7 +112,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               <DollarSign className="w-4 h-4" />
             </div>
             <button
-              onClick={() => onExplainKpi && onExplainKpi('rsbp_pnbp')}
+              onClick={() => handleExplain && handleExplain('rsbp_pnbp')}
               className="text-[10px] text-emerald-700 hover:text-emerald-900 flex items-center gap-0.5 font-medium cursor-pointer"
               title="Penjelasan Formula & Atribut Satu Data"
             >
@@ -104,7 +125,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
         <div className="mt-2.5 pt-2 border-t border-slate-100 flex flex-col gap-1 text-[11px]">
           <div className="flex items-center justify-between">
             <span className="text-slate-500">Target RBA (DIPA):</span>
-            <span className="font-semibold text-slate-800">Rp {targetPnbpMiliar.toFixed(2)} M</span>
+            <span className="font-semibold text-slate-800">Rp {safeTargetPnbp.toFixed(2)} M</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-500">Rasio Capaian:</span>
@@ -138,7 +159,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1 tracking-tight">
-              Rp {realisasiBelanjaMiliar.toFixed(2)}{' '}
+              Rp {safeRealisasiBelanja.toFixed(2)}{' '}
               <span className="text-xs font-semibold text-slate-500">M</span>
             </h3>
           </div>
@@ -148,7 +169,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               <TrendingUp className="w-4 h-4" />
             </div>
             <button
-              onClick={() => onExplainKpi && onExplainKpi('rsbp_belanja')}
+              onClick={() => handleExplain && handleExplain('rsbp_belanja')}
               className="text-[10px] text-blue-700 hover:text-blue-900 flex items-center gap-0.5 font-medium cursor-pointer"
               title="Penjelasan Formula & Atribut Satu Data"
             >
@@ -161,7 +182,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
         <div className="mt-2.5 pt-2 border-t border-slate-100 flex flex-col gap-1 text-[11px]">
           <div className="flex items-center justify-between">
             <span className="text-slate-500">Pagu DIPA Belanja:</span>
-            <span className="font-semibold text-slate-800">Rp {paguBelanjaMiliar.toFixed(2)} M</span>
+            <span className="font-semibold text-slate-800">Rp {safePaguBelanja.toFixed(2)} M</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-500">Serapan / Sisa Pagu:</span>
@@ -196,7 +217,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
             </div>
             <div className="flex items-baseline gap-2 mt-1">
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {nilaiIkm.toFixed(2)}
+                {safeNilaiIkm.toFixed(2)}
               </h3>
               <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                 Mutu A (Sangat Baik)
@@ -209,7 +230,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               <Award className="w-4 h-4" />
             </div>
             <button
-              onClick={() => onExplainKpi && onExplainKpi('rsbp_ikm')}
+              onClick={() => handleExplain && handleExplain('rsbp_ikm')}
               className="text-[10px] text-amber-700 hover:text-amber-900 flex items-center gap-0.5 font-medium cursor-pointer"
               title="Penjelasan Formula & 9 Unsur Pelayanan"
             >
@@ -232,7 +253,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
           <div className="w-full bg-slate-100 rounded-full h-1.5 mt-1 overflow-hidden">
             <div
               className="bg-amber-500 h-1.5 rounded-full transition-all duration-500"
-              style={{ width: `${(nilaiIkm / 100) * 100}%` }}
+              style={{ width: `${(safeNilaiIkm / 100) * 100}%` }}
             />
           </div>
         </div>
@@ -254,7 +275,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1 tracking-tight">
-              {totalKunjunganPasien.toLocaleString('id-ID')}{' '}
+              {safeTotalKunjungan.toLocaleString('id-ID')}{' '}
               <span className="text-xs font-semibold text-slate-500">Pasien</span>
             </h3>
           </div>
@@ -264,7 +285,7 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
               <Users className="w-4 h-4" />
             </div>
             <button
-              onClick={() => onExplainKpi && onExplainKpi('rsbp_kunjungan')}
+              onClick={() => handleExplain && handleExplain('rsbp_kunjungan')}
               className="text-[10px] text-purple-700 hover:text-purple-900 flex items-center gap-0.5 font-medium cursor-pointer"
               title="Penjelasan Formula & Atribut Satu Data"
             >
@@ -285,8 +306,8 @@ export const RumahSakitKpiRow: React.FC<RumahSakitKpiRowProps> = ({
           </div>
           {/* Secondary stats pill */}
           <div className="flex items-center justify-between pt-0.5 text-[10px] text-slate-500">
-            <span>BOR: <strong className="text-slate-700">{nilaiBor}%</strong></span>
-            <span>Tenant: <strong className="text-slate-700">{jumlahTenant} Mitra</strong></span>
+            <span>BOR: <strong className="text-slate-700">{safeNilaiBor}%</strong></span>
+            <span>Tenant: <strong className="text-slate-700">{safeJumlahTenant} Mitra</strong></span>
           </div>
         </div>
       </div>

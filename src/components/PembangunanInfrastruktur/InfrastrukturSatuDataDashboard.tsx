@@ -32,8 +32,8 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
   onOpenWordDoc,
   onOpenVisualCatalog,
 }) => {
-  // Tab pilihan dataset: 'semua' | 'ds4' | 'ds1' | 'ds2' | 'ds5' | 'ds6'
-  const [activeTab, setActiveTab] = useState<string>('semua');
+  // Tab pilihan dataset: 'ds4' | 'ds1' | 'ds2' | 'ds5' | 'ds6'
+  const [activeTab, setActiveTab] = useState<string>('ds4');
 
   // Filter & sortir untuk Dataset 4 (NAMOBJ & PRGRS_PEK)
   const [statusFilterDs4, setStatusFilterDs4] = useState<'Semua' | 'Lancar' | 'Waspada' | 'Kritis'>('Semua');
@@ -122,13 +122,12 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
           </div>
         </div>
 
-        {/* TAB NAVIGATOR 6 DATASET SESUAI BUKU SATU DATA */}
+        {/* TAB NAVIGATOR DATASET SESUAI BUKU SATU DATA */}
         <div className="flex items-center gap-1 mt-3.5 pt-3 border-t border-slate-100 overflow-x-auto text-xs">
           <span className="text-slate-400 font-medium shrink-0 mr-1 text-[11px]">
             Pilih Tampilan:
           </span>
           {[
-            { key: 'semua', label: 'Semua Dataset', icon: <Layers className="w-3.5 h-3.5" /> },
             { key: 'ds4', label: 'Dataset 4: Progres Fisik (NAMOBJ & PRGRS)', icon: <HardHat className="w-3.5 h-3.5" />, badge: '12 Proyek' },
             { key: 'ds1', label: 'Dataset 1: ROW Utilitas', icon: <Zap className="w-3.5 h-3.5" />, badge: '142 Izin' },
             { key: 'ds2', label: 'Dataset 2: ROW Penghijauan', icon: <Trees className="w-3.5 h-3.5" />, badge: '34,2 Ha' },
@@ -300,7 +299,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
       {/* 4. DATASET 4: LAPORAN PROGRES PEKERJAAN KONSTRUKSI (NAMOBJ & PRGRS_PEK)    */}
       {/* (RESPONS PERTANYAAN 2: FOKUS GRAFIK NAMOBJ & PRGRS_PEK, TANPA DESKRIPSI RAMAI) */}
       {/* ========================================================================= */}
-      {(activeTab === 'semua' || activeTab === 'ds4') && (
+      {activeTab === 'ds4' && (
         <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
             <div>
@@ -443,10 +442,10 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
       {/* ========================================================================= */}
       {/* 5. DATASET 1 & 2: ROW UTILITAS & ROW PENGHIJAUAN                         */}
       {/* ========================================================================= */}
-      {(activeTab === 'semua' || activeTab === 'ds1' || activeTab === 'ds2') && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+      {(activeTab === 'ds1' || activeTab === 'ds2') && (
+        <div className="grid grid-cols-1 gap-3.5">
           {/* DATASET 1: ROW UTILITAS */}
-          {(activeTab === 'semua' || activeTab === 'ds1') && (
+          {activeTab === 'ds1' && (
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                 <div>
@@ -502,7 +501,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
           )}
 
           {/* DATASET 2: ROW PENGHIJAUAN */}
-          {(activeTab === 'semua' || activeTab === 'ds2') && (
+          {activeTab === 'ds2' && (
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                 <div>
@@ -552,10 +551,10 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
       {/* ========================================================================= */}
       {/* 7. DATASET 5 & 6: PEMATANGAN TANAH (BSW) & REKAPITULASI PEMBANGUNAN       */}
       {/* ========================================================================= */}
-      {(activeTab === 'semua' || activeTab === 'ds5' || activeTab === 'ds6') && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+      {(activeTab === 'ds5' || activeTab === 'ds6') && (
+        <div className="grid grid-cols-1 gap-3.5">
           {/* DATASET 5: PEMATANGAN TANAH (BSW) CUT & FILL */}
-          {(activeTab === 'semua' || activeTab === 'ds5') && (
+          {activeTab === 'ds5' && (
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                 <div>
@@ -606,7 +605,7 @@ export const InfrastrukturSatuDataDashboard: React.FC<InfrastrukturSatuDataDashb
           )}
 
           {/* DATASET 6: REKAPITULASI PEMBANGUNAN FISIK TOTAL */}
-          {(activeTab === 'semua' || activeTab === 'ds6') && (
+          {activeTab === 'ds6' && (
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2 mb-2 border-b border-slate-100 gap-2">
                 <div>

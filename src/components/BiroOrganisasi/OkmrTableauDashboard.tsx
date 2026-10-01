@@ -54,6 +54,7 @@ import { SpipMaturitasCard } from './SpipMaturitasCard';
 interface OkmrTableauDashboardProps {
   filters: BokmrFilterState;
   onOpenFormulaModal?: (datasetIndex: number) => void;
+  hideKpis?: boolean;
 }
 
 type TableauTab =
@@ -70,6 +71,7 @@ type TableauTab =
 export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
   filters,
   onOpenFormulaModal,
+  hideKpis = false,
 }) => {
   const [activeTab, setActiveTab] = useState<TableauTab>('rb');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -211,143 +213,145 @@ export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
       {/* ========================================================================= */}
       {/* 3. 4 CORE EXECUTIVE KPI CARDS PER PERSYARATAN #6 & #8 */}
       {/* ========================================================================= */}
-      <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 px-0.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-              Indikator Utama Tata Kelola, Akuntabilitas &amp; Manajemen Risiko
-            </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-800 border border-purple-200 font-mono">
-              🏷️ Visualisasi: Kartu Metrik KPI Eksekutif (Executive BANs)
-            </span>
-          </div>
-          <span className="text-[10.5px] font-mono text-slate-500">
-            Atribut: SAKIP (Hal. 38), SPIP (Hal. 40), PEKPPP (Hal. 40), MRI (Hal. 40)
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-        {/* KPI 1: SAKIP */}
-        <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
-          <div className="flex items-start justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Nilai SAKIP (DS #2)
-            </span>
-            <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
-              Predikat {PREDIKAT_SAKIP}
-            </span>
-          </div>
-          <div className="my-1.5">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
-                {TOTAL_NILAI_SAKIP.toFixed(2)}
+      {!hideKpis && (
+        <div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 px-0.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                Indikator Utama Tata Kelola, Akuntabilitas &amp; Manajemen Risiko
               </span>
-              <span className="text-[11px] text-slate-400 font-medium">/ 100</span>
-            </div>
-            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-              <div
-                className="bg-indigo-600 h-full rounded-full"
-                style={{ width: `${TOTAL_NILAI_SAKIP}%` }}
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
-            <span>Target: <strong>80.00</strong></span>
-            <span className="text-indigo-700 font-bold font-mono">+2.68 Pts</span>
-          </div>
-        </div>
-
-        {/* KPI 2: SPIP */}
-        <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
-          <div className="flex items-start justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Maturitas SPIP (DS #17)
-            </span>
-            <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Level 3 - Terdefinisi
-            </span>
-          </div>
-          <div className="my-1.5">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
-                {SKOR_AGREGAT_SPIP.toFixed(2)}
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-800 border border-purple-200 font-mono">
+                🏷️ Visualisasi: Kartu Metrik KPI Eksekutif (Executive BANs)
               </span>
-              <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
             </div>
-            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-              <div
-                className="bg-emerald-600 h-full rounded-full"
-                style={{ width: `${(SKOR_AGREGAT_SPIP / 5) * 100}%` }}
-              />
-            </div>
+            <span className="text-[10.5px] font-mono text-slate-500">
+              Atribut: SAKIP (Hal. 38), SPIP (Hal. 40), PEKPPP (Hal. 40), MRI (Hal. 40)
+            </span>
           </div>
-          <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
-            <span>Target BPKP: <strong>3.20</strong></span>
-            <span className="text-emerald-700 font-bold font-mono">+0.22 (Matur)</span>
-          </div>
-        </div>
 
-        {/* KPI 3: INDEKS PELAYANAN PUBLIK (PEKPPP) - DITAMBAHKAN PER SYARAT #6 */}
-        <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
-          <div className="flex items-start justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Indeks Pelayanan Publik (DS #16)
-            </span>
-            <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">
-              Pelayanan Prima
-            </span>
-          </div>
-          <div className="my-1.5">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
-                {avgPekppp}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+          {/* KPI 1: SAKIP */}
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Nilai SAKIP (DS #2)
               </span>
-              <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
+              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Predikat {PREDIKAT_SAKIP}
+              </span>
             </div>
-            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-              <div
-                className="bg-teal-600 h-full rounded-full"
-                style={{ width: `${(Number(avgPekppp) / 5) * 100}%` }}
-              />
+            <div className="my-1.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+                  {TOTAL_NILAI_SAKIP.toFixed(2)}
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">/ 100</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
+                <div
+                  className="bg-indigo-600 h-full rounded-full"
+                  style={{ width: `${TOTAL_NILAI_SAKIP}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
+              <span>Target: <strong>80.00</strong></span>
+              <span className="text-indigo-700 font-bold font-mono">+2.68 Pts</span>
             </div>
           </div>
-          <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
-            <span>Kategori: <strong>A (Prima)</strong></span>
-            <span className="text-teal-700 font-bold font-mono">109.5% Capaian</span>
-          </div>
-        </div>
 
-        {/* KPI 4: INDEKS MANAJEMEN RISIKO (MRI) - DITAMBAHKAN PER SYARAT #8 */}
-        <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
-          <div className="flex items-start justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Indeks Manajemen Risiko (DS #18)
-            </span>
-            <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
-              Tingkat 3 - Terkelola
-            </span>
-          </div>
-          <div className="my-1.5">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
-                {MRI_DATA.skor.toFixed(2)}
+          {/* KPI 2: SPIP */}
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Maturitas SPIP (DS #17)
               </span>
-              <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
+              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Level 3 - Terdefinisi
+              </span>
             </div>
-            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-              <div
-                className="bg-rose-500 h-full rounded-full"
-                style={{ width: `${(MRI_DATA.skor / 5) * 100}%` }}
-              />
+            <div className="my-1.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+                  {SKOR_AGREGAT_SPIP.toFixed(2)}
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
+                <div
+                  className="bg-emerald-600 h-full rounded-full"
+                  style={{ width: `${(SKOR_AGREGAT_SPIP / 5) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
+              <span>Target BPKP: <strong>3.20</strong></span>
+              <span className="text-emerald-700 font-bold font-mono">+0.22 (Matur)</span>
             </div>
           </div>
-          <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
-            <span>Efektivitas Mitigasi:</span>
-            <span className="text-rose-700 font-bold font-mono">{MRI_DATA.persentaseMitigasi}% Efektif</span>
+
+          {/* KPI 3: INDEKS PELAYANAN PUBLIK (PEKPPP) - DITAMBAHKAN PER SYARAT #6 */}
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Indeks Pelayanan Publik (DS #16)
+              </span>
+              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">
+                Pelayanan Prima
+              </span>
+            </div>
+            <div className="my-1.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+                  {avgPekppp}
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
+                <div
+                  className="bg-teal-600 h-full rounded-full"
+                  style={{ width: `${(Number(avgPekppp) / 5) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
+              <span>Kategori: <strong>A (Prima)</strong></span>
+              <span className="text-teal-700 font-bold font-mono">109.5% Capaian</span>
+            </div>
+          </div>
+
+          {/* KPI 4: INDEKS MANAJEMEN RISIKO (MRI) - DITAMBAHKAN PER SYARAT #8 */}
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Indeks Manajemen Risiko (DS #18)
+              </span>
+              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
+                Tingkat 3 - Terkelola
+              </span>
+            </div>
+            <div className="my-1.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+                  {MRI_DATA.skor.toFixed(2)}
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">/ 5.00</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
+                <div
+                  className="bg-rose-500 h-full rounded-full"
+                  style={{ width: `${(MRI_DATA.skor / 5) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 pt-1 border-t border-slate-100">
+              <span>Efektivitas Mitigasi:</span>
+              <span className="text-rose-700 font-bold font-mono">{MRI_DATA.persentaseMitigasi}% Efektif</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )}
 
       {/* ========================================================================= */}
       {/* 4. CONTENT SECTIONS ACCORDING TO USER'S 7 REQUESTED VISUALIZATIONS */}

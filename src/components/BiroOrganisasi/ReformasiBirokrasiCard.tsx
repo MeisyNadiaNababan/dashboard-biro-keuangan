@@ -205,7 +205,7 @@ interface ReformasiBirokrasiCardProps {
 export const ReformasiBirokrasiCard: React.FC<ReformasiBirokrasiCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<'radar' | 'cards' | 'dataset' | 'kategori'>('radar');
+  const [activeTab, setActiveTab] = useState<'radar' | 'dataset' | 'kategori'>('radar');
   const [selectedAspek, setSelectedAspek] = useState<RbComponent>(REFORMASI_BIROKRASI_8_KOMPONEN[0]);
 
   // Aggregate stats
@@ -314,17 +314,6 @@ export const ReformasiBirokrasiCard: React.FC<ReformasiBirokrasiCardProps> = ({
             >
               <RadarIcon className="w-3.5 h-3.5 text-cyan-600" />
               <span>Radar Chart (8 Area)</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('cards')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
-                activeTab === 'cards'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Kartu Rincian Komponen</span>
             </button>
             <button
               onClick={() => setActiveTab('dataset')}
@@ -534,12 +523,36 @@ export const ReformasiBirokrasiCard: React.FC<ReformasiBirokrasiCardProps> = ({
                   </div>
                 </div>
 
-                {/* Rekomendasi Perbaikan */}
-                <div className="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
-                  <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold block">Rekomendasi Tindak Lanjut:</span>
-                    <p className="text-[11px] text-amber-800 leading-snug">{selectedAspek.rekomendasi}</p>
+                {/* QUICK COMPONENT SELECTOR BUTTONS (Identik Sistem Merit) */}
+                <div className="pt-2 border-t border-cyan-100">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-mono mb-1.5">
+                    Pilih Area Perubahan (Klik untuk detail sub-komponen):
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    {REFORMASI_BIROKRASI_8_KOMPONEN.map((aspek) => {
+                      const isSelected = selectedAspek.id === aspek.id;
+                      return (
+                        <button
+                          key={aspek.id}
+                          onClick={() => setSelectedAspek(aspek)}
+                          className={`p-2 rounded-lg text-left transition-all cursor-pointer border ${
+                            isSelected
+                              ? 'bg-cyan-700 text-white border-cyan-800 shadow-xs'
+                              : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-[10px]">
+                            <span className="font-mono font-bold">Area #{aspek.no}</span>
+                            <span className={isSelected ? 'text-cyan-200 font-mono' : 'text-slate-400 font-mono'}>
+                              {aspek.nilai.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="text-[10.5px] font-semibold truncate mt-0.5">
+                            {aspek.nama}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -548,63 +561,7 @@ export const ReformasiBirokrasiCard: React.FC<ReformasiBirokrasiCardProps> = ({
         </div>
       )}
 
-      {/* TAB 2: GRID OF 8 COMPONENT CARDS */}
-      {activeTab === 'cards' && (
-        <div className="p-4 sm:p-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {REFORMASI_BIROKRASI_8_KOMPONEN.map((aspek) => (
-              <div
-                key={aspek.id}
-                onClick={() => setSelectedAspek(aspek)}
-                className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between space-y-2.5 ${
-                  selectedAspek.id === aspek.id
-                    ? 'border-cyan-500 bg-cyan-50/40 shadow-xs'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
-                }`}
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
-                      Area #{aspek.no}
-                    </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${aspek.statusColor}`}>
-                      {aspek.status}
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
-                    {aspek.nama}
-                  </h4>
-                  <p className="text-[10.5px] text-slate-500 leading-snug line-clamp-2">
-                    {aspek.deskripsi}
-                  </p>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                  <div className="flex items-baseline justify-between text-xs">
-                    <span className="text-[10.5px] text-slate-500 font-mono">Nilai Realisasi</span>
-                    <span className="text-sm font-black text-cyan-800 font-mono">
-                      {aspek.nilai.toFixed(2)}{' '}
-                      <span className="text-[10px] text-slate-400 font-normal">/ {aspek.bobot}%</span>
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-cyan-600 rounded-full"
-                      style={{ width: `${Math.min(aspek.capaianPersen, 100)}%` }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                    <span>Target: {aspek.target.toFixed(2)}</span>
-                    <span className="text-emerald-700 font-bold">{aspek.capaianPersen.toFixed(1)}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* TAB 3: DATASET TABLE (8 AREA) */}
+      {/* TAB 2: DATASET TABLE (8 AREA) */}
       {activeTab === 'dataset' && (
         <div className="p-4 sm:p-5 overflow-x-auto">
           <table className="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">

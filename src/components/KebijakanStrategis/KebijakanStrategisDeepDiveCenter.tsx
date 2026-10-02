@@ -3,9 +3,13 @@ import {
   Layers,
   ShieldCheck,
   Sparkles,
+  Compass,
+  Scale,
 } from 'lucide-react';
 import { PtspDashboard } from '../PTSP/PtspDashboard';
 import { PdsiDashboard } from '../PDSI/PdsiDashboard';
+import { PusrenDashboard } from '../Pusren/PusrenDashboard';
+import { HarmonisasiDashboard } from '../Harmonisasi/HarmonisasiDashboard';
 
 interface KebijakanStrategisDeepDiveCenterProps {
   selectedUnitId: string;
@@ -29,7 +33,14 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
   // Sub-tabs for PDSI view
   const [pdsiSubMenu, setPdsiSubMenu] = useState<string>('ikhtisar');
 
-  const normalizedUnitId = selectedUnitId === 'pdsi' ? 'pdsi' : 'ptsp';
+  const normalizedUnitId =
+    selectedUnitId === 'pusat-perencanaan-program' || selectedUnitId === 'pusren'
+      ? 'pusat-perencanaan-program'
+      : selectedUnitId === 'pusat-harmonisasi' || selectedUnitId === 'harmonisasi'
+      ? 'pusat-harmonisasi'
+      : selectedUnitId === 'pdsi'
+      ? 'pdsi'
+      : 'ptsp';
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 sm:p-5 space-y-5">
@@ -45,63 +56,109 @@ export const KebijakanStrategisDeepDiveCenter: React.FC<
                 EXECUTIVE DEEP-DIVE
               </span>
               <span className="text-xs text-slate-500 font-mono">
-                Buku Satu Data BP Batam
+                Buku Satu Data BP Batam (64 Dataset)
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-              Unit Deep-Dive Center: Kebijakan Strategis, Perizinan, Perencanaan &amp; Sistem Informasi
+              Unit Deep-Dive Center: 4 Satker Pengampu Kebijakan Strategis &amp; Perizinan
             </h3>
           </div>
         </div>
 
-        {/* 2 Unit Selection Tabs (PTSP & PDSI) */}
+        {/* 4 Unit Selection Tabs (Pusren, Harmonisasi, PDSI, PTSP) */}
         <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl overflow-x-auto no-scrollbar">
           <button
-            onClick={() => onSelectUnit('ptsp')}
+            onClick={() => onSelectUnit('pusat-perencanaan-program')}
             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              normalizedUnitId === 'ptsp'
+              normalizedUnitId === 'pusat-perencanaan-program'
+                ? 'bg-white text-sky-700 shadow-xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Compass className="w-4 h-4 text-sky-600" />
+            <span>Pusren (19 DS)</span>
+          </button>
+
+          <button
+            onClick={() => onSelectUnit('pusat-harmonisasi')}
+            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+              normalizedUnitId === 'pusat-harmonisasi'
                 ? 'bg-white text-blue-700 shadow-xs ring-1 ring-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Layers className="w-4 h-4 text-blue-600" />
-            <span>PTSP (17 DS)</span>
+            <Scale className="w-4 h-4 text-blue-600" />
+            <span>Harmonisasi (7 DS)</span>
           </button>
 
           <button
             onClick={() => onSelectUnit('pdsi')}
             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
               normalizedUnitId === 'pdsi'
+                ? 'bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-indigo-600" />
+            <span>PDSI (21 DS)</span>
+          </button>
+
+          <button
+            onClick={() => onSelectUnit('ptsp')}
+            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+              normalizedUnitId === 'ptsp'
                 ? 'bg-white text-emerald-700 shadow-xs ring-1 ring-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>PDSI (21 DS)</span>
+            <Layers className="w-4 h-4 text-emerald-600" />
+            <span>PTSP (17 DS)</span>
           </button>
         </div>
       </div>
 
       {/* 2. DYNAMIC WORKSPACE PER SELECTED UNIT */}
 
-      {/* UNIT 1: PUSAT PELAYANAN TERPADU SATU PINTU (PTSP) */}
-      {normalizedUnitId === 'ptsp' && (
+      {/* UNIT 1: PUSAT PERENCANAAN PROGRAM STRATEGIS (PUSREN) */}
+      {normalizedUnitId === 'pusat-perencanaan-program' && (
         <div className="space-y-4">
-          <PtspDashboard
-            activeSubMenu={ptspSubMenu}
-            onSelectSubMenu={setPtspSubMenu}
+          <PusrenDashboard
+            activeSubTab="masterplan"
             onOpenExportModal={onOpenExportModal}
             onOpenFormulaModal={onOpenFormulaModal}
           />
         </div>
       )}
 
-      {/* UNIT 2: PUSAT DATA DAN SISTEM INFORMASI (PDSI) */}
+      {/* UNIT 2: PUSAT HARMONISASI KEBIJAKAN STRATEGIS (HARMONISASI) */}
+      {normalizedUnitId === 'pusat-harmonisasi' && (
+        <div className="space-y-4">
+          <HarmonisasiDashboard
+            activeSubTab="ikk"
+            onOpenExportModal={onOpenExportModal}
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+        </div>
+      )}
+
+      {/* UNIT 3: PUSAT DATA DAN SISTEM INFORMASI (PDSI) */}
       {normalizedUnitId === 'pdsi' && (
         <div className="space-y-4">
           <PdsiDashboard
             activeSubMenu={pdsiSubMenu}
             onSelectSubMenu={setPdsiSubMenu}
+            onOpenExportModal={onOpenExportModal}
+            onOpenFormulaModal={onOpenFormulaModal}
+          />
+        </div>
+      )}
+
+      {/* UNIT 4: PUSAT PELAYANAN TERPADU SATU PINTU (PTSP) */}
+      {normalizedUnitId === 'ptsp' && (
+        <div className="space-y-4">
+          <PtspDashboard
+            activeSubMenu={ptspSubMenu}
+            onSelectSubMenu={setPtspSubMenu}
             onOpenExportModal={onOpenExportModal}
             onOpenFormulaModal={onOpenFormulaModal}
           />

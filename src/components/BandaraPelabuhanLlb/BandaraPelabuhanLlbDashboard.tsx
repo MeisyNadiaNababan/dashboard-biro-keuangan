@@ -27,6 +27,7 @@ import {
 } from './bandaraPelabuhanLlbData';
 import { BandaraPelabuhanLlbKpiRow } from './BandaraPelabuhanLlbKpiRow';
 import { BandaraPelabuhanLlbVisualCharts } from './BandaraPelabuhanLlbVisualCharts';
+import { BandaraPelabuhanLlbUnitCards } from './BandaraPelabuhanLlbUnitCards';
 import { BandaraPelabuhanLlbDeepDiveCenter } from './BandaraPelabuhanLlbDeepDiveCenter';
 import { BandaraPelabuhanLlbFormulaModal } from './BandaraPelabuhanLlbFormulaModal';
 
@@ -230,16 +231,17 @@ export const BandaraPelabuhanLlbDashboard: React.FC<
       </div>
 
       {/* ============================================================== */}
-      {/* 2. 2 INDIKATOR KINERJA PROGRAM UTAMA & 3 KINERJA SATKER        */}
+      {/* 2. 3 INDIKATOR KINERJA PROGRAM UTAMA & KPI OPERASIONAL SATKER  */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbKpiRow
         onOpenFormulaModal={handleOpenFormula}
         selectedQuarter={selectedQuarter}
+        selectedUnit={selectedSatkerFilter}
         onNavigateToUnit={handleSelectDeepDive}
       />
 
       {/* ============================================================== */}
-      {/* 4. CAPAIAN EVALUASI 3 INDIKATOR KINERJA PROGRAM (IKP)          */}
+      {/* 3. CAPAIAN EVALUASI 3 INDIKATOR KINERJA PROGRAM (IKP)          */}
       {/* ============================================================== */}
       <BandaraPelabuhanLlbVisualCharts
         onOpenFormulaModal={handleOpenFormula}
@@ -247,14 +249,24 @@ export const BandaraPelabuhanLlbDashboard: React.FC<
       />
 
       {/* ============================================================== */}
+      {/* 4. 3 PILAR UNIT KERJA PENGAMPU PERKIN A.5 (RINGKASAN EKSEKUTIF) */}
+      {/* ============================================================== */}
+      <BandaraPelabuhanLlbUnitCards
+        onAnalyzeUnit={handleSelectDeepDive}
+        onNavigateToUnit={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
+      />
+
+      {/* ============================================================== */}
       {/* 5. UNIT DEEP-DIVE CENTER (3 UNIT KERJA TERKAIT)                */}
       {/* ============================================================== */}
-      <BandaraPelabuhanLlbDeepDiveCenter
-        selectedUnitId={selectedDeepDiveUnit}
-        onSelectUnit={setSelectedDeepDiveUnit}
-        onOpenFormulaModal={handleOpenFormula}
-        onNavigateToFullDashboard={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
-      />
+      <div id="bandara-pelabuhan-deep-dive-section" className="scroll-mt-6">
+        <BandaraPelabuhanLlbDeepDiveCenter
+          selectedUnitId={selectedDeepDiveUnit}
+          onSelectUnit={setSelectedDeepDiveUnit}
+          onOpenFormulaModal={handleOpenFormula}
+          onNavigateToFullDashboard={(unitId) => onSwitchUnit && onSwitchUnit(unitId)}
+        />
+      </div>
 
       {/* ============================================================== */}
       {/* 7. FORMULA & DEFINISI MODAL                                    */}

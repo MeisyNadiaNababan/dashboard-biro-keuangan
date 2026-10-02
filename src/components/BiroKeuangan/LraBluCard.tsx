@@ -207,31 +207,6 @@ export const LraBluCard: React.FC<LraBluCardProps> = ({ onOpenFormulaModal }) =>
           onOpenFormula={() => onOpenFormulaModal && onOpenFormulaModal('lra_blu')}
           rightControls={
             <div className="flex items-center gap-2 flex-wrap">
-              {/* Year Filter: Default 2025 as requested */}
-              <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                <span className="text-[10.5px] font-semibold text-slate-500 pl-2 pr-1">Tahun:</span>
-                <button
-                  onClick={() => setSelectedYear('2025')}
-                  className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                    selectedYear === '2025'
-                      ? 'bg-sky-600 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  2025
-                </button>
-                <button
-                  onClick={() => setSelectedYear('2026')}
-                  className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                    selectedYear === '2026'
-                      ? 'bg-sky-600 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  2026
-                </button>
-              </div>
-
               {/* View Switcher: Renamed from Target vs Realisasi */}
               <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
                 <button

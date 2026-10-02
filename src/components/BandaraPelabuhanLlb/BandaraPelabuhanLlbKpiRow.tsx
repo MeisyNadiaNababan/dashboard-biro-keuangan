@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TrendingUp,
   Award,
@@ -14,334 +14,913 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Building2,
+  HelpCircle,
+  Clock,
+  FileCheck2,
+  Compass,
+  FileText,
+  BarChart2,
+  Navigation,
+  Scale,
+  Sparkles,
+  MapPin,
 } from 'lucide-react';
+import {
+  PERKIN_A5_METADATA,
+  PERKIN_A5_KPIS,
+  SATKER_A5_LIST,
+} from './bandaraPelabuhanLlbData';
 
 interface BandaraPelabuhanLlbKpiRowProps {
   onOpenFormulaModal: (kpiId: string) => void;
   selectedQuarter?: string;
+  selectedUnit?: string;
   onNavigateToUnit?: (unitId: string) => void;
 }
 
 export const BandaraPelabuhanLlbKpiRow: React.FC<BandaraPelabuhanLlbKpiRowProps> = ({
   onOpenFormulaModal,
   selectedQuarter = 'ALL',
+  selectedUnit = 'ALL',
   onNavigateToUnit,
 }) => {
-  // 2 KPI UTAMA (PNBP LALU LINTAS BARANG SUDAH DIGABUNG KE PNBP BANDARA & PELABUHAN)
-  const DUA_KPI_UTAMA = [
-    {
-      id: 'ikp-1-ikm-gabungan',
-      code: 'IKP-1',
-      number: 1,
-      name: 'Rata-rata Nilai IKM Pelayanan di Kawasan Bandara, Pelabuhan, dan Lalu Lintas Barang',
-      programTarget: '86,30',
-      realization: '88,45',
-      achievement: 102.49,
-      unit: 'Indeks (Skala 1-100)',
-      predikat: 'Mutu A (Sangat Baik)',
-      status: 'Melampaui Target',
-      responsibleUnit: 'Konsolidasi 3 Satker: Dit. Bandara, Dit. Pelabuhan, Dit. LLB',
-      dataSource: 'Biro Organisasi, Kepatuhan & Manajemen Risiko (BOKMR) & 3 Unit Layanan',
-      baseline: '84,10 (Mutu B)',
-      accentGradient: 'from-blue-600 via-indigo-600 to-blue-700',
-      borderAccent: 'border-blue-200 hover:border-blue-400',
-      icon: <Users className="w-5 h-5 text-white" />,
-      // Rincian Nilai IKM 3 Lokus
-      breakdown: [
-        { entity: 'Bandara Hang Nadim', target: '86,00', realization: '88,50', percentage: 102.91, mutu: 'Mutu A' },
-        { entity: 'Pelabuhan Laut Batam', target: '86,30', realization: '88,40', percentage: 102.43, mutu: 'Mutu A' },
-        { entity: 'Lalu Lintas Barang', target: '86,50', realization: '88,45', percentage: 102.25, mutu: 'Mutu A' },
-      ],
-      // Indikator Operasional dari 3 Unit Kerja Pengampu yang ditaruh di bawah KPI Utama
-      satkerMetrics: [
-        {
-          unit: 'Dit. Kawasan Bandara',
-          icon: <Plane className="w-3.5 h-3.5 text-emerald-600" />,
-          items: [
-            { label: 'Arus Penumpang Udara', val: '4,86 Juta Pax', note: '108,0% keterisian' },
-            { label: 'Throughput Penerbangan', val: '38.450 Flight', note: '102,5% target' },
-            { label: 'Kargo Udara (EMPU)', val: '42.150 Ton', note: '105,4% kapasitas' },
-          ],
-        },
-        {
-          unit: 'Dit. Kepelabuhanan',
-          icon: <Anchor className="w-3.5 h-3.5 text-blue-600" />,
-          items: [
-            { label: 'Kunjungan Kapal (Call)', val: '18.240 Call', note: '104,2% traffic laut' },
-            { label: 'Peti Kemas Batu Ampar', val: '620.000 TEUs', note: 'STS Crane elektrik' },
-            { label: 'Volume Kargo & Curah', val: '45,20 Jt Ton', note: '106,4% throughput' },
-          ],
-        },
-        {
-          unit: 'Dit. Lalu Lintas Barang',
-          icon: <Truck className="w-3.5 h-3.5 text-amber-600" />,
-          items: [
-            { label: 'Dokumen Izin Terbit', val: '14.850 Dok', note: 'Inbound & outbound' },
-            { label: 'Kepatuhan SLA Waktu', val: '96,8% Tepat', note: 'Target SLA: 95,0%' },
-            { label: 'Kuota Barang Konsumsi', val: '100% Realisasi', note: 'Pengendalian pasokan' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'ikp-2-pnbp-bandara-pelabuhan',
-      code: 'IKP-2',
-      number: 2,
-      name: 'Realisasi PNBP Gabungan Kawasan Bandara, Pelabuhan, dan Lalu Lintas Barang',
-      programTarget: 'Rp 520,41 M',
-      realization: 'Rp 565,33 M',
-      achievement: 108.63,
-      unit: 'Miliar Rupiah',
-      predikat: 'Melampaui (+Rp 44,92 M)',
-      status: 'Melampaui Target',
-      responsibleUnit: 'Konsolidasi 3 Satker Pengampu: Dit. Bandara, Dit. Pelabuhan, Dit. LLB',
-      dataSource: 'Biro Keuangan BP Batam & SIMP Billing System 3 Satker (Hal. 8, 11 & 15)',
-      baseline: 'Rp 488,55 M',
-      accentGradient: 'from-emerald-600 via-teal-600 to-cyan-600',
-      borderAccent: 'border-emerald-200 hover:border-emerald-400',
-      icon: <DollarSign className="w-5 h-5 text-white" />,
-      // Rincian Realisasi PNBP 3 Satker Pengampu
-      breakdown: [
-        { entity: 'Dit. Kawasan Bandara', target: 'Rp 285,00 M', realization: 'Rp 312,45 M', percentage: 109.63, share: '55,3%' },
-        { entity: 'Dit. Pengelolaan Kepelabuhanan', target: 'Rp 233,21 M', realization: 'Rp 250,40 M', percentage: 107.37, share: '44,3%' },
-        { entity: 'Dit. Lalu Lintas Barang', target: 'Rp 2,20 M', realization: 'Rp 2,48 M', percentage: 112.73, share: '0,4%' },
-      ],
-      // Indikator Finansial & Penerimaan dari 3 Unit Kerja Pengampu
-      satkerMetrics: [
-        {
-          unit: 'Dit. Kawasan Bandara',
-          icon: <Plane className="w-3.5 h-3.5 text-emerald-600" />,
-          items: [
-            { label: 'Realisasi PNBP Bandara', val: 'Rp 312,45 M', note: '109,6% dari Target Rp 285,00 M' },
-            { label: 'Kontribusi Porsi PNBP', val: '55,27%', note: 'Satker penerima terbesar' },
-            { label: 'Surplus PNBP Bersih', val: '+Rp 27,45 M', note: 'PJP4U, Aviobridge & Konsesi' },
-          ],
-        },
-        {
-          unit: 'Dit. Kepelabuhanan',
-          icon: <Anchor className="w-3.5 h-3.5 text-blue-600" />,
-          items: [
-            { label: 'Realisasi PNBP Pelabuhan', val: 'Rp 250,40 M', note: '107,4% dari Target Rp 233,21 M' },
-            { label: 'Kontribusi Porsi PNBP', val: '44,29%', note: 'Satker pilar maritim' },
-            { label: 'Surplus PNBP Bersih', val: '+Rp 17,19 M', note: 'Jasa Labuh, Tambat & Dermaga' },
-          ],
-        },
-        {
-          unit: 'Dit. Lalu Lintas Barang',
-          icon: <Truck className="w-3.5 h-3.5 text-amber-600" />,
-          items: [
-            { label: 'Realisasi PNBP LLB', val: 'Rp 2,48 M', note: '112,7% dari Target Rp 2,20 M' },
-            { label: 'Kontribusi Porsi PNBP', val: '0,44%', note: 'Layanan logistik regulasi' },
-            { label: 'Surplus PNBP Bersih', val: '+Rp 0,28 M', note: 'Izin Kawasan & Konsumsi' },
-          ],
-        },
-      ],
-    },
-  ];
+  // Display Mode: Semua Indikator vs Hanya KPI Utama Perkin vs Hanya KPI Selain Utama
+  const [displayMode, setDisplayMode] = useState<
+    'all' | 'primary_only' | 'operational_only'
+  >('all');
+
+  const ikp1 = PERKIN_A5_KPIS.find((k) => k.id === 'ikp-1-ikm-gabungan') || PERKIN_A5_KPIS[0];
+  const ikp2 = PERKIN_A5_KPIS.find((k) => k.id === 'ikp-2-pnbp-bandara-pelabuhan') || PERKIN_A5_KPIS[1];
+  const ikp3 = PERKIN_A5_KPIS.find((k) => k.id === 'ikp-3-pnbp-lalu-lintas-barang') || PERKIN_A5_KPIS[2];
+
+  const unitBandara = SATKER_A5_LIST.find((u) => u.id === 'dit-bandara') || SATKER_A5_LIST[0];
+  const unitPelabuhan = SATKER_A5_LIST.find((u) => u.id === 'dit-pelabuhan') || SATKER_A5_LIST[1];
+  const unitLlb = SATKER_A5_LIST.find((u) => u.id === 'dit-lalu-lintas-barang') || SATKER_A5_LIST[2];
 
   return (
     <div className="space-y-4 font-sans">
       {/* ============================================================== */}
-      {/* SECTION 2 INDIKATOR KINERJA PROGRAM UTAMA (PERKIN A.5)          */}
-      {/* DENGAN BEBERAPA KPI 3 SATKER PENGAMPU DILETAKKAN DI BAWAHNYA   */}
-      {/* SEPERTI CONTOH KPI PADA DASHBOARD KEPALA BP BATAM              */}
+      {/* 1. OVERARCHING EXECUTIVE CONSOLIDATED STRIP (3 IKP PERKIN A5)  */}
       {/* ============================================================== */}
-      <div className="space-y-2.5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#002B49] text-white flex items-center justify-center text-xs shadow-2xs font-mono font-bold">
-              2
+      <div className="bg-gradient-to-r from-[#002B49] via-[#0A3D62] to-[#1F3864] rounded-2xl p-4 sm:p-5 text-white shadow-sm border border-slate-700/60 relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute -top-16 -right-16 w-56 h-56 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-400/20 text-cyan-300 border border-sky-400/30 uppercase tracking-wider">
+                PERJANJIAN KINERJA (PERKIN A.5 TAHUN 2025)
+              </span>
+              <span className="text-[11px] font-mono text-slate-300">
+                Nomor: {PERKIN_A5_METADATA.nomorPerkin} &bull; 13 Maret 2025
+              </span>
             </div>
-            <div>
-              <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900 font-mono flex items-center gap-2">
-                <span>2 INDIKATOR KINERJA PROGRAM UTAMA (PERKIN A.5 TAHUN 2025)</span>
-                <span className="text-[10px] font-sans font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  100% HIJAU &bull; RATA-RATA CAPAIAN 105,56%
-                </span>
-              </h2>
-            </div>
+            <h2 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
+              <span>Konsolidasi 3 Indikator Kinerja Program (DEP-A5)</span>
+              <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/40 font-mono">
+                100% Tercapai
+              </span>
+            </h2>
+            <p className="text-xs text-slate-300 max-w-3xl">
+              Sasaran Program:{' '}
+              <strong className="text-white font-semibold">
+                {PERKIN_A5_METADATA.sasaranProgram}
+              </strong>{' '}
+              &bull; Total Pagu DIPA:{' '}
+              <strong className="text-cyan-300 font-mono font-bold">
+                Rp 59,51 Miliar
+              </strong>{' '}
+              (Realisasi Rp 23,80 M / 40,0%)
+            </p>
           </div>
 
-          <span className="text-[11px] text-slate-500 font-sans">
-            Klik tombol <Info className="w-3 h-3 inline text-blue-600" /> untuk melihat kamus rumus perhitungan &amp; regulasi resmi
-          </span>
-        </div>
-
-        {/* 2 Compact KPI Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-7xl">
-          {DUA_KPI_UTAMA.map((kpi) => (
+          {/* 3 Point Summary Metrics Pill Group */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0">
+            {/* IKP 1 IKM */}
             <div
-              key={kpi.id}
-              className={`bg-white rounded-xl border ${kpi.borderAccent} shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between overflow-hidden relative group`}
+              onClick={() => onOpenFormulaModal('ikp-1-ikm-gabungan')}
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 transition-all cursor-pointer space-y-0.5 group"
+              title="Buka Formula & Detail IKP-1"
             >
-              {/* Top Accent Strip */}
-              <div className={`h-1 w-full bg-linear-to-r ${kpi.accentGradient}`} />
-
-              <div className="p-3 sm:p-3.5 space-y-2.5 flex-1 flex flex-col justify-between">
-                {/* Badge Header & Info Button */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-7 h-7 rounded-lg bg-linear-to-br ${kpi.accentGradient} flex items-center justify-center shadow-2xs shrink-0`}
-                    >
-                      {React.cloneElement(kpi.icon as React.ReactElement<{ className?: string }>, { className: 'w-4 h-4 text-white' })}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded bg-slate-100 text-slate-800 border border-slate-200">
-                          {kpi.code}
-                        </span>
-                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
-                          {kpi.status}
-                        </span>
-                      </div>
-                      <span className="text-[9.5px] text-slate-400 font-mono block mt-0.5 truncate max-w-[280px]">
-                        {kpi.responsibleUnit}
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => onOpenFormulaModal(kpi.id)}
-                    className="p-1 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                    title="Buka Kamus Rumus & Definisi Operasional"
-                  >
-                    <Info className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* KPI Title */}
-                <div>
-                  <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-snug line-clamp-1" title={kpi.name}>
-                    {kpi.name}
-                  </h3>
-                  <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                    Sumber: {kpi.dataSource}
-                  </p>
-                </div>
-
-                {/* Realization & Target Display */}
-                <div className="p-2 sm:p-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                  <div className="flex items-baseline justify-between mb-1.5">
-                    <div>
-                      <div className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold">
-                        Realisasi 2025
-                      </div>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-xl sm:text-2xl font-black font-mono tracking-tight text-slate-900">
-                          {kpi.realization}
-                        </span>
-                        <span className="text-[10px] text-slate-500 font-mono">
-                          {kpi.unit}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <div className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold">
-                        Target Penetapan
-                      </div>
-                      <div className="text-xs sm:text-sm font-bold font-mono text-slate-700">
-                        {kpi.programTarget}
-                      </div>
-                      <span className="text-[9.5px] text-emerald-700 font-bold font-mono block">
-                        Capaian: {kpi.achievement.toFixed(2)}%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-700 bg-linear-to-r ${kpi.accentGradient}`}
-                      style={{ width: `${Math.min(kpi.achievement, 100)}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Breakdown 3 Satker Layanan */}
-                <div className="space-y-1">
-                  <div className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                    <span>Breakdown 3 Satker Pengampu:</span>
-                    <span className="text-emerald-700 font-semibold">{kpi.predikat}</span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {kpi.breakdown.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="p-1.5 rounded-md bg-white border border-slate-200/80 shadow-2xs flex flex-col justify-between"
-                      >
-                        <span className="text-[9px] font-bold text-slate-800 truncate" title={item.entity}>
-                          {item.entity.replace('Direktorat ', 'Dit. ').replace('Pengelolaan ', '')}
-                        </span>
-                        <div className="flex items-baseline justify-between mt-0.5">
-                          <span className="text-[11px] font-black font-mono text-slate-900 truncate">
-                            {item.realization}
-                          </span>
-                          <span className="text-[9px] font-mono font-bold text-emerald-700 ml-1">
-                            {item.percentage.toFixed(1)}%
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Sub-KPI 3 Satker Pengampu (Compact Single Row Strip) */}
-                <div className="pt-1.5 border-t border-slate-100 space-y-1">
-                  <div className="text-[9px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center justify-between">
-                    <span className="flex items-center gap-1">
-                      <Layers className="w-3 h-3 text-blue-600" />
-                      <span>Kinerja Operasional 3 Satker Terkait:</span>
-                    </span>
-                    <span className="text-[8.5px] font-sans text-slate-400">
-                      Satu Data BP Batam
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {kpi.satkerMetrics.map((sat, sIdx) => (
-                      <div
-                        key={sIdx}
-                        className="p-1.5 rounded-lg bg-slate-50 border border-slate-200/70 space-y-0.5"
-                      >
-                        <div className="flex items-center gap-1 pb-0.5 border-b border-slate-200/50">
-                          {sat.icon}
-                          <span className="text-[9.5px] font-bold text-slate-900 truncate">
-                            {sat.unit.replace('Dit. Pengelolaan ', 'Dit. ').replace('Dit. Kawasan ', 'Dit. ')}
-                          </span>
-                        </div>
-
-                        <div className="space-y-0.5">
-                          {sat.items.slice(0, 2).map((m, mIdx) => (
-                            <div key={mIdx} className="text-[8.5px] flex items-baseline justify-between font-mono leading-tight">
-                              <span className="text-slate-500 truncate max-w-[70px]" title={m.label}>
-                                {m.label}:
-                              </span>
-                              <span className="font-extrabold text-slate-900 ml-1">
-                                {m.val}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Footer */}
-              <div className="px-3 py-1.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[9.5px] font-mono text-slate-500">
-                <span>Baseline 2024: <strong>{kpi.baseline}</strong></span>
-                <span className="text-emerald-700 font-bold uppercase flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  100% MELAMPAUI
+              <div className="flex items-center justify-between text-[10px] text-cyan-200">
+                <span className="font-mono font-bold">IKP-1: Rata-rata IKM</span>
+                <span className="text-[9px] font-mono bg-cyan-400/20 px-1 rounded text-cyan-200">
+                  {ikp1.achievement.toFixed(1)}%
                 </span>
               </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-black font-mono text-white group-hover:text-cyan-300 transition-colors">
+                  {ikp1.realization}
+                </span>
+                <span className="text-[10px] text-slate-300">Target {ikp1.programTarget}</span>
+              </div>
+              <div className="text-[9.5px] text-emerald-300 font-medium">Mutu A (Sangat Baik)</div>
             </div>
-          ))}
+
+            {/* IKP 2 PNBP Bandara & Pelabuhan */}
+            <div
+              onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 transition-all cursor-pointer space-y-0.5 group"
+              title="Buka Formula & Detail IKP-2"
+            >
+              <div className="flex items-center justify-between text-[10px] text-cyan-200">
+                <span className="font-mono font-bold">IKP-2: PNBP Bandara-Laut</span>
+                <span className="text-[9px] font-mono bg-emerald-400/20 px-1 rounded text-emerald-200">
+                  {ikp2.achievement.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-black font-mono text-white group-hover:text-emerald-300 transition-colors">
+                  Rp 562,8 M
+                </span>
+                <span className="text-[10px] text-slate-300">Target Rp 518,2 M</span>
+              </div>
+              <div className="text-[9.5px] text-emerald-300 font-medium">+Rp 44,6 M Surplus</div>
+            </div>
+
+            {/* IKP 3 PNBP LLB */}
+            <div
+              onClick={() => onOpenFormulaModal('ikp-3-pnbp-lalu-lintas-barang')}
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 transition-all cursor-pointer space-y-0.5 group"
+              title="Buka Formula & Detail IKP-3"
+            >
+              <div className="flex items-center justify-between text-[10px] text-cyan-200">
+                <span className="font-mono font-bold">IKP-3: PNBP LLB</span>
+                <span className="text-[9px] font-mono bg-amber-400/20 px-1 rounded text-amber-200">
+                  {ikp3.achievement.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-black font-mono text-white group-hover:text-amber-300 transition-colors">
+                  Rp 2,48 M
+                </span>
+                <span className="text-[10px] text-slate-300">Target Rp 2,20 M</span>
+              </div>
+              <div className="text-[9.5px] text-amber-300 font-medium">+Rp 0,28 M Melampaui</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============================================================== */}
+      {/* 2. SECTION HEADER & VIEW MODE TOGGLE BUTTONS                   */}
+      {/* ============================================================== */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-5 rounded-full bg-blue-600" />
+          <h2 className="text-xs sm:text-sm font-black uppercase tracking-tight text-slate-900 flex flex-wrap items-center gap-2">
+            <span>3 PILAR UNIT KERJA PENGAMPU PERKIN A.5 (BANDARA, PELABUHAN &amp; LALU LINTAS BARANG)</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold border border-blue-200">
+              KONSOLIDASI 46 DATASET SATU DATA
+            </span>
+          </h2>
+        </div>
+
+        {/* View Toggle: Semua vs Hanya KPI Utama vs Hanya KPI Selain Utama */}
+        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200 self-start sm:self-auto shrink-0">
+          <button
+            type="button"
+            onClick={() => setDisplayMode('all')}
+            className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+              displayMode === 'all'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Semua Indikator
+          </button>
+          <button
+            type="button"
+            onClick={() => setDisplayMode('primary_only')}
+            className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+              displayMode === 'primary_only'
+                ? 'bg-blue-600 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>★</span>
+            <span>Hanya KPI Utama Perkin</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setDisplayMode('operational_only')}
+            className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+              displayMode === 'operational_only'
+                ? 'bg-indigo-600 text-white shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>◆</span>
+            <span>KPI Selain Utama (Operasional)</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="text-xs text-slate-500 font-medium flex flex-wrap items-center justify-between gap-1 pb-1">
+        <span>
+          Pihak Pertama: <strong className="text-slate-700">{PERKIN_A5_METADATA.pihakPertama.nama}</strong> ({PERKIN_A5_METADATA.pihakPertama.jabatan})
+        </span>
+        <span className="font-mono text-[11px] text-slate-600">
+          Struktur: 3 IKP Utama Perkin + 15 Indikator Operasional Lintas 46 Dataset
+        </span>
+      </div>
+
+      {/* ============================================================== */}
+      {/* 3. 3 WORK UNIT KPI CARDS (IDENTIK MODEL KARTU DEP-A1 & DEP-A3) */}
+      {/* ============================================================== */}
+      <div className="grid gap-3.5 grid-cols-1 lg:grid-cols-3">
+        {/* ========================================================================= */}
+        {/* KARTU 1: DIREKTORAT PENGELOLAAN KAWASAN BANDARA (HANG NADIM)              */}
+        {/* ========================================================================= */}
+        <div
+          className={`bg-white rounded-xl border transition-all p-4 flex flex-col justify-between relative overflow-hidden group border-t-4 border-t-emerald-600 ${
+            selectedUnit === 'ALL' || selectedUnit === 'dit-bandara'
+              ? 'border-slate-200/90 shadow-xs hover:shadow-md'
+              : 'opacity-60 border-slate-100'
+          }`}
+        >
+          <div>
+            {/* Top Badge & Unit Header */}
+            <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+                  <Plane className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase">
+                    UNIT KERJA 1 &bull; KAWASAN BANDARA
+                  </span>
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug group-hover:text-emerald-700 transition-colors">
+                    Dit. Pengelolaan Kawasan Bandara
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1 font-mono">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  {unitBandara.capaianPnbpPersen.toFixed(1)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+                  className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                  title="Formula & Manual Teknis PNBP Bandara"
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Primary IKP Card Block: Realisasi PNBP Bandara & IKM Bandara (KPI Utama Perkin) */}
+            {displayMode !== 'operational_only' && (
+              <div className="bg-gradient-to-br from-emerald-50/70 to-slate-50/90 rounded-lg p-3 border border-emerald-100/80 my-3">
+                <div className="text-[10px] font-bold text-emerald-950 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 font-black text-emerald-900">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                    IKP #2 (Porsi 22%): PNBP Bandara
+                  </span>
+                  <span className="text-[9.5px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    MELAMPAUI TARGET
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      Rp 124,50 M
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">107,03%</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">Rp 116,32 M</span>
+                  </div>
+                </div>
+
+                {/* Sub-IKP IKM Bandara */}
+                <div className="mt-2 pt-2 border-t border-emerald-200/60 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-slate-600 flex items-center gap-1">
+                    <Users className="w-3 h-3 text-emerald-600" />
+                    <span>Lokus IKM Bandara (Skor):</span>
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-black font-mono text-slate-900">87.80</span>
+                    <span className="text-[9.5px] font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.2 rounded">
+                      Mutu B (Target 86.30)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-500"
+                    style={{ width: `${Math.min(100, unitBandara.capaianPnbpPersen)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Ringkasan Kinerja Keseluruhan: KPI Selain KPI Utama dari Perkin (Buku Satu Data Hal. 11-12, 12 Dataset) */}
+            {displayMode !== 'primary_only' && (
+              <div className="space-y-2 mt-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                  <div className="text-[10px] font-bold font-mono text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                    <span>KPI SELAIN UTAMA (SATU DATA):</span>
+                  </div>
+                  <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                    12 Dataset
+                  </span>
+                </div>
+
+                {/* Metric 1: Arus Penumpang Udara */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <Users className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Arus Penumpang Udara</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 2 Hal. 11 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-emerald-700">4,12 Jt Pax</div>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      108,0% Target
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 2: Pergerakan Pesawat / Throughput Penerbangan */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                      <Navigation className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Pergerakan Pesawat (Flight)</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 2 Hal. 11 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-teal-700">34.250 Call</div>
+                    <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-1 py-0.2 rounded border border-teal-200">
+                      102,5% Traffic
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 3: Kargo Udara (EMPU) */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                      <Package className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Ekspedisi Muatan Udara (EMPU)</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 5 Hal. 12 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-sky-700">42.150 Ton</div>
+                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-1 py-0.2 rounded border border-sky-200">
+                      105,4% Porsi
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 4: Rute Penerbangan Langsung */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                      <Compass className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Rute Penerbangan Langsung</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 9 Hal. 12 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-slate-900">28 Rute</div>
+                    <span className="text-[10px] font-bold text-slate-700 bg-slate-100 px-1 py-0.2 rounded">
+                      Domestik/Intl
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 5: Utilisasi Runway 4.025m & Fasilitas Sisi Udara */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                      <Layers className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Utilisasi Fasilitas Bandara</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 6, 7 &amp; 8 Hal. 12</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-indigo-700">94,2%</div>
+                    <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-1 py-0.2 rounded border border-indigo-200">
+                      Runway 4.025m
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Card Footer */}
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-3">
+            <span className="text-[11px] font-medium text-emerald-700 flex items-center gap-1 font-sans">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Status: Optimal &amp; Melampaui
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onNavigateToUnit?.('dit-bandara')}
+                className="font-bold text-emerald-700 hover:text-emerald-900 transition-colors flex items-center gap-1 cursor-pointer text-xs"
+                title="Buka Analisis Satker Bandara"
+              >
+                <span>Analisis Satker</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+                className="text-slate-500 hover:text-emerald-700 text-xs font-semibold cursor-pointer"
+                title="Kamus & Manual Regulasi"
+              >
+                Manual ↗
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* KARTU 2: DIREKTORAT PENGELOLAAN KEPELABUHANAN (PELABUHAN LAUT BATAM)       */}
+        {/* ========================================================================= */}
+        <div
+          className={`bg-white rounded-xl border transition-all p-4 flex flex-col justify-between relative overflow-hidden group border-t-4 border-t-blue-600 ${
+            selectedUnit === 'ALL' || selectedUnit === 'dit-pelabuhan'
+              ? 'border-slate-200/90 shadow-xs hover:shadow-md'
+              : 'opacity-60 border-slate-100'
+          }`}
+        >
+          <div>
+            {/* Top Badge & Unit Header */}
+            <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 shrink-0">
+                  <Anchor className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 uppercase">
+                    UNIT KERJA 2 &bull; KEPELABUHANAN
+                  </span>
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug group-hover:text-blue-700 transition-colors">
+                    Dit. Pengelolaan Kepelabuhanan
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 flex items-center gap-1 font-mono">
+                  <CheckCircle2 className="w-3 h-3 text-blue-600" />
+                  {unitPelabuhan.capaianPnbpPersen.toFixed(1)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+                  className="p-1 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                  title="Formula & Manual Teknis PNBP Pelabuhan"
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Primary IKP Card Block: Realisasi PNBP Kepelabuhanan & IKM Pelabuhan (KPI Utama Perkin) */}
+            {displayMode !== 'operational_only' && (
+              <div className="bg-gradient-to-br from-blue-50/70 to-slate-50/90 rounded-lg p-3 border border-blue-100/80 my-3">
+                <div className="text-[10px] font-bold text-blue-950 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 font-black text-blue-900">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                    IKP #2 (Porsi 78%): PNBP Kepelabuhanan
+                  </span>
+                  <span className="text-[9.5px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    MELAMPAUI TARGET
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      Rp 438,35 M
+                    </span>
+                    <span className="text-xs font-bold text-blue-700">109,07%</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">Rp 401,89 M</span>
+                  </div>
+                </div>
+
+                {/* Sub-IKP IKM Pelabuhan */}
+                <div className="mt-2 pt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-slate-600 flex items-center gap-1">
+                    <Users className="w-3 h-3 text-blue-600" />
+                    <span>Lokus IKM Pelabuhan (Skor):</span>
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-black font-mono text-slate-900">88.20</span>
+                    <span className="text-[9.5px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.2 rounded">
+                      Mutu A (Target 86.30)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600"
+                    style={{ width: `${Math.min(100, unitPelabuhan.capaianPnbpPersen)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Ringkasan Kinerja Keseluruhan: KPI Selain KPI Utama dari Perkin (Buku Satu Data Hal. 14-17, 25 Dataset) */}
+            {displayMode !== 'primary_only' && (
+              <div className="space-y-2 mt-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                  <div className="text-[10px] font-bold font-mono text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                    <span>KPI SELAIN UTAMA (SATU DATA):</span>
+                  </div>
+                  <span className="text-[9px] font-mono font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
+                    25 Dataset
+                  </span>
+                </div>
+
+                {/* Metric 1: Kunjungan Kapal Barang & Penumpang */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                      <Anchor className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Kunjungan Kapal (Call)</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 5 &amp; 7 Hal. 15 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-blue-700">18.420 Call</div>
+                    <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-1 py-0.2 rounded border border-blue-200">
+                      104,2% Traffic
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 2: Bongkar Muat Peti Kemas Batu Ampar */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                      <Package className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Peti Kemas Batu Ampar</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 23 Hal. 17 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-indigo-700">612.400 TEUs</div>
+                    <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-1 py-0.2 rounded border border-indigo-200">
+                      STS Crane
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 3: Volume Curah Cair & General Cargo */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0">
+                      <Layers className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Volume Kargo &amp; Curah Cair</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 22 &amp; 24 Hal. 17 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-cyan-700">45,20 Jt Ton</div>
+                    <span className="text-[10px] font-mono text-cyan-800 font-bold bg-cyan-50 px-1 py-0.2 rounded border border-cyan-200">
+                      Kabil &amp; Ampar
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 4: Arus Penumpang Laut Domestik & Internasional */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                      <Users className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Arus Penumpang Pelabuhan</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 25 Hal. 17 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-slate-900">7,85 Jt Pax</div>
+                    <span className="text-[10px] font-bold text-purple-800 bg-purple-50 px-1 py-0.2 rounded border border-purple-200">
+                      Dom / Intl Ferry
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 5: Kepatuhan Standar Operasional Pelabuhan */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Kepatuhan Standar SOP</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 1, 4 &amp; 13 Hal. 14-16</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-emerald-700">96,8%</div>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      12 Dermaga
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Card Footer */}
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-3">
+            <span className="text-[11px] font-medium text-blue-700 flex items-center gap-1 font-sans">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Status: Prima &amp; Melampaui
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onNavigateToUnit?.('dit-pelabuhan')}
+                className="font-bold text-blue-700 hover:text-blue-900 transition-colors flex items-center gap-1 cursor-pointer text-xs"
+                title="Buka Analisis Satker Pelabuhan"
+              >
+                <span>Analisis Satker</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal('ikp-2-pnbp-bandara-pelabuhan')}
+                className="text-slate-500 hover:text-blue-700 text-xs font-semibold cursor-pointer"
+                title="Kamus & Manual Regulasi"
+              >
+                Manual ↗
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* KARTU 3: DIREKTORAT LALU LINTAS BARANG (LOGISTIK & PERIZINAN KAWASAN)     */}
+        {/* ========================================================================= */}
+        <div
+          className={`bg-white rounded-xl border transition-all p-4 flex flex-col justify-between relative overflow-hidden group border-t-4 border-t-amber-600 ${
+            selectedUnit === 'ALL' || selectedUnit === 'dit-lalu-lintas-barang'
+              ? 'border-slate-200/90 shadow-xs hover:shadow-md'
+              : 'opacity-60 border-slate-100'
+          }`}
+        >
+          <div>
+            {/* Top Badge & Unit Header */}
+            <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
+                  <Truck className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 uppercase">
+                    UNIT KERJA 3 &bull; LALU LINTAS BARANG
+                  </span>
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight leading-snug group-hover:text-amber-700 transition-colors">
+                    Dit. Lalu Lintas Barang
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1 font-mono">
+                  <CheckCircle2 className="w-3 h-3 text-amber-600" />
+                  {unitLlb.capaianPnbpPersen.toFixed(1)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onOpenFormulaModal('ikp-3-pnbp-lalu-lintas-barang')}
+                  className="p-1 rounded-md text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer"
+                  title="Formula & Manual Teknis PNBP LLB"
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Primary IKP Card Block: Realisasi PNBP Lalu Lintas Barang (KPI Utama Perkin IKP-3) */}
+            {displayMode !== 'operational_only' && (
+              <div className="bg-gradient-to-br from-amber-50/70 to-slate-50/90 rounded-lg p-3 border border-amber-100/80 my-3">
+                <div className="text-[10px] font-bold text-amber-950 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 font-black text-amber-900">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                    IKP #3: PNBP Lalu Lintas Barang
+                  </span>
+                  <span className="text-[9.5px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                    MELAMPAUI TARGET
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between mt-1.5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                      Rp 2,48 M
+                    </span>
+                    <span className="text-xs font-bold text-amber-700">112,73%</span>
+                  </div>
+                  <div className="text-right text-xs">
+                    <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                    <span className="font-bold font-mono text-slate-700">Rp 2,20 M</span>
+                  </div>
+                </div>
+
+                {/* Sub-IKP IKM Lalu Lintas Barang */}
+                <div className="mt-2 pt-2 border-t border-amber-200/60 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-slate-600 flex items-center gap-1">
+                    <Users className="w-3 h-3 text-amber-600" />
+                    <span>Lokus IKM LLB (Skor):</span>
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-black font-mono text-slate-900">89.35</span>
+                    <span className="text-[9.5px] font-bold text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded">
+                      Mutu A (Target 86.30)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-amber-600 to-orange-500"
+                    style={{ width: `${Math.min(100, unitLlb.capaianPnbpPersen)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Ringkasan Kinerja Keseluruhan: KPI Selain KPI Utama dari Perkin (Buku Satu Data Hal. 8-9, 9 Dataset) */}
+            {displayMode !== 'primary_only' && (
+              <div className="space-y-2 mt-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                  <div className="text-[10px] font-bold font-mono text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                    <span>KPI SELAIN UTAMA (SATU DATA):</span>
+                  </div>
+                  <span className="text-[9px] font-mono font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                    9 Dataset
+                  </span>
+                </div>
+
+                {/* Metric 1: Penerbitan Izin Lalu Lintas Barang */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                      <FileCheck2 className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Penerbitan Izin LLB (SK)</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 3 Hal. 9 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-amber-700">14.850 SK</div>
+                    <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-1 py-0.2 rounded border border-amber-200">
+                      100% Selesai
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 2: Pengendalian Kuota Induk Konsumsi */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <Package className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Realisasi Kuota Konsumsi</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 2 Hal. 8 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-emerald-700">128 Jenis</div>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      100% SK Kuota
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 3: Izin Usaha Kawasan & KBLI */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                      <Building2 className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Izin Usaha Kawasan (KBLI)</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 4 &amp; 5 Hal. 9 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-blue-700">382 PT</div>
+                    <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-1 py-0.2 rounded border border-blue-200">
+                      Terverifikasi
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 4: Izin Pemasukan & Pengeluaran Barang */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                      <Truck className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Inbound &amp; Outbound Cargo</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 6 &amp; 7 Hal. 9 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-slate-900">9.420 Dok</div>
+                    <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-1 py-0.2 rounded border border-indigo-200">
+                      Sistem IBOSS
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metric 5: Kepatuhan SLA Pelayanan */}
+                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="w-6 h-6 rounded bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0">
+                      <Clock className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-800 truncate">Kepatuhan Waktu SLA Layanan</div>
+                      <div className="text-[10px] text-slate-500 truncate">Data No. 8 &amp; 9 Hal. 9 Satu Data</div>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-black font-mono text-cyan-700">96,8%</div>
+                    <span className="text-[10px] font-bold text-cyan-800 bg-cyan-50 px-1 py-0.2 rounded border border-cyan-200">
+                      &lt; 24 Jam
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Card Footer */}
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-3">
+            <span className="text-[11px] font-medium text-amber-700 flex items-center gap-1 font-sans">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Status: Tepat Waktu &amp; Akuntabel
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onNavigateToUnit?.('dit-lalu-lintas-barang')}
+                className="font-bold text-amber-700 hover:text-amber-900 transition-colors flex items-center gap-1 cursor-pointer text-xs"
+                title="Buka Analisis Satker Lalu Lintas Barang"
+              >
+                <span>Analisis Satker</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal('ikp-3-pnbp-lalu-lintas-barang')}
+                className="text-slate-500 hover:text-amber-700 text-xs font-semibold cursor-pointer"
+                title="Kamus & Manual Regulasi"
+              >
+                Manual ↗
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -18,6 +18,15 @@ import {
   HelpCircle,
   Info,
   ChevronDown,
+  Compass,
+  FileText,
+  FolderKanban,
+  MapPin,
+  Scale,
+  Target,
+  Database,
+  Sparkles,
+  FileSpreadsheet,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -49,6 +58,8 @@ import {
   SPBE_DOMAINS_DATA,
   PDSI_INFRASTRUCTURE_DATA,
   IKK_DIMENSI_DATA,
+  PROGRAM_ACTIVITIES_BUDGET,
+  KEBIJAKAN_STRATEGIS_UNITS,
 } from './kebijakanStrategisData';
 
 interface KebijakanStrategisVisualChartsProps {
@@ -61,7 +72,7 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
   onAnalyzeUnit,
 }) => {
   const [activeTab, setActiveTab] = useState<
-    'ikp_anggaran' | 'perizinan_ptsp' | 'spbe_pdsi'
+    'ikp_anggaran' | 'perencanaan_pusren' | 'harmonisasi_phks' | 'perizinan_ptsp' | 'spbe_pdsi'
   >('ikp_anggaran');
 
   // Selected Sector for interactive highlight
@@ -127,7 +138,7 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                 PUSAT VISUALISASI KINERJA &amp; TATA KELOLA PERKIN A2 (DEP A2)
               </h3>
               <p className="text-[10.5px] text-slate-500">
-                Pilih perspektif visualisasi untuk menganalisis detail data dari 3 unit kerja pelaksana (PTSP, PDSI, PHKS)
+                Pilih perspektif visualisasi untuk menganalisis detail data dari 4 unit kerja pelaksana (Pusren, Harmonisasi, PDSI, PTSP)
               </p>
             </div>
           </div>
@@ -143,6 +154,26 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
               }`}
             >
               Radar Capaian 4 IKP
+            </button>
+            <button
+              onClick={() => setActiveTab('perencanaan_pusren')}
+              className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                activeTab === 'perencanaan_pusren'
+                  ? 'bg-white text-sky-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Perencanaan (Pusren)
+            </button>
+            <button
+              onClick={() => setActiveTab('harmonisasi_phks')}
+              className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                activeTab === 'harmonisasi_phks'
+                  ? 'bg-white text-blue-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Harmonisasi (PHKS)
             </button>
             <button
               onClick={() => setActiveTab('perizinan_ptsp')}
@@ -722,6 +753,488 @@ export const KebijakanStrategisVisualCharts: React.FC<KebijakanStrategisVisualCh
                     <span>Lihat Panduan &amp; Formula IKM</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =================================================================== */}
+      {/* TAB: PERENCANAAN PROGRAM STRATEGIS (PUSREN) - 19 DATASET SATU DATA  */}
+      {/* =================================================================== */}
+      {activeTab === 'perencanaan_pusren' && (
+        <div className="space-y-4">
+          {/* Top Banner Info */}
+          <div className="bg-gradient-to-r from-sky-900 via-[#002B49] to-blue-900 rounded-xl p-4 text-white shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
+                <Compass className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/30 uppercase">
+                    UNIT 1 &bull; PUSREN
+                  </span>
+                  <span className="text-xs text-sky-200 font-mono">
+                    Halaman 51 - 53 (19 Dataset Satu Data)
+                  </span>
+                </div>
+                <h3 className="text-sm sm:text-base font-black tracking-tight text-white mt-0.5">
+                  Pusat Perencanaan Program Strategis: IPPN, Masterplan &amp; Spasial
+                </h3>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs">
+              <span className="px-3 py-1 rounded-lg bg-white/10 font-mono font-bold text-white border border-white/15">
+                DIPA: Rp 13,66 M
+              </span>
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal?.('ikp-1-perencanaan')}
+                className="px-2.5 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-bold transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              >
+                <span>Manual IPPN</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 5 KPI Selain Utama Pusren Metrics Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Indeks IPPN 2025
+                </span>
+                <span className="text-[9px] font-mono text-sky-800 bg-sky-50 px-1 py-0.2 rounded font-bold">
+                  Bappenas
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-sky-700">94.20</span>
+                <span className="text-xs text-emerald-600 font-bold">+2.20 Poin</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Target 92.00 &bull; Predikat Sangat Baik
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Keselarasan RKA
+                </span>
+                <span className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded font-bold">
+                  SE PPN 3/2023
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-emerald-600">98.2%</span>
+                <span className="text-xs text-emerald-600 font-bold">Optimal</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Pagu DIPA selaras thd KRO Nasional
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Masterplan Strategis
+                </span>
+                <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1 py-0.2 rounded font-bold">
+                  5 Dokumen
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-indigo-700">100%</span>
+                <span className="text-xs text-indigo-600 font-bold">Tersusun</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Drainase, Jalan, Utilitas, Port, Airport
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Data Spasial Kontur
+                </span>
+                <span className="text-[9px] font-mono text-amber-800 bg-amber-50 px-1 py-0.2 rounded font-bold">
+                  Interval 1M
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-amber-700">100%</span>
+                <span className="text-xs text-slate-500 font-medium">Batam</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Hal. 51 Satu Data &bull; Peta Topografi
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Sasaran Renstra
+                </span>
+                <span className="text-[9px] font-mono text-purple-800 bg-purple-50 px-1 py-0.2 rounded font-bold">
+                  2025-2029
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-purple-700">92.8%</span>
+                <span className="text-xs text-purple-600 font-bold">On Track</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Monev Sasaran Makro BP Batam
+              </p>
+            </div>
+          </div>
+
+          {/* Visual Charts: Left (IPPN 4 Komponen) | Right (5 Masterplan Progress) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Left: Bar Chart Komponen IPPN Bappenas */}
+            <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <BarChart2 className="w-4 h-4 text-sky-600" />
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                      Evaluasi 4 Komponen IPPN Bappenas (SE PPN No. 3/2023)
+                    </h4>
+                    <p className="text-[10px] text-slate-500">
+                      Rincian bobot dan skor evaluasi kualitas perencanaan pembangunan
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200 font-bold">
+                  Skor: 94.20
+                </span>
+              </div>
+
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={IPPN_KOMPONEN_DATA}
+                    layout="vertical"
+                    margin={{ top: 5, right: 30, left: 130, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#F1F5F9" />
+                    <XAxis type="number" domain={[80, 100]} tick={{ fontSize: 10 }} />
+                    <YAxis
+                      type="category"
+                      dataKey="komponen"
+                      tick={{ fontSize: 9, fill: '#334155' }}
+                      width={125}
+                    />
+                    <Tooltip
+                      formatter={(val: any, name: any) => [`${val} Poin`, name === 'target' ? 'Target Bappenas' : 'Realisasi Pusren']}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
+                    <Bar dataKey="target" fill="#CBD5E1" name="Target Bappenas" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="nilai" fill="#0284C7" name="Realisasi Pusren" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-sky-50/80 border border-sky-100 text-xs text-sky-900 space-y-1">
+                <div className="flex items-center justify-between font-bold">
+                  <span>Konsistensi Renstra thd RPJMN:</span>
+                  <span className="font-mono text-emerald-700">95.00 Poin (Bobot 30%)</span>
+                </div>
+                <p className="text-[10.5px] text-slate-600">
+                  Semua indikator sasaran makro BP Batam telah sinkron dengan Agenda Pembangunan Nasional 2025-2029.
+                </p>
+              </div>
+            </div>
+
+            {/* Right: 5 Masterplan Strategis Wilayah Batam */}
+            <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <FolderKanban className="w-4 h-4 text-indigo-600" />
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                      5 Masterplan Strategis Wilayah
+                    </h4>
+                    <p className="text-[10px] text-slate-500">
+                      Status penyusunan dokumen perencanaan fisik utama (Hal. 51 Satu Data)
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">
+                  100% Selesai
+                </span>
+              </div>
+
+              <div className="space-y-2.5 text-xs">
+                {[
+                  { nama: 'Masterplan Sistem Drainase & Pengendali Banjir', mitra: 'KemenPUPR', ket: 'Kajian DAS & 24 titik retensi air' },
+                  { nama: 'Masterplan Utilitas Terpadu (Utility Duct)', mitra: 'Kemenkominfo & ESDM', ket: 'Box utilitas bawah tanah Batam Center' },
+                  { nama: 'Masterplan Jaringan Jalan Utama & Simpang Susun', mitra: 'Kemenhub', ket: 'Desain simpang flyover & arteri primer' },
+                  { nama: 'Masterplan Kawasan Aeropolis Bandara Hang Nadim', mitra: 'Kemenhub / BIB', ket: 'Zonasi logistik kargo & MRO aviasi' },
+                  { nama: 'Masterplan Modernisasi Pelabuhan Batu Ampar', mitra: 'Kemenhub & Pelindo', ket: 'Terminal petikemas otomatis & dermaga utara' },
+                ].map((mp, idx) => (
+                  <div key={idx} className="p-2 rounded-lg bg-slate-50 border border-slate-100 hover:bg-slate-100/70 transition-colors">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="font-bold text-slate-800 truncate pr-2">{mp.nama}</div>
+                      <span className="text-[9.5px] font-bold font-mono px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 shrink-0">
+                        100% Tersusun
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 mt-0.5">
+                      <span>Mitra: {mp.mitra}</span>
+                      <span className="italic">{mp.ket}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-indigo-50/80 border border-indigo-100 text-xs text-indigo-900 flex items-center justify-between">
+                <span className="font-medium text-[11px]">Katalog Satu Data Pusren:</span>
+                <span className="font-mono font-bold text-indigo-700">19 Dataset Terverifikasi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =================================================================== */}
+      {/* TAB: HARMONISASI KEBIJAKAN (PHKS) - 7 DATASET SATU DATA            */}
+      {/* =================================================================== */}
+      {activeTab === 'harmonisasi_phks' && (
+        <div className="space-y-4">
+          {/* Top Banner Info */}
+          <div className="bg-gradient-to-r from-blue-900 via-[#1F3864] to-slate-900 rounded-xl p-4 text-white shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
+                <Scale className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-200 border border-blue-400/30 uppercase">
+                    UNIT 2 &bull; HARMONISASI
+                  </span>
+                  <span className="text-xs text-blue-200 font-mono">
+                    Halaman 12 - 13 (7 Dataset Satu Data)
+                  </span>
+                </div>
+                <h3 className="text-sm sm:text-base font-black tracking-tight text-white mt-0.5">
+                  Pusat Harmonisasi Kebijakan: IKK LAN-RI, Tarif 7 Level &amp; Rapim
+                </h3>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs">
+              <span className="px-3 py-1 rounded-lg bg-white/10 font-mono font-bold text-white border border-white/15">
+                DIPA: Rp 4,55 M
+              </span>
+              <button
+                type="button"
+                onClick={() => onOpenFormulaModal?.('ikp-2-kebijakan')}
+                className="px-2.5 py-1 rounded-lg bg-blue-500 hover:bg-blue-400 text-white font-bold transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              >
+                <span>Manual IKK</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 5 KPI Selain Utama Harmonisasi Metrics Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Indeks IKK 2025
+                </span>
+                <span className="text-[9px] font-mono text-blue-800 bg-blue-50 px-1 py-0.2 rounded font-bold">
+                  LAN-RI
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-blue-700">71.80</span>
+                <span className="text-xs text-emerald-600 font-bold">+6.80 Poin</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Target 65.00 &bull; Predikat Cukup Baik
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Harmonisasi Regulasi
+                </span>
+                <span className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded font-bold">
+                  Perka/Kepka
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-emerald-600">42</span>
+                <span className="text-xs text-slate-500 font-medium">Regulasi</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                100% Selaras thd Regulasi Pusat
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Evaluasi Tarif Layanan
+                </span>
+                <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1 py-0.2 rounded font-bold">
+                  7 Tingkat
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-indigo-700">100%</span>
+                <span className="text-xs text-indigo-600 font-bold">Tuntas</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                Unit Cost &amp; Daya Saing Kawasan
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Sinkronisasi K/L
+                </span>
+                <span className="text-[9px] font-mono text-cyan-800 bg-cyan-50 px-1 py-0.2 rounded font-bold">
+                  Kemenko / Kemenkeu
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-cyan-700">96.4%</span>
+                <span className="text-xs text-cyan-600 font-bold">Harmonis</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                36 Dokumen Selaras K/L Terkait
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-2xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">
+                  Tindak Lanjut Rapim
+                </span>
+                <span className="text-[9px] font-mono text-purple-800 bg-purple-50 px-1 py-0.2 rounded font-bold">
+                  SLA Rapim
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black font-mono text-purple-700">98.1%</span>
+                <span className="text-xs text-purple-600 font-bold">Tepat SLA</span>
+              </div>
+              <p className="text-[10.5px] text-slate-500 truncate">
+                76 dari 80 Nota Eksekusi Cepat
+              </p>
+            </div>
+          </div>
+
+          {/* Visual Charts: Left (IKK 4 Dimensi LAN-RI) | Right (Evaluasi 7 Level Tarif) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Left: Bar Chart 4 Dimensi IKK */}
+            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <BarChart2 className="w-4 h-4 text-blue-600" />
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                      4 Dimensi Mutu Regulasi IKK LAN-RI
+                    </h4>
+                    <p className="text-[10px] text-slate-500">
+                      Evaluasi kualitas siklus perumusan kebijakan BP Batam
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 font-bold">
+                  IKK: 71.80
+                </span>
+              </div>
+
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={IKK_DIMENSI_DATA}
+                    margin={{ top: 10, right: 20, left: 0, bottom: 25 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+                    <XAxis
+                      dataKey="dimensi"
+                      tick={{ fontSize: 9, fill: '#334155' }}
+                      interval={0}
+                      angle={-10}
+                      textAnchor="end"
+                    />
+                    <YAxis domain={[50, 85]} tick={{ fontSize: 10 }} />
+                    <Tooltip
+                      formatter={(val: any, name: any) => [`${val} Poin`, name === 'target' ? 'Target IKK' : 'Skor Capaian']}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                    <Bar dataKey="target" fill="#CBD5E1" name="Target IKK" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="skor" fill="#2563EB" name="Skor Capaian" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-blue-50/80 border border-blue-100 text-xs text-blue-900 space-y-1">
+                <div className="flex items-center justify-between font-bold">
+                  <span>Agenda Setting Kebijakan (Evidence-Based):</span>
+                  <span className="font-mono text-emerald-700">74.00 Poin (Melampaui Target)</span>
+                </div>
+                <p className="text-[10.5px] text-slate-600">
+                  Didukung integrasi Satu Data BP Batam dan keterlibatan aktif pelaku usaha dalam perumusan regulasi.
+                </p>
+              </div>
+            </div>
+
+            {/* Right: Evaluasi 7 Level Kedalaman Struktur Tarif Badan Usaha */}
+            <div className="lg:col-span-6 bg-white rounded-xl border border-slate-200/90 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Scale className="w-4 h-4 text-emerald-600" />
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-tight text-slate-900">
+                      Evaluasi Struktur 7 Level Tarif Layanan
+                    </h4>
+                    <p className="text-[10px] text-slate-500">
+                      Berdasarkan Buku Satu Data Halaman 12-13 (Kajian Kewajaran Tarif)
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">
+                  7 Sektor Layanan
+                </span>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {[
+                  { sektor: 'Badan Usaha Rumah Sakit (RSBP)', kedalaman: 'Level 7: Tarif Konsul s/d Tindakan Spesialistik', status: 'Wajar & Terstandar' },
+                  { sektor: 'Badan Usaha Pelabuhan (Dermaga & Labuh)', kedalaman: 'Level 6: Sandar, Labuh, Stevedoring, Bongkar Muat', status: 'Kompetitif Regional' },
+                  { sektor: 'Badan Usaha Bandara (Hang Nadim)', kedalaman: 'Level 5: PJP2U, Garbarata, Kargo, Apron Parking', status: 'Selaras PP 20/2024' },
+                  { sektor: 'Badan Usaha SPAM (Air Minum & Limbah)', kedalaman: 'Level 5: Tarif Blok Konsumsi Rumah Tangga & Industri', status: 'Terjangkau' },
+                  { sektor: 'Pengelolaan Lahan (UWT & Faktur)', kedalaman: 'Level 6: Peruntukan Komersial, Residensial, Industri', status: 'Insentif Terjaga' },
+                  { sektor: 'Pusat Data & Sistem Informasi (TI)', kedalaman: 'Level 4: Co-location Rack, Cloud VPS, Bandwidth FO', status: 'Efisiensi Tinggi' },
+                ].map((tf, idx) => (
+                  <div key={idx} className="p-2 rounded-lg bg-slate-50 border border-slate-100 hover:bg-slate-100/70 transition-colors flex items-center justify-between">
+                    <div className="min-w-0 pr-2">
+                      <div className="font-bold text-slate-800 truncate">{tf.sektor}</div>
+                      <div className="text-[10px] text-slate-500 truncate">{tf.kedalaman}</div>
+                    </div>
+                    <span className="text-[9.5px] font-bold font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 shrink-0">
+                      {tf.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-emerald-50/80 border border-emerald-100 text-xs text-emerald-900 flex items-center justify-between">
+                <span className="font-medium text-[11px]">Katalog Satu Data PHKS:</span>
+                <span className="font-mono font-bold text-emerald-700">7 Dataset Terverifikasi</span>
               </div>
             </div>
           </div>

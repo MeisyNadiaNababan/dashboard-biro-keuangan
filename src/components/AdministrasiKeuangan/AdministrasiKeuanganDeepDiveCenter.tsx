@@ -20,7 +20,6 @@ import {
   Activity,
   FileSpreadsheet,
 } from 'lucide-react';
-import { LraBluCard } from '../BiroKeuangan/LraBluCard';
 import { LaporanFinansialBlu4WayCard } from '../BiroKeuangan/LaporanFinansialBlu4WayCard';
 import { SaldoBankRealTimeCard } from '../BiroKeuangan/SaldoBankRealTimeCard';
 import { PenerimaanSumberDanaCard } from '../BiroKeuangan/PenerimaanSumberDanaCard';
@@ -44,14 +43,14 @@ interface AdministrasiKeuanganDeepDiveCenterProps {
 export const AdministrasiKeuanganDeepDiveCenter: React.FC<
   AdministrasiKeuanganDeepDiveCenterProps
 > = ({ selectedUnitId, onSelectUnit, onOpenFormulaModal }) => {
-  // Sub-tabs for Biro Keuangan view
+  // Sub-tabs for Biro Keuangan view (LRA BLU sheet removed as requested)
   const [keuanganSubTab, setKeuanganSubTab] = useState<
-    'lra' | 'surplus' | 'finansial_blu' | 'kas_bank' | 'sumber_dana' | 'piutang'
-  >('lra');
+    'surplus' | 'finansial_blu' | 'kas_bank' | 'sumber_dana' | 'piutang'
+  >('surplus');
 
-  // Sub-tabs for Biro SDM view
+  // Sub-tabs for Biro SDM view (Status Kepegawaian & Kualifikasi Pendidikan digabung 1 sheet 2 cards)
   const [sdmSubTab, setSdmSubTab] = useState<
-    'merit' | 'status' | 'pendidikan'
+    'merit' | 'status_pendidikan'
   >('merit');
 
   // Data for SDM components
@@ -129,16 +128,6 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
           <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200/80">
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
               <button
-                onClick={() => setKeuanganSubTab('lra')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  keuanganSubTab === 'lra'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                LRA BLU &amp; Pendapatan
-              </button>
-              <button
                 onClick={() => setKeuanganSubTab('surplus')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   keuanganSubTab === 'surplus'
@@ -197,10 +186,6 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
           </div>
 
           {/* Render ONLY the selected component */}
-          {keuanganSubTab === 'lra' && (
-            <LraBluCard onOpenFormulaModal={onOpenFormulaModal} />
-          )}
-
           {keuanganSubTab === 'surplus' && (
             <SurplusDefisitUnitCard />
           )}
@@ -240,24 +225,14 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
                 Sistem Merit (8 Aspek)
               </button>
               <button
-                onClick={() => setSdmSubTab('status')}
+                onClick={() => setSdmSubTab('status_pendidikan')}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  sdmSubTab === 'status'
+                  sdmSubTab === 'status_pendidikan'
                     ? 'bg-indigo-600 text-white shadow-2xs'
                     : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
                 }`}
               >
-                Status Kepegawaian
-              </button>
-              <button
-                onClick={() => setSdmSubTab('pendidikan')}
-                className={`px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  sdmSubTab === 'pendidikan'
-                    ? 'bg-indigo-600 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Kualifikasi Pendidikan
+                Status Kepegawaian &amp; Kualifikasi Pendidikan
               </button>
             </div>
 
@@ -277,18 +252,18 @@ export const AdministrasiKeuanganDeepDiveCenter: React.FC<
             />
           )}
 
-          {sdmSubTab === 'status' && (
-            <StatusKepegawaianCard
-              data={sdmYearData?.statusKepegawaian || []}
-              totalPegawai={sdmYearData?.totalPegawai || 2978}
-            />
-          )}
-
-          {sdmSubTab === 'pendidikan' && (
-            <PendidikanPegawaiCard
-              data={sdmYearData?.pendidikan || []}
-              totalPegawai={sdmYearData?.totalPegawai || 2978}
-            />
+          {/* Sheet Gabungan: Status Kepegawaian DAN Kualifikasi Pendidikan (1 Baris 2 Card) */}
+          {sdmSubTab === 'status_pendidikan' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <StatusKepegawaianCard
+                data={sdmYearData?.statusKepegawaian || []}
+                totalPegawai={sdmYearData?.totalPegawai || 2978}
+              />
+              <PendidikanPegawaiCard
+                data={sdmYearData?.pendidikan || []}
+                totalPegawai={sdmYearData?.totalPegawai || 2978}
+              />
+            </div>
           )}
         </div>
       )}

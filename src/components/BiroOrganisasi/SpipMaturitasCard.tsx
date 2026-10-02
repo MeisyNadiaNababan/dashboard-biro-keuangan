@@ -619,22 +619,32 @@ export const SpipMaturitasCard: React.FC<SpipMaturitasCardProps> = ({
                 <p className="text-slate-600 leading-relaxed">{selectedUnsur.fokusArea}</p>
               </div>
 
-              {/* Sub-Unsur List */}
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-mono">
-                  Rincian Penilaian Sub-Unsur Kunci:
-                </span>
-                <div className="space-y-1">
+              {/* Sub-Unsur List: Rincian Sub-Komponen Penilaian (Identik Sistem Merit) */}
+              <div className="space-y-2 pt-1 border-t border-slate-200/80">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10.5px] font-bold text-slate-800 uppercase tracking-wider block font-mono">
+                    Rincian Sub-Komponen Penilaian (Detail Komponen &amp; Nilai):
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    {selectedUnsur.subUnsur.length} Sub-Komponen
+                  </span>
+                </div>
+                <div className="space-y-1.5">
                   {selectedUnsur.subUnsur.map((sub, sIdx) => (
                     <div
                       key={sIdx}
-                      className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200 text-xs"
+                      className="flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-300 transition-colors text-xs"
                     >
-                      <span className="text-slate-700 font-medium">{sub.nama}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="text-slate-800 font-medium">{sub.nama}</span>
+                      </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-mono text-slate-400">({sub.bobot}%)</span>
-                        <span className="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded text-[11px]">
-                          {sub.nilai.toFixed(2)}
+                        <span className="text-[10.5px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          Bobot {sub.bobot}%
+                        </span>
+                        <span className="font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-xs border border-emerald-200">
+                          {sub.nilai.toFixed(2)} Poin
                         </span>
                       </div>
                     </div>
@@ -648,6 +658,39 @@ export const SpipMaturitasCard: React.FC<SpipMaturitasCardProps> = ({
                 <div>
                   <span className="font-bold">Arah Penguatan Berkelanjutan: </span>
                   <span>{selectedUnsur.tindakLanjut}</span>
+                </div>
+              </div>
+
+              {/* QUICK UNSUR SELECTOR BUTTONS (Identik Sistem Merit) */}
+              <div className="pt-2 border-t border-slate-200">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-mono mb-1.5">
+                  Pilih Unsur Pengendalian (Klik untuk melihat rincian sub-komponen &amp; nilainya):
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                  {SPIP_5_UNSUR_ITEMS.map((u) => {
+                    const isSelected = selectedUnsurId === u.id;
+                    return (
+                      <button
+                        key={u.id}
+                        onClick={() => setSelectedUnsurId(u.id)}
+                        className={`p-2 rounded-lg text-left transition-all cursor-pointer border ${
+                          isSelected
+                            ? 'bg-emerald-700 text-white border-emerald-800 shadow-xs'
+                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-mono font-bold">Unsur #{u.no}</span>
+                          <span className={isSelected ? 'text-emerald-200 font-mono' : 'text-slate-500 font-mono'}>
+                            {u.nilai.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="text-[10px] font-semibold truncate mt-0.5">
+                          {u.singkatan}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

@@ -496,9 +496,19 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
             </div>
 
             {/* Primary IKP Card Block: IKP #1 Indeks Reformasi Birokrasi (KPI Utama Perkin) */}
-            <div className="bg-gradient-to-br from-cyan-50/70 to-slate-50/90 rounded-lg p-3 border border-cyan-100/80 my-3">
+            <div className="bg-gradient-to-br from-cyan-50/70 to-slate-50/90 rounded-lg p-3 border border-cyan-100/80 my-2.5">
               <div className="text-[10.5px] font-bold text-cyan-950 flex items-center justify-between">
-                <span>IKP #1: Indeks Reformasi Birokrasi</span>
+                <div className="flex items-center gap-1.5">
+                  <span>IKP #1: Indeks Reformasi Birokrasi</span>
+                  <button
+                    type="button"
+                    onClick={() => onOpenFormulaModal('ikp-1-rb')}
+                    className="p-0.5 rounded text-slate-400 hover:text-cyan-800 transition-colors cursor-pointer"
+                    title="Formula & Manual Teknis IKP 1 Reformasi Birokrasi"
+                  >
+                    <HelpCircle className="w-3 h-3" />
+                  </button>
+                </div>
                 <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
                   MELAMPAUI TARGET
                 </span>
@@ -526,27 +536,68 @@ export const AdministrasiKeuanganKpiRow: React.FC<AdministrasiKeuanganKpiRowProp
               </div>
             </div>
 
+            {/* Model IKP #3: Indeks Maturitas SPIP (Ukuran & Desain Identik dengan IKP #1) */}
+            <div className="bg-gradient-to-br from-emerald-50/70 to-slate-50/90 rounded-lg p-3 border border-emerald-100/80 mb-2.5">
+              <div className="text-[10.5px] font-bold text-emerald-950 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span>IKP #3: Indeks Maturitas SPIP</span>
+                  <button
+                    type="button"
+                    onClick={() => onOpenFormulaModal('ikp-3-spip')}
+                    className="p-0.5 rounded text-slate-400 hover:text-emerald-800 transition-colors cursor-pointer"
+                    title="Formula & Manual Teknis IKP 3 Maturitas SPIP"
+                  >
+                    <HelpCircle className="w-3 h-3" />
+                  </button>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.2 rounded">
+                  MELAMPAUI TARGET
+                </span>
+              </div>
+
+              <div className="flex items-baseline justify-between mt-1.5">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-900">
+                    {ikpSpip.realisasi2025}
+                  </span>
+                  <span className="text-xs font-bold text-emerald-800">Level 3 (Terdefinisi)</span>
+                </div>
+                <div className="text-right text-xs">
+                  <span className="text-[10px] text-slate-500 block">Target Perkin:</span>
+                  <span className="font-bold font-mono text-slate-700">{ikpSpip.target2025}</span>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-500"
+                  style={{ width: `${Math.min(100, ikpSpip.capaianPersen)}%` }}
+                />
+              </div>
+            </div>
+
             {/* Ringkasan Kinerja Keseluruhan Unit (KPI Lainnya dari Informasi Biro OKMR) */}
             <div className="space-y-2">
               <div className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-wider">
                 Ringkasan Kinerja Keseluruhan:
               </div>
 
-              {/* Metric 1: Indeks Maturitas SPIP (IKP #3 Perkin) */}
+              {/* Metric 1: Nilai Akuntabilitas SAKIP */}
               <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs hover:bg-slate-100/70 transition-colors">
                 <div className="flex items-center gap-2 min-w-0 pr-2">
-                  <div className="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                    <ShieldAlert className="w-3.5 h-3.5" />
+                  <div className="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-slate-800 truncate">IKP #3: Indeks Maturitas SPIP</div>
-                    <div className="text-[10px] text-slate-500 truncate">Target: 3,2 (Level 3 Berkembang - Hal. 5 Perkin)</div>
+                    <div className="font-bold text-slate-800 truncate">Nilai Akuntabilitas SAKIP BP Batam</div>
+                    <div className="text-[10px] text-slate-500 truncate">Predikat A (Memuaskan - KemenPAN-RB)</div>
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="font-black font-mono text-emerald-700">{ikpSpip.realisasi2025}</div>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
-                    {ikpSpip.capaianPersen.toFixed(1)}% Target
+                  <div className="font-black font-mono text-teal-700">82.68</div>
+                  <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-1 py-0.2 rounded border border-teal-200">
+                    Predikat A
                   </span>
                 </div>
               </div>

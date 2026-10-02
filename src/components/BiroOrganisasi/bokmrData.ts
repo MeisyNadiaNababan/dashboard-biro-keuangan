@@ -324,6 +324,33 @@ export const SKM_KATEGORI_DATA: SkmHasilSurvey[] = [
     persentase: 89.00,
     keterangan: 'Keramahan perawat, kejelasan edukasi dokter spesialis',
   },
+  {
+    id: 7,
+    tahun: '2026',
+    unitUsaha: 'Direktorat Pelayanan Terpadu Satu Pintu (PTSP)',
+    kategori: 'Indeks Konsultasi & Penerbitan Perizinan Berusaha',
+    nilai: 3.68,
+    persentase: 92.00,
+    keterangan: 'Kemudahan sistem OSS & percepatan izin investasi IBOSS',
+  },
+  {
+    id: 8,
+    tahun: '2026',
+    unitUsaha: 'Badan Usaha SPAM Batam',
+    kategori: 'Indeks Distribusi & Penanganan Keluhan Pelanggan',
+    nilai: 3.51,
+    persentase: 87.75,
+    keterangan: 'Kontinuitas pasokan air bersih dan respon penanganan pipa bocor',
+  },
+  {
+    id: 9,
+    tahun: '2026',
+    unitUsaha: 'Badan Usaha Pelabuhan Batam',
+    kategori: 'Indeks Pelayanan Terminal Penumpang & Bongkar Muat',
+    nilai: 3.55,
+    persentase: 88.75,
+    keterangan: 'Kenyamanan ruang tunggu pelabuhan & kelancaran dermaga kargo',
+  },
 ];
 
 // 6. DATASET NO. 6: PERSENTASE PENYELESAIAN REKOMENDASI MONITORING & EVALUASI

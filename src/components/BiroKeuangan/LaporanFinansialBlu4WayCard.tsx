@@ -46,7 +46,7 @@ type FinancialSheetMode = 'gabungan' | 'lo' | 'lpe' | 'lak' | 'neraca';
 export const LaporanFinansialBlu4WayCard: React.FC<LaporanFinansialBlu4WayCardProps> = ({
   onOpenFormulaModal,
 }) => {
-  const [activeSheet, setActiveSheet] = useState<FinancialSheetMode>('gabungan');
+  const [activeSheet, setActiveSheet] = useState<FinancialSheetMode>('lo');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const formatTriliunMiliar = (val: number) => {
@@ -255,16 +255,6 @@ export const LaporanFinansialBlu4WayCard: React.FC<LaporanFinansialBlu4WayCardPr
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* Sheet Swap Controls for Requirements 2-5 & 6 */}
               <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-                <button
-                  onClick={() => setActiveSheet('gabungan')}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
-                    activeSheet === 'gabungan'
-                      ? 'bg-white text-slate-900 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  ⚡ Ringkasan Gabungan (4 Lap)
-                </button>
                 <button
                   onClick={() => setActiveSheet('lo')}
                   className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${

@@ -150,16 +150,29 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
             </button>
             <button
               onClick={() => {
-                setSelectedSatkerFilter('ptsp');
-                handleSelectDeepDive('ptsp');
+                setSelectedSatkerFilter('pusat-perencanaan-program');
+                handleSelectDeepDive('pusat-perencanaan-program');
               }}
               className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
-                selectedSatkerFilter === 'ptsp'
+                selectedSatkerFilter === 'pusat-perencanaan-program' || selectedSatkerFilter === 'pusren'
+                  ? 'bg-white text-sky-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Pusren
+            </button>
+            <button
+              onClick={() => {
+                setSelectedSatkerFilter('pusat-harmonisasi');
+                handleSelectDeepDive('pusat-harmonisasi');
+              }}
+              className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
+                selectedSatkerFilter === 'pusat-harmonisasi' || selectedSatkerFilter === 'harmonisasi'
                   ? 'bg-white text-blue-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              PTSP
+              Harmonisasi
             </button>
             <button
               onClick={() => {
@@ -174,6 +187,19 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
             >
               PDSI
             </button>
+            <button
+              onClick={() => {
+                setSelectedSatkerFilter('ptsp');
+                handleSelectDeepDive('ptsp');
+              }}
+              className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
+                selectedSatkerFilter === 'ptsp'
+                  ? 'bg-white text-blue-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              PTSP
+            </button>
           </div>
         </div>
 
@@ -181,7 +207,7 @@ export const KebijakanStrategisDashboard: React.FC<KebijakanStrategisDashboardPr
         <div className="flex items-center gap-2 ml-auto">
           <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold">DEP A2: Unit Pelaksana</span>
+            <span className="font-bold">DEP A2: 4 Unit Pelaksana</span>
           </div>
 
           <button

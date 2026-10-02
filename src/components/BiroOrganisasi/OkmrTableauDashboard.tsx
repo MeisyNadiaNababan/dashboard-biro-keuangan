@@ -130,31 +130,12 @@ export const OkmrTableauDashboard: React.FC<OkmrTableauDashboardProps> = ({
 
   return (
     <div className="space-y-4 font-sans">
-      {/* ========================================================================= */}
-      {/* 1. TABLEAU EXECUTIVE HEADER & CONTROLS */}
-      {/* ========================================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-2xs p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-[#E9762B]/10 text-[#E9762B] border border-[#E9762B]/30 flex items-center justify-center shrink-0">
-            <BarChart3 className="w-5 h-5 text-[#E9762B]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-[#C45E1B] border border-amber-200">
-                TABLEAU-READY DASHBOARD
-              </span>
-              <h2 className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight">
-                Tata Kelola Organisasi, Kepatuhan &amp; Manajemen Risiko
-              </h2>
-            </div>
-            <p className="text-[10.5px] text-slate-500">
-              Visualisasi terstruktur &amp; intuitif dengan format baku nama visualisasi &amp; daftar atribut (Halaman 38–40 Satu Data)
-            </p>
-          </div>
+      {/* Top Action Controls (Banner removed as requested) */}
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="text-xs font-bold text-slate-700">
+          Katalog Visualisasi Tata Kelola, Kepatuhan &amp; Manajemen Risiko (Biro OKMR)
         </div>
-
-        {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex items-center gap-1.5 ml-auto">
           <button
             onClick={handleDownloadTableauCSV}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10.5px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"

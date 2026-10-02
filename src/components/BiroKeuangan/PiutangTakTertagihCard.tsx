@@ -247,61 +247,6 @@ export const PiutangTakTertagihCard: React.FC<PiutangTakTertagihCardProps> = ({
         </div>
       </div>
 
-      {/* Interactive Duration Cards (Misal: 30 hari total hutangnya berapa) */}
-      <div className="p-3 bg-white border-b border-slate-200">
-        <div className="text-xs font-semibold text-slate-700 mb-2 flex items-center justify-between">
-          <span className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
-            <span>Rincian Total Hutang Berdasarkan Lamanya (Klik untuk filter):</span>
-          </span>
-          {selectedDuration !== 'all' && (
-            <button
-              onClick={() => setSelectedDuration('all')}
-              className="text-[11px] text-sky-600 hover:text-sky-800 font-bold cursor-pointer"
-            >
-              Reset Filter (Tampilkan Semua)
-            </button>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-          {PIUTANG_AGING_DURATION_DATA.map((bracket) => {
-            const isSelected = selectedDuration === bracket.durasi;
-            return (
-              <button
-                key={bracket.durasi}
-                onClick={() =>
-                  setSelectedDuration(isSelected ? 'all' : bracket.durasi)
-                }
-                className={`text-left p-2.5 rounded-xl border transition-all cursor-pointer ${
-                  isSelected
-                    ? 'border-sky-500 ring-2 ring-sky-200 bg-sky-50/50 shadow-xs'
-                    : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/60 bg-white'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-bold text-slate-800">
-                    {bracket.durasi}
-                  </span>
-                  <span
-                    className={`text-[9px] font-bold px-1.5 py-0.2 rounded border ${bracket.badgeClass}`}
-                  >
-                    {bracket.persentase}%
-                  </span>
-                </div>
-                <div className="text-sm font-bold text-slate-900 leading-tight">
-                  Rp {bracket.totalHutangMiliar.toLocaleString('id-ID', { minimumFractionDigits: 2 })} M
-                </div>
-                <div className="text-[10px] text-slate-500 mt-1 flex items-center justify-between">
-                  <span>{bracket.jumlahFaktur} Faktur</span>
-                  <span className="font-semibold text-slate-600">{bracket.statusKolektibilitas}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <div className="p-3.5 space-y-3">
         {viewMode === 'chart' ? (
